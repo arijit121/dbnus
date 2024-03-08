@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCyevA3w9TN18VVJ4bnFTryGYTS00bsKIk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1010994691811</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.genupathlabs.genu</string>
+	<key>PROJECT_ID</key>
+	<string>genupathlabs-28005</string>
+	<key>STORAGE_BUCKET</key>
+	<string>genupathlabs-28005.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1010994691811:ios:0e88f87215df73e1af8fd6</string>
+	<key>DATABASE_URL</key>
+	<string>https://genupathlabs-28005.firebaseio.com</string>
+</dict>
+</plist>

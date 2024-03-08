@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1010994691811",
+    "firebase_url": "https://genupathlabs-28005.firebaseio.com",
+    "project_id": "genupathlabs-28005",
+    "storage_bucket": "genupathlabs-28005.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010994691811:android:ca2fcc39b04831cd",
+        "android_client_info": {
+          "package_name": "com.genupathlabs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010994691811-88j2ebpda4pi59kql9022c9ivoj3dhbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD52PFU-VnaS2Lnsn9qYGNADSWuz13RtwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010994691811-88j2ebpda4pi59kql9022c9ivoj3dhbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

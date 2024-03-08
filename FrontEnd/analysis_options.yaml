@@ -1,0 +1,14 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+
+analyzer:
+  exclude: [ lib/service/JsService/helper/js_helper_web.dart,
+             lib/service/JsService/library/js_library.dart,
+             lib/extension/logger_extension.dart, lib/enum/state_enum.dart,
+             lib/enum/marital_status_enum.dart,
+             lib/enum/gender_type_enum.dart ]
+  errors:
+    unused_local_variable: ignore
+
