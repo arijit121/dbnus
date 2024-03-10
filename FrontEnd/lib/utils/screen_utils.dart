@@ -34,16 +34,20 @@ class ScreenUtils {
     }
   }
 
+  /// [responsiveUI] is reusable widget which can decide that ui is large, medium or narrow
+  ///
+  /// [ui] is common ui or narrowUI
+  ///
   static Widget responsiveUI(
-      {required Widget narrowUI, Widget? mediumUI, Widget? largeUI}) {
+      {required Widget ui, Widget? mediumUI, Widget? largeUI}) {
     return OrientationBuilder(builder: (context, orientation) {
       if (MediaQuery.of(context).size.width > mediumWidthBreakpoint) {
-        return largeUI ?? narrowUI;
+        return largeUI ?? ui;
       } else if (MediaQuery.of(context).size.width >
           narrowScreenWidthThreshold) {
-        return mediumUI ?? narrowUI;
+        return mediumUI ?? ui;
       }
-      return narrowUI;
+      return ui;
     });
   }
 }

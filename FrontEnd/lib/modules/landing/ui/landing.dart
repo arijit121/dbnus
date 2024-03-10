@@ -23,7 +23,7 @@ class LandingUi extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ScreenUtils.responsiveUI(
-            narrowUI: customText(
+            ui: customText(
               "narrowUI",
             ),
             mediumUI: customText(
