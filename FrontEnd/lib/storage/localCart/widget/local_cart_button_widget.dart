@@ -29,7 +29,7 @@ class LocalCartButtonWidget extends StatelessWidget {
                 ? InkWell(
                     child: Badge(
                       label: customText("${state.serviceList.value?.length}",
-                          Colors.white, 11),
+                          color: Colors.white, size: 11),
                       padding: const EdgeInsets.symmetric(horizontal: 5),
                       child: customCardDesign(
                         radius: 10,
@@ -71,8 +71,8 @@ class LocalCartButtonWidget extends StatelessWidget {
                         Badge(
                           label: customText(
                               "${state.serviceList.value?.length}",
-                              Colors.white,
-                              11),
+                              color: Colors.white,
+                              size: 11),
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: customCardDesign(
                             radius: 5,
@@ -87,16 +87,16 @@ class LocalCartButtonWidget extends StatelessWidget {
                         ),
                         22.pw,
                         customText(
-                            "${TextUtils.rupee} ${state.totalPrice.value?.toInt()??""}",
-                            Colors.green,
-                            18,
+                            "${TextUtils.rupee} ${state.totalPrice.value?.toInt() ?? ""}",
+                            color: Colors.green,
+                            size: 18,
                             fontWeight: FontWeight.w600),
                         const Spacer(),
                         customElevatedButton(
                             radius: 10,
                             color: HexColor.fromHex(ColorConst.green),
-                            child: customText(
-                                TextUtils.go_to_cart, Colors.white, 14),
+                            child: customText(TextUtils.go_to_cart,
+                                color: Colors.white, size: 14),
                             onPressed: () {
                               // kIsWeb
                               //     ? context.goNamed(RouteName.cart)

@@ -95,7 +95,7 @@ class RouterManager {
                 icon: const Icon(Icons.clear))
             : Container(),
         title: customText(
-            TextUtils.notFound, HexColor.fromHex(ColorConst.primaryDark), 20),
+            TextUtils.notFound,color:  HexColor.fromHex(ColorConst.primaryDark),size:  20),
       ),
       body: Center(
         child: CustomErrorWidget(),

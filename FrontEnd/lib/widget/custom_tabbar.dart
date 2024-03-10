@@ -12,7 +12,7 @@ Widget customTabBar(
     customTextButton(
       child: Column(
         children: [
-          customText(title, isActive ? activeColor : inactiveColor, 14,
+          customText(title,color:  isActive ? activeColor : inactiveColor,size:  14,
               fontWeight: isActive ? FontWeight.w500 : FontWeight.w400),
           7.ph,
           Container(

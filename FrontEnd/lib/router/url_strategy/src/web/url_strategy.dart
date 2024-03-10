@@ -62,7 +62,6 @@ class PathUrlStrategy extends ui_web.HashUrlStrategy {
     if (_basePath.isNotEmpty && path.startsWith(_basePath)) {
       return ensureLeadingSlash(path.substring(_basePath.length));
     }
-    AppLog.i("URI @@GetPath ${ensureLeadingSlash(path)}");
     return ensureLeadingSlash(path);
   }
 
@@ -77,7 +76,6 @@ class PathUrlStrategy extends ui_web.HashUrlStrategy {
       "the browser's pathname always starts with '/'. "
       "Found route name: '$internalUrl'",
     );
-    AppLog.i('URI @@PrepareExternalUrl $_basePath$internalUrl');
     return '$_basePath$internalUrl';
   }
 }

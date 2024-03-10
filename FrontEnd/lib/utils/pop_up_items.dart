@@ -60,16 +60,16 @@ class PopUpItems {
     showDialog<String>(
       context: CurrentContext().context,
       builder: (BuildContext context) => AlertDialog(
-        title: customText(msg, HexColor.fromHex(ColorConst.primaryDark), 13,
+        title: customText(msg,color:  HexColor.fromHex(ColorConst.primaryDark),size:  13,
             textAlign: TextAlign.start),
         content: content != null
-            ? customText(content, HexColor.fromHex(ColorConst.primaryDark), 12,
+            ? customText(content,color:  HexColor.fromHex(ColorConst.primaryDark),size:  12,
                 textAlign: TextAlign.start)
             : null,
         actions: <Widget>[
           customElevatedButton(
             radius: 10,
-            child: customText(TextUtils.ok, Colors.white, 20),
+            child: customText(TextUtils.ok,color:  Colors.white,size:  20),
             color: Colors.blueAccent,
             onPressed: () {
               Navigator.pop(context);
@@ -116,7 +116,7 @@ class ToastMassage extends StatelessWidget {
               10.pw,
               SizedBox(
                 width: ScreenUtils.aw * 0.5,
-                child: customText(message, Colors.white, 16,
+                child: customText(message,color:  Colors.white,size:  16,
                     fontWeight: FontWeight.w600),
               ),
             ],
@@ -178,7 +178,7 @@ class _EmailPickerState extends State<EmailPicker> {
                       minimumSize: const Size(80, 35),
                       radius: 10,
                       color: Colors.blueAccent,
-                      child: customText(TextUtils.ok, Colors.white, 20),
+                      child: customText(TextUtils.ok,color:  Colors.white,size:  20),
                       onPressed: () {
                         if (key.currentState?.validate() == true) {
                           Navigator.pop(context, emailController.text.trim());

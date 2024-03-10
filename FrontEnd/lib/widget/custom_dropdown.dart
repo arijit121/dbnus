@@ -32,7 +32,7 @@ Widget customDropDownFormField<T>(
       value: value,
       items: items,
       onChanged: onChanged,
-      hint: hintText != null ? customText(hintText, Colors.grey, 13) : null,
+      hint: hintText != null ? customText(hintText,color:  Colors.grey,size:  13) : null,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
@@ -73,7 +73,7 @@ List<DropdownMenuItem<T>> customItemList<T>({
         (index) => DropdownMenuItem<T>(
               value: valueList.elementAt(index).value,
               child: customText(
-                  valueList.elementAt(index).title ?? '', HexColor.fromHex(ColorConst.primaryDark), 13),
+                  valueList.elementAt(index).title ?? '',color:  HexColor.fromHex(ColorConst.primaryDark),size:  13),
             ));
 
 class CustomDropDownModel<T> {
@@ -112,7 +112,7 @@ Widget customMenuAnchor<T>(
             onPressed(items.elementAt(index).value);
           },
           child:
-              customText(items.elementAt(index).title ?? "", HexColor.fromHex(ColorConst.primaryDark), 13),
+              customText(items.elementAt(index).title ?? "",color:  HexColor.fromHex(ColorConst.primaryDark),size:  13),
         ),
       ),
     );

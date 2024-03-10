@@ -71,11 +71,11 @@ Widget keyValueWidget(
     Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        customText(key, color, size ?? 16, fontWeight: fontWeight),
+        customText(key,color:  color,size:  size ?? 16, fontWeight: fontWeight),
         customText(
           value,
-          color,
-          size ?? 16,
+        color:   color,
+       size:    size ?? 16,
           fontWeight: fontWeight ?? FontWeight.w500,
         ),
       ],
@@ -103,8 +103,8 @@ Widget conflictedTestMsg(
                 serviceModel?.isPackage == true
                     ? "This package have test(s) already in cart."
                     : "Already in cart under selected package.",
-                HexColor.fromHex(ColorConst.primaryDark),
-                13,
+              color:   HexColor.fromHex(ColorConst.primaryDark),
+             size:    13,
               ),
             ));
       }

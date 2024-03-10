@@ -64,6 +64,13 @@ class AssectsConst {
   static String videoIcon = "assets/icon/video_icon.svg";
   static String videoCall = "assets/icon/video_call.svg";
   static String phoneMissed = "assets/icon/phone-missed.svg";
+  static String chartLine = "assets/icon/chart_line.svg";
+  static String dashboardIcon = "assets/icon/dashboardIcon.svg";
+  static String leaderBoard = "assets/icon/leaderBoard.svg";
+  static String message = "assets/icon/message.svg";
+  static String setting = "assets/icon/setting.svg";
+  static String shopping = "assets/icon/shopping.svg";
+  static String signOut = "assets/icon/sign_out.svg";
 
   static String genuLogo = "assets/design/genu_logo.png";
   static String accurateReport = "assets/design/accurate-report.png";

@@ -5,6 +5,7 @@ import 'package:genu/widget/custom_text.dart';
 
 import '../../../const/color_const.dart';
 import '../../../extension/hex_color.dart';
+import '../../../extension/logger_extension.dart';
 import '../../../storage/local_preferences.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/text_utils.dart';
@@ -21,7 +22,16 @@ class LandingUi extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Container(),
+        child: ScreenUtils.responsiveUI(
+            narrowUI: customText(
+              "narrowUI",
+            ),
+            mediumUI: customText(
+              "mediumUI",
+            ),
+            largeUI: customText(
+              "largeUI",
+            )),
       ),
     )
         //   BlocProvider(

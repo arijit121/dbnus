@@ -29,7 +29,7 @@ Widget customTextFormField(
           Row(
             children: [
               customText('${title ?? ""}${isRequired == true ? " *" : ""}',
-                  HexColor.fromHex(ColorConst.primaryDark), 14,
+               color:    HexColor.fromHex(ColorConst.primaryDark),size:  14,
                   fontWeight: FontWeight.w500),
             ],
           ),

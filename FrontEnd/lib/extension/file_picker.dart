@@ -109,8 +109,8 @@ Future<CustomFile?> customFilePicker() async {
                           8.ph,
                           customText(
                             "Capture Photo.",
-                            HexColor.fromHex(ColorConst.primaryDark),
-                            14,
+                          color:   HexColor.fromHex(ColorConst.primaryDark),
+                         size:    14,
                             fontWeight: FontWeight.w500,
                             textAlign: TextAlign.center,
                           )
@@ -136,8 +136,8 @@ Future<CustomFile?> customFilePicker() async {
                           8.ph,
                           customText(
                             "Choose file from device.",
-                            HexColor.fromHex(ColorConst.primaryDark),
-                            14,
+                      color:       HexColor.fromHex(ColorConst.primaryDark),
+                        size:     14,
                             fontWeight: FontWeight.w500,
                             textAlign: TextAlign.center,
                           )

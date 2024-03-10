@@ -25,8 +25,9 @@ TextStyle customizeTextStyle(
 
 Widget customText(
   String text,
-  Color color,
-  double size, {
+   {
+     Color? color,
+     double? size,
   FontWeight? fontWeight,
   int? maxLines,
   bool? lineThrough,

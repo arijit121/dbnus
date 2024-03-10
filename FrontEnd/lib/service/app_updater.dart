@@ -39,7 +39,7 @@ class AppUpdater {
             String? result = await showDialog<String>(
               context: context,
               builder: (BuildContext context) => CupertinoAlertDialog(
-                title: customText(TextUtils.update_app, HexColor.fromHex(ColorConst.primaryDark), 16,
+                title: customText(TextUtils.update_app,color:  HexColor.fromHex(ColorConst.primaryDark),size:  16,
                     textAlign: TextAlign.center, fontWeight: FontWeight.bold),
                 content: Column(
                   children: [
@@ -50,17 +50,17 @@ class AppUpdater {
                               "{{currentAppStoreVersion}}", localVersion)
                           .replaceAll("{{currentInstalledVersion}}",
                               storeVersion ?? ""),
-                      HexColor.fromHex(ColorConst.primaryDark),
-                      12,
+                    color:   HexColor.fromHex(ColorConst.primaryDark),
+                   size:    12,
                     ),
                     8.ph,
-                    customText(TextUtils.release_notes, HexColor.fromHex(ColorConst.primaryDark), 14,
+                    customText(TextUtils.release_notes,color:  HexColor.fromHex(ColorConst.primaryDark),size:  14,
                         fontWeight: FontWeight.bold),
                     5.ph,
                     customText(
                       releaseNotes ?? "",
-                      HexColor.fromHex(ColorConst.primaryDark),
-                      13,
+                   color:    HexColor.fromHex(ColorConst.primaryDark),
+                   size:    13,
                     ),
                   ],
                 ),
@@ -69,12 +69,12 @@ class AppUpdater {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: customText("Ignore", Colors.blue, 13)),
+                      child: customText("Ignore",color:  Colors.blue,size:  13)),
                   customTextButton(
                       onPressed: () {
                         Navigator.pop(context, "Y");
                       },
-                      child: customText("Update Now", Colors.blue, 13)),
+                      child: customText("Update Now",color:  Colors.blue,size:  13)),
                 ],
               ),
             );
