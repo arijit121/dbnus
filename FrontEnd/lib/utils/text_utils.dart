@@ -787,8 +787,7 @@ class TextUtils {
   static String recommended_health_package = "Recommended Health Package";
 
   // ignore: non_constant_identifier_names
-  static String appTitle =
-      "Book Online Blood Test | NABL Accredited | Genu Path Labs";
+  static String appTitle = "Test Des";
 
   // ignore: non_constant_identifier_names
   static String provide_email =

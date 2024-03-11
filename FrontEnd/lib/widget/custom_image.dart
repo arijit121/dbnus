@@ -16,7 +16,7 @@ Widget customNetWorkImageView(
         fit: fit ?? BoxFit.contain,
         errorBuilder: (_, __, ___) {
           return Image.asset(
-            AssectsConst.genuNoImageLogo,
+            AssetsConst.genuNoImageLogo,
             width: width != 0.0 ? width : null,
             height: height != 0.0 ? height : null,
           );

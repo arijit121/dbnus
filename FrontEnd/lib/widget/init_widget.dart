@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genu/const/assects_const.dart';
+
 //ignore: must_be_immutable
 class InitWidget extends StatelessWidget {
   InitWidget(
@@ -19,7 +20,7 @@ class InitWidget extends StatelessWidget {
       width: width,
       height: height,
       child: Image.asset(
-        AssectsConst.genuNoImageLogo,
+        AssetsConst.genuNoImageLogo,
         height: 60,
         width: 60,
       ),

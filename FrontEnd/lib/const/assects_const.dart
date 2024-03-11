@@ -1,4 +1,4 @@
-class AssectsConst {
+class AssetsConst {
   static String homeIcon = "assets/icon/home.svg";
   static String bookingsIcon = "assets/icon/bookings.svg";
   static String menuIcon = "assets/icon/menu.svg";
@@ -65,7 +65,7 @@ class AssectsConst {
   static String videoCall = "assets/icon/video_call.svg";
   static String phoneMissed = "assets/icon/phone-missed.svg";
   static String chartLine = "assets/icon/chart_line.svg";
-  static String dashboardIcon = "assets/icon/dashboardIcon.svg";
+  static String dashboardIcon = "assets/icon/dashboard_Icon.png";
   static String leaderBoard = "assets/icon/leaderBoard.svg";
   static String message = "assets/icon/message.svg";
   static String setting = "assets/icon/setting.svg";

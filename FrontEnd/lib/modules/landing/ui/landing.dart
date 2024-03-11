@@ -13,6 +13,7 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/dots_indicator.dart';
 import '../bloc/landing_bloc.dart';
+import '../widget/landing_widget.dart';
 
 class LandingUi extends StatelessWidget {
   const LandingUi({super.key});
@@ -29,9 +30,7 @@ class LandingUi extends StatelessWidget {
             mediumUI: customText(
               "mediumUI",
             ),
-            largeUI: customText(
-              "largeUI",
-            )),
+            largeUI: LandingWidget().drawerNavigationRail()),
       ),
     )
         //   BlocProvider(

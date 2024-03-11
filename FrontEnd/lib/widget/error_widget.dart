@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:genu/widget/custom_text.dart';
 
 import '../const/assects_const.dart';
+
 //ignore: must_be_immutable
 class CustomErrorWidget extends StatelessWidget {
   CustomErrorWidget(
@@ -28,13 +29,13 @@ class CustomErrorWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              AssectsConst.somethingWentWrong,
+              AssetsConst.somethingWentWrong,
               height: height - 20,
             ),
             if (errorMsg?.isNotEmpty == true)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: customText(errorMsg ?? "",color:  Colors.grey,size:  13),
+                child: customText(errorMsg ?? "", color: Colors.grey, size: 13),
               )
           ],
         ),
