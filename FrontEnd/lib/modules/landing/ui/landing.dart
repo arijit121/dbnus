@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/widget/custom_text.dart';
+import 'package:genu/extension/logger_extension.dart';
 
-import '../../../const/color_const.dart';
-import '../../../extension/hex_color.dart';
-import '../../../extension/logger_extension.dart';
-import '../../../storage/local_preferences.dart';
 import '../../../utils/screen_utils.dart';
-import '../../../utils/text_utils.dart';
-import '../../../widget/custom_button.dart';
-import '../../../widget/custom_image.dart';
-import '../../../widget/dots_indicator.dart';
-import '../bloc/landing_bloc.dart';
 import '../widget/landing_widget.dart';
 
-class LandingUi extends StatelessWidget {
+class LandingUi extends StatefulWidget {
   const LandingUi({super.key});
+
+  @override
+  State<LandingUi> createState() => _LandingUiState();
+}
+
+class _LandingUiState extends State<LandingUi> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: LandingWidget().drawerNavigationRailWithTitle(
+          chooseIndex: (int value) {
+        Navigator.of(context).pop();
+        AppLog.i(value);
+      }),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ScreenUtils.responsiveUI(
-            ui: customText(
-              "narrowUI",
-            ),
-            mediumUI: customText(
-              "mediumUI",
-            ),
-            largeUI: LandingWidget().drawerNavigationRail()),
+            narrowUI: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                }),
+            mediumUI: LandingWidget().drawerNavigationRailMediumUI(),
+            largeUI: LandingWidget()
+                .drawerNavigationRailWithTitle(chooseIndex: (int value) {})),
       ),
     )
         //   BlocProvider(

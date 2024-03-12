@@ -29,14 +29,15 @@ Widget customTextFormField(
           Row(
             children: [
               customText('${title ?? ""}${isRequired == true ? " *" : ""}',
-               color:    HexColor.fromHex(ColorConst.primaryDark),size:  14,
+                  color: HexColor.fromHex(ColorConst.primaryDark),
+                  size: 14,
                   fontWeight: FontWeight.w500),
             ],
           ),
         if (title?.isNotEmpty == true) 5.ph,
         TextFormField(
             cursorColor: HexColor.fromHex(ColorConst.primaryDark),
-            cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
+            // cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
             onChanged: onChanged,
             readOnly: readOnly,
             controller: controller,

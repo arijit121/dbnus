@@ -3,6 +3,27 @@ class TextUtils {
   static String user_is_inActive = "User is inActive.";
 
   // ignore: non_constant_identifier_names
+  static String dashboard = "Dashboard";
+
+  // ignore: non_constant_identifier_names
+  static String leaderBoard = "LeaderBoard";
+
+  // ignore: non_constant_identifier_names
+  static String message = "Message";
+
+  // ignore: non_constant_identifier_names
+  static String settings = "Settings";
+
+  // ignore: non_constant_identifier_names
+  static String sign_out = "Sign Out";
+
+  // ignore: non_constant_identifier_names
+  static String order = "Order";
+
+  // ignore: non_constant_identifier_names
+  static String products = "Products";
+
+  // ignore: non_constant_identifier_names
   static String test_result_analysis = "Test Result Analysis";
 
   // ignore: non_constant_identifier_names

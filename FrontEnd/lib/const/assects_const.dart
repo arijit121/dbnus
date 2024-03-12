@@ -69,6 +69,7 @@ class AssetsConst {
   static String leaderBoard = "assets/icon/leaderBoard.svg";
   static String message = "assets/icon/message.svg";
   static String setting = "assets/icon/setting.svg";
+  static String shoppingCart = "assets/icon/shopping-cart.svg";
   static String shopping = "assets/icon/shopping.svg";
   static String signOut = "assets/icon/sign_out.svg";
 
