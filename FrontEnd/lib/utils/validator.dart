@@ -138,11 +138,11 @@ class Validator {
 
     if (value == null || value.isEmpty) {
       return TextUtils.phoneValidation;
-    } else if (value[0] == " ") {
+    } else if (value[0] == " " || !validate) {
       return TextUtils.phoneValidation;
     } else if (int.parse(value[0]) < 5) {
       return TextUtils.phoneValidation;
-    } else if (value.length != 10 || !validate) {
+    } else if (value.length != 10) {
       return TextUtils.phoneValidation;
     } else {
       return null;
