@@ -37,7 +37,7 @@ Widget customTextFormField(
         if (title?.isNotEmpty == true) 5.ph,
         TextFormField(
             cursorColor: HexColor.fromHex(ColorConst.primaryDark),
-            // cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
+            cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
             onChanged: onChanged,
             readOnly: readOnly,
             controller: controller,
