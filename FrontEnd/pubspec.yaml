@@ -18,7 +18,7 @@ dependencies:
   # bloc
   equatable: ^2.0.5
   flutter_bloc: ^8.1.4
-  bloc: ^8.1.2
+
   # http
   http: ^1.1.2
   #route manager web
@@ -75,7 +75,7 @@ dependencies:
   dyte_uikit: ^0.6.1
   flutter_inappwebview: ^6.0.0
   video_player: ^2.8.2
-  web:
+  web: ^0.4.2
   permission_handler: ^11.3.0
   #update:
   in_app_update: ^4.2.2

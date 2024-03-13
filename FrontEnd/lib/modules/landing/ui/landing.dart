@@ -18,11 +18,14 @@ class _LandingUiState extends State<LandingUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: LandingWidget().drawerNavigationRailWithTitle(
-          chooseIndex: (int value) {
-        Navigator.of(context).pop();
-        AppLog.i(value);
-      }),
+      drawer: SafeArea(
+        child: LandingWidget().drawerNavigationRail(
+            withTitle: true,
+            chooseIndex: (int value) {
+              Navigator.of(context).pop();
+              AppLog.i(value);
+            }),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ScreenUtils.responsiveUI(
@@ -31,9 +34,15 @@ class _LandingUiState extends State<LandingUi> {
                 onPressed: () {
                   _scaffoldKey.currentState?.openDrawer();
                 }),
-            mediumUI: LandingWidget().drawerNavigationRailMediumUI(),
-            largeUI: LandingWidget()
-                .drawerNavigationRailWithTitle(chooseIndex: (int value) {})),
+            mediumUI:
+                LandingWidget().drawerNavigationRail(chooseIndex: (int value) {
+              AppLog.i(value);
+            }),
+            largeUI: LandingWidget().drawerNavigationRail(
+                withTitle: true,
+                chooseIndex: (int value) {
+                  AppLog.i(value);
+                })),
       ),
     )
         //   BlocProvider(

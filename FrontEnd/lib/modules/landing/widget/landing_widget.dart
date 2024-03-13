@@ -9,10 +9,12 @@ import 'package:genu/widget/custom_text.dart';
 import '../../../const/assects_const.dart';
 
 class LandingWidget {
-  Widget drawerNavigationRailWithTitle(
-          {required void Function(int value) chooseIndex}) =>
+  Widget drawerNavigationRail(
+          {required void Function(int value) chooseIndex, bool? withTitle}) =>
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+        padding: withTitle == true
+            ? const EdgeInsets.symmetric(horizontal: 50, vertical: 20)
+            : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           borderRadius:
               const BorderRadius.only(topRight: Radius.circular(16.0)),
@@ -36,39 +38,12 @@ class LandingWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          drawerNavigationRailList(showTitle: true)
+                          drawerNavigationRailList(showTitle: withTitle == true)
                               .elementAt(index),
                           if (index != (drawerNavigationRailList().length - 1))
                             30.ph,
                         ],
                       ),
-                    ))),
-      );
-  Widget drawerNavigationRailMediumUI() => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          borderRadius:
-              const BorderRadius.only(topRight: Radius.circular(16.0)),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: HexColor.fromHex(ColorConst.grey4),
-              blurRadius: 4.0,
-              spreadRadius: 1.0,
-            ),
-          ],
-        ),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-                drawerNavigationRailList().length,
-                (index) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        drawerNavigationRailList().elementAt(index),
-                        if (index != (drawerNavigationRailList().length - 1))
-                          30.ph,
-                      ],
                     ))),
       );
 
