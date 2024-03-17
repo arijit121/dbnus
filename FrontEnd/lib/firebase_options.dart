@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -47,32 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB1d_V13Jk8qflgd52GKkqOEf_4prUqV-k',
-    appId: '1:1010994691811:web:5131c65b45f57e1aaf8fd6',
-    messagingSenderId: '1010994691811',
-    projectId: 'genupathlabs-28005',
-    authDomain: 'genupathlabs-28005.firebaseapp.com',
-    databaseURL: 'https://genupathlabs-28005.firebaseio.com',
-    storageBucket: 'genupathlabs-28005.appspot.com',
-    measurementId: 'G-6R0RHRH1Y3',
+    apiKey: 'AIzaSyDdGpKs-t8Ee4tr4GsaEavhureueb2O4zM',
+    appId: '1:783534429855:web:cc78ab29a1b67306e6f4aa',
+    messagingSenderId: '783534429855',
+    projectId: 'dbnus-df986',
+    authDomain: 'dbnus-df986.firebaseapp.com',
+    storageBucket: 'dbnus-df986.appspot.com',
+    measurementId: 'G-8YSKF8B4G1',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD52PFU-VnaS2Lnsn9qYGNADSWuz13RtwQ',
-    appId: '1:1010994691811:android:ca2fcc39b04831cd',
-    messagingSenderId: '1010994691811',
-    projectId: 'genupathlabs-28005',
-    databaseURL: 'https://genupathlabs-28005.firebaseio.com',
-    storageBucket: 'genupathlabs-28005.appspot.com',
+    apiKey: 'AIzaSyDrLI6sP4HuEqJgGlul9NzE7XyfVl7Es9w',
+    appId: '1:783534429855:android:3cef16b71551f7a6e6f4aa',
+    messagingSenderId: '783534429855',
+    projectId: 'dbnus-df986',
+    storageBucket: 'dbnus-df986.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCyevA3w9TN18VVJ4bnFTryGYTS00bsKIk',
-    appId: '1:1010994691811:ios:0e88f87215df73e1af8fd6',
-    messagingSenderId: '1010994691811',
-    projectId: 'genupathlabs-28005',
-    databaseURL: 'https://genupathlabs-28005.firebaseio.com',
-    storageBucket: 'genupathlabs-28005.appspot.com',
+    apiKey: 'AIzaSyAxw1WbItbE1GEOJWiI8yCTLQ3sFQ93llA',
+    appId: '1:783534429855:ios:68ae1fb09dc68722e6f4aa',
+    messagingSenderId: '783534429855',
+    projectId: 'dbnus-df986',
+    storageBucket: 'dbnus-df986.appspot.com',
     iosBundleId: 'com.genupathlabs.genu',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAxw1WbItbE1GEOJWiI8yCTLQ3sFQ93llA',
+    appId: '1:783534429855:ios:b2c42208bfe976dae6f4aa',
+    messagingSenderId: '783534429855',
+    projectId: 'dbnus-df986',
+    storageBucket: 'dbnus-df986.appspot.com',
+    iosBundleId: 'com.genupathlabs.genu.RunnerTests',
   );
 }
