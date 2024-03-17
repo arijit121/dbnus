@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:genu/service/open_url_service.dart';
+import '../service/open_url_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 TextStyle customizeTextStyle(
@@ -24,10 +24,9 @@ TextStyle customizeTextStyle(
 }
 
 Widget customText(
-  String text,
-   {
-     Color? color,
-     double? size,
+  String text, {
+  Color? color,
+  double? size,
   FontWeight? fontWeight,
   int? maxLines,
   bool? lineThrough,

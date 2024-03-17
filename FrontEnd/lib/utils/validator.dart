@@ -1,5 +1,5 @@
-import 'package:genu/extension/logger_extension.dart';
-import 'package:genu/utils/text_utils.dart';
+import '../extension/logger_extension.dart';
+import '../utils/text_utils.dart';
 import 'package:intl/intl.dart';
 
 class Validator {

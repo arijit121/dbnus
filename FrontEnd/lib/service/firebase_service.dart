@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:genu/extension/logger_extension.dart';
+import '../extension/logger_extension.dart';
 
 import 'redirect_engine.dart';
 

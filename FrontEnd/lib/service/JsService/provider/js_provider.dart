@@ -1,5 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
-
+import '../../../extension/logger_extension.dart';
 import '../helper/js_helper.dart';
 
 class JsProvider {

@@ -1,5 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
-
+import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
 
 class PatientModel {
@@ -42,7 +41,7 @@ class PatientModel {
       }
       patientId = "${json['PatientId']}";
       relationship = json['Relationship'];
-      ageYr = json['AgeYr']??json['Age'];
+      ageYr = json['AgeYr'] ?? json['Age'];
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

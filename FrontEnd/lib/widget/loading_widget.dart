@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:genu/const/color_const.dart';
-import 'package:genu/extension/hex_color.dart';
+import '../const/color_const.dart';
+import '../extension/hex_color.dart';
 
 import '../service/context_service.dart';
 

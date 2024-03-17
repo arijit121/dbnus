@@ -1,12 +1,11 @@
+import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:genu/const/color_const.dart';
-import 'package:genu/extension/hex_color.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/utils/text_utils.dart';
-import 'package:genu/widget/custom_text.dart';
-
 import '../../../const/assects_const.dart';
+import '../../../const/color_const.dart';
+import '../../../extension/hex_color.dart';
+import '../../../utils/text_utils.dart';
+import '../../../widget/custom_text.dart';
 import '../../../widget/custom_ui.dart';
 
 class LandingWidget {

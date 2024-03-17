@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/widget/custom_button.dart';
-import 'package:genu/widget/custom_text.dart';
+import '../extension/spacing.dart';
+import '../widget/custom_button.dart';
+import '../widget/custom_text.dart';
 
 Widget customTabBar(
         {required Color inactiveColor,
@@ -12,11 +12,13 @@ Widget customTabBar(
     customTextButton(
       child: Column(
         children: [
-          customText(title,color:  isActive ? activeColor : inactiveColor,size:  14,
+          customText(title,
+              color: isActive ? activeColor : inactiveColor,
+              size: 14,
               fontWeight: isActive ? FontWeight.w500 : FontWeight.w400),
           7.ph,
           Container(
-            width: (title.length * 8)+9,
+            width: (title.length * 8) + 9,
             height: 2,
             decoration: BoxDecoration(
                 color: isActive ? activeColor : Colors.transparent,

@@ -1,14 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:genu/extension/logger_extension.dart';
-import 'package:genu/router/router_name.dart';
+
 import 'package:go_router/go_router.dart';
 
 import '../../data/model/custom_file.dart';
 import '../../data/model/paytm_merchant_details.dart';
 
+import '../../extension/logger_extension.dart';
 import '../../service/context_service.dart';
 import '../router_manager.dart';
+import '../router_name.dart';
 import 'web/custom_router_web.dart';
 
 class CustomRoute {
@@ -49,7 +50,6 @@ class CustomRoute {
 
   MaterialPageRoute getRoute({required String name, dynamic arguments}) {
     switch (name) {
-     
       // case RouteName.cartUploadPrescription:
       //   return MaterialPageRoute(builder: (_) {
       //     if (arguments is Map) {

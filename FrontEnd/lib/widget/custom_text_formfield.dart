@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:genu/extension/hex_color.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/widget/custom_text.dart';
+import '../extension/hex_color.dart';
+import '../extension/spacing.dart';
+import '../widget/custom_text.dart';
 
 import '../const/color_const.dart';
 

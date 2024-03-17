@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:custom_platform_device_id/platform_device_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:genu/extension/logger_extension.dart';
-import 'package:genu/utils/screen_utils.dart';
+
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../data/connection/connection_status.dart';
+import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart';
 
 import '../storage/local_preferences.dart';
+import '../utils/screen_utils.dart';
 
 class AppConfig {
   Future<String> getAppVersion() async {
@@ -54,8 +55,6 @@ class AppConfig {
     }
     return null;
   }
-
-
 
   Future<String?> getDeviceId() async {
     try {

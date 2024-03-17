@@ -1,4 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
+import '../extension/logger_extension.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 

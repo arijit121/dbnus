@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:genu/config/api_config.dart';
-import 'package:genu/data/model/api_return_model.dart';
-import 'package:genu/extension/logger_extension.dart';
-
+import '../../../config/api_config.dart';
 import '../../../const/api_url_const.dart';
 import '../../../data/api_client/imp/api_repo_imp.dart';
 import '../../../data/api_client/repo/api_repo.dart';
+import '../../../data/model/api_return_model.dart';
+import '../../../extension/logger_extension.dart';
 import '../model/landing_banner_response.dart';
 
 class LandingRepo {

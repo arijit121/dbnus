@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:genu/extension/logger_extension.dart';
 
 import '../../../utils/screen_utils.dart';
 import '../bloc/landing_bloc.dart';

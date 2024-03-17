@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:genu/extension/sizing.dart';
-import 'package:genu/widget/custom_text.dart';
-import 'package:genu/widget/custom_ui.dart';
+import '../extension/sizing.dart';
+import '../widget/custom_text.dart';
+import '../widget/custom_ui.dart';
 
 import '../const/color_const.dart';
 import '../data/model/service_model.dart';
@@ -101,7 +101,9 @@ Widget customCartButton(
                   allServiceList: state.serviceList.value ?? [],
                   serviceId: "${serviceModel?.serviceId}")
               ? customElevatedButton(
-                  child: customText(TextUtils.remove,color:  Colors.white,size:  14,
+                  child: customText(TextUtils.remove,
+                      color: Colors.white,
+                      size: 14,
                       fontWeight: FontWeight.w700),
                   onPressed: () {
                     context.read<LocalCartBloc>().add(RemoveServiceFromCart(
@@ -114,7 +116,9 @@ Widget customCartButton(
                       serviceModel: serviceModel)
                   ? Container()
                   : customElevatedButton(
-                      child: customText(TextUtils.book_now,color:  Colors.white,size:  14,
+                      child: customText(TextUtils.book_now,
+                          color: Colors.white,
+                          size: 14,
                           fontWeight: FontWeight.w700),
                       onPressed: () {
                         context.read<LocalCartBloc>().add(AddServiceToCart(
@@ -149,7 +153,8 @@ Widget genderButton(
       onTap: onTap,
       child: Column(
         children: [
-          customText(title,color:  HexColor.fromHex(ColorConst.primaryDark),size:  14.fs),
+          customText(title,
+              color: HexColor.fromHex(ColorConst.primaryDark), size: 14.fs),
           Image.asset(
             assetName,
             height: 48.fs,

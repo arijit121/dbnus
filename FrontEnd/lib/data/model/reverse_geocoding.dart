@@ -1,4 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
+import '../../extension/logger_extension.dart';
 
 class ReverseGeocoding {
   String? result;
@@ -12,7 +12,7 @@ class ReverseGeocoding {
       addressparts = json['addressparts'] != null
           ? Addressparts.fromJson(json['addressparts'])
           : null;
-    }  catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
@@ -57,7 +57,7 @@ class Addressparts {
       postcode = json['postcode'];
       country = json['country'];
       countryCode = json['country_code'];
-    }  catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }

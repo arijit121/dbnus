@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genu/const/assects_const.dart';
+import '../const/assects_const.dart';
 
 //ignore: must_be_immutable
 class InitWidget extends StatelessWidget {

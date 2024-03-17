@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/service/open_url_service.dart';
+import '../extension/spacing.dart';
+import '../service/open_url_service.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
@@ -39,8 +39,11 @@ class AppUpdater {
             String? result = await showDialog<String>(
               context: context,
               builder: (BuildContext context) => CupertinoAlertDialog(
-                title: customText(TextUtils.update_app,color:  HexColor.fromHex(ColorConst.primaryDark),size:  16,
-                    textAlign: TextAlign.center, fontWeight: FontWeight.bold),
+                title: customText(TextUtils.update_app,
+                    color: HexColor.fromHex(ColorConst.primaryDark),
+                    size: 16,
+                    textAlign: TextAlign.center,
+                    fontWeight: FontWeight.bold),
                 content: Column(
                   children: [
                     customText(
@@ -50,17 +53,19 @@ class AppUpdater {
                               "{{currentAppStoreVersion}}", localVersion)
                           .replaceAll("{{currentInstalledVersion}}",
                               storeVersion ?? ""),
-                    color:   HexColor.fromHex(ColorConst.primaryDark),
-                   size:    12,
+                      color: HexColor.fromHex(ColorConst.primaryDark),
+                      size: 12,
                     ),
                     8.ph,
-                    customText(TextUtils.release_notes,color:  HexColor.fromHex(ColorConst.primaryDark),size:  14,
+                    customText(TextUtils.release_notes,
+                        color: HexColor.fromHex(ColorConst.primaryDark),
+                        size: 14,
                         fontWeight: FontWeight.bold),
                     5.ph,
                     customText(
                       releaseNotes ?? "",
-                   color:    HexColor.fromHex(ColorConst.primaryDark),
-                   size:    13,
+                      color: HexColor.fromHex(ColorConst.primaryDark),
+                      size: 13,
                     ),
                   ],
                 ),
@@ -69,12 +74,14 @@ class AppUpdater {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: customText("Ignore",color:  Colors.blue,size:  13)),
+                      child:
+                          customText("Ignore", color: Colors.blue, size: 13)),
                   customTextButton(
                       onPressed: () {
                         Navigator.pop(context, "Y");
                       },
-                      child: customText("Update Now",color:  Colors.blue,size:  13)),
+                      child: customText("Update Now",
+                          color: Colors.blue, size: 13)),
                 ],
               ),
             );

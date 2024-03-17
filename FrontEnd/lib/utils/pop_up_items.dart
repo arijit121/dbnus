@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/utils/screen_utils.dart';
-import 'package:genu/utils/text_utils.dart';
-import 'package:genu/utils/validator.dart';
+import '../extension/spacing.dart';
+import '../utils/screen_utils.dart';
+import '../utils/text_utils.dart';
+import '../utils/validator.dart';
 
 import '../const/assects_const.dart';
 import '../const/color_const.dart';

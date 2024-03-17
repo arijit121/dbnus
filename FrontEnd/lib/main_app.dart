@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:genu/service/app_updater.dart';
+import '../service/app_updater.dart';
 
 import 'data/model/fcm_notification_model.dart';
 import 'extension/logger_extension.dart';

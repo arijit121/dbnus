@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:genu/utils/text_utils.dart';
-import 'package:genu/widget/error_widget.dart';
+import '../utils/text_utils.dart';
+import '../widget/error_widget.dart';
 import 'package:go_router/go_router.dart';
 
 import '../const/color_const.dart';

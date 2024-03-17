@@ -1,4 +1,4 @@
-import 'package:genu/utils/screen_utils.dart';
+import '../utils/screen_utils.dart';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';

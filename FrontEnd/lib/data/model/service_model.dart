@@ -1,5 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
-
+import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
 
 class ServiceModel {

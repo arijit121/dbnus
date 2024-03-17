@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:genu/extension/logger_extension.dart';
+import '../extension/logger_extension.dart';
 import 'package:http/http.dart' as http;
 import 'package:xml2json/xml2json.dart';
 

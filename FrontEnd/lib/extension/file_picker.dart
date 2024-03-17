@@ -3,12 +3,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:genu/const/color_const.dart';
-import 'package:genu/extension/hex_color.dart';
-import 'package:genu/extension/logger_extension.dart';
-import 'package:genu/extension/spacing.dart';
-import 'package:genu/utils/screen_utils.dart';
-import 'package:genu/widget/custom_text.dart';
+import '../const/color_const.dart';
+import '../extension/hex_color.dart';
+import '../extension/logger_extension.dart';
+import '../extension/spacing.dart';
+import '../utils/screen_utils.dart';
+import '../widget/custom_text.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../data/model/custom_file.dart';
@@ -109,8 +109,8 @@ Future<CustomFile?> customFilePicker() async {
                           8.ph,
                           customText(
                             "Capture Photo.",
-                          color:   HexColor.fromHex(ColorConst.primaryDark),
-                         size:    14,
+                            color: HexColor.fromHex(ColorConst.primaryDark),
+                            size: 14,
                             fontWeight: FontWeight.w500,
                             textAlign: TextAlign.center,
                           )
@@ -136,8 +136,8 @@ Future<CustomFile?> customFilePicker() async {
                           8.ph,
                           customText(
                             "Choose file from device.",
-                      color:       HexColor.fromHex(ColorConst.primaryDark),
-                        size:     14,
+                            color: HexColor.fromHex(ColorConst.primaryDark),
+                            size: 14,
                             fontWeight: FontWeight.w500,
                             textAlign: TextAlign.center,
                           )

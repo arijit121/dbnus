@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genu/extension/spacing.dart';
+import '../extension/spacing.dart';
 
 Widget customStepper(
         {List<CustomStepperContent>? customStepperContent,

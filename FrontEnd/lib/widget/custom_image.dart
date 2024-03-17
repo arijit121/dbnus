@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genu/const/assects_const.dart';
+import '../const/assects_const.dart';
 
 Widget customNetWorkImageView(
         {required String url,

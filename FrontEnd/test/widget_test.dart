@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:genu/main_app.dart';
-import 'package:genu/main_web.dart';
+import '../main_app.dart';
+import '../main_web.dart';
 
 void main() {
   testWidgets('Smoke test', (WidgetTester tester) async {

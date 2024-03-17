@@ -5,7 +5,6 @@
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:genu/extension/logger_extension.dart';
 
 export 'dart:ui_web'
     show

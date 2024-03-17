@@ -1,4 +1,4 @@
-import 'package:genu/extension/logger_extension.dart';
+import '../extension/logger_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalPreferences {

@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:genu/service/value_handler.dart';
-import 'package:genu/utils/pop_up_items.dart';
+import '../service/value_handler.dart';
+import '../utils/pop_up_items.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 

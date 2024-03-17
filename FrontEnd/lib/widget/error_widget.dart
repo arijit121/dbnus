@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:genu/widget/custom_text.dart';
+import '../widget/custom_text.dart';
 
 import '../const/assects_const.dart';
 

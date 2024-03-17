@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:genu/extension/logger_extension.dart';
+import '../extension/logger_extension.dart';
 
 import '../data/model/user_model.dart';
 import 'local_preferences.dart';
@@ -41,12 +41,10 @@ class UserPreference {
       await LocalPreferences().setString(
           key: LocalPreferences.userDetailsKey,
           value: json.encode(userModel.toJson()));
-    }  catch (e, stacktrace) {
+    } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
-
- 
 
   Future<bool> clearData() async {
     return await LocalPreferences()
