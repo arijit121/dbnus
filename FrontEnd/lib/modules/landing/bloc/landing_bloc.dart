@@ -17,7 +17,7 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
   LandingBloc()
       : super(LandingState(
           bannerData: DynamicBlocData<LandingBannerResponse>.init(),
-          bannerIndex: DynamicBlocData<int>.init(value: 0),
+          pageIndex: DynamicBlocData<int>.init(value: 0),
         )) {
     ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
     on<LandingEvent>((event, emit) async {
@@ -43,10 +43,10 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
             }
           });
         }
-      } else if (event is UpdateBannerIndex) {
-        emit(state.copyWith(bannerIndex: DynamicBlocData.loading()));
+      } else if (event is ChangeIndex) {
+        emit(state.copyWith(pageIndex: DynamicBlocData.loading()));
         emit(state.copyWith(
-            bannerIndex: DynamicBlocData<int>.success(value: event.index)));
+            pageIndex: DynamicBlocData<int>.success(value: event.index)));
       }
     });
   }

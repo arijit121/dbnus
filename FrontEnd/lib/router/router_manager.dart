@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:genu/utils/text_utils.dart';
@@ -31,10 +30,12 @@ class RouterManager {
         name: RouteName.initialView,
         path: RouteName.initialView,
         builder: (BuildContext context, GoRouterState state) {
-          return  const LandingUi();
+          return LandingUi(
+            index: 0,
+          );
         },
       ),
-       
+
       // GoRoute(
       //   name: RouteName.bookingReschedule,
       //   path: "${RouteName.bookingReschedule}/:booking_no",
@@ -77,7 +78,6 @@ class RouterManager {
       //     }
       //   },
       // ),
-    
     ],
   );
 
@@ -94,8 +94,8 @@ class RouterManager {
                 },
                 icon: const Icon(Icons.clear))
             : Container(),
-        title: customText(
-            TextUtils.notFound,color:  HexColor.fromHex(ColorConst.primaryDark),size:  20),
+        title: customText(TextUtils.notFound,
+            color: HexColor.fromHex(ColorConst.primaryDark), size: 20),
       ),
       body: Center(
         child: CustomErrorWidget(),

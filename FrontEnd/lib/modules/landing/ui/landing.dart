@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:genu/extension/logger_extension.dart';
 
 import '../../../utils/screen_utils.dart';
+import '../bloc/landing_bloc.dart';
 import '../widget/landing_widget.dart';
 
+// ignore: must_be_immutable
 class LandingUi extends StatefulWidget {
-  const LandingUi({super.key});
-
+  LandingUi({super.key, required this.index});
+  int index;
   @override
   State<LandingUi> createState() => _LandingUiState();
 }
@@ -16,33 +19,48 @@ class _LandingUiState extends State<LandingUi> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: SafeArea(
-        child: LandingWidget().drawerNavigationRail(
-            withTitle: true,
-            chooseIndex: (int value) {
-              Navigator.of(context).pop();
-              AppLog.i(value);
-            }),
-      ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: ScreenUtils.responsiveUI(
-            narrowUI: IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  _scaffoldKey.currentState?.openDrawer();
-                }),
-            mediumUI:
-                LandingWidget().drawerNavigationRail(chooseIndex: (int value) {
-              AppLog.i(value);
-            }),
-            largeUI: LandingWidget().drawerNavigationRail(
-                withTitle: true,
-                chooseIndex: (int value) {
-                  AppLog.i(value);
-                })),
+    return BlocProvider(
+      create: (context) => LandingBloc()..add(ChangeIndex(index: widget.index)),
+      child: BlocBuilder<LandingBloc, LandingState>(
+        builder: (context, state) {
+          return Scaffold(
+            key: _scaffoldKey,
+            drawer: SafeArea(
+              child: LandingWidget().drawerNavigationRail(
+                  selectedIndex: state.pageIndex.value,
+                  withTitle: true,
+                  chooseIndex: (int value) {
+                    Navigator.of(context).pop();
+
+                    context.read<LandingBloc>().add(ChangeIndex(index: value));
+                  }),
+            ),
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: ScreenUtils.responsiveUI(
+                  narrowUI: IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      }),
+                  mediumUI: LandingWidget().drawerNavigationRail(
+                      selectedIndex: state.pageIndex.value,
+                      chooseIndex: (int value) {
+                        context
+                            .read<LandingBloc>()
+                            .add(ChangeIndex(index: value));
+                      }),
+                  largeUI: LandingWidget().drawerNavigationRail(
+                      selectedIndex: state.pageIndex.value,
+                      withTitle: true,
+                      chooseIndex: (int value) {
+                        context
+                            .read<LandingBloc>()
+                            .add(ChangeIndex(index: value));
+                      })),
+            ),
+          );
+        },
       ),
     )
         //   BlocProvider(

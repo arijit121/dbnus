@@ -8,9 +8,10 @@ class InitiateSplash extends LandingEvent {
   @override
   List<Object?> get props => [];
 }
+
 //ignore: must_be_immutable
-class UpdateBannerIndex extends LandingEvent {
-  UpdateBannerIndex({required this.index});
+class ChangeIndex extends LandingEvent {
+  ChangeIndex({required this.index});
 
   int index;
 

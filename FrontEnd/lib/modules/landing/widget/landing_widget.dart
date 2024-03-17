@@ -7,10 +7,13 @@ import 'package:genu/utils/text_utils.dart';
 import 'package:genu/widget/custom_text.dart';
 
 import '../../../const/assects_const.dart';
+import '../../../widget/custom_ui.dart';
 
 class LandingWidget {
   Widget drawerNavigationRail(
-          {required void Function(int value) chooseIndex, bool? withTitle}) =>
+          {required void Function(int value) chooseIndex,
+          bool? withTitle,
+          int? selectedIndex}) =>
       Container(
         padding: withTitle == true
             ? const EdgeInsets.symmetric(horizontal: 50, vertical: 20)
@@ -38,8 +41,36 @@ class LandingWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          drawerNavigationRailList(showTitle: withTitle == true)
-                              .elementAt(index),
+                          if (index == selectedIndex)
+                            withTitle != true
+                                ? customCardDesign(
+                                    radius: 12,
+                                    minimumSize: const Size(44, 44),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 6),
+                                    color: HexColor.fromHex(
+                                        ColorConst.baseHexColor),
+                                    child: drawerNavigationRailList(
+                                            showTitle: withTitle == true,
+                                            color: Colors.white)
+                                        .elementAt(index),
+                                  )
+                                : customCardDesign(
+                                    radius: 12,
+                                    minimumSize: const Size(172, 44),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 22, vertical: 6),
+                                    color: HexColor.fromHex(
+                                        ColorConst.baseHexColor),
+                                    child: drawerNavigationRailList(
+                                            showTitle: withTitle == true,
+                                            color: Colors.white)
+                                        .elementAt(index),
+                                  )
+                          else
+                            drawerNavigationRailList(
+                                    showTitle: withTitle == true)
+                                .elementAt(index),
                           if (index != (drawerNavigationRailList().length - 1))
                             30.ph,
                         ],
@@ -47,19 +78,20 @@ class LandingWidget {
                     ))),
       );
 
-  List<Widget> drawerNavigationRailList({bool? showTitle}) => [
+  List<Widget> drawerNavigationRailList({bool? showTitle, Color? color}) => [
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
               AssetsConst.dashboardIcon,
               height: 32,
-              color: HexColor.fromHex(ColorConst.grey),
+              color: color ?? HexColor.fromHex(ColorConst.grey),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.dashboard),
+                child: customText(TextUtils.dashboard,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -70,12 +102,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.leaderBoard,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.leaderBoard),
+                child: customText(TextUtils.leaderBoard,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -86,12 +119,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.shoppingCart,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.order),
+                child: customText(TextUtils.order,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -102,12 +136,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.shopping,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.products),
+                child: customText(TextUtils.products,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -118,12 +153,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.message,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.message),
+                child: customText(TextUtils.message,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -134,12 +170,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.setting,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.settings),
+                child: customText(TextUtils.settings,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
@@ -150,12 +187,13 @@ class LandingWidget {
               height: 32,
               AssetsConst.signOut,
               colorFilter: ColorFilter.mode(
-                  HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
+                  color ?? HexColor.fromHex(ColorConst.grey), BlendMode.srcIn),
             ),
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.sign_out),
+                child: customText(TextUtils.sign_out,
+                    color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
         ),
