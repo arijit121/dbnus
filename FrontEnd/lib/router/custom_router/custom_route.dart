@@ -13,14 +13,12 @@ import '../router_name.dart';
 import 'web/custom_router_web.dart';
 
 class CustomRoute {
-  void back({String? customPath}) {
+  void back() {
     if (kIsWeb) {
       CustomRouterWeb().back();
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
         RouterManager.getInstance.router.pop();
-      } else if (customPath != null && customPath.isNotEmpty == true) {
-        clearAndNavigate(customPath);
       } else {
         clearAndNavigate(RouteName.initialView);
       }
