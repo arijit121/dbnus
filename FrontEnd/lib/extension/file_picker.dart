@@ -68,6 +68,7 @@ Future<List<CustomFile>?> pickMultipleFile() async {
 
 Future<CustomFile?> customFilePicker() async {
   try {
+    FocusManager.instance.primaryFocus?.unfocus();
     List<CameraDescription> cameraDescription = [];
     try {
       cameraDescription = await availableCameras();
