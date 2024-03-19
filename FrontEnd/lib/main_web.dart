@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'const/color_const.dart';
+import 'extension/hex_color.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
@@ -16,7 +18,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
     runApp(const MyWebApp());
   });
@@ -44,7 +46,8 @@ class _MyWebAppState extends State<MyWebApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (BuildContext context) => LocalCartBloc()..add(InItLocalCartEvent()),
+          create: (BuildContext context) =>
+              LocalCartBloc()..add(InItLocalCartEvent()),
         ),
       ],
       child: MaterialApp.router(
@@ -59,7 +62,8 @@ class _MyWebAppState extends State<MyWebApp> {
           },
         ),
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: HexColor.fromHex(ColorConst.baseHexColor)),
           useMaterial3: true,
         ),
         routerConfig: RouterManager.getInstance.router,

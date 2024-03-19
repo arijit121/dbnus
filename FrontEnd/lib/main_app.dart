@@ -10,7 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import '../service/app_updater.dart';
 
+import 'const/color_const.dart';
 import 'data/model/fcm_notification_model.dart';
+import 'extension/hex_color.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
@@ -136,7 +138,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: TextUtils.appTitle,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: HexColor.fromHex(ColorConst.baseHexColor)),
           useMaterial3: true,
         ),
         routerConfig: RouterManager.getInstance.router,
