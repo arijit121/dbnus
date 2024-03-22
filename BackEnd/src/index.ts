@@ -1,6 +1,7 @@
 // src/index.ts
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import { CustomConsole } from "./utils/custom_console"; 
 
 /*
  * Load up and parse configuration details from
@@ -26,5 +27,5 @@ app.get("/", (req: Request, res: Response) => {
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+   CustomConsole.infoLog(`Server is running at http://localhost:${port}`,"server");
 });
