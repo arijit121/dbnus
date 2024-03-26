@@ -37,7 +37,10 @@ class ConnectionStatus {
   //Hook into flutter_connectivity's Stream to listen for changes
   //And check the connection status out of the gate
   void initialize() {
-    _connectivity.onConnectivityChanged.listen(_connectionChange);
+    _connectivity.onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      _connectionChange();
+    });
     checkConnection();
   }
 
@@ -51,7 +54,7 @@ class ConnectionStatus {
   }
 
   //flutter_connectivity's listener
-  void _connectionChange(ConnectivityResult result) {
+  void _connectionChange() {
     checkConnection();
   }
 
@@ -83,8 +86,8 @@ class ConnectionStatus {
   }
 
   Future<String> getNetworkInfo() async {
-    ConnectivityResult connectivityResult =
+    List<ConnectivityResult> connectivityResult =
         await _connectivity.checkConnectivity();
-    return connectivityResult.name;
+    return connectivityResult.first.name;
   }
 }
