@@ -20,12 +20,10 @@ Widget customElevatedButton(
         double? radius,
         Gradient? gradient}) =>
     gradient != null
-        ? Container(
-            width: minimumSize?.width,
-            height: minimumSize?.height,
+        ? DecoratedBox(
             decoration: BoxDecoration(
               gradient: gradient,
-              borderRadius: BorderRadius.all(Radius.circular(radius ?? 2)),
+              borderRadius: BorderRadius.all(Radius.circular(radius ?? 16)),
             ),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -34,7 +32,7 @@ Widget customElevatedButton(
                 minimumSize: minimumSize,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 2)),
+                  borderRadius: BorderRadius.all(Radius.circular(radius ?? 16)),
                 ),
               ),
               onPressed: onPressed,
@@ -47,9 +45,11 @@ Widget customElevatedButton(
               surfaceTintColor: Colors.transparent,
               minimumSize: minimumSize,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(radius ?? 2)),
-              ),
+              shape: radius != null
+                  ? RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                    )
+                  : null,
             ),
             onPressed: onPressed,
             child: child,

@@ -60,6 +60,14 @@ class _LandingUiState extends State<LandingUi> {
                         onPressed: () {},
                       ),
                       20.ph,
+                      customElevatedButton(
+                          child: customText("text"),
+                          onPressed: () {},
+                          gradient: const LinearGradient(colors: [
+                            Colors.red,
+                            Colors.blue,
+                          ])),
+                      20.ph,
                       customOutLineButton(
                         onPressed: () {},
                         child: customText("text"),
@@ -78,14 +86,34 @@ class _LandingUiState extends State<LandingUi> {
                             .read<LandingBloc>()
                             .add(ChangeIndex(index: value));
                       }),
-                  largeUI: LandingWidget().drawerNavigationRail(
-                      selectedIndex: state.pageIndex.value,
-                      withTitle: true,
-                      chooseIndex: (int value) {
-                        context
-                            .read<LandingBloc>()
-                            .add(ChangeIndex(index: value));
-                      })),
+                  largeUI: Row(
+                    children: [
+                      LandingWidget().drawerNavigationRail(
+                          selectedIndex: state.pageIndex.value,
+                          withTitle: true,
+                          chooseIndex: (int value) {
+                            context
+                                .read<LandingBloc>()
+                                .add(ChangeIndex(index: value));
+                          }),
+                      Column(
+                        children: [
+                          customElevatedButton(
+                            child: customText("text"),
+                            onPressed: () {},
+                          ),
+                          20.ph,
+                          customElevatedButton(
+                              child: customText("text"),
+                              onPressed: () {},
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ])),
+                        ],
+                      )
+                    ],
+                  )),
             ),
           );
         },
