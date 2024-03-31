@@ -60,13 +60,15 @@ class _LandingUiState extends State<LandingUi> {
                         onPressed: () {},
                       ),
                       20.ph,
-                      ElevatedButton(
+                      customOutLineButton(
                         onPressed: () {},
                         child: customText("text"),
                       ),
                       20.ph,
                       customTextButton(
-                          child: customText("text"), onPressed: () {})
+                          child: customText("text"), onPressed: () {}),
+                      20.ph,
+                      customText("text"),
                     ],
                   ),
                   mediumUI: LandingWidget().drawerNavigationRail(

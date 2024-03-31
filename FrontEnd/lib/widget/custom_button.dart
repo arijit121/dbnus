@@ -74,9 +74,9 @@ Widget customIconButton(
     );
 
 Widget customOutLineButton({
-  required void Function() onTap,
+  required void Function() onPressed,
   Widget? child,
-  required Color borderColor,
+  Color? borderColor,
   Color? backGroundColor,
   double? radius,
   Size? minimumSize = const Size(88, 36),
@@ -89,9 +89,9 @@ Widget customOutLineButton({
                   borderRadius: BorderRadius.circular(radius),
                 )
               : null,
-          side: BorderSide(color: borderColor),
+          side: borderColor != null ? BorderSide(color: borderColor) : null,
           backgroundColor: backGroundColor),
-      onPressed: onTap,
+      onPressed: onPressed,
       child: child,
     );
 
