@@ -60,7 +60,7 @@ Widget customTextButton(
     TextButton(
         style: TextButton.styleFrom(
           foregroundColor:
-              HexColor.fromHex(ColorConst.primaryDark).withOpacity(0.87),
+              HexColor.fromHex(ColorConst.deepBlue).withOpacity(0.87),
           padding: const EdgeInsets.all(5.0),
         ),
         onPressed: onPressed,

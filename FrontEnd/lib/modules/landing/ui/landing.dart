@@ -52,7 +52,8 @@ class _LandingUiState extends State<LandingUi> {
                         ],
                       ),
                       200.ph,
-                      customIconButton(icon: Icon(Icons.abc), onPressed: () {}),
+                      customIconButton(
+                          icon: const Icon(Icons.abc), onPressed: () {}),
                       20.ph,
                       customElevatedButton(
                         child: customText("text"),
@@ -63,6 +64,9 @@ class _LandingUiState extends State<LandingUi> {
                         onPressed: () {},
                         child: customText("text"),
                       ),
+                      20.ph,
+                      customTextButton(
+                          child: customText("text"), onPressed: () {})
                     ],
                   ),
                   mediumUI: LandingWidget().drawerNavigationRail(
