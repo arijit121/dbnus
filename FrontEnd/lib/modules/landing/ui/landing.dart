@@ -1,7 +1,10 @@
+import 'package:dbnus/extension/spacing.dart';
+import 'package:dbnus/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/screen_utils.dart';
+import '../../../widget/custom_button.dart';
 import '../bloc/landing_bloc.dart';
 import '../widget/landing_widget.dart';
 
@@ -37,11 +40,31 @@ class _LandingUiState extends State<LandingUi> {
             backgroundColor: Colors.white,
             body: SafeArea(
               child: ScreenUtils.responsiveUI(
-                  narrowUI: IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        _scaffoldKey.currentState?.openDrawer();
-                      }),
+                  narrowUI: Column(
+                    children: [
+                      Row(
+                        children: [
+                          customIconButton(
+                              icon: const Icon(Icons.menu),
+                              onPressed: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              }),
+                        ],
+                      ),
+                      200.ph,
+                      customIconButton(icon: Icon(Icons.abc), onPressed: () {}),
+                      20.ph,
+                      customElevatedButton(
+                        child: customText("text"),
+                        onPressed: () {},
+                      ),
+                      20.ph,
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: customText("text"),
+                      ),
+                    ],
+                  ),
                   mediumUI: LandingWidget().drawerNavigationRail(
                       selectedIndex: state.pageIndex.value,
                       chooseIndex: (int value) {

@@ -61,10 +61,16 @@ class _MyWebAppState extends State<MyWebApp> {
             PointerDeviceKind.unknown
           },
         ),
+        themeMode: ThemeMode.system,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: HexColor.fromHex(ColorConst.baseHexColor)),
+          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
+          useMaterial3: true,
+          brightness: Brightness.dark,
         ),
         routerConfig: RouterManager.getInstance.router,
       ),

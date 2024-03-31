@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../extension/sizing.dart';
 import '../widget/custom_text.dart';
-import '../widget/custom_ui.dart';
 
 import '../const/color_const.dart';
 import '../data/model/service_model.dart';
@@ -44,10 +43,9 @@ Widget customElevatedButton(
           )
         : ElevatedButton(
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.transparent,
               backgroundColor: color,
               surfaceTintColor: Colors.transparent,
-              minimumSize: minimumSize ?? const Size(88, 36),
+              minimumSize: minimumSize,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius ?? 2)),
@@ -68,6 +66,13 @@ Widget customTextButton(
         onPressed: onPressed,
         child: child);
 
+Widget customIconButton(
+        {required Widget icon, required void Function()? onPressed}) =>
+    IconButton(
+      icon: icon,
+      onPressed: onPressed,
+    );
+
 Widget customOutLineButton({
   required void Function() onTap,
   Widget? child,
@@ -78,14 +83,14 @@ Widget customOutLineButton({
 }) =>
     OutlinedButton(
       style: OutlinedButton.styleFrom(
-        minimumSize: minimumSize,
-        shape: radius != null
-            ? RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(radius),
-              )
-            : null,
-        side: BorderSide(color: borderColor),
-      ),
+          minimumSize: minimumSize,
+          shape: radius != null
+              ? RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius),
+                )
+              : null,
+          side: BorderSide(color: borderColor),
+          backgroundColor: backGroundColor),
       onPressed: onTap,
       child: child,
     );

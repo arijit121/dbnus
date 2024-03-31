@@ -137,10 +137,16 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: TextUtils.appTitle,
+        themeMode: ThemeMode.system,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: HexColor.fromHex(ColorConst.baseHexColor)),
+          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
+          useMaterial3: true,
+          brightness: Brightness.dark,
         ),
         routerConfig: RouterManager.getInstance.router,
       ),
