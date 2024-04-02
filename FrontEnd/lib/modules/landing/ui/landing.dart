@@ -1,11 +1,14 @@
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/widget/custom_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../extension/logger_extension.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
 import '../bloc/landing_bloc.dart';
+import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
 
 // ignore: must_be_immutable
@@ -33,8 +36,15 @@ class _LandingUiState extends State<LandingUi> {
                   withTitle: true,
                   chooseIndex: (int value) {
                     Navigator.of(context).pop();
-
-                    context.read<LandingBloc>().add(ChangeIndex(index: value));
+                    if (value == 6) {
+                      AppLog.i("Log out");
+                    } else if (kIsWeb) {
+                      LandingUtils.redirect(value);
+                    } else {
+                      context
+                          .read<LandingBloc>()
+                          .add(ChangeIndex(index: value));
+                    }
                   }),
             ),
             backgroundColor: Colors.white,
@@ -82,9 +92,15 @@ class _LandingUiState extends State<LandingUi> {
                   mediumUI: LandingWidget().drawerNavigationRail(
                       selectedIndex: state.pageIndex.value,
                       chooseIndex: (int value) {
-                        context
-                            .read<LandingBloc>()
-                            .add(ChangeIndex(index: value));
+                        if (value == 6) {
+                          AppLog.i("Log out");
+                        } else if (kIsWeb) {
+                          LandingUtils.redirect(value);
+                        } else {
+                          context
+                              .read<LandingBloc>()
+                              .add(ChangeIndex(index: value));
+                        }
                       }),
                   largeUI: Row(
                     children: [
@@ -92,9 +108,15 @@ class _LandingUiState extends State<LandingUi> {
                           selectedIndex: state.pageIndex.value,
                           withTitle: true,
                           chooseIndex: (int value) {
-                            context
-                                .read<LandingBloc>()
-                                .add(ChangeIndex(index: value));
+                            if (value == 6) {
+                              AppLog.i("Log out");
+                            } else if (kIsWeb) {
+                              LandingUtils.redirect(value);
+                            } else {
+                              context
+                                  .read<LandingBloc>()
+                                  .add(ChangeIndex(index: value));
+                            }
                           }),
                       Column(
                         children: [

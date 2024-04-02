@@ -35,6 +35,51 @@ class RouterManager {
           );
         },
       ),
+      GoRoute(
+        name: RouteName.leaderBoard,
+        path: RouteName.leaderBoard,
+        builder: (BuildContext context, GoRouterState state) {
+          return LandingUi(
+            index: 1,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.order,
+        path: RouteName.order,
+        builder: (BuildContext context, GoRouterState state) {
+          return LandingUi(
+            index: 2,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.products,
+        path: RouteName.products,
+        builder: (BuildContext context, GoRouterState state) {
+          return LandingUi(
+            index: 3,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.massage,
+        path: RouteName.massage,
+        builder: (BuildContext context, GoRouterState state) {
+          return LandingUi(
+            index: 4,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.settings,
+        path: RouteName.settings,
+        builder: (BuildContext context, GoRouterState state) {
+          return LandingUi(
+            index: 5,
+          );
+        },
+      ),
 
       // GoRoute(
       //   name: RouteName.bookingReschedule,
