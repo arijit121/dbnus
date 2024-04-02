@@ -15,11 +15,7 @@ import 'web/custom_router_web.dart';
 class CustomRoute {
   void back() {
     if (kIsWeb) {
-      if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop();
-      } else {
-        CustomRouterWeb().back();
-      }
+      CustomRouterWeb().back();
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
         RouterManager.getInstance.router.pop();
