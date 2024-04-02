@@ -12,10 +12,14 @@ class RedirectEngine {
         RouterManager routerManager = RouterManager.getInstance;
         String fragment =
             redirectUrl.toString().replaceAll(ApiUrlConst.hostUrl, "");
-
-        kIsWeb
-            ? routerManager.router.go(fragment)
-            : routerManager.router.push(fragment);
+        if (routerManager.router.routeInformationParser.configuration
+            .findMatch(fragment)
+            .matches
+            .isNotEmpty) {
+          kIsWeb
+              ? routerManager.router.go(fragment)
+              : routerManager.router.push(fragment);
+        }
       });
     });
   }
