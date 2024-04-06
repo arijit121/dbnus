@@ -32,9 +32,9 @@ class LocalCartButtonWidget extends StatelessWidget {
                       label: customText("${state.serviceList.value?.length}",
                           color: Colors.white, size: 11),
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: customCardDesign(
-                        radius: 10,
-                        minimumSize: const Size(40, 40),
+                      child: customContainer(
+                        // radius: 10,
+                        // minimumSize: const Size(40, 40),
                         color: Colors.orangeAccent.withOpacity(.2),
                         child: const Icon(
                           Icons.shopping_cart_outlined,
@@ -75,9 +75,9 @@ class LocalCartButtonWidget extends StatelessWidget {
                               color: Colors.white,
                               size: 11),
                           padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: customCardDesign(
-                            radius: 5,
-                            minimumSize: const Size(40, 40),
+                          child: customContainer(
+                            // radius: 5,
+                            // minimumSize: const Size(40, 40),
                             color: Colors.orangeAccent.withOpacity(.2),
                             child: const Icon(
                               Icons.shopping_cart_outlined,

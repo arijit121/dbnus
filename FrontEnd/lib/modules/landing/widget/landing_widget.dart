@@ -42,9 +42,11 @@ class LandingWidget {
                         children: [
                           if (index == selectedIndex)
                             withTitle != true
-                                ? customCardDesign(
-                                    radius: 12,
-                                    minimumSize: const Size(44, 44),
+                                ? customContainer(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
+                                    height: 44,
+                                    width: 44,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 6, vertical: 6),
                                     color: HexColor.fromHex(
@@ -54,9 +56,11 @@ class LandingWidget {
                                             color: Colors.white)
                                         .elementAt(index),
                                   )
-                                : customCardDesign(
-                                    radius: 12,
-                                    minimumSize: const Size(172, 44),
+                                : customContainer(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(12)),
+                                    height: 44,
+                                    width: 172,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 22, vertical: 6),
                                     color: HexColor.fromHex(
