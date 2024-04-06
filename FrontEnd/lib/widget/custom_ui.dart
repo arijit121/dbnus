@@ -9,12 +9,14 @@ Widget customContainer(
         Color? color,
         required Widget? child,
         EdgeInsetsGeometry? padding,
+        EdgeInsetsGeometry? margin,
         Color? borderColor,
         List<BoxShadow>? boxShadow}) =>
     Container(
       height: height,
       width: width,
       padding: padding,
+      margin: margin,
       decoration: BoxDecoration(
         color: color,
         border: borderColor != null
