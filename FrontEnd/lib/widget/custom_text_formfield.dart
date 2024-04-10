@@ -78,15 +78,35 @@ Widget customTextFormField(
                   width: 1,
                 ),
               ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+                borderSide: const BorderSide(
+                  color: Colors.white,
+                  width: 1,
+                ),
+              ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9.0),
+                borderRadius: BorderRadius.circular(6.0),
                 borderSide: BorderSide(
-                  color: HexColor.fromHex(ColorConst.color5),
+                  color: HexColor.fromHex(ColorConst.grey4),
+                  width: 1,
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+                borderSide: const BorderSide(
                   width: 1,
                 ),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9.0),
+                borderRadius: BorderRadius.circular(6.0),
+                borderSide: const BorderSide(
+                  color: Colors.red,
+                  width: 1,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
                 borderSide: const BorderSide(
                   color: Colors.red,
                   width: 1,
