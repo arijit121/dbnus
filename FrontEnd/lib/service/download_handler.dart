@@ -41,7 +41,7 @@ class DownloadHandler {
     try {
       String directoryPath;
       if (Platform.isIOS) {
-        directoryPath = (await getDownloadsDirectory())?.path ?? "";
+        directoryPath = (await getApplicationDocumentsDirectory()).path;
       } else {
         directoryPath = "/storage/emulated/0/Download";
 
