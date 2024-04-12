@@ -8,7 +8,7 @@ import '../service/value_handler.dart';
 import '../utils/pop_up_items.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import '../extension/logger_extension.dart';
 import 'JsService/provider/js_provider.dart';
 
@@ -19,7 +19,7 @@ class DownloadHandler {
         await JsProvider().downloadFile(url: url, name: url.split("/").last);
       } else {
         PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
-        _bindBackgroundIsolate();
+        _bindBackgroundIsolate(path: "${await downloadPath()}/${url.split('/').last}");
         await FlutterDownloader.registerCallback(downloadCallback, step: 1);
         final taskId = await FlutterDownloader.enqueue(
             url: url,
@@ -41,7 +41,7 @@ class DownloadHandler {
     try {
       String directoryPath;
       if (Platform.isIOS) {
-        directoryPath = (await getDownloadsDirectory())?.path ?? "";
+        directoryPath = (await getApplicationDocumentsDirectory()).path ?? "";
       } else {
         directoryPath = "/storage/emulated/0/Download";
 
@@ -52,6 +52,10 @@ class DownloadHandler {
           directoryPath = "/storage/emulated/0/Downloads";
         }
       }
+      bool dirDownloadExists = await Directory(directoryPath).exists();
+      if (!dirDownloadExists) {
+        await Directory(directoryPath).create();
+      }
       return directoryPath;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -61,17 +65,17 @@ class DownloadHandler {
 
   @pragma('vm:entry-point')
   static void downloadCallback(
-    String id,
-    int status,
-    int progress,
-  ) async {
+      String id,
+      int status,
+      int progress,
+      ) async {
     AppLog.i('task ($id) is in status ($status) and process ($progress)',
         tag: 'Callback on background isolate');
     IsolateNameServer.lookupPortByName('downloader_send_port')
         ?.send([id, status, progress]);
   }
 
-  void _bindBackgroundIsolate() {
+  void _bindBackgroundIsolate({required String path}) {
     List<TaskInfo>? _tasks;
     ReceivePort _port = ReceivePort();
     final isSuccess = IsolateNameServer.registerPortWithName(
@@ -80,21 +84,23 @@ class DownloadHandler {
     );
     if (!isSuccess) {
       _unbindBackgroundIsolate();
-      _bindBackgroundIsolate();
+      _bindBackgroundIsolate(path: path);
       return;
     }
     _port.listen((dynamic data) async {
       final taskId = (data as List<dynamic>)[0] as String;
       final status = DownloadTaskStatus.fromInt(data[1] as int);
       final progress = data[2] as int;
-      var v = await FlutterDownloader.loadTasks();
+      // var v = await FlutterDownloader.loadTasks();
       AppLog.i('task ($taskId) is in status ($status) and process ($progress)',
           tag: 'Callback on UI isolate:');
 
       if (progress == 100) {
-        AppLog.i("${v?.first.savedDir ?? ""}/${v?.first.filename ?? ""}");
-        await OpenFilex.open(
-            "${v?.first.savedDir ?? ""}/${v?.first.filename ?? ""}");
+        AppLog.i(path);
+        await Permission.storage.request();
+        await Permission.manageExternalStorage.request();
+        await Permission.accessMediaLocation.request();
+        await OpenFilex.open(path);
       }
     });
   }
