@@ -1,4 +1,4 @@
-package com.genupathlabs.genu
+package com.arj.dbnus
 
 import io.flutter.embedding.android.FlutterActivity
 

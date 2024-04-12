@@ -67,7 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
     storageBucket: 'dbnus-df986.appspot.com',
-    iosBundleId: 'com.genupathlabs.genu',
+    iosBundleId: 'com.genupathlabs.dbnus',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -76,6 +76,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
     storageBucket: 'dbnus-df986.appspot.com',
-    iosBundleId: 'com.genupathlabs.genu.RunnerTests',
+    iosBundleId: 'com.genupathlabs.dbnus.RunnerTests',
   );
 }
