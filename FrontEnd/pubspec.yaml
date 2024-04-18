@@ -31,7 +31,7 @@ dependencies:
   #path
   path_provider: ^2.1.2
   #App Details picker
-  package_info_plus: ^6.0.0
+  package_info_plus: ^7.0.0
   #html
   universal_html: ^2.2.4
   uuid: ^4.2.1
@@ -72,7 +72,7 @@ dependencies:
   flutter_downloader: ^1.11.6
   syncfusion_flutter_charts: ^25.1.35
   encrypt: ^5.0.3
-  dyte_uikit: ^0.6.1
+  dyte_uikit: ^0.7.0
   flutter_inappwebview: ^6.0.0
   video_player: ^2.8.2
   web: ^0.5.1
