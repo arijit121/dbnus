@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../const/color_const.dart';
 import '../extension/hex_color.dart';
 
-import '../modules/landing/ui/landing.dart';
+import '../modules/landing/ui/landing.dart' deferred as landing;
 
 import '../widget/custom_text.dart';
 import 'custom_router/custom_route.dart';
@@ -30,7 +30,7 @@ class RouterManager {
         name: RouteName.initialView,
         path: RouteName.initialView,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 0,
           );
         },
@@ -39,7 +39,7 @@ class RouterManager {
         name: RouteName.leaderBoard,
         path: RouteName.leaderBoard,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 1,
           );
         },
@@ -48,7 +48,7 @@ class RouterManager {
         name: RouteName.order,
         path: RouteName.order,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 2,
           );
         },
@@ -57,7 +57,7 @@ class RouterManager {
         name: RouteName.products,
         path: RouteName.products,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 3,
           );
         },
@@ -66,7 +66,7 @@ class RouterManager {
         name: RouteName.massage,
         path: RouteName.massage,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 4,
           );
         },
@@ -75,7 +75,7 @@ class RouterManager {
         name: RouteName.settings,
         path: RouteName.settings,
         builder: (BuildContext context, GoRouterState state) {
-          return LandingUi(
+          return landing.LandingUi(
             index: 5,
           );
         },
