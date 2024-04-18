@@ -5,6 +5,7 @@ import '../../../const/assects_const.dart';
 import '../../../const/color_const.dart';
 import '../../../extension/hex_color.dart';
 import '../../../utils/text_utils.dart';
+import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/custom_ui.dart';
 
@@ -85,8 +86,8 @@ class LandingWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              AssetsConst.dashboardIcon,
+            CustomAssetImageView(
+              path: AssetsConst.dashboardIcon,
               height: 32,
               color: color ?? HexColor.fromHex(ColorConst.grey),
             ),

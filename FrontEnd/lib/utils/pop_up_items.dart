@@ -10,6 +10,7 @@ import '../extension/hex_color.dart';
 import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
 import '../widget/custom_button.dart';
+import '../widget/custom_image.dart';
 import '../widget/custom_text.dart';
 import '../widget/custom_text_formfield.dart';
 
@@ -111,10 +112,10 @@ class ToastMassage extends StatelessWidget {
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  child: Image.asset(
+                  child: CustomAssetImageView(
+                    path: AssetsConst.genuIcon,
                     height: 40,
                     width: 40,
-                    AssetsConst.genuIcon,
                     color: HexColor.fromHex(ColorConst.deepBlue),
                   )),
               10.pw,

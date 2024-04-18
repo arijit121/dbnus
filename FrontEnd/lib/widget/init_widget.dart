@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../const/assects_const.dart';
+import 'custom_image.dart';
 
 //ignore: must_be_immutable
 class InitWidget extends StatelessWidget {
@@ -19,8 +20,8 @@ class InitWidget extends StatelessWidget {
       color: backgroundColor,
       width: width,
       height: height,
-      child: Image.asset(
-        AssetsConst.genuNoImageLogo,
+      child: CustomAssetImageView(
+        path: AssetsConst.genuNoImageLogo,
         height: 60,
         width: 60,
       ),

@@ -11,6 +11,7 @@ import '../storage/localCart/bloc/local_cart_bloc.dart';
 import '../storage/localCart/model/cart_service_model.dart';
 import '../storage/localCart/repo/local_cart_repo.dart';
 import '../utils/text_utils.dart';
+import 'custom_image.dart';
 
 Widget customElevatedButton(
         {required Widget? child,
@@ -160,8 +161,8 @@ Widget genderButton(
         children: [
           customText(title,
               color: HexColor.fromHex(ColorConst.primaryDark), size: 14.fs),
-          Image.asset(
-            assetName,
+          CustomAssetImageView(
+            path: assetName,
             height: 48.fs,
             width: 48.fs,
             color: isSelected
