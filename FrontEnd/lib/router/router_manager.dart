@@ -30,60 +30,78 @@ class RouterManager {
         name: RouteName.initialView,
         path: RouteName.initialView,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 0,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
       GoRoute(
         name: RouteName.leaderBoard,
         path: RouteName.leaderBoard,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 1,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
       GoRoute(
         name: RouteName.order,
         path: RouteName.order,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 2,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
       GoRoute(
         name: RouteName.products,
         path: RouteName.products,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 3,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
       GoRoute(
         name: RouteName.massage,
         path: RouteName.massage,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 4,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
       GoRoute(
         name: RouteName.settings,
         path: RouteName.settings,
         builder: (BuildContext context, GoRouterState state) {
-          landing.loadLibrary();
           return landing.LandingUi(
             index: 5,
           );
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await landing.loadLibrary();
+          return null;
         },
       ),
 
