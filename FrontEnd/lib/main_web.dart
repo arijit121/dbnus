@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,14 +67,38 @@ class _MyWebAppState extends State<MyWebApp> {
           colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
           brightness: Brightness.light,
+          pageTransitionsTheme: NoTransitionsOnWeb(),
         ),
         darkTheme: ThemeData(
           colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
           brightness: Brightness.dark,
+          pageTransitionsTheme: NoTransitionsOnWeb(),
         ),
         routerConfig: RouterManager.getInstance.router,
       ),
+    );
+  }
+}
+
+class NoTransitionsOnWeb extends PageTransitionsTheme {
+  @override
+  Widget buildTransitions<T>(
+    route,
+    context,
+    animation,
+    secondaryAnimation,
+    child,
+  ) {
+    if (kIsWeb) {
+      return child;
+    }
+    return super.buildTransitions(
+      route,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
     );
   }
 }
