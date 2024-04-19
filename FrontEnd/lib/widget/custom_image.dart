@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import '../const/assects_const.dart';
+import '../const/color_const.dart';
+import '../extension/hex_color.dart';
 
 // ignore: must_be_immutable
 class CustomNetWorkImageView extends StatelessWidget {
@@ -35,9 +37,11 @@ class CustomNetWorkImageView extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               child: frame != null
                   ? child
-                  : Icon(
-                      CupertinoIcons.app_fill,
-                      size: height,
+                  : Container(
+                      color: HexColor.fromHex(ColorConst.baseHexColor)
+                          .withOpacity(0.3),
+                      height: height,
+                      width: width,
                     ),
             );
           }
@@ -91,9 +95,11 @@ class CustomAssetImageView extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               child: frame != null
                   ? child
-                  : Icon(
-                      CupertinoIcons.app_fill,
-                      size: height,
+                  : Container(
+                      color: HexColor.fromHex(ColorConst.baseHexColor)
+                          .withOpacity(0.3),
+                      height: height,
+                      width: width,
                     ),
             );
           }
