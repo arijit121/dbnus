@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../const/assects_const.dart';
 
 // ignore: must_be_immutable
@@ -10,11 +10,13 @@ class CustomNetWorkImageView extends StatelessWidget {
       this.width,
       this.fit,
       this.radius});
+
   String url;
   double? height;
   double? width;
   BoxFit? fit;
   double? radius;
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -33,10 +35,9 @@ class CustomNetWorkImageView extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               child: frame != null
                   ? child
-                  : Image.asset(
-                      AssetsConst.genuNoImageLogo,
-                      width: width != 0.0 ? width : null,
-                      height: height != 0.0 ? height : null,
+                  : Icon(
+                      CupertinoIcons.app_fill,
+                      size: height,
                     ),
             );
           }
@@ -63,12 +64,14 @@ class CustomAssetImageView extends StatelessWidget {
       this.fit,
       this.radius,
       this.color});
+
   String path;
   double? height;
   double? width;
   BoxFit? fit;
   double? radius;
   Color? color;
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -88,10 +91,9 @@ class CustomAssetImageView extends StatelessWidget {
               duration: const Duration(milliseconds: 500),
               child: frame != null
                   ? child
-                  : Image.asset(
-                      AssetsConst.genuNoImageLogo,
-                      width: width != 0.0 ? width : null,
-                      height: height != 0.0 ? height : null,
+                  : Icon(
+                      CupertinoIcons.app_fill,
+                      size: height,
                     ),
             );
           }
