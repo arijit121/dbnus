@@ -61,7 +61,6 @@ class ResponsiveUI extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         final screenWidth = MediaQuery.of(context).size.width;
-        AppLog.i(ScreenUtils().aw);
         if (screenWidth > ScreenUtils.mediumWidthBreakpoint) {
           return largeUI(context) ?? const Placeholder();
         } else if (screenWidth > ScreenUtils.narrowScreenWidthThreshold) {
