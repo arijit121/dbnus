@@ -67,7 +67,7 @@ class _LandingUiState extends State<LandingUi> {
                           icon: const Icon(Icons.abc), onPressed: () {}),
                       20.ph,
                       CustomElevatedButton(
-                        child: CustomText("text"),
+                        child: const CustomText("text"),
                         onPressed: () {},
                       ),
                       20.ph,
@@ -77,17 +77,17 @@ class _LandingUiState extends State<LandingUi> {
                             Colors.red,
                             Colors.blue,
                           ]),
-                          child: CustomText("text")),
+                          child: const CustomText("text")),
                       20.ph,
                       CustomOutLineButton(
                         onPressed: () {},
-                        child: CustomText("text"),
+                        child: const CustomText("text"),
                       ),
                       20.ph,
                       CustomTextButton(
-                          child: CustomText("text"), onPressed: () {}),
+                          child: const CustomText("text"), onPressed: () {}),
                       20.ph,
-                      CustomText("text"),
+                      const CustomText("text"),
                     ],
                   ),
                   mediumUI: LandingWidget().drawerNavigationRail(
@@ -122,7 +122,7 @@ class _LandingUiState extends State<LandingUi> {
                       Column(
                         children: [
                           CustomElevatedButton(
-                            child: CustomText("text"),
+                            child: const CustomText("text"),
                             onPressed: () {},
                           ),
                           20.ph,
@@ -132,7 +132,7 @@ class _LandingUiState extends State<LandingUi> {
                                 Colors.red,
                                 Colors.blue,
                               ]),
-                              child: CustomText("text")),
+                              child: const CustomText("text")),
                         ],
                       )
                     ],
