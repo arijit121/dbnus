@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
+import '../../../widget/custom_ui.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
@@ -54,7 +55,7 @@ class _LandingUiState extends State<LandingUi> {
                     children: [
                       Row(
                         children: [
-                          customIconButton(
+                          CustomIconButton(
                               icon: const Icon(Icons.menu),
                               onPressed: () {
                                 _scaffoldKey.currentState?.openDrawer();
@@ -62,31 +63,31 @@ class _LandingUiState extends State<LandingUi> {
                         ],
                       ),
                       200.ph,
-                      customIconButton(
+                      CustomIconButton(
                           icon: const Icon(Icons.abc), onPressed: () {}),
                       20.ph,
-                      customElevatedButton(
-                        child: customText("text"),
+                      CustomElevatedButton(
+                        child: CustomText("text"),
                         onPressed: () {},
                       ),
                       20.ph,
-                      customElevatedButton(
-                          child: customText("text"),
+                      CustomElevatedButton(
                           onPressed: () {},
                           gradient: const LinearGradient(colors: [
                             Colors.red,
                             Colors.blue,
-                          ])),
+                          ]),
+                          child: CustomText("text")),
                       20.ph,
-                      customOutLineButton(
+                      CustomOutLineButton(
                         onPressed: () {},
-                        child: customText("text"),
+                        child: CustomText("text"),
                       ),
                       20.ph,
-                      customTextButton(
-                          child: customText("text"), onPressed: () {}),
+                      CustomTextButton(
+                          child: CustomText("text"), onPressed: () {}),
                       20.ph,
-                      customText("text"),
+                      CustomText("text"),
                     ],
                   ),
                   mediumUI: LandingWidget().drawerNavigationRail(
@@ -120,18 +121,18 @@ class _LandingUiState extends State<LandingUi> {
                           }),
                       Column(
                         children: [
-                          customElevatedButton(
-                            child: customText("text"),
+                          CustomElevatedButton(
+                            child: CustomText("text"),
                             onPressed: () {},
                           ),
                           20.ph,
-                          customElevatedButton(
-                              child: customText("text"),
+                          CustomElevatedButton(
                               onPressed: () {},
                               gradient: const LinearGradient(colors: [
                                 Colors.red,
                                 Colors.blue,
-                              ])),
+                              ]),
+                              child: CustomText("text")),
                         ],
                       )
                     ],

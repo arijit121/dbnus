@@ -43,7 +43,7 @@ class LandingWidget {
                         children: [
                           if (index == selectedIndex)
                             withTitle != true
-                                ? customContainer(
+                                ? CustomContainer(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(12)),
                                     height: 44,
@@ -57,7 +57,7 @@ class LandingWidget {
                                             color: Colors.white)
                                         .elementAt(index),
                                   )
-                                : customContainer(
+                                : CustomContainer(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(12)),
                                     height: 44,
@@ -94,7 +94,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.dashboard,
+                child: CustomText(TextUtils.dashboard,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -111,7 +111,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.leaderBoard,
+                child: CustomText(TextUtils.leaderBoard,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -128,7 +128,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.order,
+                child: CustomText(TextUtils.order,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -145,7 +145,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.products,
+                child: CustomText(TextUtils.products,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -162,7 +162,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.message,
+                child: CustomText(TextUtils.message,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -179,7 +179,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.settings,
+                child: CustomText(TextUtils.settings,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],
@@ -196,7 +196,7 @@ class LandingWidget {
             if (showTitle == true)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: customText(TextUtils.sign_out,
+                child: CustomText(TextUtils.sign_out,
                     color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
               )
           ],

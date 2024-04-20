@@ -1,13 +1,9 @@
 import 'package:dbnus/extension/spacing.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:go_router/go_router.dart';
-
 import '../../../const/color_const.dart';
 import '../../../extension/hex_color.dart';
-import '../../../router/router_name.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/text_utils.dart';
 import '../../../widget/custom_button.dart';
@@ -29,10 +25,10 @@ class LocalCartButtonWidget extends StatelessWidget {
             ? onlyIcon == true
                 ? InkWell(
                     child: Badge(
-                      label: customText("${state.serviceList.value?.length}",
+                      label: CustomText("${state.serviceList.value?.length}",
                           color: Colors.white, size: 11),
                       padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: customContainer(
+                      child: CustomContainer(
                         // radius: 10,
                         // minimumSize: const Size(40, 40),
                         color: Colors.orangeAccent.withOpacity(.2),
@@ -70,12 +66,12 @@ class LocalCartButtonWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Badge(
-                          label: customText(
+                          label: CustomText(
                               "${state.serviceList.value?.length}",
                               color: Colors.white,
                               size: 11),
                           padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: customContainer(
+                          child: CustomContainer(
                             // radius: 5,
                             // minimumSize: const Size(40, 40),
                             color: Colors.orangeAccent.withOpacity(.2),
@@ -87,16 +83,16 @@ class LocalCartButtonWidget extends StatelessWidget {
                           ),
                         ),
                         22.pw,
-                        customText(
+                        CustomText(
                             "${TextUtils.rupee} ${state.totalPrice.value?.toInt() ?? ""}",
                             color: Colors.green,
                             size: 18,
                             fontWeight: FontWeight.w600),
                         const Spacer(),
-                        customElevatedButton(
+                        CustomElevatedButton(
                             radius: 10,
                             color: HexColor.fromHex(ColorConst.green),
-                            child: customText(TextUtils.go_to_cart,
+                            child: CustomText(TextUtils.go_to_cart,
                                 color: Colors.white, size: 14),
                             onPressed: () {
                               // kIsWeb

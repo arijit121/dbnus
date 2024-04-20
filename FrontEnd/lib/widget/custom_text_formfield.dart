@@ -28,7 +28,7 @@ Widget customTextFormField(
         if (title?.isNotEmpty == true)
           Row(
             children: [
-              customText('${title ?? ""}${isRequired == true ? " *" : ""}',
+              CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
                   color: HexColor.fromHex(ColorConst.primaryDark),
                   size: 14,
                   fontWeight: FontWeight.w500),

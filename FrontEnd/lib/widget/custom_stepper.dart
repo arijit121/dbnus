@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import '../extension/spacing.dart';
 
-Widget customStepper(
-        {List<CustomStepperContent>? customStepperContent,
-        ScrollPhysics? physics,
-        bool shrinkWrap = false,
-        Color activeLineColor = Colors.green,
-        Color inActiveLineColor = Colors.grey}) =>
-    ListView.separated(
+class CustomStepper extends StatelessWidget {
+  final List<CustomStepperContent>? customStepperContent;
+  final ScrollPhysics? physics;
+  final bool shrinkWrap;
+  final Color activeLineColor;
+  final Color inActiveLineColor;
+
+  const CustomStepper({
+    super.key,
+    this.customStepperContent,
+    this.physics,
+    this.shrinkWrap = false,
+    this.activeLineColor = Colors.green,
+    this.inActiveLineColor = Colors.grey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
         physics: physics,
         shrinkWrap: shrinkWrap,
         itemBuilder: (context, index) {
@@ -47,6 +59,8 @@ Widget customStepper(
           return 0.ph;
         },
         itemCount: customStepperContent?.length ?? 0);
+  }
+}
 
 class CustomStepperContent {
   CustomStepperContent(

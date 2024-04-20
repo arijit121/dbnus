@@ -108,7 +108,7 @@ Future<CustomFile?> customFilePicker() async {
                               icon: const Icon(
                                   CupertinoIcons.photo_camera_solid)),
                           8.ph,
-                          customText(
+                          CustomText(
                             "Capture Photo.",
                             color: HexColor.fromHex(ColorConst.primaryDark),
                             size: 14,
@@ -135,7 +135,7 @@ Future<CustomFile?> customFilePicker() async {
                               },
                               icon: const Icon(CupertinoIcons.folder_solid)),
                           8.ph,
-                          customText(
+                          CustomText(
                             "Choose file from device.",
                             color: HexColor.fromHex(ColorConst.primaryDark),
                             size: 14,

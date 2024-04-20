@@ -36,7 +36,7 @@ class CustomErrorWidget extends StatelessWidget {
             if (errorMsg?.isNotEmpty == true)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: customText(errorMsg ?? "", color: Colors.grey, size: 13),
+                child: CustomText(errorMsg ?? "", color: Colors.grey, size: 13),
               )
           ],
         ),

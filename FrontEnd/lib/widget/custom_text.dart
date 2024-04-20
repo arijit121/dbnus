@@ -23,67 +23,104 @@ TextStyle customizeTextStyle(
       backgroundColor: backgroundColor);
 }
 
-Widget customText(
-  String text, {
-  Color? color,
-  double? size,
-  FontWeight? fontWeight,
-  int? maxLines,
-  bool? lineThrough,
-  bool lineGapNeeded = false,
-  TextAlign? textAlign,
-  Color? backGroundColor,
-}) {
-  return Text(
-    text,
-    maxLines: maxLines,
-    textAlign: textAlign,
-    style: customizeTextStyle(
-      fontWeight: fontWeight,
-      fontSize: size,
-      fontColor: color,
-      height: lineGapNeeded == true
-          ? 1.8
-          : kIsWeb
-              ? 1.2
-              : 0.0,
-      decoration: lineThrough == true
-          ? TextDecoration.lineThrough
-          : TextDecoration.none,
-      backgroundColor: backGroundColor,
-    ),
-  );
+class CustomText extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+  final int? maxLines;
+  final bool? lineThrough;
+  final bool lineGapNeeded;
+  final TextAlign? textAlign;
+  final Color? backGroundColor;
+
+  const CustomText(
+    this.text, {
+    super.key,
+    this.color,
+    this.size,
+    this.fontWeight,
+    this.maxLines,
+    this.lineThrough,
+    this.lineGapNeeded = false,
+    this.textAlign,
+    this.backGroundColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      maxLines: maxLines,
+      textAlign: textAlign,
+      style: customizeTextStyle(
+        fontWeight: fontWeight,
+        fontSize: size,
+        fontColor: color,
+        height: lineGapNeeded == true
+            ? 1.8
+            : kIsWeb
+                ? 1.2
+                : 0.0,
+        decoration: lineThrough == true
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
+        backgroundColor: backGroundColor,
+      ),
+    );
+  }
 }
 
-Widget customInkWellText(
-  Function() onTap,
-  String text,
-  Color color,
-  double size, {
-  fontWeight,
-  Key? key,
-}) {
-  return InkWell(
-    key: key,
-    onTap: onTap,
-    child: Text(text,
-        style: customizeTextStyle(
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-        )),
-  );
+class CustomInkWellText extends StatelessWidget {
+  final void Function()? onTap;
+  final String text;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+
+  const CustomInkWellText(
+    this.text, {
+    super.key,
+    this.onTap,
+    this.color,
+    this.size,
+    this.fontWeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      key: key,
+      onTap: onTap,
+      child: Text(text,
+          style: customizeTextStyle(
+            fontWeight: fontWeight,
+            fontSize: size,
+            fontColor: color,
+          )),
+    );
+  }
 }
 
-Widget customRichText(
-    {required List<TextSpan> textSpanList,
-    TextAlign textAlign = TextAlign.start}) {
-  return RichText(
-    textAlign: textAlign,
-    text: TextSpan(
-      children: textSpanList,
-    ),
-  );
+class CustomRichText extends StatelessWidget {
+  final List<TextSpan> textSpanList;
+  final TextAlign textAlign;
+
+  const CustomRichText({
+    super.key,
+    required this.textSpanList,
+    this.textAlign = TextAlign.start,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      textAlign: textAlign,
+      text: TextSpan(
+        children: textSpanList,
+      ),
+    );
+  }
 }
 
 TextSpan customTextSpan({
@@ -107,70 +144,134 @@ TextSpan customTextSpan({
             height: height,
             backgroundColor: backgroundColor));
 
-Widget customUnderlineText(String text, Color color, double size,
-    {fontWeight, decorationColor, TextAlign? textAlign}) {
-  return Text(text,
-      textAlign: textAlign,
-      style: customizeTextStyle(
-        fontWeight: fontWeight,
-        fontSize: size,
-        fontColor: color,
-        decoration: TextDecoration.underline,
-        decorationColor: decorationColor,
-      ));
+class CustomUnderlineText extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+  final Color? decorationColor;
+  final TextAlign? textAlign;
+
+  const CustomUnderlineText(
+    this.text, {
+    super.key,
+    this.color,
+    this.size,
+    this.fontWeight,
+    this.decorationColor,
+    this.textAlign,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        textAlign: textAlign,
+        style: customizeTextStyle(
+          fontWeight: fontWeight,
+          fontSize: size,
+          fontColor: color,
+          decoration: TextDecoration.underline,
+          decorationColor: decorationColor,
+        ));
+  }
 }
 
-Widget customOverflowText(String text, Color color, double size,
-    {fontWeight,
-    int maxLines = 2,
-    TextAlign? textAlign = TextAlign.center,
-    TextOverflow? overflow}) {
-  return Text(text,
-      overflow: overflow ?? TextOverflow.ellipsis,
+class CustomOverflowText extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+  final int maxLines;
+  final TextAlign? textAlign;
+  final TextOverflow? overflow;
+
+  const CustomOverflowText(
+    this.text, {
+    super.key,
+    this.size,
+    this.color,
+    this.fontWeight,
+    this.maxLines = 2,
+    this.textAlign = TextAlign.center,
+    this.overflow,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text,
+        overflow: overflow ?? TextOverflow.ellipsis,
+        textAlign: textAlign,
+        maxLines: maxLines,
+        style: customizeTextStyle(
+          fontWeight: fontWeight,
+          fontSize: size,
+          fontColor: color,
+        ));
+  }
+}
+
+class CustomOnlyText extends StatelessWidget {
+  final String data;
+
+  final TextStyle? style;
+  final StrutStyle? strutStyle;
+  final TextAlign? textAlign;
+  final Locale? locale;
+  final bool? softWrap;
+  final TextOverflow? overflow;
+  final double? textScaleFactor;
+  final int? maxLines;
+  final String? semanticsLabel;
+  final TextWidthBasis? textWidthBasis;
+  final TextHeightBehavior? textHeightBehavior;
+  final Color? selectionColor;
+
+  const CustomOnlyText(
+    this.data, {
+    super.key,
+    this.style,
+    this.strutStyle,
+    this.textAlign,
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.textScaleFactor,
+    this.maxLines,
+    this.semanticsLabel,
+    this.textWidthBasis,
+    this.textHeightBehavior,
+    this.selectionColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      data,
+      key: key,
+      style: style,
+      strutStyle: strutStyle,
       textAlign: textAlign,
+      locale: locale,
+      softWrap: softWrap,
+      overflow: overflow,
+      textScaler: TextScaler.linear(textScaleFactor ?? 0.0),
       maxLines: maxLines,
-      style: customizeTextStyle(
-        fontWeight: fontWeight,
-        fontSize: size,
-        fontColor: color,
-      ));
+      semanticsLabel: semanticsLabel,
+      textWidthBasis: textWidthBasis,
+      textHeightBehavior: textHeightBehavior,
+      selectionColor: selectionColor,
+    );
+  }
 }
 
-Widget customOnlyText(
-  String data, {
-  Key? key,
-  TextStyle? style,
-  StrutStyle? strutStyle,
-  TextAlign? textAlign,
-  Locale? locale,
-  bool? softWrap,
-  TextOverflow? overflow,
-  double? textScaleFactor,
-  int? maxLines,
-  String? semanticsLabel,
-  TextWidthBasis? textWidthBasis,
-  TextHeightBehavior? textHeightBehavior,
-  Color? selectionColor,
-}) {
-  return Text(
-    data,
-    key: key,
-    style: style,
-    strutStyle: strutStyle,
-    textAlign: textAlign,
-    locale: locale,
-    softWrap: softWrap,
-    overflow: overflow,
-    textScaler: TextScaler.linear(textScaleFactor ?? 0.0),
-    maxLines: maxLines,
-    semanticsLabel: semanticsLabel,
-    textWidthBasis: textWidthBasis,
-    textHeightBehavior: textHeightBehavior,
-    selectionColor: selectionColor,
-  );
-}
+class CustomHtmlText extends StatelessWidget {
+  final String html;
 
-Widget customHtmlText(String html) => HtmlWidget(
+  const CustomHtmlText(this.html, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return HtmlWidget(
       html,
       textStyle: customizeTextStyle(),
       onTapUrl: (url) async {
@@ -178,3 +279,5 @@ Widget customHtmlText(String html) => HtmlWidget(
         return true;
       },
     );
+  }
+}

@@ -13,14 +13,28 @@ import '../storage/localCart/repo/local_cart_repo.dart';
 import '../utils/text_utils.dart';
 import 'custom_image.dart';
 
-Widget customElevatedButton(
-        {required Widget? child,
-        required void Function()? onPressed,
-        Color? color,
-        Size? minimumSize = const Size(88, 36),
-        double? radius,
-        Gradient? gradient}) =>
-    gradient != null
+// ignore: must_be_immutable
+class CustomElevatedButton extends StatelessWidget {
+  CustomElevatedButton({
+    super.key,
+    required this.child,
+    required this.onPressed,
+    this.color,
+    this.minimumSize,
+    this.radius,
+    this.gradient,
+    this.padding,
+  });
+  Widget child;
+  void Function()? onPressed;
+  Color? color;
+  Size? minimumSize = const Size(88, 36);
+  double? radius;
+  Gradient? gradient;
+  EdgeInsetsGeometry? padding;
+  @override
+  Widget build(BuildContext context) {
+    return gradient != null
         ? DecoratedBox(
             decoration: BoxDecoration(
               gradient: gradient,
@@ -31,7 +45,7 @@ Widget customElevatedButton(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
                 minimumSize: minimumSize,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(radius ?? 16)),
                 ),
@@ -45,56 +59,96 @@ Widget customElevatedButton(
               backgroundColor: color,
               surfaceTintColor: Colors.transparent,
               minimumSize: minimumSize,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
               shape: radius != null
                   ? RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(radius),
+                      borderRadius: BorderRadius.circular(radius!),
                     )
                   : null,
             ),
             onPressed: onPressed,
             child: child,
           );
+  }
+}
 
-Widget customTextButton(
-        {required Widget child, required void Function()? onPressed}) =>
-    TextButton(
+// ignore: must_be_immutable
+class CustomTextButton extends StatelessWidget {
+  CustomTextButton(
+      {super.key,
+      required this.child,
+      required this.onPressed,
+      this.color,
+      this.padding});
+  Widget child;
+  void Function()? onPressed;
+  Color? color;
+  EdgeInsetsGeometry? padding;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
         style: TextButton.styleFrom(
-          foregroundColor:
-              HexColor.fromHex(ColorConst.deepBlue).withOpacity(0.87),
-          padding: const EdgeInsets.all(5.0),
+          foregroundColor: color,
+          padding: padding,
         ),
         onPressed: onPressed,
         child: child);
+  }
+}
 
-Widget customIconButton(
-        {required Widget icon, required void Function()? onPressed}) =>
-    IconButton(
+// ignore: must_be_immutable
+class CustomIconButton extends StatelessWidget {
+  CustomIconButton(
+      {super.key, required this.onPressed, required this.icon, this.color});
+  Widget icon;
+  void Function()? onPressed;
+  Color? color;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      color: color,
       icon: icon,
       onPressed: onPressed,
     );
+  }
+}
 
-Widget customOutLineButton({
-  required void Function() onPressed,
-  Widget? child,
-  Color? borderColor,
-  Color? backGroundColor,
-  double? radius,
-  Size? minimumSize = const Size(88, 36),
-}) =>
-    OutlinedButton(
+// ignore: must_be_immutable
+class CustomOutLineButton extends StatelessWidget {
+  CustomOutLineButton(
+      {super.key,
+      required this.onPressed,
+      required this.child,
+      this.borderColor,
+      this.backGroundColor,
+      this.radius,
+      this.minimumSize,
+      this.padding});
+  void Function() onPressed;
+  Widget child;
+  Color? borderColor;
+  Color? backGroundColor;
+  double? radius;
+  Size? minimumSize = const Size(88, 36);
+  EdgeInsetsGeometry? padding;
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
       style: OutlinedButton.styleFrom(
+          padding: padding,
           minimumSize: minimumSize,
           shape: radius != null
               ? RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(radius),
+                  borderRadius: BorderRadius.circular(radius!),
                 )
               : null,
-          side: borderColor != null ? BorderSide(color: borderColor) : null,
+          side: borderColor != null ? BorderSide(color: borderColor!) : null,
           backgroundColor: backGroundColor),
       onPressed: onPressed,
       child: child,
     );
+  }
+}
 
 Widget customCartButton(
         {ServiceModel? serviceModel,
@@ -106,26 +160,22 @@ Widget customCartButton(
           child: LocalCartRepo().checkIfServiceContainInCart(
                   allServiceList: state.serviceList.value ?? [],
                   serviceId: "${serviceModel?.serviceId}")
-              ? customElevatedButton(
-                  child: customText(TextUtils.remove,
-                      color: Colors.white,
-                      size: 14,
-                      fontWeight: FontWeight.w700),
+              ? CustomElevatedButton(
                   onPressed: () {
                     context.read<LocalCartBloc>().add(RemoveServiceFromCart(
                         serviceId: serviceModel?.serviceId ?? ""));
                   },
                   color: Colors.red,
-                  radius: 5)
+                  radius: 5,
+                  child: CustomText(TextUtils.remove,
+                      color: Colors.white,
+                      size: 14,
+                      fontWeight: FontWeight.w700))
               : LocalCartRepo().checkIfPackageServiceContainInCart(
                       allServiceList: state.serviceList.value ?? [],
                       serviceModel: serviceModel)
                   ? Container()
-                  : customElevatedButton(
-                      child: customText(TextUtils.book_now,
-                          color: Colors.white,
-                          size: 14,
-                          fontWeight: FontWeight.w700),
+                  : CustomElevatedButton(
                       onPressed: () {
                         context.read<LocalCartBloc>().add(AddServiceToCart(
                             serviceModel: CartServiceModel(
@@ -145,7 +195,11 @@ Widget customCartButton(
                         }
                       },
                       color: HexColor.fromHex(ColorConst.green),
-                      radius: 5),
+                      radius: 5,
+                      child: CustomText(TextUtils.book_now,
+                          color: Colors.white,
+                          size: 14,
+                          fontWeight: FontWeight.w700)),
         );
       },
     );
@@ -159,7 +213,7 @@ Widget genderButton(
       onTap: onTap,
       child: Column(
         children: [
-          customText(title,
+          CustomText(title,
               color: HexColor.fromHex(ColorConst.primaryDark), size: 14.fs),
           CustomAssetImageView(
             path: assetName,
