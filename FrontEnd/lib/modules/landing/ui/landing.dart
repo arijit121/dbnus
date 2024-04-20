@@ -50,94 +50,100 @@ class _LandingUiState extends State<LandingUi> {
             ),
             backgroundColor: Colors.white,
             body: SafeArea(
-              child: ScreenUtils.responsiveUI(
-                  narrowUI: Column(
-                    children: [
-                      Row(
-                        children: [
-                          CustomIconButton(
-                              icon: const Icon(Icons.menu),
-                              onPressed: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              }),
-                        ],
-                      ),
-                      200.ph,
-                      CustomIconButton(
-                          icon: const Icon(Icons.abc), onPressed: () {}),
-                      20.ph,
-                      CustomElevatedButton(
-                        child: const CustomText("text"),
+                child: ResponsiveUI(
+              narrowUI: (BuildContext context) {
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        CustomIconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            }),
+                      ],
+                    ),
+                    200.ph,
+                    CustomIconButton(
+                        icon: const Icon(Icons.abc), onPressed: () {}),
+                    20.ph,
+                    CustomElevatedButton(
+                      child: const CustomText("text"),
+                      onPressed: () {},
+                    ),
+                    20.ph,
+                    CustomElevatedButton(
                         onPressed: () {},
-                      ),
-                      20.ph,
-                      CustomElevatedButton(
+                        gradient: const LinearGradient(colors: [
+                          Colors.red,
+                          Colors.blue,
+                        ]),
+                        child: const CustomText("text")),
+                    20.ph,
+                    CustomOutLineButton(
+                      onPressed: () {},
+                      child: const CustomText("text"),
+                    ),
+                    20.ph,
+                    CustomTextButton(
+                        child: const CustomText("text"), onPressed: () {}),
+                    20.ph,
+                    const CustomText("text"),
+                  ],
+                );
+              },
+              mediumUI: (BuildContext context) {
+                return LandingWidget().drawerNavigationRail(
+                    selectedIndex: state.pageIndex.value,
+                    chooseIndex: (int value) {
+                      if (value == 6) {
+                        AppLog.i("Log out");
+                      } else if (kIsWeb) {
+                        LandingUtils.redirect(value);
+                      } else {
+                        context
+                            .read<LandingBloc>()
+                            .add(ChangeIndex(index: value));
+                      }
+                    });
+              },
+              largeUI: (BuildContext context) {
+                return Row(
+                  children: [
+                    LandingWidget().drawerNavigationRail(
+                        selectedIndex: state.pageIndex.value,
+                        withTitle: true,
+                        chooseIndex: (int value) {
+                          if (value == 6) {
+                            AppLog.i("Log out");
+                          } else if (kIsWeb) {
+                            LandingUtils.redirect(value);
+                          } else {
+                            context
+                                .read<LandingBloc>()
+                                .add(ChangeIndex(index: value));
+                          }
+                        }),
+                    Column(
+                      children: [
+                        CustomElevatedButton(
+                          child: const CustomText("text"),
                           onPressed: () {},
-                          gradient: const LinearGradient(colors: [
-                            Colors.red,
-                            Colors.blue,
-                          ]),
-                          child: const CustomText("text")),
-                      20.ph,
-                      CustomOutLineButton(
-                        onPressed: () {},
-                        child: const CustomText("text"),
-                      ),
-                      20.ph,
-                      CustomTextButton(
-                          child: const CustomText("text"), onPressed: () {}),
-                      20.ph,
-                      const CustomText("text"),
-                    ],
-                  ),
-                  mediumUI: LandingWidget().drawerNavigationRail(
-                      selectedIndex: state.pageIndex.value,
-                      chooseIndex: (int value) {
-                        if (value == 6) {
-                          AppLog.i("Log out");
-                        } else if (kIsWeb) {
-                          LandingUtils.redirect(value);
-                        } else {
-                          context
-                              .read<LandingBloc>()
-                              .add(ChangeIndex(index: value));
-                        }
-                      }),
-                  largeUI: Row(
-                    children: [
-                      LandingWidget().drawerNavigationRail(
-                          selectedIndex: state.pageIndex.value,
-                          withTitle: true,
-                          chooseIndex: (int value) {
-                            if (value == 6) {
-                              AppLog.i("Log out");
-                            } else if (kIsWeb) {
-                              LandingUtils.redirect(value);
-                            } else {
-                              context
-                                  .read<LandingBloc>()
-                                  .add(ChangeIndex(index: value));
-                            }
-                          }),
-                      Column(
-                        children: [
-                          CustomElevatedButton(
-                            child: const CustomText("text"),
+                        ),
+                        20.ph,
+                        CustomElevatedButton(
                             onPressed: () {},
-                          ),
-                          20.ph,
-                          CustomElevatedButton(
-                              onPressed: () {},
-                              gradient: const LinearGradient(colors: [
-                                Colors.red,
-                                Colors.blue,
-                              ]),
-                              child: const CustomText("text")),
-                        ],
-                      )
-                    ],
-                  )),
-            ),
+                            gradient: const LinearGradient(colors: [
+                              Colors.red,
+                              Colors.blue,
+                            ]),
+                            child: const CustomText("text")),
+                      ],
+                    )
+                  ],
+                );
+              },
+            )),
           );
         },
       ),

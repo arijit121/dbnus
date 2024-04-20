@@ -33,19 +33,36 @@ class ScreenUtils {
       return 1;
     }
   }
+}
 
-  /// [responsiveUI] is reusable widget which can decide that ui is large, medium or narrow
+class ResponsiveUI extends StatelessWidget {
+  final Widget? Function(BuildContext context) narrowUI;
+  final Widget? Function(BuildContext context) mediumUI;
+  final Widget? Function(BuildContext context) largeUI;
+
+  /// [ResponsiveUI] is reusable widget which can decide that ui is large, medium or narrow
   ///
-  static Widget responsiveUI(
-      {Widget? narrowUI, Widget? mediumUI, Widget? largeUI}) {
-    return OrientationBuilder(builder: (context, orientation) {
-      if (MediaQuery.of(context).size.width > mediumWidthBreakpoint) {
-        return largeUI ?? const Placeholder();
-      } else if (MediaQuery.of(context).size.width >
-          narrowScreenWidthThreshold) {
-        return mediumUI ?? const Placeholder();
-      }
-      return narrowUI ?? const Placeholder();
-    });
+  const ResponsiveUI({
+    super.key,
+    required this.narrowUI,
+    required this.mediumUI,
+    required this.largeUI,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        final screenWidth = MediaQuery.of(context).size.width;
+
+        if (screenWidth > ScreenUtils.mediumWidthBreakpoint) {
+          return largeUI(context) ?? const Placeholder();
+        } else if (screenWidth > ScreenUtils.narrowScreenWidthThreshold) {
+          return mediumUI(context) ?? const Placeholder();
+        } else {
+          return narrowUI(context) ?? const Placeholder();
+        }
+      },
+    );
   }
 }
