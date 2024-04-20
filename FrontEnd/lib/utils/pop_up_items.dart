@@ -120,7 +120,7 @@ class ToastMassage extends StatelessWidget {
                   )),
               10.pw,
               SizedBox(
-                width: ScreenUtils.aw * 0.5,
+                width: (ScreenUtils().aw ?? 0) * 0.5,
                 child: CustomText(message,
                     color: Colors.white, size: 16, fontWeight: FontWeight.w600),
               ),

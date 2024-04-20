@@ -46,11 +46,11 @@ class LocalCartButtonWidget extends StatelessWidget {
                     },
                   )
                 : Container(
-                    height: 55 + ScreenUtils.paddingBottom,
+                    height: 55 + (ScreenUtils().paddingBottom ?? 0),
                     padding: EdgeInsets.only(
-                        left: ScreenUtils.paddingLeft + 5,
-                        right: ScreenUtils.paddingRight + 5,
-                        bottom: ScreenUtils.paddingBottom + 2,
+                        left: (ScreenUtils().paddingLeft ?? 0) + 5,
+                        right: (ScreenUtils().paddingRight ?? 0) + 5,
+                        bottom: (ScreenUtils().paddingBottom ?? 0) + 2,
                         top: 5),
                     decoration: BoxDecoration(
                         color: Colors.white,

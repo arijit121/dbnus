@@ -4,26 +4,33 @@ import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
 
 class ScreenUtils {
+  ScreenUtils() {
+    paddingLeft = MediaQuery.of(CurrentContext().context).padding.left;
+    paddingRight = MediaQuery.of(CurrentContext().context).padding.right;
+    paddingTop = MediaQuery.of(CurrentContext().context).padding.top;
+    paddingBottom = MediaQuery.of(CurrentContext().context).padding.bottom;
+    aw = MediaQuery.of(CurrentContext().context).size.width;
+    ah = MediaQuery.of(CurrentContext().context).size.height;
+    nw = (MediaQuery.of(CurrentContext().context).size.width) -
+        (MediaQuery.of(CurrentContext().context).padding.left) -
+        (MediaQuery.of(CurrentContext().context).padding.right);
+    nh = MediaQuery.of(CurrentContext().context).size.height -
+        (MediaQuery.of(CurrentContext().context).padding.top) -
+        (MediaQuery.of(CurrentContext().context).padding.bottom);
+  }
+
   static double narrowScreenWidthThreshold = 450;
 
   static double mediumWidthBreakpoint = 1000;
   static double largeWidthBreakpoint = 1500;
-  static double paddingLeft =
-      MediaQuery.of(CurrentContext().context).padding.left;
-  static double paddingRight =
-      MediaQuery.of(CurrentContext().context).padding.right;
-  static double paddingTop =
-      MediaQuery.of(CurrentContext().context).padding.top;
-  static double paddingBottom =
-      MediaQuery.of(CurrentContext().context).padding.bottom;
-  static double aw = MediaQuery.of(CurrentContext().context).size.width;
-  static double ah = MediaQuery.of(CurrentContext().context).size.height;
-  static double nw = (MediaQuery.of(CurrentContext().context).size.width) -
-      (MediaQuery.of(CurrentContext().context).padding.left) -
-      (MediaQuery.of(CurrentContext().context).padding.right);
-  static double nh = MediaQuery.of(CurrentContext().context).size.height -
-      (MediaQuery.of(CurrentContext().context).padding.top) -
-      (MediaQuery.of(CurrentContext().context).padding.bottom);
+  double? paddingLeft;
+  double? paddingRight;
+  double? paddingTop;
+  double? paddingBottom;
+  double? aw;
+  double? ah;
+  double? nw;
+  double? nh;
 
   static double getAspectRation(
       {required double height, required double width}) {
@@ -54,7 +61,7 @@ class ResponsiveUI extends StatelessWidget {
     return OrientationBuilder(
       builder: (context, orientation) {
         final screenWidth = MediaQuery.of(context).size.width;
-
+        AppLog.i(ScreenUtils().aw);
         if (screenWidth > ScreenUtils.mediumWidthBreakpoint) {
           return largeUI(context) ?? const Placeholder();
         } else if (screenWidth > ScreenUtils.narrowScreenWidthThreshold) {

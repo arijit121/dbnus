@@ -102,11 +102,11 @@ class AppConfig {
   }
 
   String getDeviceWidth() {
-    return ScreenUtils.aw.toString();
+    return ScreenUtils().aw.toString();
   }
 
   String getDeviceHeight() {
-    return ScreenUtils.ah.toString();
+    return ScreenUtils().ah.toString();
   }
 
   Future<String> getNetworkInfo() async {

@@ -9,7 +9,7 @@ extension Sizing on num {
   double get fs =>
       MediaQuery.of(CurrentContext().context).textScaler.scale(toDouble());
 
-  double get sh => ScreenUtils.nh * (toDouble() / 100);
+  double get sh => (ScreenUtils().nh ?? 1) * (toDouble() / 100);
 
-  double get sw => ScreenUtils.nw * (toDouble() / 100);
+  double get sw => (ScreenUtils().nw ?? 1) * (toDouble() / 100);
 }

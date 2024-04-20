@@ -96,7 +96,7 @@ Future<CustomFile?> customFilePicker() async {
                       Navigator.pop(context, 'Camera');
                     },
                     child: SizedBox(
-                      width: (ScreenUtils.nw / 2) - 8,
+                      width: ((ScreenUtils().nw ?? 1) / 2) - 8,
                       child: Column(
                         children: [
                           IconButton(
@@ -124,7 +124,7 @@ Future<CustomFile?> customFilePicker() async {
                       Navigator.pop(context, 'Folder');
                     },
                     child: SizedBox(
-                      width: (ScreenUtils.nw / 2) - 8,
+                      width: ((ScreenUtils().nw ?? 1) / 2) - 8,
                       child: Column(
                         children: [
                           IconButton(
