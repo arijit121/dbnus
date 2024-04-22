@@ -26,19 +26,20 @@ class LoadingWidget extends StatelessWidget {
       color: backgroundColor,
       width: width,
       height: height,
-      child: SpinKitThreeBounce(
-        itemBuilder: (_, int index) {
-          return DecoratedBox(
-            decoration: BoxDecoration(
-                color: index.isEven
-                    ? HexColor.fromHex(ColorConst.baseHexColor)
-                    : HexColor.fromHex(ColorConst.baseHexColor)
-                        .withOpacity(0.2),
-                borderRadius: const BorderRadius.all(Radius.circular(50))),
-          );
-        },
-        size: 30.0,
-      ),
+      child: child ??
+          SpinKitThreeBounce(
+            itemBuilder: (_, int index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                    color: index.isEven
+                        ? HexColor.fromHex(ColorConst.baseHexColor)
+                        : HexColor.fromHex(ColorConst.baseHexColor)
+                            .withOpacity(0.2),
+                    borderRadius: const BorderRadius.all(Radius.circular(50))),
+              );
+            },
+            size: 30.0,
+          ),
     );
   }
 }
