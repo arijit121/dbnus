@@ -7,15 +7,18 @@ import '../service/context_service.dart';
 
 //ignore: must_be_immutable
 class LoadingWidget extends StatelessWidget {
-  LoadingWidget(
-      {super.key,
-      this.height = 300,
-      this.width = 300,
-      this.backgroundColor = Colors.transparent});
+  LoadingWidget({
+    super.key,
+    this.height = 300,
+    this.width = 300,
+    this.backgroundColor = Colors.transparent,
+    this.child,
+  });
 
   double width;
   double height;
   Color? backgroundColor;
+  Widget? child;
 
   @override
   Widget build(BuildContext context) {
