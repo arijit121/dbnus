@@ -15,7 +15,9 @@ import '../widget/landing_widget.dart';
 // ignore: must_be_immutable
 class LandingUi extends StatefulWidget {
   LandingUi({super.key, required this.index});
+
   int index;
+
   @override
   State<LandingUi> createState() => _LandingUiState();
 }
