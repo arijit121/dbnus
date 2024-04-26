@@ -1,3 +1,4 @@
+import 'package:dbnus/extension/logger_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:universal_html/html.dart' as html;
@@ -93,5 +94,15 @@ class CustomRouterWeb {
   ///
   void secBack() {
     html.window.history.go(-2);
+  }
+
+  bool canBack() {
+    try {
+      return html.window.history.state["serialCount"] != 0 &&
+          html.window.history.state["serialCount"] != null;
+    } catch (e, s) {
+      AppLog.e(e, stackTrace: s);
+    }
+    return false;
   }
 }
