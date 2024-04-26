@@ -98,7 +98,8 @@ class CustomRouterWeb {
 
   bool canBack() {
     try {
-      return html.window.history.state["serialCount"] != 0 &&
+      return html.window.history.state != null &&
+          html.window.history.state["serialCount"] != 0 &&
           html.window.history.state["serialCount"] != null;
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
