@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
-import '../../data/model/custom_file.dart';
-import '../../data/model/paytm_merchant_details.dart';
-
 import '../../extension/logger_extension.dart';
 import '../../service/context_service.dart';
 import '../router_manager.dart';
