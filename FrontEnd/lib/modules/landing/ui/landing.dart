@@ -33,14 +33,6 @@ class _LandingUiState extends State<LandingUi> {
       child: BlocBuilder<LandingBloc, LandingState>(
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(
-              leading: CustomIconButton(
-                onPressed: () {
-                  CustomRoute().back();
-                },
-                icon: const Icon(Icons.arrow_back_ios),
-              ),
-            ),
             key: _scaffoldKey,
             drawer: SafeArea(
               child: LandingWidget().drawerNavigationRail(
