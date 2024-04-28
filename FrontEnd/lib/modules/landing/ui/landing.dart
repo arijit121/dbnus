@@ -1,4 +1,5 @@
 import 'package:dbnus/extension/spacing.dart';
+import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,15 @@ class _LandingUiState extends State<LandingUi> {
       child: BlocBuilder<LandingBloc, LandingState>(
         builder: (context, state) {
           return Scaffold(
+            appBar: state.pageIndex.value != 0
+                ? AppBar(
+                    leading: CustomIconButton(
+                        onPressed: () {
+                          CustomRoute().back();
+                        },
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                  )
+                : null,
             key: _scaffoldKey,
             drawer: SafeArea(
               child: LandingWidget().drawerNavigationRail(
@@ -55,44 +65,83 @@ class _LandingUiState extends State<LandingUi> {
             body: SafeArea(
                 child: ResponsiveUI(
               narrowUI: (BuildContext context) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        CustomIconButton(
-                            icon: const Icon(Icons.menu),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            }),
-                      ],
-                    ),
-                    200.ph,
-                    CustomIconButton(
-                        icon: const Icon(Icons.abc), onPressed: () {}),
-                    20.ph,
-                    CustomElevatedButton(
-                      child: const CustomText("text"),
-                      onPressed: () {},
-                    ),
-                    20.ph,
-                    CustomElevatedButton(
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          CustomIconButton(
+                              icon: const Icon(Icons.menu),
+                              onPressed: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              }),
+                        ],
+                      ),
+                      200.ph,
+                      CustomIconButton(
+                          icon: const Icon(Icons.abc), onPressed: () {}),
+                      20.ph,
+                      CustomElevatedButton(
+                        child: const CustomText("text"),
                         onPressed: () {},
-                        gradient: const LinearGradient(colors: [
-                          Colors.red,
-                          Colors.blue,
-                        ]),
-                        child: const CustomText("text")),
-                    20.ph,
-                    CustomOutLineButton(
-                      onPressed: () {},
-                      child: const CustomText("text"),
-                    ),
-                    20.ph,
-                    CustomTextButton(
-                        child: const CustomText("text"), onPressed: () {}),
-                    20.ph,
-                    const CustomText("text"),
-                  ],
+                      ),
+                      20.ph,
+                      CustomElevatedButton(
+                          onPressed: () {},
+                          gradient: const LinearGradient(colors: [
+                            Colors.red,
+                            Colors.blue,
+                          ]),
+                          child: const CustomText("text")),
+                      20.ph,
+                      CustomOutLineButton(
+                        onPressed: () {},
+                        child: const CustomText("text"),
+                      ),
+                      20.ph,
+                      CustomTextButton(
+                          child: const CustomText("text"), onPressed: () {}),
+                      20.ph,
+                      const CustomText("text"),
+                      20.ph,
+                      CustomElevatedButton(
+                          onPressed: () {
+                            DownloadHandler().download(
+                                url:
+                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
+                          },
+                          gradient: const LinearGradient(colors: [
+                            Colors.red,
+                            Colors.blue,
+                          ]),
+                          child: const CustomText("GlucoseFasting")),
+                      20.ph,
+                      CustomElevatedButton(
+                          onPressed: () {
+                            DownloadHandler().download(
+                                url:
+                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
+                          },
+                          gradient: const LinearGradient(colors: [
+                            Colors.red,
+                            Colors.blue,
+                          ]),
+                          child: const CustomText("GlucosePP")),
+                      20.ph,
+                      CustomElevatedButton(
+                          onPressed: () {
+                            DownloadHandler().download(
+                                url:
+                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
+                          },
+                          gradient: const LinearGradient(colors: [
+                            Colors.red,
+                            Colors.blue,
+                          ]),
+                          child: const CustomText("LipidProfile")),
+                      20.ph,
+                    ],
+                  ),
                 );
               },
               mediumUI: (BuildContext context) {
@@ -135,12 +184,16 @@ class _LandingUiState extends State<LandingUi> {
                         ),
                         20.ph,
                         CustomElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              DownloadHandler().download(
+                                  url:
+                                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                            },
                             gradient: const LinearGradient(colors: [
                               Colors.red,
                               Colors.blue,
                             ]),
-                            child: const CustomText("text")),
+                            child: const CustomText("Download")),
                       ],
                     )
                   ],

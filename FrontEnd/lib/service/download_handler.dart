@@ -19,7 +19,7 @@ class DownloadHandler {
         await JsProvider().downloadFile(url: url, name: url.split("/").last);
       } else {
         PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
-        _bindBackgroundIsolate(path: "${await downloadPath()}/${url.split('/').last}");
+        _bindBackgroundIsolate();
         await FlutterDownloader.registerCallback(downloadCallback, step: 1);
         final taskId = await FlutterDownloader.enqueue(
             url: url,
@@ -65,17 +65,17 @@ class DownloadHandler {
 
   @pragma('vm:entry-point')
   static void downloadCallback(
-      String id,
-      int status,
-      int progress,
-      ) async {
+    String id,
+    int status,
+    int progress,
+  ) async {
     AppLog.i('task ($id) is in status ($status) and process ($progress)',
         tag: 'Callback on background isolate');
     IsolateNameServer.lookupPortByName('downloader_send_port')
         ?.send([id, status, progress]);
   }
 
-  void _bindBackgroundIsolate({required String path}) {
+  void _bindBackgroundIsolate() {
     List<TaskInfo>? _tasks;
     ReceivePort _port = ReceivePort();
     final isSuccess = IsolateNameServer.registerPortWithName(
@@ -84,7 +84,7 @@ class DownloadHandler {
     );
     if (!isSuccess) {
       _unbindBackgroundIsolate();
-      _bindBackgroundIsolate(path: path);
+      _bindBackgroundIsolate();
       return;
     }
     _port.listen((dynamic data) async {
@@ -96,11 +96,15 @@ class DownloadHandler {
           tag: 'Callback on UI isolate:');
 
       if (progress == 100) {
-        AppLog.i(path);
+        String query = "SELECT * FROM task WHERE task_id='$taskId'";
+        List<DownloadTask>? tasks =
+            await FlutterDownloader.loadTasksWithRawQuery(query: query);
+
         await Permission.storage.request();
         await Permission.manageExternalStorage.request();
         await Permission.accessMediaLocation.request();
-        await OpenFilex.open(path);
+        await OpenFilex.open(
+            "${tasks?.first.savedDir ?? ""}/${tasks?.first.filename ?? ""}");
       }
     });
   }
