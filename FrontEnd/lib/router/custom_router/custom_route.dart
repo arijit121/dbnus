@@ -7,7 +7,7 @@ import '../../extension/logger_extension.dart';
 import '../../service/context_service.dart';
 import '../router_manager.dart';
 import '../router_name.dart';
-import 'web/custom_router.dart';
+import 'web/custom_router_web.dart';
 
 class CustomRoute {
   void back() {
