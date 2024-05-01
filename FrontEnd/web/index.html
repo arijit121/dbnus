@@ -23,6 +23,7 @@
 
     <title>Test des</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css" /> 
     <script>
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
@@ -78,35 +79,63 @@
 
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>
-    <style>
-      .container {
-        width: 100vw;
-        height: 100vh;
-        display: flex; /* Default Axis is X*/
-        justify-content: center; /* Main Axis */
-        align-items: center; /* Cross Axis */
-      }
-      .indicator{
-        width: 45vw;
-      }
-    </style>
 </head>
-<body style="overflow: hidden">
+<body>
+
+   <!-- Create a progress bar container with a nested progress bar -->
+   <div class="progress-container" id="progressbar">
+    <div class="progress-bar" id="progress"></div>
+  </div>
 <script>
+   /**
+       * Creates a Promise that resolves after a specified delay.
+       *
+       * @param {number} delay - The delay duration in milliseconds.
+       * @returns {Promise} A Promise that resolves after the specified delay.
+       */
+       function addDelay(delay) {
+        return new Promise((resolve) => setTimeout(resolve, delay));
+      }
+
+      // Get references to the progress bar container and the progress bar element.
+      const progress = document.getElementById("progress");
+      const progressBar = document.getElementById("progressbar");
+
+      // Set the initial width of the progress bar to 0%.
+      progress.style.width = `0%`;
+
     window.addEventListener('load', function(ev) {
+      // Set an initial progress of 33% when the page loads.
+      progress.style.width = `33%`;
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine(
+        onEntrypointLoaded:async function(engineInitializer) {
+           // Update progress to 66% after the entry point is loaded.
+           progress.style.width = `66%`;
+        // Initialize the Flutter engine.
+        const appRunner = await engineInitializer.initializeEngine(
           {
             renderer: "html"
-          }
-          ).then(function(appRunner) {
-            appRunner.runApp();
           });
+        // Set progress to 99% before adding a delay.
+        progress.style.width = `99%`;
+
+        // Add a delay using the addDelay function.
+        // await addDelay(500);
+
+        // Hide the progress bar by reducing its opacity.
+        // This will create the fade out effect by animating the opacity.
+        progressBar.style.opacity = 0;
+
+        // Run the Flutter app.
+        await appRunner.runApp();
+
+        // Add a fade-in effect to the Flutter view element.
+        document.querySelector("flutter-view").classList.add("fade-in");
+
         }
       });
     });
@@ -129,20 +158,6 @@
        });
    }
 
-
-</script>
-<div id="loading_indicator" class="container">
-    <img class="indicator" src="./assets/loading.gif"/>
-</div>
-<script>
- window.onload = function () {
-        setTimeout(function () {
-          var loadingIndicator = document.getElementById("loading_indicator");
-          if (loadingIndicator) {
-            loadingIndicator.remove();
-          }
-        }, 10000);
-        };
 
 </script>
 </body>

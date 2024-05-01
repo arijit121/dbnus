@@ -3,6 +3,7 @@ import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../extension/logger_extension.dart';
@@ -65,83 +66,88 @@ class _LandingUiState extends State<LandingUi> {
             body: SafeArea(
                 child: ResponsiveUI(
               narrowUI: (BuildContext context) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        CustomIconButton(
+                            icon: const Icon(Icons.menu),
+                            onPressed: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            }),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView(
                         children: [
+                          20.ph,
                           CustomIconButton(
-                              icon: const Icon(Icons.menu),
+                              icon: const Icon(Icons.abc), onPressed: () {}),
+                          20.ph,
+                          CustomElevatedButton(
+                            child: const CustomText("text"),
+                            onPressed: () {},
+                          ),
+                          20.ph,
+                          CustomElevatedButton(
+                              onPressed: () {},
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ]),
+                              child: const CustomText("text")),
+                          20.ph,
+                          CustomOutLineButton(
+                            onPressed: () {},
+                            child: const CustomText("text"),
+                          ),
+                          20.ph,
+                          CustomTextButton(
+                              child: const CustomText("text"),
+                              onPressed: () {}),
+                          20.ph,
+                          const CustomText("text"),
+                          20.ph,
+                          CustomElevatedButton(
                               onPressed: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              }),
+                                DownloadHandler().download(
+                                    url:
+                                        "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
+                              },
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ]),
+                              child: const CustomText("GlucoseFasting")),
+                          20.ph,
+                          CustomElevatedButton(
+                              onPressed: () {
+                                DownloadHandler().download(
+                                    url:
+                                        "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
+                              },
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ]),
+                              child: const CustomText("GlucosePP")),
+                          20.ph,
+                          CustomElevatedButton(
+                              onPressed: () {
+                                DownloadHandler().download(
+                                    url:
+                                        "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
+                              },
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ]),
+                              child: const CustomText("LipidProfile")),
+                          20.ph,
                         ],
                       ),
-                      200.ph,
-                      CustomIconButton(
-                          icon: const Icon(Icons.abc), onPressed: () {}),
-                      20.ph,
-                      CustomElevatedButton(
-                        child: const CustomText("text"),
-                        onPressed: () {},
-                      ),
-                      20.ph,
-                      CustomElevatedButton(
-                          onPressed: () {},
-                          gradient: const LinearGradient(colors: [
-                            Colors.red,
-                            Colors.blue,
-                          ]),
-                          child: const CustomText("text")),
-                      20.ph,
-                      CustomOutLineButton(
-                        onPressed: () {},
-                        child: const CustomText("text"),
-                      ),
-                      20.ph,
-                      CustomTextButton(
-                          child: const CustomText("text"), onPressed: () {}),
-                      20.ph,
-                      const CustomText("text"),
-                      20.ph,
-                      CustomElevatedButton(
-                          onPressed: () {
-                            DownloadHandler().download(
-                                url:
-                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
-                          },
-                          gradient: const LinearGradient(colors: [
-                            Colors.red,
-                            Colors.blue,
-                          ]),
-                          child: const CustomText("GlucoseFasting")),
-                      20.ph,
-                      CustomElevatedButton(
-                          onPressed: () {
-                            DownloadHandler().download(
-                                url:
-                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
-                          },
-                          gradient: const LinearGradient(colors: [
-                            Colors.red,
-                            Colors.blue,
-                          ]),
-                          child: const CustomText("GlucosePP")),
-                      20.ph,
-                      CustomElevatedButton(
-                          onPressed: () {
-                            DownloadHandler().download(
-                                url:
-                                    "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
-                          },
-                          gradient: const LinearGradient(colors: [
-                            Colors.red,
-                            Colors.blue,
-                          ]),
-                          child: const CustomText("LipidProfile")),
-                      20.ph,
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
               mediumUI: (BuildContext context) {
