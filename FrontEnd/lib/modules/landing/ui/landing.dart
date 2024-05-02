@@ -79,6 +79,7 @@ class _LandingUiState extends State<LandingUi> {
                     ),
                     Expanded(
                       child: ListView(
+                        primary: false,
                         children: [
                           20.ph,
                           CustomIconButton(
