@@ -38,7 +38,7 @@ class CustomRoute {
       }
       routerManager.router.pushReplacement(path);
     } else {
-      while (CustomRouterWeb().historyIndex() != 0) {
+      if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
       routerManager.router.goNamed(path);
