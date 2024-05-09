@@ -41,7 +41,7 @@ class CustomRoute {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
-      routerManager.router.goNamed(path);
+      CustomRouterWeb().goToNameAndOff(path);
     }
   }
 
