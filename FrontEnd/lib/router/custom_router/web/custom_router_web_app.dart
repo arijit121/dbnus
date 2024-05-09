@@ -30,6 +30,11 @@ class CustomRouterWeb {
   ///
   void back() {}
 
+  /// Number of Html Back
+  ///
+  ///
+  void numBack(int index) {}
+
   /// Html SecBack
   ///
   ///
@@ -37,5 +42,9 @@ class CustomRouterWeb {
 
   bool canBack() {
     return false;
+  }
+
+  int historyIndex() {
+    return 0;
   }
 }

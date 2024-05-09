@@ -90,6 +90,13 @@ class CustomRouterWeb {
     html.window.history.go(-1);
   }
 
+  /// Number of Html Back
+  ///
+  ///
+  void numBack(int index) {
+    html.window.history.go(-index);
+  }
+
   /// Html SecBack
   ///
   ///
@@ -106,5 +113,15 @@ class CustomRouterWeb {
       AppLog.e(e, stackTrace: s);
     }
     return false;
+  }
+
+  int historyIndex() {
+    try {
+      int index = html.window.history.state["serialCount"];
+      return index;
+    } catch (e, s) {
+      AppLog.e(e, stackTrace: s);
+    }
+    return 0;
   }
 }
