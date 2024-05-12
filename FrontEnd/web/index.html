@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-   
     <base href="$FLUTTER_BASE_HREF">
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description"
-          content="Test Content">
+    <meta name="description" content="Test Content">
 
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title"
-          content="Test title">
+    <meta name="apple-mobile-web-app-title" content="Test title">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
     <!-- Favicon -->
@@ -23,17 +20,17 @@
 
     <title>Test des</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css" /> 
+    <link rel="stylesheet" href="styles.css">
     <script>
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-analytics.js";
-    import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messagin.js";
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-analytics.js";
+        import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messagin.js";
 
     </script>
     <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
+        // The value below is injected by flutter build, do not touch.
+        const serviceWorkerVersion = null;
 
 
     </script>
@@ -48,10 +45,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
     <!--staging-->
-    <script crossorigin="anonymous"
-            onload="onScriptLoad();"
-            src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js"
-            type="application/javascript"></script>
+    <script crossorigin="anonymous" onload="onScriptLoad();"
+        src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js"
+        type="application/javascript"></script>
 
     <!--Live-->
     <!--    <script type="application/javascript"-->
@@ -70,95 +66,90 @@
     <script type="module">
         import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/@dytesdk/ui-kit@latest/loader/index.es2017.js';
         defineCustomElements();
-      </script>
+    </script>
 
     <!-- Import Web Core via CDN too -->
     <script src="https://cdn.dyte.in/core/dyte.js"></script>
 
-    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"></script>
+    <script type="application/javascript"
+        src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"></script>
 
     <!-- This script adds the flutter initialization JS code -->
     <script src="flutter.js" defer></script>
 </head>
+
 <body>
+    <div class="web-initial-loader">
+        <section class="content" id="desktopContent">
+            <div class="row">
+                <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: calc(100vh - 20px);"></div>
+                <div class="size-box" style="--custom-width: 10px;"></div>
+                <div class="column">
+                    <div class="skeleton-loader" style="--custom-width: calc(100vw - 200px); --custom-height: 80px;">
+                    </div>
+                    <div class="size-box" style="--custom-height: 10px;"></div>
+                    <div class="skeleton-loader" style="--custom-width: 100px; --custom-height: 100px;"></div>
+                    <div class="size-box" style="--custom-height: 10px;"></div>
+                    <div class="skeleton-loader" style="--custom-width: 100px; --custom-height: 100px;"></div>
+                </div>
 
-   <!-- Create a progress bar container with a nested progress bar -->
-   <div class="progress-container" id="progressbar">
-    <div class="progress-bar" id="progress"></div>
-  </div>
-<script>
-   /**
-       * Creates a Promise that resolves after a specified delay.
-       *
-       * @param {number} delay - The delay duration in milliseconds.
-       * @returns {Promise} A Promise that resolves after the specified delay.
-       */
-       function addDelay(delay) {
-        return new Promise((resolve) => setTimeout(resolve, delay));
-      }
+            </div>
+        </section>
 
-      // Get references to the progress bar container and the progress bar element.
-      const progress = document.getElementById("progress");
-      const progressBar = document.getElementById("progressbar");
+        <section class="content" id="mobileContent">
+            <div class="column">
+                <div class="skeleton-loader" style="--custom-height: 80px;"></div>
+                <div class="size-box" style="--custom-height: 20px;"></div>
+                <div class="row">
+                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
+                    <div class="size-box" style="--custom-width: 10px;"></div>
+                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
+                    <div class="size-box" style="--custom-width: 10px;"></div>
+                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
+                </div>
+                <div class="size-box" style="--custom-height: 40px;"></div>
+                <div class="skeleton-loader" style="--custom-height: 200px;"></div>
+            </div>
+        </section>
+    </div>
 
-      // Set the initial width of the progress bar to 0%.
-      progress.style.width = `0%`;
+    <script>
+        window.addEventListener('load', function (ev) {
+            var web_initial_loader = document.getElementById("web-initial-loader");
+            _flutter.loader.loadEntrypoint({
+                serviceWorker: {
+                    serviceWorkerVersion: serviceWorkerVersion,
+                },
+                onEntrypointLoaded: async function (engineInitializer) {
 
-    window.addEventListener('load', function(ev) {
-      // Set an initial progress of 33% when the page loads.
-      progress.style.width = `33%`;
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded:async function(engineInitializer) {
-           // Update progress to 66% after the entry point is loaded.
-           progress.style.width = `66%`;
-        // Initialize the Flutter engine.
-        const appRunner = await engineInitializer.initializeEngine(
-          {
-            renderer: "html"
-          });
-        // Set progress to 99% before adding a delay.
-        progress.style.width = `99%`;
+                    let appRunner = await engineInitializer.initializeEngine();
 
-        // Add a delay using the addDelay function.
-        await addDelay(500);
+                    if (web_initial_loader) {
+                        web_initial_loader.remove();
+                    }
+                    await appRunner.runApp();
+                }
+            });
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            // Service workers are supported. Use them.
+            window.addEventListener('load', function () {
+                // ADD THIS LINE
+                navigator.serviceWorker.register('/firebase-messaging-sw.js');
 
-        // Hide the progress bar by reducing its opacity.
-        // This will create the fade out effect by animating the opacity.
-        progressBar.style.opacity = 0;
+                // Wait for registration to finish before dropping the <script> tag.
+                // Otherwise, the browser will load the script multiple times,
+                // potentially different versions.
+                var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
 
-        // Run the Flutter app.
-        await appRunner.runApp();
-
-        // Add a fade-in effect to the Flutter view element.
-        document.querySelector("flutter-view").classList.add("fade-in");
-
+                //  ...
+            });
         }
-      });
-    });
 
 
-</script>
-<script>
-    if ('serviceWorker' in navigator) {
-       // Service workers are supported. Use them.
-       window.addEventListener('load', function () {
-         // ADD THIS LINE
-         navigator.serviceWorker.register('/firebase-messaging-sw.js');
-
-         // Wait for registration to finish before dropping the <script> tag.
-         // Otherwise, the browser will load the script multiple times,
-         // potentially different versions.
-         var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-
-         //  ...
-       });
-   }
-
-
-</script>
+    </script>
 </body>
+
 </html>
