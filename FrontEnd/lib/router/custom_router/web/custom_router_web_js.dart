@@ -26,7 +26,14 @@ class CustomRouterWeb {
     }
 
     if (pathParameters.isNotEmpty) {
-      String temp = url;
+      List<GoRoute> goRouteList = RouterManager
+          .getInstance.router.configuration.routes
+          .map((e) => e as GoRoute)
+          .toList();
+      GoRoute goRoute = goRouteList.firstWhere(
+              (element) => element.name == name,
+          orElse: () => GoRoute(path: name));
+      String temp = goRoute.path;
 
       List<String> keyList = pathParameters.keys.toList();
       List<String> valueList = pathParameters.values.toList();
