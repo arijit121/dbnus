@@ -6,6 +6,7 @@ import 'package:universal_html/html.dart' as html;
 
 import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/context_service.dart';
+import '../../router_manager.dart';
 
 class CustomRouterWeb {
   /// Go To name page and Replace Current Page
@@ -58,8 +59,14 @@ class CustomRouterWeb {
     }
 
     if (pathParameters != null && pathParameters.isNotEmpty) {
-      String temp = url;
-
+      List<GoRoute> goRouteList = RouterManager
+          .getInstance.router.configuration.routes
+          .map((e) => e as GoRoute)
+          .toList();
+      GoRoute goRoute = goRouteList.firstWhere(
+              (element) => element.name == name,
+          orElse: () => GoRoute(path: name));
+      String temp = goRoute.path;
       List<String> keyList = pathParameters.keys.toList();
       List<String> valueList = pathParameters.values.toList();
       url = Uri.parse(temp.replaceAll(
