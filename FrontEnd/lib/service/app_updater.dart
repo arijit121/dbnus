@@ -96,8 +96,8 @@ class AppUpdater {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child:
-                      const CustomText("Cancel", color: Colors.blue, size: 13)),
+                  child: CustomText(isForceUpdate == true ? "Cancel" : "Ignore",
+                      color: Colors.blue, size: 13)),
               CustomTextButton(
                   onPressed: () {
                     Navigator.pop(context, "Y");
