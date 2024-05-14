@@ -122,7 +122,7 @@ class TextUtils {
 
   // ignore: non_constant_identifier_names
   static String update_msg =
-      "A new version of {{appName}} is available! Version {{currentAppStoreVersion}} is now available.You have {{currentInstalledVersion}}.";
+      "A new version of {{appName}} is available! Version {{currentAppStoreVersion}} is now available.You have {{currentInstalledVersion}}";
 
   // ignore: non_constant_identifier_names
   static String release_notes = "Release Notes";
