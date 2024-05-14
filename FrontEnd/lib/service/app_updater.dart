@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import '../extension/spacing.dart';
 import '../service/open_url_service.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -22,75 +23,7 @@ class AppUpdater {
   Future<void> startUpdate() async {
     try {
       if (Platform.isIOS) {
-        PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        final iTunes = ITunesSearchAPI();
-        final response =
-            await (iTunes.lookupByBundleId(packageInfo.packageName));
-        if (response != null) {
-          String? storeVersion = iTunes.version(response);
-          String? appStoreListingURL = iTunes.trackViewUrl(response);
-          String? releaseNotes = iTunes.releaseNotes(response);
-          String localVersion = packageInfo.version;
-          BuildContext context = CurrentContext().context;
-          if (_canUpdate(
-                  storeVersion: storeVersion ?? "",
-                  localVersion: localVersion) &&
-              context.mounted) {
-            String? result = await showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => CupertinoAlertDialog(
-                title: CustomText(TextUtils.update_app,
-                    color: HexColor.fromHex(ColorConst.primaryDark),
-                    size: 16,
-                    textAlign: TextAlign.center,
-                    fontWeight: FontWeight.bold),
-                content: Column(
-                  children: [
-                    CustomText(
-                      TextUtils.update_msg
-                          .replaceAll("{{appName}}", packageInfo.appName)
-                          .replaceAll(
-                              "{{currentAppStoreVersion}}", localVersion)
-                          .replaceAll("{{currentInstalledVersion}}",
-                              storeVersion ?? ""),
-                      color: HexColor.fromHex(ColorConst.primaryDark),
-                      size: 12,
-                    ),
-                    8.ph,
-                    CustomText(TextUtils.release_notes,
-                        color: HexColor.fromHex(ColorConst.primaryDark),
-                        size: 14,
-                        fontWeight: FontWeight.bold),
-                    5.ph,
-                    CustomText(
-                      releaseNotes ?? "",
-                      color: HexColor.fromHex(ColorConst.primaryDark),
-                      size: 13,
-                    ),
-                  ],
-                ),
-                actions: <Widget>[
-                  CustomTextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child:
-                          CustomText("Ignore", color: Colors.blue, size: 13)),
-                  CustomTextButton(
-                      onPressed: () {
-                        Navigator.pop(context, "Y");
-                      },
-                      child: CustomText("Update Now",
-                          color: Colors.blue, size: 13)),
-                ],
-              ),
-            );
-            if (result == "Y") {
-              OpenUrlService()
-                  .openUrl(uri: Uri.parse(appStoreListingURL ?? ""));
-            }
-          }
-        }
+        _checkAndUpdateIos();
       } else if (Platform.isAndroid) {
         _checkForFlexibleUpdateAndUpdate();
       }
@@ -122,6 +55,65 @@ class AppUpdater {
 
     // The local and store versions are the same.
     return false;
+  }
+
+  Future<void> _checkAndUpdateIos({bool? isForceUpdate}) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    final iTunes = ITunesSearchAPI();
+    final response = await (iTunes.lookupByBundleId(packageInfo.packageName));
+
+    if (response != null) {
+      String? storeVersion = iTunes.version(response);
+      String? appStoreListingURL = iTunes.trackViewUrl(response);
+      String localVersion = packageInfo.version;
+      BuildContext context = CurrentContext().context;
+      if (_canUpdate(
+              storeVersion: storeVersion ?? "", localVersion: localVersion) &&
+          context.mounted) {
+        String? result = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+            title: CustomText(TextUtils.update_app,
+                color: HexColor.fromHex(ColorConst.primaryDark),
+                size: 16,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.bold),
+            content: Column(
+              children: [
+                CustomText(
+                  TextUtils.update_msg
+                      .replaceAll("{{appName}}", packageInfo.appName)
+                      .replaceAll("{{currentAppStoreVersion}}", localVersion)
+                      .replaceAll(
+                          "{{currentInstalledVersion}}", storeVersion ?? ""),
+                  color: HexColor.fromHex(ColorConst.primaryDark),
+                  size: 12,
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              CustomTextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child:
+                      const CustomText("Ignore", color: Colors.blue, size: 13)),
+              CustomTextButton(
+                  onPressed: () {
+                    Navigator.pop(context, "Y");
+                  },
+                  child: const CustomText("Update Now",
+                      color: Colors.blue, size: 13)),
+            ],
+          ),
+        );
+        if (result == "Y") {
+          OpenUrlService().openUrl(uri: Uri.parse(appStoreListingURL ?? ""));
+        } else if (isForceUpdate == true) {
+          FlutterExitApp.exitApp(iosForceExit: false);
+        }
+      }
+    }
   }
 
   Future<void> _checkForFlexibleUpdateAndUpdate() async {
