@@ -97,7 +97,7 @@ class AppUpdater {
                     Navigator.pop(context);
                   },
                   child:
-                      const CustomText("Ignore", color: Colors.blue, size: 13)),
+                      const CustomText("Cancel", color: Colors.blue, size: 13)),
               CustomTextButton(
                   onPressed: () {
                     Navigator.pop(context, "Y");
