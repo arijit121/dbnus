@@ -83,9 +83,9 @@ class AppUpdater {
                 CustomText(
                   TextUtils.update_msg
                       .replaceAll("{{appName}}", packageInfo.appName)
-                      .replaceAll("{{currentAppStoreVersion}}", localVersion)
                       .replaceAll(
-                          "{{currentInstalledVersion}}", storeVersion ?? ""),
+                          "{{currentAppStoreVersion}}", storeVersion ?? "")
+                      .replaceAll("{{currentInstalledVersion}}", localVersion),
                   color: HexColor.fromHex(ColorConst.primaryDark),
                   size: 12,
                 ),
