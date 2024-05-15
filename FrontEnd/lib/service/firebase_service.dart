@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../extension/logger_extension.dart';
 
@@ -35,8 +36,18 @@ class FirebaseService {
 
         // PopUpItems().toastMessage(initialMessage.data["ActionURL"], blue);
       }
-    } catch (e) {
-      // TODO
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
+  }
+
+  void logEvent({
+    required String name,
+    Map<String, Object?>? parameters,
+    AnalyticsCallOptions? callOptions,
+  }) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    analytics.logEvent(
+        name: name, parameters: parameters, callOptions: callOptions);
   }
 }
