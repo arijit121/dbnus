@@ -285,16 +285,16 @@ class CustomHtmlText extends StatelessWidget {
 
 class CustomExpandableText extends StatelessWidget {
   final String text;
-  final Color color;
-  final double size;
+  final Color? color;
+  final double? size;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
 
   const CustomExpandableText(
     this.text, {
     super.key,
-    required this.color,
-    required this.size,
+    this.color,
+    this.size,
     this.fontWeight,
     this.textAlign,
   });
