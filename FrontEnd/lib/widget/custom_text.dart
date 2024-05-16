@@ -283,17 +283,16 @@ class CustomHtmlText extends StatelessWidget {
   }
 }
 
-
 class CustomExpandableText extends StatelessWidget {
-  final String longText;
+  final String text;
   final Color color;
   final double size;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
 
-  const CustomExpandableText({
+  const CustomExpandableText(
+    this.text, {
     super.key,
-    required this.longText,
     required this.color,
     required this.size,
     this.fontWeight,
@@ -303,7 +302,7 @@ class CustomExpandableText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandableText(
-      longText,
+      text,
       textAlign: textAlign,
       style: customizeTextStyle(
         fontWeight: fontWeight,
