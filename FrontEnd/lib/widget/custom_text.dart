@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -278,6 +279,41 @@ class CustomHtmlText extends StatelessWidget {
         await OpenUrlService().openUrl(uri: Uri.parse(url));
         return true;
       },
+    );
+  }
+}
+
+
+class CustomExpandableText extends StatelessWidget {
+  final String longText;
+  final Color color;
+  final double size;
+  final FontWeight? fontWeight;
+  final TextAlign? textAlign;
+
+  const CustomExpandableText({
+    super.key,
+    required this.longText,
+    required this.color,
+    required this.size,
+    this.fontWeight,
+    this.textAlign,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpandableText(
+      longText,
+      textAlign: textAlign,
+      style: customizeTextStyle(
+        fontWeight: fontWeight,
+        fontSize: size,
+        fontColor: color,
+      ),
+      expandText: 'show more',
+      collapseText: 'show less',
+      maxLines: 1,
+      linkColor: Colors.blue,
     );
   }
 }

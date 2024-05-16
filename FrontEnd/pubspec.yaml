@@ -88,6 +88,7 @@ dependencies:
   open_filex: ^4.4.0
   flutter_exit_app: ^1.1.2
   firebase_analytics: ^10.10.5
+  expandable_text: ^2.3.0
 
 
 
