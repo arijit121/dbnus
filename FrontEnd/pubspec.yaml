@@ -91,6 +91,7 @@ dependencies:
   flutter_exit_app: ^1.1.2
   firebase_analytics: ^10.10.5
   expandable_text: ^2.3.0
+  bloc: ^8.1.4
 
 
 
