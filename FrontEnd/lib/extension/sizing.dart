@@ -1,5 +1,4 @@
 import '../utils/screen_utils.dart';
-import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
