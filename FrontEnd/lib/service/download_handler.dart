@@ -1,40 +1,140 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import '../service/value_handler.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
+import '../config/app_config.dart';
 import '../utils/pop_up_items.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../extension/logger_extension.dart';
 import 'JsService/provider/js_provider.dart';
+import 'open_url_service.dart';
 
 class DownloadHandler {
-  Future<void> download({required String url}) async {
+  final String _group = 'bunchOfFiles';
+  Future<void> download({required String url, bool? inGroup}) async {
     try {
       if (kIsWeb) {
         await JsProvider().downloadFile(url: url, name: url.split("/").last);
       } else {
         PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
-        _bindBackgroundIsolate();
-        await FlutterDownloader.registerCallback(downloadCallback, step: 1);
-        final taskId = await FlutterDownloader.enqueue(
-            url: url,
-            savedDir: await downloadPath(),
-            showNotification: true,
-            // show download progress in status bar (for Android)
-            openFileFromNotification: true,
-            // click on notification to open downloaded file (for Android),
-            saveInPublicStorage: true);
 
-        AppLog.i(taskId, tag: "TaskId");
+        if (inGroup == true) {
+          // Use .download to start a download and wait for it to complete
+          // define the download task (subset of parameters shown)
+          await FileDownloader().enqueue(DownloadTask(
+              filename: '${DateTime.now()}_${url.split("/").last}',
+              url: url,
+              directory: await downloadPath(),
+              updates: Updates.statusAndProgress,
+              retries: 7, // request status and progress updates
+              group: _group));
+          // Use .download to start a download and wait for it to complete
+        } else {
+          // Start download, and wait for result. Show progress and status changes
+          // while downloading
+          final result = await FileDownloader().download(DownloadTask(
+            filename: '${DateTime.now()}_${url.split("/").last}',
+            url: url,
+            directory: await downloadPath(),
+            updates: Updates
+                .statusAndProgress, // request status and progress updates
+            retries: 5,
+          ));
+          // Act on the result
+          switch (result.status) {
+            case TaskStatus.complete:
+              String filePath = await result.task.filePath();
+              AppLog.i(filePath, tag: "FilePath");
+              await OpenUrlService().openFile(filePath);
+              AppLog.i('Success!');
+
+            case TaskStatus.canceled:
+              AppLog.i('Download was canceled');
+
+            case TaskStatus.paused:
+              AppLog.i('Download was paused');
+
+            default:
+              AppLog.i('Download not successful');
+          }
+        }
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
+  }
+
+  Future<void> config() async {
+    FileDownloader()
+        .registerCallbacks(taskNotificationTapCallback:
+            (Task task, NotificationType notificationType) async {
+          AppLog.i(
+              'Tapped notification $notificationType for taskId ${task.taskId}');
+          String filePath = await task.filePath();
+          AppLog.i(filePath, tag: "FilePath");
+          await OpenUrlService().openFile(filePath);
+        })
+        .configureNotificationForGroup(FileDownloader.defaultGroup,
+            // For the main download button
+            // which uses 'enqueue' and a default group
+            running: const TaskNotification('Download {filename}',
+                'File: {filename} - {progress} - speed {networkSpeed} and {timeRemaining} remaining'),
+            complete: const TaskNotification(
+                '{displayName} download {filename}', 'Download complete'),
+            error: const TaskNotification(
+                'Download {filename}', 'Download failed'),
+            paused: const TaskNotification(
+                'Download {filename}', 'Paused with metadata {metadata}'),
+            progressBar: true)
+        .configureNotificationForGroup(
+          _group, // refers to the Task.group field
+          running: const TaskNotification(
+              '{numFinished} out of {numTotal}', 'Progress = {progress}'),
+          complete: const TaskNotification('Done!', 'Loaded {numTotal} files'),
+          error:
+              const TaskNotification('Error', '{numFailed}/{numTotal} failed'),
+          progressBar: false,
+          groupNotificationId:
+              '${await AppConfig().getAppPackageName()}_background_download',
+        )
+        .configureNotification(
+            // for the 'Download & Open' dog picture
+            // which uses 'download' which is not the .defaultGroup
+            // but the .await group so won't use the above config
+            complete: const TaskNotification(
+                'Download {filename}', 'Download complete'),
+            progressBar: true,
+            tapOpensFile: true);
+
+    // Use .enqueue for true parallel downloads, i.e. you don't wait for completion of the tasks you
+    // enqueue, and can enqueue hundreds of tasks simultaneously.
+
+    // First define an event listener to process `TaskUpdate` events sent to you by the downloader,
+    // typically in your app's `initState()`:
+    FileDownloader().updates.listen((update) async {
+      switch (update) {
+        case TaskStatusUpdate():
+          // process the TaskStatusUpdate, e.g.
+          switch (update.status) {
+            case TaskStatus.complete:
+              AppLog.i('Task ${update.task.taskId} success!');
+              String filePath = await update.task.filePath();
+              AppLog.i(filePath, tag: "FilePath");
+              await OpenUrlService().openFile(filePath);
+            case TaskStatus.canceled:
+              AppLog.i('Download was canceled');
+
+            case TaskStatus.paused:
+              AppLog.i('Download was paused');
+
+            default:
+              AppLog.i('Download not successful');
+          }
+
+        case TaskProgressUpdate():
+      }
+    });
   }
 
   Future<String> downloadPath() async {
@@ -62,65 +162,4 @@ class DownloadHandler {
     }
     return "";
   }
-
-  @pragma('vm:entry-point')
-  static void downloadCallback(
-    String id,
-    int status,
-    int progress,
-  ) async {
-    AppLog.i('task ($id) is in status ($status) and process ($progress)',
-        tag: 'Callback on background isolate');
-    IsolateNameServer.lookupPortByName('downloader_send_port')
-        ?.send([id, status, progress]);
-  }
-
-  void _bindBackgroundIsolate() {
-    List<TaskInfo>? _tasks;
-    ReceivePort _port = ReceivePort();
-    final isSuccess = IsolateNameServer.registerPortWithName(
-      _port.sendPort,
-      'downloader_send_port',
-    );
-    if (!isSuccess) {
-      _unbindBackgroundIsolate();
-      _bindBackgroundIsolate();
-      return;
-    }
-    _port.listen((dynamic data) async {
-      final taskId = (data as List<dynamic>)[0] as String;
-      final status = DownloadTaskStatus.fromInt(data[1] as int);
-      final progress = data[2] as int;
-      // var v = await FlutterDownloader.loadTasks();
-      AppLog.i('task ($taskId) is in status ($status) and process ($progress)',
-          tag: 'Callback on UI isolate:');
-
-      if (progress == 100) {
-        String query = "SELECT * FROM task WHERE task_id='$taskId'";
-        List<DownloadTask>? tasks =
-            await FlutterDownloader.loadTasksWithRawQuery(query: query);
-
-        await Permission.storage.request();
-        await Permission.manageExternalStorage.request();
-        await Permission.accessMediaLocation.request();
-        await OpenFilex.open(
-            "${tasks?.first.savedDir ?? ""}/${tasks?.first.filename ?? ""}");
-      }
-    });
-  }
-
-  void _unbindBackgroundIsolate() {
-    IsolateNameServer.removePortNameMapping('downloader_send_port');
-  }
-}
-
-class TaskInfo {
-  TaskInfo({this.name, this.link});
-
-  final String? name;
-  final String? link;
-
-  String? taskId;
-  int? progress = 0;
-  DownloadTaskStatus? status = DownloadTaskStatus.undefined;
 }

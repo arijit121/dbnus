@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import '../service/app_updater.dart';
 
 import 'const/color_const.dart';
@@ -16,6 +15,7 @@ import 'extension/hex_color.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
+import 'service/download_handler.dart';
 import 'service/firebase_service.dart';
 import 'service/redirect_engine.dart';
 import 'service/notification_handler.dart';
@@ -89,12 +89,7 @@ Future<void> main() async {
   await FirebaseService().getInitialMessage();
   await NotificationHandler().requestPermissions();
   await NotificationHandler().initiateNotification();
-  await FlutterDownloader.initialize(
-      debug: kDebugMode,
-      // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl:
-          false // option: set to false to disable working with http links (default: false)
-      );
+  await DownloadHandler().config();
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {

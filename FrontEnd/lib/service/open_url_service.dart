@@ -1,3 +1,6 @@
+import 'package:open_filex/open_filex.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import '../extension/logger_extension.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,5 +46,12 @@ class OpenUrlService {
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
+  }
+
+  Future<void> openFile(String filePath) async {
+    await Permission.storage.request();
+    await Permission.manageExternalStorage.request();
+    await Permission.accessMediaLocation.request();
+    await OpenFilex.open(filePath);
   }
 }

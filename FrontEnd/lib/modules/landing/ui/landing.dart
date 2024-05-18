@@ -145,6 +145,18 @@ class _LandingUiState extends State<LandingUi> {
                               ]),
                               child: const CustomText("LipidProfile")),
                           20.ph,
+                          CustomElevatedButton(
+                              onPressed: () {
+                                DownloadHandler().download(
+                                    url:
+                                        "https://storage.googleapis.com/approachcharts/test/5MB-test.ZIP");
+                              },
+                              gradient: const LinearGradient(colors: [
+                                Colors.red,
+                                Colors.blue,
+                              ]),
+                              child: const CustomText("5MB-test")),
+                          20.ph,
                         ],
                       ),
                     ),

@@ -69,7 +69,9 @@ dependencies:
   animated_text_kit: ^4.2.2
   image_picker: ^1.0.7
   paytm_allinonesdk: ^1.2.4
-  flutter_downloader: ^1.11.6
+  # downloader
+  # flutter_downloader: ^1.11.6
+  background_downloader: ^8.5.1
   syncfusion_flutter_charts: ^25.1.35
   encrypt: ^5.0.3
   # dyte_uikit: ^0.7.0

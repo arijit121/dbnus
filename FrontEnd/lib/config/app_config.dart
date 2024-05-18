@@ -11,7 +11,6 @@ import '../data/connection/connection_status.dart';
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart';
 
-import '../storage/local_preferences.dart';
 import '../utils/screen_utils.dart';
 
 class AppConfig {
@@ -21,6 +20,11 @@ class AppConfig {
     }
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return packageInfo.version;
+  }
+
+  Future<String> getAppPackageName() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.packageName;
   }
 
   Future<String> getAppVersionCode() async {
