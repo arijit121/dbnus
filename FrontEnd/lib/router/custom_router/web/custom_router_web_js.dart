@@ -1,5 +1,4 @@
 import 'package:dbnus/extension/logger_extension.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:universal_html/html.dart' as html;
@@ -31,7 +30,7 @@ class CustomRouterWeb {
           .map((e) => e as GoRoute)
           .toList();
       GoRoute goRoute = goRouteList.firstWhere(
-              (element) => element.name == name,
+          (element) => element.name == name,
           orElse: () => GoRoute(path: name));
       String temp = goRoute.path;
 
@@ -71,7 +70,7 @@ class CustomRouterWeb {
           .map((e) => e as GoRoute)
           .toList();
       GoRoute goRoute = goRouteList.firstWhere(
-              (element) => element.name == name,
+          (element) => element.name == name,
           orElse: () => GoRoute(path: name));
       String temp = goRoute.path;
       List<String> keyList = pathParameters.keys.toList();

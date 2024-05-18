@@ -3,14 +3,12 @@ import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
-import '../../../widget/custom_ui.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
