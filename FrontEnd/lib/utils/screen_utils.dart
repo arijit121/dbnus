@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
 
 class ScreenUtils {
