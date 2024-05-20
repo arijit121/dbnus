@@ -7,7 +7,7 @@ import '../utils/pop_up_items.dart';
 import 'package:path_provider/path_provider.dart';
 import '../extension/logger_extension.dart';
 import 'JsService/provider/js_provider.dart';
-import 'open_url_service.dart';
+import 'open_service.dart';
 
 class DownloadHandler {
   final String _group = 'bunchOfFiles';
@@ -45,7 +45,7 @@ class DownloadHandler {
             case TaskStatus.complete:
               String filePath = await result.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
-              await OpenUrlService().openFile(filePath);
+              await OpenService().openFile(filePath);
               AppLog.i('Success!');
 
             case TaskStatus.canceled:
@@ -72,7 +72,7 @@ class DownloadHandler {
               'Tapped notification $notificationType for taskId ${task.taskId}');
           String filePath = await task.filePath();
           AppLog.i(filePath, tag: "FilePath");
-          await OpenUrlService().openFile(filePath);
+          await OpenService().openFile(filePath);
         })
         .configureNotificationForGroup(FileDownloader.defaultGroup,
             // For the main download button
@@ -120,7 +120,7 @@ class DownloadHandler {
               AppLog.i('Task ${update.task.taskId} success!');
               String filePath = await update.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
-              await OpenUrlService().openFile(filePath);
+              await OpenService().openFile(filePath);
             case TaskStatus.canceled:
               AppLog.i('Download was canceled');
 

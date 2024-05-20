@@ -1,11 +1,12 @@
 import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../extension/logger_extension.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class OpenUrlService {
+class OpenService {
   void openWhatsApp({required String contactNo, String? message}) {
     try {
       Uri whatsAppUrl = Uri.parse('https://wa.me/$contactNo')
@@ -53,5 +54,10 @@ class OpenUrlService {
     await Permission.manageExternalStorage.request();
     await Permission.accessMediaLocation.request();
     await OpenFilex.open(filePath);
+  }
+
+  Future<ShareResultStatus> share({required String text}) async {
+    final result = await Share.share(text);
+    return result.status;
   }
 }
