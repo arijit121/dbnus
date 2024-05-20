@@ -131,7 +131,7 @@ class CustomOutLineButton extends StatelessWidget {
       this.minimumSize,
       this.padding});
 
-  void Function() onPressed;
+  void Function()? onPressed;
   Widget child;
   Color? borderColor;
   Color? backGroundColor;
