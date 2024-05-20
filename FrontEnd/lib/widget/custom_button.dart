@@ -25,6 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.gradient,
     this.padding,
   });
+
   Widget child;
   void Function()? onPressed;
   Color? color;
@@ -32,6 +33,7 @@ class CustomElevatedButton extends StatelessWidget {
   double? radius;
   Gradient? gradient;
   EdgeInsetsGeometry? padding;
+
   @override
   Widget build(BuildContext context) {
     return gradient != null
@@ -80,16 +82,18 @@ class CustomTextButton extends StatelessWidget {
       required this.onPressed,
       this.color,
       this.padding});
+
   Widget child;
   void Function()? onPressed;
   Color? color;
   EdgeInsetsGeometry? padding;
+
   @override
   Widget build(BuildContext context) {
     return TextButton(
         style: TextButton.styleFrom(
           foregroundColor: color,
-          padding: padding,
+          padding: padding ?? const EdgeInsets.symmetric(horizontal: 4.0),
         ),
         onPressed: onPressed,
         child: child);
@@ -100,9 +104,11 @@ class CustomTextButton extends StatelessWidget {
 class CustomIconButton extends StatelessWidget {
   CustomIconButton(
       {super.key, required this.onPressed, required this.icon, this.color});
+
   Widget icon;
   void Function()? onPressed;
   Color? color;
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -124,6 +130,7 @@ class CustomOutLineButton extends StatelessWidget {
       this.radius,
       this.minimumSize,
       this.padding});
+
   void Function() onPressed;
   Widget child;
   Color? borderColor;
@@ -131,11 +138,12 @@ class CustomOutLineButton extends StatelessWidget {
   double? radius;
   Size? minimumSize = const Size(88, 36);
   EdgeInsetsGeometry? padding;
+
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-          padding: padding,
+          padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
           minimumSize: minimumSize,
           shape: radius != null
               ? RoundedRectangleBorder(
