@@ -28,9 +28,6 @@
         import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messagin.js";
 
     </script>
-    <script>
-       {{flutter_service_worker_version}}
-    </script>
     <!--script-->
     <script src="js/customScript.js"></script>
 
@@ -76,6 +73,11 @@
 </head>
 
 <body>
+    <script>
+        {{flutter_service_worker_version}}
+    </script>
+    <script src="flutter_bootstrap.js" async></script>
+
     <div id="web-initial-loader" class="container">
         <section class="content" id="desktopContent">
             <div class="row">
