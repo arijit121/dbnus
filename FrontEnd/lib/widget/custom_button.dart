@@ -100,21 +100,36 @@ class CustomTextButton extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class CustomIconButton extends StatelessWidget {
-  CustomIconButton(
-      {super.key, required this.onPressed, required this.icon, this.color});
+  const CustomIconButton(
+      {super.key,
+      required this.icon,
+      this.color,
+      this.backgroundColor,
+      this.iconSize,
+      required this.onPressed});
 
-  Widget icon;
-  void Function()? onPressed;
-  Color? color;
+  final Widget icon;
+  final Color? color, backgroundColor;
+  final double? iconSize;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      color: color,
-      icon: icon,
-      onPressed: onPressed,
+    return Material(
+      color: Colors.transparent,
+      child: Ink(
+        decoration: ShapeDecoration(
+          color: backgroundColor,
+          shape: const CircleBorder(),
+        ),
+        child: IconButton(
+          iconSize: iconSize,
+          icon: icon,
+          color: color,
+          onPressed: onPressed,
+        ),
+      ),
     );
   }
 }
@@ -210,27 +225,4 @@ Widget customCartButton(
                           fontWeight: FontWeight.w700)),
         );
       },
-    );
-
-Widget genderButton(
-        {required String title,
-        required String assetName,
-        required void Function() onTap,
-        required bool isSelected}) =>
-    InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          CustomText(title,
-              color: HexColor.fromHex(ColorConst.primaryDark), size: 14.fs),
-          CustomAssetImageView(
-            path: assetName,
-            height: 48.fs,
-            width: 48.fs,
-            color: isSelected
-                ? HexColor.fromHex(ColorConst.baseHexColor)
-                : Colors.grey,
-          ),
-        ],
-      ),
     );
