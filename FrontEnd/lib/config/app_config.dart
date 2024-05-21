@@ -71,6 +71,19 @@ class AppConfig {
     return null;
   }
 
+  String? getOsName() {
+    try {
+      if (kIsWeb) {
+        return "web";
+      } else {
+        return Platform.operatingSystem;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   Future<String?> getDeviceId() async {
     try {
       if (kIsWeb) {
