@@ -11,6 +11,8 @@ import '../data/connection/connection_status.dart';
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart';
 
+import '../service/value_handler.dart';
+import '../storage/local_preferences.dart';
 import '../utils/screen_utils.dart';
 
 class AppConfig {
@@ -36,7 +38,16 @@ class AppConfig {
   }
 
   Future<String?> getBrowserId() async {
-    return await JsProvider().getDeviceId();
+    String? browserId =
+        await LocalPreferences().getString(key: LocalPreferences.browserId);
+    if (ValueHandler().isTextNotEmptyOrNull(browserId)) {
+      return browserId;
+    } else {
+      String? browserId = await JsProvider().getDeviceId();
+      await LocalPreferences()
+          .setString(key: LocalPreferences.browserId, value: browserId ?? "");
+      return browserId;
+    }
   }
 
   String getUserAgent() {
