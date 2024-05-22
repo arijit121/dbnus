@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/svg.dart';
 import '../const/assects_const.dart';
 import '../const/color_const.dart';
 import '../extension/hex_color.dart';
@@ -115,3 +116,51 @@ class CustomAssetImageView extends StatelessWidget {
     );
   }
 }
+
+// ignore: must_be_immutable
+class CustomSvgAssetImageView extends StatelessWidget {
+  CustomSvgAssetImageView(
+      {super.key,
+        required this.path,
+        this.height,
+        this.width,
+        this.fit,
+        this.radius,
+        this.color});
+
+  String path;
+  double? height;
+  double? width;
+  BoxFit? fit;
+  double? radius;
+  Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width != 0.0 ? width : null,
+      height: height != 0.0 ? height : null,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 0.0),
+        child: SvgPicture.asset(
+          path,
+          width: width != 0.0 ? width : null,
+          height: height != 0.0 ? height : null,
+          fit: fit ?? BoxFit.contain,
+          colorFilter:
+          color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+          placeholderBuilder: (
+              BuildContext context,
+              ) {
+            return Container(
+              color: HexColor.fromHex(ColorConst.baseHexColor).withOpacity(0.3),
+              height: height,
+              width: width,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
