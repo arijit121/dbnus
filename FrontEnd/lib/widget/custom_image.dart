@@ -66,52 +66,48 @@ class CustomAssetImageView extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.radius,
       this.color});
 
   String path;
   double? height;
   double? width;
   BoxFit? fit;
-  double? radius;
+
   Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 0.0),
-      child: Image.asset(
-        path,
-        color: color,
-        width: width != 0.0 ? width : null,
-        height: height != 0.0 ? height : null,
-        fit: fit ?? BoxFit.contain,
-        frameBuilder: (BuildContext context, Widget child, int? frame,
-            bool? wasSynchronouslyLoaded) {
-          if (wasSynchronouslyLoaded == true) {
-            return child;
-          } else {
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: frame != null
-                  ? child
-                  : Container(
-                      color: HexColor.fromHex(ColorConst.baseHexColor)
-                          .withOpacity(0.3),
-                      height: height,
-                      width: width,
-                    ),
-            );
-          }
-        },
-        errorBuilder: (_, __, ___) {
-          return Image.asset(
-            AssetsConst.genuNoImageLogo,
-            width: width != 0.0 ? width : null,
-            height: height != 0.0 ? height : null,
+    return Image.asset(
+      path,
+      color: color,
+      width: width != 0.0 ? width : null,
+      height: height != 0.0 ? height : null,
+      fit: fit ?? BoxFit.contain,
+      frameBuilder: (BuildContext context, Widget child, int? frame,
+          bool? wasSynchronouslyLoaded) {
+        if (wasSynchronouslyLoaded == true) {
+          return child;
+        } else {
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            child: frame != null
+                ? child
+                : Container(
+                    color: HexColor.fromHex(ColorConst.baseHexColor)
+                        .withOpacity(0.3),
+                    height: height,
+                    width: width,
+                  ),
           );
-        },
-      ),
+        }
+      },
+      errorBuilder: (_, __, ___) {
+        return Image.asset(
+          AssetsConst.genuNoImageLogo,
+          width: width != 0.0 ? width : null,
+          height: height != 0.0 ? height : null,
+        );
+      },
     );
   }
 }
