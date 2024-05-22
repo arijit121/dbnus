@@ -121,53 +121,26 @@ class _LandingUiState extends State<LandingUi> {
         ],
       );
 
-  Widget _mediumUiBody({required LandingState state}) =>
-      LandingWidget().drawerNavigationRail(
-          selectedIndex: state.pageIndex.value,
-          chooseIndex: (int value) {
-            if (value == 6) {
-              AppLog.i("Log out");
-            } else if (kIsWeb) {
-              LandingUtils.redirect(value);
-            } else {
-              context.read<LandingBloc>().add(ChangeIndex(index: value));
-            }
-          });
+  Widget _mediumUiBody({required LandingState state}) => Container();
 
-  Widget _largeUiBody({required LandingState state}) => Row(
+  Widget _largeUiBody({required LandingState state}) => Column(
         children: [
-          LandingWidget().drawerNavigationRail(
-              selectedIndex: state.pageIndex.value,
-              withTitle: true,
-              chooseIndex: (int value) {
-                if (value == 6) {
-                  AppLog.i("Log out");
-                } else if (kIsWeb) {
-                  LandingUtils.redirect(value);
-                } else {
-                  context.read<LandingBloc>().add(ChangeIndex(index: value));
-                }
-              }),
-          Column(
-            children: [
-              CustomElevatedButton(
-                child: const CustomText("text"),
-                onPressed: () {},
-              ),
-              20.ph,
-              CustomElevatedButton(
-                  onPressed: () {
-                    DownloadHandler().download(
-                        url:
-                            "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
-                  },
-                  gradient: const LinearGradient(colors: [
-                    Colors.red,
-                    Colors.blue,
-                  ]),
-                  child: const CustomText("Download")),
-            ],
-          )
+          CustomElevatedButton(
+            child: const CustomText("text"),
+            onPressed: () {},
+          ),
+          20.ph,
+          CustomElevatedButton(
+              onPressed: () {
+                DownloadHandler().download(
+                    url:
+                        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+              },
+              gradient: const LinearGradient(colors: [
+                Colors.red,
+                Colors.blue,
+              ]),
+              child: const CustomText("Download")),
         ],
       );
 
@@ -212,10 +185,45 @@ class _LandingUiState extends State<LandingUi> {
                 return _narrowUiBody();
               },
               mediumUI: (BuildContext context) {
-                return _mediumUiBody(state: state);
+                return Row(
+                  children: [
+                    LandingWidget().drawerNavigationRail(
+                        selectedIndex: state.pageIndex.value,
+                        chooseIndex: (int value) {
+                          if (value == 6) {
+                            AppLog.i("Log out");
+                          } else if (kIsWeb) {
+                            LandingUtils.redirect(value);
+                          } else {
+                            context
+                                .read<LandingBloc>()
+                                .add(ChangeIndex(index: value));
+                          }
+                        }),
+                    _mediumUiBody(state: state),
+                  ],
+                );
               },
               largeUI: (BuildContext context) {
-                return _largeUiBody(state: state);
+                return Row(
+                  children: [
+                    LandingWidget().drawerNavigationRail(
+                        selectedIndex: state.pageIndex.value,
+                        withTitle: true,
+                        chooseIndex: (int value) {
+                          if (value == 6) {
+                            AppLog.i("Log out");
+                          } else if (kIsWeb) {
+                            LandingUtils.redirect(value);
+                          } else {
+                            context
+                                .read<LandingBloc>()
+                                .add(ChangeIndex(index: value));
+                          }
+                        }),
+                    _largeUiBody(state: state),
+                  ],
+                );
               },
             )),
           );
