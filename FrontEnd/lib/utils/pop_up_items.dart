@@ -172,7 +172,7 @@ class _EmailPickerState extends State<EmailPicker> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                      child: customTextFormField(
+                      child: CustomTextFormField(
                           title: TextUtils.email,
                           hintText: TextUtils.enter_email,
                           controller: emailController,

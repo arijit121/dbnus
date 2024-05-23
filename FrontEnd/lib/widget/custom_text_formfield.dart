@@ -1,29 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../extension/hex_color.dart';
 import '../extension/spacing.dart';
 import '../widget/custom_text.dart';
 
 import '../const/color_const.dart';
 
-Widget customTextFormField(
-        {TextEditingController? controller,
-        String? hintText,
-        String? Function(String?)? validator,
-        String? title,
-        String? label,
-        bool? isRequired,
-        TextInputType? keyboardType,
-        Widget? suffix,
-        Widget? prefix,
-        int? maxLength,
-        void Function()? onTap,
-        bool? enabled,
-        bool readOnly = false,
-        void Function(String)? onChanged,
-        FocusNode? focusNode,
-        void Function(String)? onFieldSubmitted,
-        EdgeInsets scrollPadding = const EdgeInsets.all(20.0)}) =>
-    Column(
+class CustomTextFormField extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final String? Function(String?)? validator;
+  final String? title;
+  final String? label;
+  final bool? isRequired;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final Widget? suffix;
+  final Widget? prefix;
+  final int? maxLength;
+  final void Function()? onTap;
+  final bool? enabled;
+  final bool readOnly;
+  final void Function(String)? onChanged;
+  final FocusNode? focusNode;
+  final void Function(String)? onFieldSubmitted;
+  final int? maxLines;
+  final EdgeInsets scrollPadding;
+  final bool autofocus;
+
+  const CustomTextFormField({
+    super.key,
+    this.controller,
+    this.hintText,
+    this.validator,
+    this.title,
+    this.label,
+    this.isRequired,
+    this.keyboardType,
+    this.inputFormatters,
+    this.suffix,
+    this.prefix,
+    this.maxLength,
+    this.onTap,
+    this.enabled,
+    this.readOnly = false,
+    this.onChanged,
+    this.focusNode,
+    this.onFieldSubmitted,
+    this.maxLines = 1,
+    this.scrollPadding = const EdgeInsets.all(20.0),
+    this.autofocus = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
         if (title?.isNotEmpty == true)
           Row(
@@ -31,11 +62,12 @@ Widget customTextFormField(
               CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
                   color: HexColor.fromHex(ColorConst.primaryDark),
                   size: 14,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.w400),
             ],
           ),
         if (title?.isNotEmpty == true) 5.ph,
         TextFormField(
+            autofocus: autofocus,
             cursorColor: HexColor.fromHex(ColorConst.primaryDark),
             cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
             onChanged: onChanged,
@@ -43,6 +75,7 @@ Widget customTextFormField(
             controller: controller,
             validator: validator,
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             maxLength: maxLength,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onTap: onTap,
@@ -50,6 +83,7 @@ Widget customTextFormField(
             focusNode: focusNode,
             scrollPadding: scrollPadding,
             onFieldSubmitted: onFieldSubmitted,
+            maxLines: maxLines,
             decoration: InputDecoration(
               counterText: "",
               prefixIcon: prefix,
@@ -58,7 +92,7 @@ Widget customTextFormField(
                   ? '${label ?? ""}${isRequired == true ? " *" : ""}'
                   : null,
               hintText: hintText,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
               hintStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -72,7 +106,7 @@ Widget customTextFormField(
                   fontSize: 17,
                   fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(9.0),
+                borderRadius: BorderRadius.circular(6.0),
                 borderSide: const BorderSide(
                   color: Colors.blue,
                   width: 1,
@@ -115,3 +149,5 @@ Widget customTextFormField(
             )),
       ],
     );
+  }
+}
