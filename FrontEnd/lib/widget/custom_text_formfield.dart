@@ -84,6 +84,10 @@ class CustomTextFormField extends StatelessWidget {
             scrollPadding: scrollPadding,
             onFieldSubmitted: onFieldSubmitted,
             maxLines: maxLines,
+            style: customizeTextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                fontColor: HexColor.fromHex(ColorConst.primaryDark)),
             decoration: InputDecoration(
               counterText: "",
               prefixIcon: prefix,
