@@ -78,8 +78,6 @@
     <script>
         {{flutter_service_worker_version}}
     </script>
-    <script src="flutter_bootstrap.js" async></script>
-
     <div id="web-initial-loader" class="container">
         <section class="content" id="desktopContent">
             <div class="row">
@@ -113,7 +111,7 @@
             </div>
         </section>
     </div>
-    
+    <script src="flutter_bootstrap.js" async></script>
     <script>
         if ('serviceWorker' in navigator) {
             // Service workers are supported. Use them.
