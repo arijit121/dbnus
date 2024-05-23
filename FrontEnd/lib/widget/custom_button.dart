@@ -114,21 +114,22 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: ShapeDecoration(
-          color: backgroundColor,
-          shape: const CircleBorder(),
-        ),
-        child: IconButton(
-          iconSize: iconSize,
-          icon: icon,
-          color: color,
-          onPressed: onPressed,
-        ),
-      ),
-    );
+    return backgroundColor != null
+        ? IconButton.filled(
+            icon: icon,
+            color: color,
+            onPressed: onPressed,
+            style: IconButton.styleFrom(
+              backgroundColor: backgroundColor,
+              iconSize: iconSize,
+            ))
+        : IconButton(
+            icon: icon,
+            color: color,
+            onPressed: onPressed,
+            style: IconButton.styleFrom(
+              iconSize: iconSize,
+            ));
   }
 }
 
