@@ -123,18 +123,17 @@ class CustomIconButton extends StatelessWidget {
             onPressed: onPressed,
             constraints: const BoxConstraints(),
             style: IconButton.styleFrom(
-              padding: padding,
+              padding: padding ?? const EdgeInsets.symmetric(horizontal: 4.0),
               backgroundColor: backgroundColor,
               iconSize: iconSize,
             ))
         : IconButton(
-            padding: padding,
             icon: icon,
             color: color,
             onPressed: onPressed,
             constraints: const BoxConstraints(),
             style: IconButton.styleFrom(
-              padding: padding,
+              padding: padding ?? const EdgeInsets.symmetric(horizontal: 4.0),
               iconSize: iconSize,
             ));
   }
