@@ -30,7 +30,7 @@ class CustomText extends StatelessWidget {
   final double? size;
   final FontWeight? fontWeight;
   final int? maxLines;
-  final bool? lineThrough;
+  final TextDecoration? decoration;
   final bool lineGapNeeded;
   final TextAlign? textAlign;
   final Color? backGroundColor;
@@ -42,7 +42,7 @@ class CustomText extends StatelessWidget {
     this.size,
     this.fontWeight,
     this.maxLines,
-    this.lineThrough,
+    this.decoration,
     this.lineGapNeeded = false,
     this.textAlign,
     this.backGroundColor,
@@ -63,9 +63,7 @@ class CustomText extends StatelessWidget {
             : kIsWeb
                 ? 1.2
                 : 0.0,
-        decoration: lineThrough == true
-            ? TextDecoration.lineThrough
-            : TextDecoration.none,
+        decoration: decoration,
         backgroundColor: backGroundColor,
       ),
     );
