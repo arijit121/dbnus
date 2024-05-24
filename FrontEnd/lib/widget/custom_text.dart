@@ -193,7 +193,7 @@ class CustomOverflowText extends StatelessWidget {
     this.color,
     this.fontWeight,
     this.maxLines = 2,
-    this.textAlign = TextAlign.center,
+    this.textAlign,
     this.overflow,
   });
 
