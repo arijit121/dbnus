@@ -105,12 +105,14 @@ class CustomIconButton extends StatelessWidget {
       this.color,
       this.backgroundColor,
       this.iconSize,
-      required this.onPressed});
+      required this.onPressed,
+      this.padding});
 
   final Widget icon;
   final Color? color, backgroundColor;
   final double? iconSize;
   final void Function()? onPressed;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -119,15 +121,20 @@ class CustomIconButton extends StatelessWidget {
             icon: icon,
             color: color,
             onPressed: onPressed,
+            constraints: const BoxConstraints(),
             style: IconButton.styleFrom(
+              padding: padding,
               backgroundColor: backgroundColor,
               iconSize: iconSize,
             ))
         : IconButton(
+            padding: padding,
             icon: icon,
             color: color,
             onPressed: onPressed,
+            constraints: const BoxConstraints(),
             style: IconButton.styleFrom(
+              padding: padding,
               iconSize: iconSize,
             ));
   }
