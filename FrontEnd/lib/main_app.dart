@@ -89,6 +89,8 @@ Future<void> main() async {
   await NotificationHandler().requestPermissions();
   await NotificationHandler().initiateNotification();
   await DownloadHandler().config();
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.white));
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
