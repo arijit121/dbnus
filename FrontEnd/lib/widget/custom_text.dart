@@ -55,17 +55,17 @@ class CustomText extends StatelessWidget {
       maxLines: maxLines,
       textAlign: textAlign,
       style: customizeTextStyle(
-        fontWeight: fontWeight,
-        fontSize: size,
-        fontColor: color,
-        height: lineGapNeeded == true
-            ? 1.8
-            : kIsWeb
-                ? 1.2
-                : 0.0,
-        decoration: decoration,
-        backgroundColor: backGroundColor,
-      ),
+          fontWeight: fontWeight,
+          fontSize: size,
+          fontColor: color,
+          height: lineGapNeeded == true
+              ? 1.8
+              : kIsWeb
+                  ? 1.2
+                  : 0.0,
+          decoration: decoration,
+          backgroundColor: backGroundColor,
+          decorationColor: color),
     );
   }
 }
