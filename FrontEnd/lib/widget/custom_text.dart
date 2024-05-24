@@ -127,8 +127,8 @@ class CustomRichText extends StatelessWidget {
 TextSpan customTextSpan({
   required String text,
   FontWeight? fontWeight,
-  required double fontSize,
-  required Color fontColor,
+  double? size,
+  Color? color,
   TextDecoration? decoration,
   Color? decorationColor,
   double? height,
@@ -138,8 +138,8 @@ TextSpan customTextSpan({
         text: text,
         style: customizeTextStyle(
             fontWeight: fontWeight,
-            fontSize: fontSize,
-            fontColor: fontColor,
+            fontSize: size,
+            fontColor: color,
             decoration: decoration,
             decorationColor: decorationColor,
             height: height,
