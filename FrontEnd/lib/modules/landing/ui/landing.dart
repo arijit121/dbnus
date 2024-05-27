@@ -1,3 +1,4 @@
+import 'package:dbnus/data/model/forward_geocoding.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
@@ -5,8 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
+import '../../../service/geocoding.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
 import '../bloc/landing_bloc.dart';
@@ -114,6 +117,35 @@ class _LandingUiState extends State<LandingUi> {
                       Colors.blue,
                     ]),
                     child: const CustomText("5MB-test")),
+                20.ph,
+                CustomElevatedButton(
+                    onPressed: () async {
+                      ForwardGeocoding? forwardGeocoding = await Geocoding()
+                          .forwardGeocoding(
+                              address:
+                                  "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India");
+                      AppLog.i(forwardGeocoding?.longitude);
+                    },
+                    gradient: const LinearGradient(colors: [
+                      Colors.red,
+                      Colors.blue,
+                    ]),
+                    child: const CustomText(
+                        "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India")),
+                20.ph,
+                CustomElevatedButton(
+                    onPressed: () async {
+                      ReverseGeocoding? reverseGeocoding = await Geocoding()
+                          .reverseGeocoding(
+                              latitude: 22.5754, longitude: 88.4798);
+                      AppLog.i(reverseGeocoding?.displayName);
+                    },
+                    gradient: const LinearGradient(colors: [
+                      Colors.red,
+                      Colors.blue,
+                    ]),
+                    child: const CustomText(
+                        "Reverse Geocoding latitude: 22.5754, longitude: 88.4798")),
                 20.ph,
               ],
             ),

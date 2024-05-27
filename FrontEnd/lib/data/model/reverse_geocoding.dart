@@ -1,75 +1,107 @@
+// ignore_for_file: unnecessary_new
+
 import '../../extension/logger_extension.dart';
 
 class ReverseGeocoding {
-  String? result;
-  Addressparts? addressparts;
+  int? placeId;
+  String? osmType;
+  int? osmId;
+  int? placeRank;
+  String? category;
+  String? type;
+  double? importance;
+  String? addresstype;
+  String? name;
+  String? displayName;
+  Address? address;
 
-  ReverseGeocoding({this.result, this.addressparts});
+  ReverseGeocoding(
+      {this.placeId,
+      this.osmType,
+      this.osmId,
+      this.placeRank,
+      this.category,
+      this.type,
+      this.importance,
+      this.addresstype,
+      this.name,
+      this.displayName,
+      this.address});
 
   ReverseGeocoding.fromJson(Map<String, dynamic> json) {
     try {
-      result = json['result'];
-      addressparts = json['addressparts'] != null
-          ? Addressparts.fromJson(json['addressparts'])
+      placeId = json['place_id'];
+      osmType = json['osm_type'];
+      osmId = json['osm_id'];
+      placeRank = json['place_rank'];
+      category = json['category'];
+      type = json['type'];
+      importance = json['importance'];
+      addresstype = json['addresstype'];
+      name = json['name'];
+      displayName = json['display_name'];
+      address = json['address'] != null
+          ? new Address.fromJson(json['address'])
           : null;
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    } catch (e, s) {
+      AppLog.e(e, stackTrace: s);
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['result'] = result;
-    if (addressparts != null) {
-      data['addressparts'] = addressparts!.toJson();
+    data['place_id'] = placeId;
+    data['osm_type'] = osmType;
+    data['osm_id'] = osmId;
+    data['place_rank'] = placeRank;
+    data['category'] = category;
+    data['type'] = type;
+    data['importance'] = importance;
+    data['addresstype'] = addresstype;
+    data['name'] = name;
+    data['display_name'] = displayName;
+    if (address != null) {
+      data['address'] = address!.toJson();
     }
     return data;
   }
 }
 
-class Addressparts {
-  String? suburb;
-  String? city;
-  String? stateDistrict;
+class Address {
+  String? village;
+  String? province;
   String? state;
   String? iSO31662Lvl4;
-  String? postcode;
   String? country;
   String? countryCode;
 
-  Addressparts(
-      {this.suburb,
-      this.city,
-      this.stateDistrict,
+  Address(
+      {this.village,
+      this.province,
       this.state,
       this.iSO31662Lvl4,
-      this.postcode,
       this.country,
       this.countryCode});
 
-  Addressparts.fromJson(Map<String, dynamic> json) {
+  Address.fromJson(Map<String, dynamic> json) {
     try {
-      suburb = json['suburb'];
-      city = json['city'];
-      stateDistrict = json['state_district'];
+      village = json['village'];
+      province = json['province'];
       state = json['state'];
       iSO31662Lvl4 = json['ISO3166-2-lvl4'];
-      postcode = json['postcode'];
       country = json['country'];
       countryCode = json['country_code'];
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    } catch (e, s) {
+      AppLog.e(e, stackTrace: s);
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['suburb'] = suburb;
-    data['city'] = city;
-    data['state_district'] = stateDistrict;
+    data['village'] = village;
+    data['province'] = province;
     data['state'] = state;
     data['ISO3166-2-lvl4'] = iSO31662Lvl4;
-    data['postcode'] = postcode;
     data['country'] = country;
     data['country_code'] = countryCode;
     return data;
