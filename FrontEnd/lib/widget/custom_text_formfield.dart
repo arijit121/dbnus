@@ -96,7 +96,12 @@ class CustomTextFormField extends StatelessWidget {
                   ? '${label ?? ""}${isRequired == true ? " *" : ""}'
                   : null,
               hintText: hintText,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12,vertical: 8),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              errorStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  fontColor: Colors.red),
               hintStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
