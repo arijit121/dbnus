@@ -70,6 +70,10 @@ class ResponsiveUI extends StatelessWidget {
   }
 }
 
+/// The signature of the [ResponsiveBuilder] builder function.
+typedef ResponsiveWidgetBuilder = Widget Function(
+    BuildContext context, WidthState widthState);
+
 class ResponsiveBuilder extends StatelessWidget {
   ///
   /// ResponsiveBuilder  provide what is the [WidthState] of the widget.
@@ -82,7 +86,7 @@ class ResponsiveBuilder extends StatelessWidget {
     required this.builder,
   });
 
-  final Widget Function(BuildContext context, WidthState widthState) builder;
+  final ResponsiveWidgetBuilder builder;
 
   Widget _buildWithConstraints(
       BuildContext context, BoxConstraints constraints) {
