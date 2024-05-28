@@ -3,11 +3,6 @@ import 'package:flutter/material.dart';
 import '../service/context_service.dart';
 
 class ScreenUtils {
-  static double narrowScreenWidthThreshold = 450;
-
-  static double mediumWidthBreakpoint = 1000;
-  static double largeWidthBreakpoint = 1500;
-
   static double paddingLeft() =>
       MediaQuery.of(CurrentContext().context).padding.left;
 
@@ -60,12 +55,12 @@ class ResponsiveUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        final screenWidth = MediaQuery.of(context).size.width;
-        if (screenWidth > ScreenUtils.mediumWidthBreakpoint) {
+    return LayoutBuilder(
+      builder: (context, BoxConstraints constraints) {
+        final screenWidth = constraints.maxWidth;
+        if (screenWidth > WidthState.medium.value) {
           return largeUI(context) ?? const Placeholder();
-        } else if (screenWidth > ScreenUtils.narrowScreenWidthThreshold) {
+        } else if (screenWidth > WidthState.narrow.value) {
           return mediumUI(context) ?? const Placeholder();
         } else {
           return narrowUI(context) ?? const Placeholder();
@@ -73,4 +68,49 @@ class ResponsiveUI extends StatelessWidget {
       },
     );
   }
+}
+
+class ResponsiveBuilder extends StatelessWidget {
+  ///
+  /// ResponsiveBuilder  provide what is the [WidthState] of the widget.
+  ///
+  /// What is WidthState?
+  /// [WidthState] is enum for screen width (narrow, medium, large).
+  ///
+  const ResponsiveBuilder({
+    super.key,
+    required this.builder,
+  });
+
+  final Widget Function(BuildContext context, WidthState widthState) builder;
+
+  Widget _buildWithConstraints(
+      BuildContext context, BoxConstraints constraints) {
+    WidthState responsiveState = constraints.maxWidth > WidthState.medium.value
+        ? WidthState.large
+        : constraints.maxWidth > WidthState.narrow.value
+            ? WidthState.medium
+            : WidthState.narrow;
+
+    return builder(context, responsiveState);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: _buildWithConstraints);
+  }
+}
+
+///
+/// [WidthState] is enum for screen width (narrow, medium, large).
+///
+enum WidthState {
+  narrow(450, "narrow"),
+  medium(1000, "medium"),
+  large(1500, "large");
+
+  final int value;
+  final String name;
+
+  const WidthState(this.value, this.name);
 }
