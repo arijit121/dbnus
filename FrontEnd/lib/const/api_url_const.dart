@@ -6,8 +6,7 @@ class ApiUrlConst {
 
   static String books = "${baseUrl}books/v1/volumes";
 
-  static String reverseGeocode = "https://nominatim.openstreetmap.org/reverse";
-  static String forwardGeocode = "https://nominatim.openstreetmap.org/search";
+
 
   static String hostUrl = "https://www.stg-googleapis.com/";
 }

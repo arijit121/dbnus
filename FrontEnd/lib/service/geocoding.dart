@@ -10,6 +10,9 @@ import '../data/model/forward_geocoding.dart';
 import '../data/model/reverse_geocoding.dart';
 
 class Geocoding {
+  final String _reverseGeocode = "https://nominatim.openstreetmap.org/reverse";
+  final String _forwardGeocode = "https://nominatim.openstreetmap.org/search";
+
   ///
   ///
   /// Free Geocoding API
@@ -82,7 +85,7 @@ class Geocoding {
     try {
       ApiReturnModel? v = await apiRepo().callApi(
           tag: "ReverseGeocoding",
-          uri: ApiUrlConst.reverseGeocode,
+          uri: _reverseGeocode,
           queryParameters: {
             "lat": latitude,
             "lon": longitude,
@@ -149,7 +152,7 @@ class Geocoding {
     try {
       ApiReturnModel? v = await apiRepo().callApi(
           tag: "ForwardGeocoding",
-          uri: ApiUrlConst.forwardGeocode,
+          uri: _forwardGeocode,
           queryParameters: {"format": "geojson", "q": address},
           method: Method.get);
       if (v?.statusCode == 200 && v?.responseString != null) {
