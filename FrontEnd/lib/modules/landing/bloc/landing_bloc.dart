@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dbnus/extension/logger_extension.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/bloc_data_model/dynamic_data.dart';
@@ -46,5 +47,11 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
             pageIndex: DynamicBlocData<int>.success(value: event.index)));
       }
     });
+  }
+
+  @override
+  Future<void> close() {
+    AppLog.i("LandingBloc dispose");
+    return super.close();
   }
 }
