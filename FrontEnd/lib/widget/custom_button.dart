@@ -178,6 +178,29 @@ class CustomOutLineButton extends StatelessWidget {
   }
 }
 
+class CustomCheckbox extends StatelessWidget {
+  const CustomCheckbox({
+    super.key,
+    required this.value,
+    this.isRounded,
+    required this.onChanged,
+  });
+
+  final bool? value, isRounded;
+  final void Function(bool?)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      checkColor: Colors.white,
+      activeColor: HexColor.fromHex(ColorConst.baseHexColor),
+      value: value,
+      shape: isRounded == true ? const CircleBorder() : null,
+      onChanged: onChanged,
+    );
+  }
+}
+
 Widget customCartButton(
         {ServiceModel? serviceModel,
         String? redirectUrl,
