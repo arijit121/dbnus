@@ -57,7 +57,7 @@ class ResponsiveUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, BoxConstraints constraints) {
-        final screenWidth = constraints.maxWidth;
+        double screenWidth = MediaQuery.of(context).size.width;
         if (screenWidth > WidthState.medium.value) {
           return largeUI(context) ?? const Placeholder();
         } else if (screenWidth > WidthState.narrow.value) {
@@ -90,9 +90,10 @@ class ResponsiveBuilder extends StatelessWidget {
 
   Widget _buildWithConstraints(
       BuildContext context, BoxConstraints constraints) {
-    WidthState responsiveState = constraints.maxWidth > WidthState.medium.value
+    double screenWidth = MediaQuery.of(context).size.width;
+    WidthState responsiveState = screenWidth > WidthState.medium.value
         ? WidthState.large
-        : constraints.maxWidth > WidthState.narrow.value
+        : screenWidth > WidthState.narrow.value
             ? WidthState.medium
             : WidthState.narrow;
 
