@@ -46,6 +46,8 @@ class ApiConfig {
       appType: AppConfig().getAppType(),
       appVersion: await AppConfig().getAppVersion(),
     );
-    return appTypeVersionParam.toJson();
+    Map<String, dynamic> json = appTypeVersionParam.toJson();
+    json.removeWhere((key, value) => value == null);
+    return json;
   }
 }
