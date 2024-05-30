@@ -12,19 +12,20 @@ class CustomContainer extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final Color? borderColor;
   final List<BoxShadow>? boxShadow;
+  final Gradient? gradient;
 
-  const CustomContainer({
-    super.key,
-    this.height,
-    this.width,
-    this.borderRadius,
-    this.color,
-    required this.child,
-    this.padding,
-    this.margin,
-    this.borderColor,
-    this.boxShadow,
-  });
+  const CustomContainer(
+      {super.key,
+      this.height,
+      this.width,
+      this.borderRadius,
+      this.color,
+      required this.child,
+      this.padding,
+      this.margin,
+      this.borderColor,
+      this.boxShadow,
+      this.gradient});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class CustomContainer extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: color,
+        gradient: gradient,
         border: borderColor != null
             ? Border.all(
                 color: borderColor!,
