@@ -32,7 +32,7 @@ class ApiRepoImp extends ApiRepo {
           : Uri.parse(uri);
       Request request = http.Request(method.value, url);
       MultipartRequest requestFormData =
-      http.MultipartRequest(method.value, url);
+          http.MultipartRequest(method.value, url);
       AppLog.i(tag: "$tag Method", method.value, time: DateTime.now());
       AppLog.i(tag: "$tag Url", "$url", time: DateTime.now());
       if (headers?.isNotEmpty == true) {
