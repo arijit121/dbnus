@@ -86,7 +86,7 @@ class AssetsConst {
   static String pinCodePickerDesign = "assets/design/pincodePickerDesign.png";
   static String appRatingScreenImage =
       "assets/design/app_rating_screen_image.png";
-
+  static String emptyFile = "assets/icon/empty_file.svg";
   static String soundAlarm = "sound/sound_alarm.mp3";
   static String callRingtone = "sound/call_ringtone.mp3";
 }
