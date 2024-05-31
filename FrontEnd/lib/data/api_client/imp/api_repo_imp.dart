@@ -24,7 +24,9 @@ class ApiRepoImp extends ApiRepo {
           stringQueryParameters[key] = value!.toString();
         }
       });
-
+      Uri.parse(uri).queryParameters.forEach((key, value) {
+        stringQueryParameters[key] = value.toString();
+      });
       Uri url = stringQueryParameters.isNotEmpty
           ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
           : Uri.parse(uri);
