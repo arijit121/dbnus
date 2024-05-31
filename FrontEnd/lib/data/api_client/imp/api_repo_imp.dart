@@ -154,7 +154,7 @@ class BodyData<T> {
         bodyTypeStatus: BodyTypeStatus.raw, value: body);
   }
 
-  static rawText({Map<String, dynamic>? body}) {
+  static rawText({dynamic body}) {
     return BodyData<String>(
         bodyTypeStatus: BodyTypeStatus.rawText, value: '''${body ?? ""}''');
   }
