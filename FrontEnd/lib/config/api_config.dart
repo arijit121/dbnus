@@ -11,16 +11,18 @@ class ApiConfig {
       bool? isSearchUrl,
       bool? isArticleUrl,
       bool? onlyContentType,
-      bool? noAuthentication}) async {
+      bool? noAuthentication,
+        ContentType? contentType = ContentType.json
+      }) async {
     Headers headers = onlyContentType == true
         ? Headers(
-            contentType: "application/json",
+            contentType: contentType?.value,
           )
         : Headers(
             browserId: kIsWeb ? "${await AppConfig().getBrowserId()}" : null,
             appType: AppConfig().getAppType(),
             appVersion: await AppConfig().getAppVersion(),
-            contentType: "application/json",
+            contentType: contentType?.value,
             authorization: "Basic YWRtaW46YWRtaW4=",
             deviceId: kIsWeb ? null : await AppConfig().getDeviceId(),
             deviceDensityType: "xhdpi",
@@ -50,4 +52,14 @@ class ApiConfig {
     json.removeWhere((key, value) => value == null);
     return json;
   }
+}
+
+enum ContentType {
+  json('application/json'),
+  urlencoded_char_utf8('application/x-www-form-urlencoded; charset=utf-8'),
+  xml('application/xml');
+
+  final String value;
+
+  const ContentType(this.value);
 }

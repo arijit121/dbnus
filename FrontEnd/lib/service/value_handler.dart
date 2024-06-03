@@ -171,4 +171,14 @@ class ValueHandler {
     String temp = val.toStringAsFixed(places);
     return double.parse(temp);
   }
+
+  String uriEncodeForm({required Map<String, dynamic> body}) {
+    List parts = [];
+    body.forEach((key, value) {
+      parts.add('${Uri.encodeQueryComponent(key)}='
+          '${Uri.encodeQueryComponent(value ?? "")}');
+    });
+    String formData = parts.join('&');
+    return formData;
+  }
 }
