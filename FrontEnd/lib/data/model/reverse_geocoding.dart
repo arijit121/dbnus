@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_new
-
 import '../../extension/logger_extension.dart';
 
 class ReverseGeocoding {
@@ -40,11 +38,10 @@ class ReverseGeocoding {
       addresstype = json['addresstype'];
       name = json['name'];
       displayName = json['display_name'];
-      address = json['address'] != null
-          ? new Address.fromJson(json['address'])
-          : null;
-    } catch (e, s) {
-      AppLog.e(e, stackTrace: s);
+      address =
+          json['address'] != null ? Address.fromJson(json['address']) : null;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
 
@@ -70,16 +67,26 @@ class ReverseGeocoding {
 class Address {
   String? village;
   String? province;
+  String? suburb;
+  String? town;
+  String? county;
+  String? stateDistrict;
   String? state;
   String? iSO31662Lvl4;
+  String? postcode;
   String? country;
   String? countryCode;
 
   Address(
       {this.village,
       this.province,
+      this.suburb,
+      this.town,
+      this.county,
+      this.stateDistrict,
       this.state,
       this.iSO31662Lvl4,
+      this.postcode,
       this.country,
       this.countryCode});
 
@@ -87,12 +94,17 @@ class Address {
     try {
       village = json['village'];
       province = json['province'];
+      suburb = json['suburb'];
+      town = json['town'];
+      county = json['county'];
+      stateDistrict = json['state_district'];
       state = json['state'];
       iSO31662Lvl4 = json['ISO3166-2-lvl4'];
+      postcode = json['postcode'];
       country = json['country'];
       countryCode = json['country_code'];
-    } catch (e, s) {
-      AppLog.e(e, stackTrace: s);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
 
@@ -100,8 +112,13 @@ class Address {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['village'] = village;
     data['province'] = province;
+    data['suburb'] = suburb;
+    data['town'] = town;
+    data['county'] = county;
+    data['state_district'] = stateDistrict;
     data['state'] = state;
     data['ISO3166-2-lvl4'] = iSO31662Lvl4;
+    data['postcode'] = postcode;
     data['country'] = country;
     data['country_code'] = countryCode;
     return data;

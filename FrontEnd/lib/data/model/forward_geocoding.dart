@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_this
-
 import '../../extension/logger_extension.dart';
 
 class ForwardGeocoding {
@@ -19,8 +17,8 @@ class ForwardGeocoding {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }
