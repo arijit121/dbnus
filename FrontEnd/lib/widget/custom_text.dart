@@ -265,14 +265,43 @@ class CustomOnlyText extends StatelessWidget {
 
 class CustomHtmlText extends StatelessWidget {
   final String html;
+  final Color? color;
+  final double? size;
+  final FontWeight? fontWeight;
+  final int? maxLines;
+  final TextDecoration? decoration;
+  final bool lineGapNeeded;
 
-  const CustomHtmlText(this.html, {super.key});
+  final Color? backGroundColor;
+
+  const CustomHtmlText(
+    this.html, {
+    super.key,
+    this.color,
+    this.size,
+    this.fontWeight,
+    this.maxLines,
+    this.decoration,
+    this.lineGapNeeded = false,
+    this.backGroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return HtmlWidget(
       html,
-      textStyle: customizeTextStyle(),
+      textStyle: customizeTextStyle(
+          fontWeight: fontWeight,
+          fontSize: size,
+          fontColor: color,
+          height: lineGapNeeded == true
+              ? 1.8
+              : kIsWeb
+                  ? 1.2
+                  : 0.0,
+          decoration: decoration,
+          backgroundColor: backGroundColor,
+          decorationColor: color),
       onTapUrl: (url) async {
         await OpenService().openUrl(uri: Uri.parse(url));
         return true;

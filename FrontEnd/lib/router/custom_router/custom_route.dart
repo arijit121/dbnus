@@ -41,7 +41,9 @@ class CustomRoute {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
-      CustomRouterWeb().goToNameAndOff(path);
+      Future.delayed(const Duration(seconds: 1), () {
+        CustomRouterWeb().goToNameAndOff(path);
+      });
     }
   }
 
