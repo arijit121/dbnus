@@ -162,7 +162,7 @@ class CustomFilePicker {
                         Navigator.pop(context, 'Camera');
                       },
                       child: SizedBox(
-                        width: (ScreenUtils.nw() / 2) - 8,
+                        width: (ScreenUtils.nw() / 3) - 8,
                         child: Column(
                           children: [
                             IconButton(
@@ -187,10 +187,37 @@ class CustomFilePicker {
                     ),
                     InkWell(
                       onTap: () {
+                        Navigator.pop(context, 'Camera');
+                      },
+                      child: SizedBox(
+                        width: (ScreenUtils.nw() / 3) - 8,
+                        child: Column(
+                          children: [
+                            IconButton(
+                                color: Colors.blueGrey,
+                                iconSize: 40,
+                                onPressed: () {
+                                  Navigator.pop(context, 'Gallery');
+                                },
+                                icon: const Icon(CupertinoIcons.photo)),
+                            8.ph,
+                            CustomText(
+                              "Choose from Gallery.",
+                              color: HexColor.fromHex(ColorConst.primaryDark),
+                              size: 14,
+                              fontWeight: FontWeight.w500,
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
                         Navigator.pop(context, 'Folder');
                       },
                       child: SizedBox(
-                        width: (ScreenUtils.nw() / 2) - 8,
+                        width: (ScreenUtils.nw() / 3) - 8,
                         child: Column(
                           children: [
                             IconButton(
@@ -219,6 +246,8 @@ class CustomFilePicker {
           );
           if (result == "Camera") {
             return cameraPicker();
+          } else if (result == "Gallery") {
+            return galleryPicker();
           } else if (result == "Folder") {
             return await pickSingleFile();
           }
