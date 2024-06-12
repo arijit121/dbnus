@@ -183,17 +183,19 @@ class CustomCheckbox extends StatelessWidget {
     super.key,
     required this.value,
     this.isRounded,
+    this.activeColor,
     required this.onChanged,
   });
 
   final bool? value, isRounded;
   final void Function(bool?)? onChanged;
+  final Color? activeColor;
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
       checkColor: Colors.white,
-      activeColor: HexColor.fromHex(ColorConst.baseHexColor),
+      activeColor: activeColor ?? Colors.blue,
       value: value,
       shape: isRounded == true ? const CircleBorder() : null,
       onChanged: onChanged,
