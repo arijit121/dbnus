@@ -55,6 +55,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      dropdownColor: Colors.white,
       value: value,
       items: items,
       onChanged: onChanged,
