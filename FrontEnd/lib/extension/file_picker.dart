@@ -167,14 +167,11 @@ class CustomFilePicker {
                         width: (ScreenUtils.nw() / 3) - 8,
                         child: Column(
                           children: [
-                            IconButton(
-                                color: Colors.blueGrey,
-                                iconSize: 40,
-                                onPressed: () {
-                                  Navigator.pop(context, 'Camera');
-                                },
-                                icon: const Icon(
-                                    CupertinoIcons.photo_camera_solid)),
+                            const Icon(
+                              CupertinoIcons.photo_camera_solid,
+                              color: Colors.blueGrey,
+                              size: 40,
+                            ),
                             8.ph,
                             CustomText(
                               "Capture Photo.",
@@ -189,19 +186,17 @@ class CustomFilePicker {
                     ),
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context, 'Camera');
+                      Navigator.pop(context, 'Gallery');
                     },
                     child: SizedBox(
                       width: (ScreenUtils.nw() / tag) - 8,
                       child: Column(
                         children: [
-                          IconButton(
-                              color: Colors.blueGrey,
-                              iconSize: 40,
-                              onPressed: () {
-                                Navigator.pop(context, 'Gallery');
-                              },
-                              icon: const Icon(CupertinoIcons.photo)),
+                          const Icon(
+                            CupertinoIcons.photo,
+                            color: Colors.blueGrey,
+                            size: 40,
+                          ),
                           8.ph,
                           CustomText(
                             "Choose from Gallery.",
@@ -222,13 +217,11 @@ class CustomFilePicker {
                       width: (ScreenUtils.nw() / tag) - 8,
                       child: Column(
                         children: [
-                          IconButton(
-                              color: Colors.blueGrey,
-                              iconSize: 40,
-                              onPressed: () {
-                                Navigator.pop(context, 'Folder');
-                              },
-                              icon: const Icon(CupertinoIcons.folder_solid)),
+                          const Icon(
+                            CupertinoIcons.folder_solid,
+                            color: Colors.blueGrey,
+                            size: 40,
+                          ),
                           8.ph,
                           CustomText(
                             "Choose file from device.",
