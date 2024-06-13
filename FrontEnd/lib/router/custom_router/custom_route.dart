@@ -32,10 +32,13 @@ class CustomRoute {
 
   void clearAndNavigate(String path) {
     if (!kIsWeb) {
-      if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop();
+      RouterManager routerManager = RouterManager.getInstance;
+      final List<RouteMatchBase> lastMatch =
+          routerManager.router.routerDelegate.currentConfiguration.matches;
+      for (int index = 0; index < lastMatch.length - 1; index++) {
+        routerManager.router.pop();
       }
-      RouterManager.getInstance.router.pushReplacementNamed(path);
+      routerManager.router.pushReplacementNamed(path);
     } else {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
