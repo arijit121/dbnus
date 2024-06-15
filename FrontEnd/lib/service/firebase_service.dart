@@ -43,7 +43,7 @@ class FirebaseService {
 
   void logEvent({
     required String name,
-    Map<String, Object?>? parameters,
+    Map<String, Object>? parameters,
     AnalyticsCallOptions? callOptions,
   }) {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;

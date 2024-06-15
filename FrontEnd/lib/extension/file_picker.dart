@@ -133,6 +133,7 @@ class CustomFilePicker {
   }
 
   Future<CustomFile?> customFilePicker() async {
+    int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
       List<CameraDescription> cameraDescription = [];
@@ -142,37 +143,35 @@ class CustomFilePicker {
         AppLog.i(e);
       }
       if (cameraDescription.isEmpty) {
-        return await pickSingleFile();
-      } else {
-        BuildContext context = CurrentContext().context;
+        tag = 2;
+      }
+      BuildContext context = CurrentContext().context;
 
-        if (context.mounted) {
-          String? result = await showModalBottomSheet<String>(
-            backgroundColor: Colors.white,
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                height: 150,
-                padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+      if (context.mounted) {
+        String? result = await showModalBottomSheet<String>(
+          backgroundColor: Colors.white,
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 150,
+              padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (tag == 3)
                     InkWell(
                       onTap: () {
                         Navigator.pop(context, 'Camera');
                       },
                       child: SizedBox(
-                        width: (ScreenUtils.nw() / 2) - 8,
+                        width: (ScreenUtils.nw() / 3) - 8,
                         child: Column(
                           children: [
-                            IconButton(
-                                color: Colors.blueGrey,
-                                iconSize: 40,
-                                onPressed: () {
-                                  Navigator.pop(context, 'Camera');
-                                },
-                                icon: const Icon(
-                                    CupertinoIcons.photo_camera_solid)),
+                            const Icon(
+                              CupertinoIcons.photo_camera_solid,
+                              color: Colors.blueGrey,
+                              size: 40,
+                            ),
                             8.ph,
                             CustomText(
                               "Capture Photo.",
@@ -185,43 +184,67 @@ class CustomFilePicker {
                         ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context, 'Folder');
-                      },
-                      child: SizedBox(
-                        width: (ScreenUtils.nw() / 2) - 8,
-                        child: Column(
-                          children: [
-                            IconButton(
-                                color: Colors.blueGrey,
-                                iconSize: 40,
-                                onPressed: () {
-                                  Navigator.pop(context, 'Folder');
-                                },
-                                icon: const Icon(CupertinoIcons.folder_solid)),
-                            8.ph,
-                            CustomText(
-                              "Choose file from device.",
-                              color: HexColor.fromHex(ColorConst.primaryDark),
-                              size: 14,
-                              fontWeight: FontWeight.w500,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context, 'Gallery');
+                    },
+                    child: SizedBox(
+                      width: (ScreenUtils.nw() / tag) - 8,
+                      child: Column(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.photo,
+                            color: Colors.blueGrey,
+                            size: 40,
+                          ),
+                          8.ph,
+                          CustomText(
+                            "Choose from Gallery.",
+                            color: HexColor.fromHex(ColorConst.primaryDark),
+                            size: 14,
+                            fontWeight: FontWeight.w500,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              );
-            },
-          );
-          if (result == "Camera") {
-            return cameraPicker();
-          } else if (result == "Folder") {
-            return await pickSingleFile();
-          }
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context, 'Folder');
+                    },
+                    child: SizedBox(
+                      width: (ScreenUtils.nw() / tag) - 8,
+                      child: Column(
+                        children: [
+                          const Icon(
+                            CupertinoIcons.folder_solid,
+                            color: Colors.blueGrey,
+                            size: 40,
+                          ),
+                          8.ph,
+                          CustomText(
+                            "Choose file from device.",
+                            color: HexColor.fromHex(ColorConst.primaryDark),
+                            size: 14,
+                            fontWeight: FontWeight.w500,
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+        if (result == "Camera") {
+          return cameraPicker();
+        } else if (result == "Gallery") {
+          return galleryPicker();
+        } else if (result == "Folder") {
+          return await pickSingleFile();
         }
       }
     } catch (e) {

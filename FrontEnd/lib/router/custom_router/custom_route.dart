@@ -31,12 +31,14 @@ class CustomRoute {
   }
 
   void clearAndNavigate(String path) {
-    RouterManager routerManager = RouterManager.getInstance;
     if (!kIsWeb) {
-      while (routerManager.router.canPop() == true) {
+      RouterManager routerManager = RouterManager.getInstance;
+      final List<RouteMatchBase> lastMatch =
+          routerManager.router.routerDelegate.currentConfiguration.matches;
+      for (int index = 0; index < lastMatch.length - 1; index++) {
         routerManager.router.pop();
       }
-      routerManager.router.pushReplacement(path);
+      routerManager.router.pushReplacementNamed(path);
     } else {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
