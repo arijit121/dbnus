@@ -6,7 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../service/app_updater.dart';
+import 'service/app_updater.dart';
 
 import 'const/color_const.dart';
 import 'data/model/fcm_notification_model.dart';
