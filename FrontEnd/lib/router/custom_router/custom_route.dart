@@ -30,7 +30,12 @@ class CustomRoute {
     back();
   }
 
-  void clearAndNavigate(String path) {
+  void clearAndNavigate(
+      String name, {
+        Map<String, String> pathParameters = const <String, String>{},
+        Map<String, dynamic> queryParameters = const <String, dynamic>{},
+        Object? extra,
+      }) {
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
       final List<RouteMatchBase> lastMatch =
@@ -38,13 +43,19 @@ class CustomRoute {
       for (int index = 0; index < lastMatch.length - 1; index++) {
         routerManager.router.pop();
       }
-      routerManager.router.pushReplacementNamed(path);
+      routerManager.router.pushReplacementNamed(name,
+          queryParameters: queryParameters,
+          pathParameters: pathParameters,
+          extra: extra);
     } else {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
       Future.delayed(const Duration(seconds: 1), () {
-        CustomRouterWeb().goToNameAndOff(path);
+        CustomRouterWeb().goToNameAndOff(name,
+            queryParameters: queryParameters,
+            pathParameters: pathParameters,
+            extra: extra);
       });
     }
   }
