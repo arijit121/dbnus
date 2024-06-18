@@ -30,12 +30,10 @@ class CustomRoute {
     back();
   }
 
-  void clearAndNavigate(
-      String name, {
-        Map<String, String> pathParameters = const <String, String>{},
-        Map<String, dynamic> queryParameters = const <String, dynamic>{},
-        Object? extra,
-      }) {
+  void clearAndNavigate(String name,
+      {Map<String, String> pathParameters = const <String, String>{},
+      Map<String, dynamic> queryParameters = const <String, dynamic>{},
+      Object? extra}) {
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
       final List<RouteMatchBase> lastMatch =
@@ -51,7 +49,7 @@ class CustomRoute {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
-      Future.delayed(const Duration(seconds: 1), () {
+      Future.delayed(Duration.zero, () {
         CustomRouterWeb().goToNameAndOff(name,
             queryParameters: queryParameters,
             pathParameters: pathParameters,
