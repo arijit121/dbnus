@@ -119,8 +119,7 @@ class CustomRouterWeb {
 
   bool canBack() {
     try {
-      return html.window.history.state != null &&
-          html.window.history.length > 1;
+      return historyIndex() > 0;
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
@@ -128,12 +127,15 @@ class CustomRouterWeb {
   }
 
   int historyIndex() {
+    int index = 0;
     try {
-      int index = html.window.history.length;
-      return index;
+      index = html.window.history.state["serialCount"];
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
-    return 0;
+    if (index == 0) {
+      index = html.window.history.length - 1;
+    }
+    return index;
   }
 }
