@@ -120,7 +120,7 @@ class CustomRouterWeb {
   bool canBack() {
     try {
       return html.window.history.state != null &&
-          html.window.history.length < 2;
+          html.window.history.length > 1;
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
