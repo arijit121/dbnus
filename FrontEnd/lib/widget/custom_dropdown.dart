@@ -42,6 +42,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
   final String? hintText;
   final String? Function(T?)? validator;
   final T? value;
+  final Widget? prefix, suffix;
 
   const CustomDropDownFormField({
     super.key,
@@ -50,6 +51,8 @@ class CustomDropDownFormField<T> extends StatelessWidget {
     this.hintText,
     this.validator,
     this.value,
+    this.prefix,
+    this.suffix,
   });
 
   @override
@@ -65,6 +68,8 @@ class CustomDropDownFormField<T> extends StatelessWidget {
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
+        prefixIcon: prefix,
+        suffixIcon: suffix,
         contentPadding: const EdgeInsets.only(left: 8),
         hintStyle: customizeTextStyle(
             fontWeight: FontWeight.w400,

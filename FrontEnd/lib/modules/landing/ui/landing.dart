@@ -12,6 +12,7 @@ import '../../../router/custom_router/custom_route.dart';
 import '../../../service/geocoding.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
+import '../../../widget/custom_dropdown.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
@@ -155,25 +156,33 @@ class _LandingUiState extends State<LandingUi> {
 
   Widget _mediumUiBody({required LandingState state}) => Container();
 
-  Widget _largeUiBody({required LandingState state}) => Column(
-        children: [
-          CustomElevatedButton(
-            child: const CustomText("text"),
-            onPressed: () {},
-          ),
-          20.ph,
-          CustomElevatedButton(
-              onPressed: () {
-                DownloadHandler().download(
-                    url:
-                        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
-              },
-              gradient: const LinearGradient(colors: [
-                Colors.red,
-                Colors.blue,
-              ]),
-              child: const CustomText("Download")),
-        ],
+  Widget _largeUiBody({required LandingState state}) => Flexible(
+        child: Column(
+          children: [
+            CustomElevatedButton(
+              child: const CustomText("text"),
+              onPressed: () {},
+            ),
+            20.ph,
+            CustomElevatedButton(
+                onPressed: () {
+                  DownloadHandler().download(
+                      url:
+                          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                },
+                gradient: const LinearGradient(colors: [
+                  Colors.red,
+                  Colors.blue,
+                ]),
+                child: const CustomText("Download")),
+            CustomDropDownFormField<String>(
+                suffix: const Icon(Icons.keyboard_arrow_down_rounded),
+                onChanged: (_) {},
+                items: customItemList<String>(valueList: [
+                  CustomDropDownModel<String>(value: "test", title: "test")
+                ]))
+          ],
+        ),
       );
 
   @override
