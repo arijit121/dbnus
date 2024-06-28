@@ -27,6 +27,8 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLines;
   final EdgeInsets scrollPadding;
   final bool autofocus;
+  final TextAlign? textAlign;
+  final String? errorText;
 
   const CustomTextFormField({
     super.key,
@@ -50,6 +52,8 @@ class CustomTextFormField extends StatelessWidget {
     this.maxLines = 1,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.autofocus = false,
+    this.textAlign,
+    this.errorText,
   });
 
   @override
@@ -84,11 +88,13 @@ class CustomTextFormField extends StatelessWidget {
             scrollPadding: scrollPadding,
             onFieldSubmitted: onFieldSubmitted,
             maxLines: maxLines,
+            textAlign: textAlign ?? TextAlign.start,
             style: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 fontColor: HexColor.fromHex(ColorConst.primaryDark)),
             decoration: InputDecoration(
+              errorText: errorText,
               counterText: "",
               prefixIcon: prefix,
               suffixIcon: suffix,
@@ -97,7 +103,7 @@ class CustomTextFormField extends StatelessWidget {
                   : null,
               hintText: hintText,
               contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               errorStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
