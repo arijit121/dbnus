@@ -73,6 +73,7 @@ class AssetsConst {
   static String shopping = "assets/icon/shopping.svg";
   static String signOut = "assets/icon/sign_out.svg";
 
+  static String pageNotFound = "assets/design/page_not_found.png";
   static String genuLogo = "assets/design/genu_logo.png";
   static String accurateReport = "assets/design/accurate-report.png";
   static String nsbl = "assets/design/nsbl.png";

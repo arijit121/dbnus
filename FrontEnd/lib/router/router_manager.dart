@@ -1,6 +1,10 @@
+import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
+import '../const/assects_const.dart';
 import '../utils/text_utils.dart';
+import '../widget/custom_button.dart';
+import '../widget/custom_image.dart';
 import '../widget/error_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -148,26 +152,61 @@ class RouterManager {
       //   },
       // ),
     ],
+    errorBuilder: (context, state) => errorRoute(),
   );
 
   static Scaffold errorRoute() {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: getInstance.router.canPop()
-            ? IconButton(
-                color: HexColor.fromHex(ColorConst.primaryDark),
-                iconSize: 30,
-                onPressed: () {
-                  CustomRoute().back();
-                },
-                icon: const Icon(Icons.clear))
-            : Container(),
+        automaticallyImplyLeading: false,
         title: CustomText(TextUtils.notFound,
             color: HexColor.fromHex(ColorConst.primaryDark), size: 20),
       ),
-      body: Center(
-        child: CustomErrorWidget(),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomAssetImageView(
+                path: AssetsConst.pageNotFound,
+                height: 200,
+                width: 200,
+              ),
+              8.ph,
+              CustomText(
+                'Oops! Something went wrong...',
+                color: HexColor.fromHex(ColorConst.primaryDark),
+                size: 20,
+              ),
+              8.ph,
+              CustomText(
+                '404',
+                color: HexColor.fromHex(ColorConst.primaryDark),
+                size: 50,
+              ),
+              8.ph,
+              CustomText(
+                'Page Not Found',
+                color: HexColor.fromHex(ColorConst.primaryDark),
+                size: 20,
+              ),
+              12.ph,
+              CustomElevatedButton(
+                radius: 6,
+                color: Colors.blueAccent,
+                onPressed: () {
+                  CustomRoute().clearAndNavigate(RouteName.initialView);
+                },
+                child: const CustomText(
+                  "Back to Home",
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
