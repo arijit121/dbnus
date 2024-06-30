@@ -24,7 +24,13 @@ import 'utils/text_utils.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  AppLog.i("On Message Id : ${message.messageId}");
+  AppLog.i("On Background Message Id : ${message.messageId}");
+
+  await NotificationHandler().initiateNotification();
+  showFlutterNotification(message);
+}
+
+Future<void> showFlutterNotification(RemoteMessage message) async {
   var massagePayload = {
     'Title': message.notification?.title,
     'Message': Platform.isAndroid
@@ -36,7 +42,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         : message.notification?.apple?.imageUrl,
     'ActionURL': message.data['ActionURL']
   };
-  await NotificationHandler().initiateNotification();
+
   FcmNotificationModel fcmNotificationModel =
       FcmNotificationModel.fromJson(massagePayload);
 
@@ -50,30 +56,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  FirebaseMessaging.instance.setAutoInitEnabled(false);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    var massagePayload = {
-      'Title': message.notification?.title,
-      'Message': Platform.isAndroid
-          ? message.notification?.android?.tag
-          : message.notification?.apple?.subtitle,
-      'BigText': message.notification?.body,
-      'ImageUrl': Platform.isAndroid
-          ? message.notification?.android?.imageUrl
-          : message.notification?.apple?.imageUrl,
-      'ActionURL': message.data['ActionURL']
-    };
-
-    FcmNotificationModel fcmNotificationModel =
-        FcmNotificationModel.fromJson(massagePayload);
-
-    if (Platform.isAndroid && fcmNotificationModel.title != null) {
-      NotificationHandler().showNotificationAndroid(fcmNotificationModel);
-    } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-      NotificationHandler().showNotificationIos(fcmNotificationModel);
-    }
+    showFlutterNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
@@ -83,7 +70,6 @@ Future<void> main() async {
       );
     }
   });
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FirebaseService().getInitialMessage();
   await NotificationHandler().requestPermissions();

@@ -73,7 +73,7 @@ dependencies:
   # downloader
   # flutter_downloader: ^1.11.6
   background_downloader: ^8.5.1
-  syncfusion_flutter_charts: ^25.1.35
+  syncfusion_flutter_charts: ^26.1.39
   encrypt: ^5.0.3
   # dyte_uikit: ^0.7.0
   flutter_inappwebview: ^6.0.0
