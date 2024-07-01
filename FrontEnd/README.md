@@ -5,7 +5,7 @@ Dbnus App
 
 flutter build web -t lib/main_web.dart --web-renderer html --no-tree-shake-icons
 
-flutter build apk -t lib/main_app.dart
+flutter build apk -t lib/main_app.dart --no-tree-shake-icons
 
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 
