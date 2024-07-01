@@ -18,5 +18,5 @@ const messaging = firebase.messaging();
 
 // Optional:
 messaging.onBackgroundMessage((message) => {
-  console.log("onBackgroundMessage", message);
+  console.log("onBackgroundMessage", message.data);
 });

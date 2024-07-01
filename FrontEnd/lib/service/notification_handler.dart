@@ -12,12 +12,11 @@ import '../data/model/fcm_notification_model.dart';
 import 'redirect_engine.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
-  'dbnus_app', // id
-  'dbnus_fcm', // name
-  description: 'dbnus app fcm notification', // description
-  importance: Importance.high,
-  ledColor: Colors.white
-);
+    'dbnus_app', // id
+    'dbnus_fcm', // name
+    description: 'dbnus app fcm notification', // description
+    importance: Importance.high,
+    ledColor: Colors.white);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -284,8 +283,7 @@ class NotificationHandler {
     } else if (fcmNotificationModel.imageUrl != null &&
         fcmNotificationModel.bigText == null) {
       final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
-          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl ??
-              'https://picsum.photos/seed/picsum/200/300'));
+          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!));
 
       final BigPictureStyleInformation bigPictureStyleInformation =
           BigPictureStyleInformation(bigPicture,
@@ -324,8 +322,7 @@ class NotificationHandler {
     } else if (fcmNotificationModel.bigText != null &&
         fcmNotificationModel.imageUrl != null) {
       final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
-          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl ??
-              'https://picsum.photos/seed/picsum/200/300'));
+          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!));
 
       final BigPictureStyleInformation bigPictureStyleInformationWithBigText =
           BigPictureStyleInformation(bigPicture,
