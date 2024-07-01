@@ -163,8 +163,7 @@ class CustomFilePicker {
                       onTap: () {
                         Navigator.pop(context, 'Camera');
                       },
-                      child: SizedBox(
-                        width: (ScreenUtils.nw() / 3) - 8,
+                      child: Expanded(
                         child: Column(
                           children: [
                             const Icon(
@@ -188,8 +187,7 @@ class CustomFilePicker {
                     onTap: () {
                       Navigator.pop(context, 'Gallery');
                     },
-                    child: SizedBox(
-                      width: (ScreenUtils.nw() / tag) - 8,
+                    child: Expanded(
                       child: Column(
                         children: [
                           const Icon(
@@ -213,8 +211,7 @@ class CustomFilePicker {
                     onTap: () {
                       Navigator.pop(context, 'Folder');
                     },
-                    child: SizedBox(
-                      width: (ScreenUtils.nw() / tag) - 8,
+                    child: Expanded(
                       child: Column(
                         children: [
                           const Icon(
