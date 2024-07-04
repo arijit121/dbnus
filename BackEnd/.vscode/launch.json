@@ -9,10 +9,10 @@
             "request": "launch",
             "name": "Launch Program",
             "runtimeExecutable": "nodemon",
-        "program": "src/index.ts",
-        "restart": true,
-        "console": "integratedTerminal",
-        "internalConsoleOptions": "neverOpen"
+            "program": "src/index.ts",
+            "restart": true,
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }
