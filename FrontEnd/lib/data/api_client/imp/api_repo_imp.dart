@@ -7,6 +7,8 @@ import 'package:http/http.dart';
 import '../../../extension/logger_extension.dart';
 import '../../model/api_return_model.dart';
 import '../repo/api_repo.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ApiRepoImp extends ApiRepo {
   @override
@@ -65,11 +67,25 @@ class ApiRepoImp extends ApiRepo {
             if (kIsWeb) {
               Uint8List byte = element.bytes ?? Uint8List(0);
               requestFormData.files.add(http.MultipartFile.fromBytes(
-                  element.field ?? "", byte,
-                  filename: element.name));
+                element.field ?? "",
+                byte,
+                filename: element.name,
+                contentType: MediaType.parse(
+                  lookupMimeType(element.name ?? "",
+                          headerBytes: element.bytes) ??
+                      "",
+                ),
+              ));
             } else {
               requestFormData.files.add(await http.MultipartFile.fromPath(
-                  element.field ?? "", element.path ?? ""));
+                element.field ?? "",
+                element.path ?? "",
+                contentType: MediaType.parse(
+                  lookupMimeType(element.name ?? "",
+                          headerBytes: element.bytes) ??
+                      "",
+                ),
+              ));
             }
           });
         }
