@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "FrontEnd",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+        }, 
+        {
             "name": "FrontEnd/Web",
             "request": "launch",
             "type": "dart",
