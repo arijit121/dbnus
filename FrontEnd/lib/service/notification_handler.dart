@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:dbnus/service/value_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -167,69 +168,34 @@ class NotificationHandler {
 
   Future<void> showNotificationIos(
       FcmNotificationModel fcmNotificationModel) async {
-    DarwinNotificationDetails darwinNotificationDetails =
-        const DarwinNotificationDetails();
-    final NotificationDetails notificationDetails = NotificationDetails(
-      iOS: darwinNotificationDetails,
+    final String? bigPicturePath =
+        ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
+            ? await _downloadAndSaveFile(
+                fcmNotificationModel.imageUrl!, 'bigPicture.jpg')
+            : null;
+
+    final DarwinNotificationDetails darwinNotificationDetailsImage =
+        DarwinNotificationDetails(
+            subtitle: ValueHandler()
+                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+                ? fcmNotificationModel.message
+                : null,
+            attachments: bigPicturePath != null
+                ? <DarwinNotificationAttachment>[
+                    DarwinNotificationAttachment(bigPicturePath,
+                        hideThumbnail: false)
+                  ]
+                : null);
+    final NotificationDetails notificationDetailsImage = NotificationDetails(
+      iOS: darwinNotificationDetailsImage,
     );
 
-    if (fcmNotificationModel.imageUrl == null &&
-        fcmNotificationModel.bigText == null) {
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          '${fcmNotificationModel.title}',
-          '${fcmNotificationModel.message}',
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.bigText != null &&
-        fcmNotificationModel.imageUrl == null) {
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          '${fcmNotificationModel.title}',
-          '${fcmNotificationModel.bigText}',
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.imageUrl != null &&
-        fcmNotificationModel.bigText == null) {
-      final String bigPicturePath = await _downloadAndSaveFile(
-          fcmNotificationModel.imageUrl ?? 'https://picsum.photos/200',
-          'bigPicture.jpg');
-
-      final DarwinNotificationDetails darwinNotificationDetailsImage =
-          DarwinNotificationDetails(attachments: <DarwinNotificationAttachment>[
-        DarwinNotificationAttachment(bigPicturePath, hideThumbnail: false)
-      ]);
-      final NotificationDetails notificationDetailsImage = NotificationDetails(
-        iOS: darwinNotificationDetailsImage,
-      );
-
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          '${fcmNotificationModel.title}',
-          '${fcmNotificationModel.message}',
-          notificationDetailsImage,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.imageUrl != null &&
-        fcmNotificationModel.bigText != null) {
-      final String bigPicturePath = await _downloadAndSaveFile(
-          fcmNotificationModel.imageUrl ?? 'https://picsum.photos/200',
-          'bigPicture.jpg');
-
-      final DarwinNotificationDetails darwinNotificationDetailsImage =
-          DarwinNotificationDetails(attachments: <DarwinNotificationAttachment>[
-        DarwinNotificationAttachment(bigPicturePath, hideThumbnail: false)
-      ]);
-      final NotificationDetails notificationDetailsImage = NotificationDetails(
-        iOS: darwinNotificationDetailsImage,
-      );
-
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          '${fcmNotificationModel.title}',
-          '${fcmNotificationModel.bigText}',
-          notificationDetailsImage,
-          payload: fcmNotificationModel.actionURL);
-    }
+    await flutterLocalNotificationsPlugin.show(
+        getId(),
+        fcmNotificationModel.title ?? "",
+        fcmNotificationModel.bigText ?? fcmNotificationModel.message ?? "",
+        notificationDetailsImage,
+        payload: fcmNotificationModel.actionURL);
   }
 
   Future<String> _downloadAndSaveFile(String url, String fileName) async {
@@ -252,98 +218,57 @@ class NotificationHandler {
 
   Future<void> showNotificationAndroid(
       FcmNotificationModel fcmNotificationModel) async {
-    // final ByteArrayAndroidBitmap largeIcon = ByteArrayAndroidBitmap(
-    //     await _getByteArrayFromUrl('https://dummyimage.com/48x48'));
+    final ByteArrayAndroidBitmap? bigPicture =
+        ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
+            ? ByteArrayAndroidBitmap(
+                await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!))
+            : null;
 
-    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-      "${fcmNotificationModel.bigText}",
-      htmlFormatBigText: true,
-      contentTitle: fcmNotificationModel.title ?? "",
-      htmlFormatContentTitle: true,
-      summaryText: fcmNotificationModel.message ?? "",
-      htmlFormatSummaryText: true,
-    );
+    StyleInformation? styleInformation = bigPicture != null &&
+            ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+        ? BigPictureStyleInformation(bigPicture,
+            // largeIcon: largeIcon,
+            contentTitle: fcmNotificationModel.title,
+            htmlFormatContentTitle: true,
+            summaryText: ValueHandler()
+                    .isTextNotEmptyOrNull(fcmNotificationModel.message)
+                ? "${fcmNotificationModel.message}<br>${fcmNotificationModel.bigText}"
+                : fcmNotificationModel.bigText,
+            htmlFormatSummaryText: true)
+        : bigPicture != null &&
+                !ValueHandler()
+                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+            ? BigPictureStyleInformation(bigPicture,
+                // largeIcon: largeIcon,
+                contentTitle: fcmNotificationModel.title,
+                htmlFormatContentTitle: true,
+                summaryText: fcmNotificationModel.message,
+                htmlFormatSummaryText: true)
+            : ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+                ? BigTextStyleInformation(
+                    fcmNotificationModel.bigText ?? "",
+                    htmlFormatBigText: true,
+                    contentTitle: fcmNotificationModel.title,
+                    htmlFormatContentTitle: true,
+                    summaryText: fcmNotificationModel.message,
+                    htmlFormatSummaryText: true,
+                  )
+                : null;
 
-    if (fcmNotificationModel.imageUrl == null &&
-        fcmNotificationModel.bigText == null) {
-      AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        channelDescription: channel.description,
-      );
-      NotificationDetails notificationDetails =
-          NotificationDetails(android: androidNotificationDetails);
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          "${fcmNotificationModel.title}",
-          "${fcmNotificationModel.message}",
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.imageUrl != null &&
-        fcmNotificationModel.bigText == null) {
-      final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
-          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!));
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(channel.id, channel.name,
+            channelDescription: channel.description,
+            styleInformation: styleInformation);
 
-      final BigPictureStyleInformation bigPictureStyleInformation =
-          BigPictureStyleInformation(bigPicture,
-              // largeIcon: largeIcon,
-              contentTitle: "${fcmNotificationModel.title}",
-              htmlFormatContentTitle: true,
-              summaryText: "${fcmNotificationModel.message}",
-              htmlFormatSummaryText: true);
+    NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
 
-      final AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(channel.id, channel.name,
-              channelDescription: channel.description,
-              styleInformation: bigPictureStyleInformation);
-      final NotificationDetails notificationDetails =
-          NotificationDetails(android: androidNotificationDetails);
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          "${fcmNotificationModel.title}",
-          "${fcmNotificationModel.message}",
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.bigText != null &&
-        fcmNotificationModel.imageUrl == null) {
-      final AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(channel.id, channel.name,
-              channelDescription: channel.description,
-              styleInformation: bigTextStyleInformation);
-      final NotificationDetails notificationDetails =
-          NotificationDetails(android: androidNotificationDetails);
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          "${fcmNotificationModel.title}",
-          fcmNotificationModel.message ?? "",
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    } else if (fcmNotificationModel.bigText != null &&
-        fcmNotificationModel.imageUrl != null) {
-      final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
-          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!));
-
-      final BigPictureStyleInformation bigPictureStyleInformationWithBigText =
-          BigPictureStyleInformation(bigPicture,
-              // largeIcon: largeIcon,
-              contentTitle: "${fcmNotificationModel.title}",
-              htmlFormatContentTitle: true,
-              summaryText: "${fcmNotificationModel.bigText}",
-              htmlFormatSummaryText: true);
-      final AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(channel.id, channel.name,
-              channelDescription: channel.description,
-              styleInformation: bigPictureStyleInformationWithBigText);
-      final NotificationDetails notificationDetails =
-          NotificationDetails(android: androidNotificationDetails);
-      await flutterLocalNotificationsPlugin.show(
-          getId(),
-          "${fcmNotificationModel.title}",
-          fcmNotificationModel.message ?? "",
-          notificationDetails,
-          payload: fcmNotificationModel.actionURL);
-    }
+    await flutterLocalNotificationsPlugin.show(
+        getId(),
+        fcmNotificationModel.title ?? "",
+        fcmNotificationModel.message ?? "",
+        notificationDetails,
+        payload: fcmNotificationModel.actionURL);
   }
 
   Future<void> showProgressNotification(
