@@ -134,7 +134,10 @@ class CustomRouterWeb {
       AppLog.e(e, stackTrace: s);
     }
     if (index == 0) {
-      index = html.window.history.length - 1;
+      index = html.window.history.length - 2;
+      if (index <= 0) {
+        index = 1;
+      }
     }
     return index;
   }
