@@ -27,31 +27,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   AppLog.i("On Background Message Id : ${message.messageId}");
 
   await NotificationHandler().initiateNotification();
-  showFlutterNotification(message);
+  NotificationHandler().showFlutterNotification(message);
 }
 
-Future<void> showFlutterNotification(RemoteMessage message) async {
-  var massagePayload = {
-    'Title': message.notification?.title,
-    'Message': Platform.isAndroid
-        ? message.notification?.android?.tag
-        : message.notification?.apple?.subtitle,
-    'BigText': message.notification?.body,
-    'ImageUrl': Platform.isAndroid
-        ? message.notification?.android?.imageUrl
-        : message.notification?.apple?.imageUrl,
-    'ActionURL': message.data['ActionURL']
-  };
 
-  FcmNotificationModel fcmNotificationModel =
-      FcmNotificationModel.fromJson(massagePayload);
-
-  if (Platform.isAndroid && fcmNotificationModel.title != null) {
-    NotificationHandler().showNotificationAndroid(fcmNotificationModel);
-  } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-    NotificationHandler().showNotificationIos(fcmNotificationModel);
-  }
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +39,7 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    showFlutterNotification(message);
+    NotificationHandler().showFlutterNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
