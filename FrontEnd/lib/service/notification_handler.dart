@@ -294,7 +294,7 @@ class NotificationHandler {
       final NotificationDetails notificationDetails = NotificationDetails(
           android: androidNotificationDetails, iOS: darwinNotificationDetails);
       await flutterLocalNotificationsPlugin.show(
-          progressId, 'Downloading .... ', '', notificationDetails,
+          progressId, 'Loading .... ', '', notificationDetails,
           payload: 'item x');
     });
   }
