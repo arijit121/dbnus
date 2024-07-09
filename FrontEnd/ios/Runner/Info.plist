@@ -79,5 +79,7 @@
 	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 </dict>
 </plist>
