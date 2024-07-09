@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dbnus/service/value_handler.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -163,6 +164,29 @@ class NotificationHandler {
 
       final bool? granted =
           await androidImplementation?.requestNotificationsPermission();
+    }
+  }
+
+  Future<void> showFlutterNotification(RemoteMessage message) async {
+    var massagePayload = {
+      'Title': message.notification?.title,
+      'Message': Platform.isAndroid
+          ? message.notification?.android?.tag
+          : message.notification?.apple?.subtitle,
+      'BigText': message.notification?.body,
+      'ImageUrl': Platform.isAndroid
+          ? message.notification?.android?.imageUrl
+          : message.notification?.apple?.imageUrl,
+      'ActionURL': message.data['ActionURL']
+    };
+
+    FcmNotificationModel fcmNotificationModel =
+        FcmNotificationModel.fromJson(massagePayload);
+
+    if (Platform.isAndroid && fcmNotificationModel.title != null) {
+      showNotificationAndroid(fcmNotificationModel);
+    } else if (Platform.isIOS && fcmNotificationModel.title != null) {
+      showNotificationIos(fcmNotificationModel);
     }
   }
 
