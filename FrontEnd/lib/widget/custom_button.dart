@@ -119,14 +119,14 @@ class CustomIconButton extends StatelessWidget {
 class CustomGOEButton extends StatelessWidget {
   const CustomGOEButton(
       {super.key,
-      required this.onPressed,
-      required this.child,
-      this.borderColor,
-      this.backGroundColor,
-      this.radius,
-      this.size = const Size(88, 36),
-      this.gradient,
-      this.padding});
+        required this.onPressed,
+        required this.child,
+        this.borderColor,
+        this.backGroundColor,
+        this.radius,
+        this.size = const Size(88, 36),
+        this.gradient,
+        this.padding});
 
   final void Function()? onPressed;
   final Widget child;
@@ -156,8 +156,8 @@ class CustomGOEButton extends StatelessWidget {
                 color: backGroundColor,
                 border: borderColor != null
                     ? Border.all(
-                        color: borderColor!,
-                      )
+                  color: borderColor!,
+                )
                     : null,
               ),
               padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
