@@ -10,6 +10,7 @@ import '../storage/localCart/bloc/local_cart_bloc.dart';
 import '../storage/localCart/model/cart_service_model.dart';
 import '../storage/localCart/repo/local_cart_repo.dart';
 import '../utils/text_utils.dart';
+import 'custom_ui.dart';
 
 // ignore: must_be_immutable
 class CustomElevatedButton extends StatelessWidget {
@@ -116,26 +117,27 @@ class CustomIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return backgroundColor != null
-        ? IconButton.filled(
-            icon: icon,
-            color: color,
-            onPressed: onPressed,
-            constraints: const BoxConstraints(),
-            style: IconButton.styleFrom(
-              padding: padding ?? const EdgeInsets.all(4.0),
-              backgroundColor: backgroundColor,
-              iconSize: iconSize,
-            ))
-        : IconButton(
-            icon: icon,
-            color: color,
-            onPressed: onPressed,
-            constraints: const BoxConstraints(),
-            style: IconButton.styleFrom(
-              padding: padding ?? const EdgeInsets.all(4.0),
-              iconSize: iconSize,
-            ));
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        onTap: onPressed,
+        child: CustomContainer(
+          borderRadius: BorderRadius.circular(50),
+          color: backgroundColor,
+          padding: padding ?? const EdgeInsets.all(4.0),
+          child: IconTheme.merge(
+            data: IconThemeData(
+              size: iconSize,
+              color: color,
+            ),
+            child: icon,
+          ),
+        ),
+      ),
+    );
   }
 }
 
