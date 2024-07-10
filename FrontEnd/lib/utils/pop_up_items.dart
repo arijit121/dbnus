@@ -180,7 +180,7 @@ class _EmailPickerState extends State<EmailPicker> {
                           validator: Validator().emailValidator)),
                   10.ph,
                   CustomGOEButton(
-                      minimumSize: const Size(80, 35),
+                      size: const Size(80, 35),
                       radius: 10,
                       backGroundColor: Colors.blueAccent,
                       child: CustomText(TextUtils.ok,

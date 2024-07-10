@@ -110,7 +110,7 @@ class CustomIconButton extends StatelessWidget {
 /// Sets the background color of the button (optional, overridden by gradient if provided).
 /// [radius]
 /// Defines the corner radius of the button (defaults to 16 if not specified).
-/// [minimumSize]
+/// [size]
 /// Sets the minimum width and height of the button (defaults to Size(88, 36)).
 /// [gradient]
 /// Applies a gradient background to the button (optional, overrides backGroundColor).
@@ -124,7 +124,7 @@ class CustomGOEButton extends StatelessWidget {
       this.borderColor,
       this.backGroundColor,
       this.radius,
-      this.minimumSize = const Size(88, 36),
+      this.size = const Size(88, 36),
       this.gradient,
       this.padding});
 
@@ -133,7 +133,7 @@ class CustomGOEButton extends StatelessWidget {
   final Color? borderColor;
   final Color? backGroundColor;
   final double? radius;
-  final Size? minimumSize;
+  final Size? size;
   final Gradient? gradient;
   final EdgeInsetsGeometry? padding;
 
@@ -147,11 +147,9 @@ class CustomGOEButton extends StatelessWidget {
             ),
             onTap: onPressed,
             child: Container(
+              height: size?.height,
+              width: size?.width,
               alignment: Alignment.center,
-              constraints: BoxConstraints(
-                minHeight: minimumSize?.height ?? 0,
-                minWidth: minimumSize?.width ?? 0,
-              ),
               decoration: BoxDecoration(
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(radius ?? 16),
