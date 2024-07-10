@@ -195,7 +195,7 @@ class RouterManager {
               12.ph,
               CustomGOEButton(
                 radius: 6,
-                color: Colors.blueAccent,
+                backGroundColor: Colors.blueAccent,
                 onPressed: () {
                   CustomRoute().clearAndNavigate(RouteName.initialView);
                 },

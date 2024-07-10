@@ -74,7 +74,7 @@ class PopUpItems {
         actions: <Widget>[
           CustomGOEButton(
             radius: 10,
-            color: Colors.blueAccent,
+            backGroundColor: Colors.blueAccent,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -182,7 +182,7 @@ class _EmailPickerState extends State<EmailPicker> {
                   CustomGOEButton(
                       minimumSize: const Size(80, 35),
                       radius: 10,
-                      color: Colors.blueAccent,
+                      backGroundColor: Colors.blueAccent,
                       child: CustomText(TextUtils.ok,
                           color: Colors.white, size: 20),
                       onPressed: () {
