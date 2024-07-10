@@ -147,6 +147,7 @@ class CustomGOEButton extends StatelessWidget {
             ),
             onTap: onPressed,
             child: Container(
+              alignment: Alignment.center,
               constraints: BoxConstraints(
                 minHeight: minimumSize?.height ?? 0,
                 minWidth: minimumSize?.width ?? 0,
