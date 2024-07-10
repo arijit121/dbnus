@@ -72,7 +72,7 @@ class PopUpItems {
                 textAlign: TextAlign.start)
             : null,
         actions: <Widget>[
-          CustomElevatedButton(
+          CustomGOEButton(
             radius: 10,
             color: Colors.blueAccent,
             onPressed: () {
@@ -179,7 +179,7 @@ class _EmailPickerState extends State<EmailPicker> {
                           keyboardType: TextInputType.emailAddress,
                           validator: Validator().emailValidator)),
                   10.ph,
-                  CustomElevatedButton(
+                  CustomGOEButton(
                       minimumSize: const Size(80, 35),
                       radius: 10,
                       color: Colors.blueAccent,

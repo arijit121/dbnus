@@ -89,7 +89,7 @@ class LocalCartButtonWidget extends StatelessWidget {
                             size: 18,
                             fontWeight: FontWeight.w600),
                         const Spacer(),
-                        CustomElevatedButton(
+                        CustomGOEButton(
                             radius: 10,
                             color: HexColor.fromHex(ColorConst.green),
                             child: CustomText(TextUtils.go_to_cart,

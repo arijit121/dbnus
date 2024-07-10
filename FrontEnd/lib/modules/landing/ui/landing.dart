@@ -48,12 +48,12 @@ class _LandingUiState extends State<LandingUi> {
                 20.ph,
                 CustomIconButton(icon: const Icon(Icons.abc), onPressed: () {}),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                   child: const CustomText("text"),
                   onPressed: () {},
                 ),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () {},
                     gradient: const LinearGradient(colors: [
                       Colors.red,
@@ -61,7 +61,7 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText("text")),
                 20.ph,
-                CustomOutLineButton(
+                CustomGOEButton(
                   onPressed: () {},
                   child: const CustomText("text"),
                 ),
@@ -71,7 +71,7 @@ class _LandingUiState extends State<LandingUi> {
                 20.ph,
                 const CustomText("text"),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () {
                       DownloadHandler().download(
                           url:
@@ -83,7 +83,7 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText("GlucoseFasting")),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () {
                       DownloadHandler().download(
                           url:
@@ -95,7 +95,7 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText("GlucosePP")),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () {
                       DownloadHandler().download(
                           url:
@@ -107,7 +107,7 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText("LipidProfile")),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () {
                       DownloadHandler().download(
                           url:
@@ -119,7 +119,7 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText("5MB-test")),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () async {
                       ForwardGeocoding? forwardGeocoding = await Geocoding()
                           .forwardGeocoding(
@@ -134,7 +134,7 @@ class _LandingUiState extends State<LandingUi> {
                     child: const CustomText(
                         "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India")),
                 20.ph,
-                CustomElevatedButton(
+                CustomGOEButton(
                     onPressed: () async {
                       ReverseGeocoding? reverseGeocoding = await Geocoding()
                           .reverseGeocoding(
@@ -159,12 +159,12 @@ class _LandingUiState extends State<LandingUi> {
   Widget _largeUiBody({required LandingState state}) => Flexible(
         child: Column(
           children: [
-            CustomElevatedButton(
+            CustomGOEButton(
               child: const CustomText("text"),
               onPressed: () {},
             ),
             20.ph,
-            CustomElevatedButton(
+            CustomGOEButton(
                 onPressed: () {
                   DownloadHandler().download(
                       url:

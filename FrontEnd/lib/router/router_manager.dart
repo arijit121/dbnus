@@ -193,7 +193,7 @@ class RouterManager {
                 size: 20,
               ),
               12.ph,
-              CustomElevatedButton(
+              CustomGOEButton(
                 radius: 6,
                 color: Colors.blueAccent,
                 onPressed: () {
