@@ -1,18 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!--push permission for Android 13 (API Level 33)-->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
 
     <!-- App Permission -->
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <!--push permission for Android 13 (API Level 33)-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -70,7 +69,7 @@
         >
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="dbnus_app" />
+            android:value="high_importance_channel" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />

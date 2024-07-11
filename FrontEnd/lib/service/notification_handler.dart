@@ -14,10 +14,10 @@ import '../data/model/fcm_notification_model.dart';
 import 'redirect_engine.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'dbnus_app', // id
-    'dbnus_fcm', // name
-    description: 'dbnus app fcm notification', // description
-    importance: Importance.high,
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description:
+        'This channel is used for important notifications.',
     ledColor: Colors.white);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();

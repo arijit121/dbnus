@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'service/app_updater.dart';
 
 import 'const/color_const.dart';
-import 'data/model/fcm_notification_model.dart';
 import 'extension/hex_color.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
@@ -23,11 +21,8 @@ import 'utils/text_utils.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  AppLog.i("On Background Message Id : ${message.messageId}");
-
-  await NotificationHandler().initiateNotification();
   NotificationHandler().showFlutterNotification(message);
+  AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
 
