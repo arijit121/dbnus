@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.genupathlabs" "\0"
-            VALUE "FileDescription", "genu" "\0"
+            VALUE "FileDescription", "dbnus" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "genu" "\0"
+            VALUE "InternalName", "dbnus" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.genupathlabs. All rights reserved." "\0"
-            VALUE "OriginalFilename", "genu.exe" "\0"
-            VALUE "ProductName", "genu" "\0"
+            VALUE "OriginalFilename", "dbnus.exe" "\0"
+            VALUE "ProductName", "dbnus" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
