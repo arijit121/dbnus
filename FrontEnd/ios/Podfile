@@ -67,10 +67,10 @@ post_install do |installer|
     end
 end
 
-target 'ImageNotification' do
-  use_frameworks!
-  pod 'Firebase/Messaging'
-  pod 'GoogleUtilities'
-end
+# target 'ImageNotification' do
+#   use_frameworks!
+#   pod 'Firebase/Messaging'
+#   pod 'GoogleUtilities'
+# end
 
 # Avoid use_frameworks! declaration in your Podfile. Contact us at support@webengage.com if you face any issue.
