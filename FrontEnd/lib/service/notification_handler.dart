@@ -13,6 +13,9 @@ import 'package:path_provider/path_provider.dart';
 import '../data/model/fcm_notification_model.dart';
 import 'redirect_engine.dart';
 
+///
+/// Don't change this configuration other wise there will be duplicate notification android.
+///
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
