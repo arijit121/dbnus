@@ -49,7 +49,7 @@ class CustomNetWorkImageView extends StatelessWidget {
         },
         errorBuilder: (_, __, ___) {
           return Image.asset(
-            AssetsConst.genuNoImageLogo,
+            AssetsConst.dbnusNoImageLogo,
             width: width != 0.0 ? width : null,
             height: height != 0.0 ? height : null,
           );
@@ -107,7 +107,7 @@ class CustomAssetImageView extends StatelessWidget {
         },
         errorBuilder: (_, __, ___) {
           return Image.asset(
-            AssetsConst.genuNoImageLogo,
+            AssetsConst.dbnusNoImageLogo,
             width: width != 0.0 ? width : null,
             height: height != 0.0 ? height : null,
           );

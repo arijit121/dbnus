@@ -21,7 +21,7 @@ class InitWidget extends StatelessWidget {
       width: width,
       height: height,
       child: CustomAssetImageView(
-        path: AssetsConst.genuNoImageLogo,
+        path: AssetsConst.dbnusNoImageLogo,
         height: 60,
         width: 60,
       ),

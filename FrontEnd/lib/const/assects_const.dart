@@ -50,7 +50,7 @@ class AssetsConst {
   static String bigenderIcon = "assets/icon/bigender.png";
   static String selectedBigenderIcon = "assets/icon/selectedBigender.png";
   static String starBlackIcon = "assets/icon/starBlack.png";
-  static String genuNoImageLogo = "assets/icon/dbnus-no-image-logo.png";
+  static String dbnusNoImageLogo = "assets/icon/dbnus-no-image-logo.png";
   static String clockIcon = "assets/icon/clock-icon.png";
   static String manageAddressIcon = "assets/icon/manage_address.svg";
   static String termsConditionIcon = "assets/icon/terms_condition.svg";
