@@ -35,6 +35,7 @@ class _LandingUiState extends State<LandingUi> {
           Row(
             children: [
               CustomIconButton(
+                color: Colors.black,
                   icon: const Icon(Icons.menu),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
