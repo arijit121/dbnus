@@ -11,15 +11,16 @@ import '../router_name.dart';
 import 'web/custom_router_web.dart';
 
 class CustomRoute {
+  /// Manual back always return [1] as value in [App].
   void back() {
     if (kIsWeb) {
       bool canBack = CustomRouterWeb().canBack();
       canBack
           ? CustomRouterWeb().back()
-          : CustomRouterWeb().reDirect(RouteName.initialView);
+          : clearAndNavigate(RouteName.initialView);
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop();
+        RouterManager.getInstance.router.pop(1);
       } else {
         clearAndNavigate(RouteName.initialView);
       }
