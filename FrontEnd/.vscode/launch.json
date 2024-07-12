@@ -1,40 +1,44 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "name": "FrontEnd",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main.dart",
-        }, 
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "FrontEnd (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/main.dart"
+        },
         {
             "name": "FrontEnd/Web",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_web.dart",
+            "program": "lib/main_web.dart"
         },
         {
             "name": "FrontEnd/App",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_app.dart",
+            "program": "lib/main_app.dart"
         },
         {
             "name": "FrontEnd/Web (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "program": "lib/main_web.dart",
+            "program": "lib/main_web.dart"
         },
         {
             "name": "FrontEnd/App (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "program": "lib/main_app.dart",
+            "program": "lib/main_app.dart"
         }
     ]
 }
