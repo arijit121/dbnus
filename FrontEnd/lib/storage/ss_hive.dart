@@ -9,7 +9,7 @@ import 'local_preferences.dart';
 
 ///How to use Hive Collection:-<br />
 ///<br />
-///1.BoxCollection collection = [await SsHive().getHiveCollection()];<br />
+///1.BoxCollection collection = [await SsHive.getHiveCollection()];<br />
 ///2.final box = [await collection?.openBox<Map>(name)];<br />
 ///<br />
 ///For get all value all values:-<br />
@@ -26,10 +26,10 @@ import 'local_preferences.dart';
 class SsHive {
   static const String searchBoxKey = "SearchBox";
   static const String productBoxKey = "ProductBox";
-  final String _collectionName = "SsHiveBox";
-  final Set<String> _boxNames = {searchBoxKey, productBoxKey};
+  static const String _collectionName = "SsHiveBox";
+  static const Set<String> _boxNames = {searchBoxKey, productBoxKey};
 
-  Future<BoxCollection> getHiveCollection() async {
+  static Future<BoxCollection> getHiveCollection() async {
     List<int> key = await _getKey();
     String storePath =
         kIsWeb ? "./" : (await getApplicationDocumentsDirectory()).path;
@@ -42,7 +42,7 @@ class SsHive {
     return collection;
   }
 
-  Future<List<int>> _getKey() async {
+  static Future<List<int>> _getKey() async {
     String? encryptionKey = await LocalPreferences()
         .getString(key: LocalPreferences.hiveEncryptionKey);
     if (ValueHandler().isTextNotEmptyOrNull(encryptionKey)) {
