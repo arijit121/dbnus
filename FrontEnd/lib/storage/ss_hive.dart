@@ -29,6 +29,9 @@ class SsHive {
   static const String _collectionName = "SsHiveBox";
   static const Set<String> _boxNames = {searchBoxKey, productBoxKey};
 
+  ///Get hive collection:-<br />
+  ///<br />
+  ///BoxCollection collection = [await SsHive.getHiveCollection()];<br />
   static Future<BoxCollection> getHiveCollection() async {
     List<int> key = await _getKey();
     String storePath =
