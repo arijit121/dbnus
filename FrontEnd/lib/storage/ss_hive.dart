@@ -7,9 +7,25 @@ import 'package:path_provider/path_provider.dart';
 import '../service/value_handler.dart';
 import 'local_preferences.dart';
 
+///How to use Hive Collection:-<br />
+///<br />
+///1.BoxCollection collection = [await SsHive().getHiveCollection()];<br />
+///2.final box = [await collection?.openBox<Map>(name)];<br />
+///<br />
+///For get all value all values:-<br />
+///<br />
+/// [Map<String, Map>? value = await box?.getAllValues();]<br />
+///<br />
+///For add or update data:-<br />
+///<br />
+/// [await box?.put(key, data in Map);]<br />
+///<br />
+///Delete:-<br />
+///<br />
+/// particulate key [await box?.delete(keyId)], for delete whole box [await box?.clear()]<br />
 class SsHive {
-  static String searchBoxKey = "SearchBox";
-  static String productBoxKey = "ProductBox";
+  static const String searchBoxKey = "SearchBox";
+  static const String productBoxKey = "ProductBox";
   final String _collectionName = "SsHiveBox";
   final Set<String> _boxNames = {searchBoxKey, productBoxKey};
 
