@@ -7,6 +7,7 @@ class LocalPreferences {
   static const String pinCodeKey = "pinCode";
   static const String isPinCodeAsked = "isPinCodeAsked";
   static const String browserId = "BrowserId";
+  static const String hiveEncryptionKey = "HiveEncryptionKey";
 
   Future<void> setBool({required String key, required bool value}) async {
     try {
