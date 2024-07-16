@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../extension/spacing.dart';
 
-class CustomStepper extends StatelessWidget {
+class CustomVerticalStepper extends StatelessWidget {
   final List<CustomStepperContent>? customStepperContent;
   final ScrollPhysics? physics;
   final bool shrinkWrap;
   final Color activeLineColor;
   final Color inActiveLineColor;
 
-  const CustomStepper({
+  const CustomVerticalStepper({
     super.key,
     this.customStepperContent,
     this.physics,

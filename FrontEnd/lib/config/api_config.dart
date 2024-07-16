@@ -19,7 +19,7 @@ class ApiConfig {
             contentType: contentType?.value,
           )
         : Headers(
-            browserId: kIsWeb ? "${await AppConfig().getBrowserId()}" : null,
+            browserId: kIsWeb ? "${await AppConfig().getDeviceId()}" : null,
             appType: AppConfig().getAppType(),
             appVersion: await AppConfig().getAppVersion(),
             contentType: contentType?.value,
