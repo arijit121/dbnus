@@ -1,3 +1,4 @@
+import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../const/color_const.dart';
@@ -67,6 +68,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
           : null,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      icon: 0.pw,
       decoration: InputDecoration(
         prefixIcon: prefix,
         suffixIcon: suffix,
