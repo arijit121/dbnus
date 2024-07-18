@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'const/theme_const.dart';
 import 'service/app_updater.dart';
 
 import 'const/color_const.dart';
@@ -47,8 +48,7 @@ Future<void> main() async {
   await NotificationHandler().requestPermissions();
   await NotificationHandler().initiateNotification();
   await DownloadHandler().config();
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.white));
+  SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
@@ -96,11 +96,15 @@ class _MyAppState extends State<MyApp> {
           colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
           brightness: Brightness.light,
+          appBarTheme:
+          AppBarTheme(systemOverlayStyle: ThemeConst.systemOverlayStyle),
         ),
         darkTheme: ThemeData(
           colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
           useMaterial3: true,
           brightness: Brightness.dark,
+          appBarTheme:
+          AppBarTheme(systemOverlayStyle: ThemeConst.systemOverlayStyle),
         ),
         routerConfig: RouterManager.getInstance.router,
       ),

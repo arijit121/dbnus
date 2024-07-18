@@ -37,7 +37,7 @@ class AppConfig {
     return packageInfo.buildNumber;
   }
 
-  Future<String?> getBrowserId() async {
+  Future<String?> _getBrowserId() async {
     String? browserId =
         await LocalPreferences().getString(key: LocalPreferences.browserId);
     if (ValueHandler().isTextNotEmptyOrNull(browserId)) {
@@ -87,7 +87,7 @@ class AppConfig {
   Future<String?> getDeviceId() async {
     try {
       if (kIsWeb) {
-        return null;
+        return await _getBrowserId();
       }
       String? deviceId;
 
