@@ -35,7 +35,7 @@ class _LandingUiState extends State<LandingUi> {
           Row(
             children: [
               CustomIconButton(
-                color: Colors.black,
+                  color: Colors.black,
                   icon: const Icon(Icons.menu),
                   onPressed: () {
                     _scaffoldKey.currentState?.openDrawer();
@@ -176,12 +176,14 @@ class _LandingUiState extends State<LandingUi> {
                   Colors.blue,
                 ]),
                 child: const CustomText("Download")),
-            CustomDropDownFormField<String>(
+            CustomDropdownMenu<String>(
+                hintText: "Please choose val",
                 suffix: const Icon(Icons.keyboard_arrow_down_rounded),
                 onChanged: (_) {},
-                items: customItemList<String>(valueList: [
-                  CustomDropDownModel<String>(value: "test", title: "test")
-                ]))
+                items: List.generate(
+                    10,
+                    (index) => CustomDropDownModel<String>(
+                        value: "test$index", title: "test$index")))
           ],
         ),
       );

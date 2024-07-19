@@ -37,6 +37,212 @@ class CustomMenuDropDown<T> extends StatelessWidget {
   }
 }
 
+class CustomDropdownMenu<T> extends FormField<T> {
+  final List<CustomDropDownModel<T>> items;
+  final void Function(T?)? onChanged;
+  final String? hintText;
+  final Widget? prefix, suffix;
+  final T? value;
+  CustomDropdownMenu({
+    super.key,
+    required this.onChanged,
+    required this.items,
+    this.hintText,
+    this.prefix,
+    this.suffix,
+    this.value,
+    super.validator,
+  }) : super(builder: (FormFieldState<T> field) {
+          return Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            child: Builder(builder: (BuildContext context) {
+              return DropdownMenu<T?>(
+                  menuStyle: const MenuStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll<Color>(Colors.white),
+                  ),
+                  initialSelection: value,
+                  leadingIcon: prefix,
+                  trailingIcon: suffix ??
+                      Icon(Icons.arrow_drop_down,
+                          size: 24,
+                          color: HexColor.fromHex(ColorConst.primaryDark)),
+                  selectedTrailingIcon: suffix != null
+                      ? RotatedBox(
+                          quarterTurns: 2,
+                          child: suffix,
+                        )
+                      : Icon(Icons.arrow_drop_up,
+                          size: 24,
+                          color: HexColor.fromHex(ColorConst.primaryDark)),
+                  hintText: hintText,
+                  textStyle: customizeTextStyle(
+                      fontColor: HexColor.fromHex(ColorConst.primaryDark),
+                      fontSize: 16),
+                  onSelected: onChanged,
+                  dropdownMenuEntries: items
+                      .map((element) => DropdownMenuEntry<T?>(
+                          value: element.value,
+                          label: element.title ?? "",
+                          labelWidget: CustomText(
+                            element.title ?? "",
+                            color: HexColor.fromHex(ColorConst.primaryDark),
+                            size: 16,
+                          )))
+                      .toList(),
+                  inputDecorationTheme: InputDecorationTheme(
+                    errorStyle: customizeTextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontColor: Colors.red),
+                    hintStyle: customizeTextStyle(
+                        fontColor: HexColor.fromHex(ColorConst.grey),
+                        fontSize: 16),
+                    labelStyle: customizeTextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontColor: HexColor.fromHex(ColorConst.color5)),
+                    floatingLabelStyle: customizeTextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 17,
+                        fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 1,
+                      ),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: const BorderSide(
+                        color: Colors.white,
+                        width: 1,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: BorderSide(
+                        color: HexColor.fromHex(ColorConst.grey4),
+                        width: 1,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: const BorderSide(
+                        width: 1,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 1,
+                      ),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 1,
+                      ),
+                    ),
+                  ));
+            }),
+          );
+        });
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return DropdownMenu<T?>(
+  //       menuStyle: const MenuStyle(
+  //         backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+  //       ),
+  //       initialSelection: value,
+  //       leadingIcon: prefix,
+  //       trailingIcon: suffix ??
+  //           Icon(Icons.arrow_drop_down,
+  //               size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+  //       selectedTrailingIcon: suffix != null
+  //           ? RotatedBox(
+  //               quarterTurns: 2,
+  //               child: suffix,
+  //             )
+  //           : Icon(Icons.arrow_drop_up,
+  //               size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+  //       hintText: hintText,
+  //       textStyle: customizeTextStyle(
+  //           fontColor: HexColor.fromHex(ColorConst.primaryDark), fontSize: 16),
+  //       onSelected: onChanged,
+  //       dropdownMenuEntries: items
+  //           .map((element) => DropdownMenuEntry<T?>(
+  //               value: element.value,
+  //               label: element.title ?? "",
+  //               labelWidget: CustomText(
+  //                 element.title ?? "",
+  //                 color: HexColor.fromHex(ColorConst.primaryDark),
+  //                 size: 16,
+  //               )))
+  //           .toList(),
+  //       inputDecorationTheme: InputDecorationTheme(
+  //         errorStyle: customizeTextStyle(
+  //             fontWeight: FontWeight.w400, fontSize: 14, fontColor: Colors.red),
+  //         hintStyle: customizeTextStyle(
+  //             fontColor: HexColor.fromHex(ColorConst.grey), fontSize: 16),
+  //         labelStyle: customizeTextStyle(
+  //             fontWeight: FontWeight.w400,
+  //             fontSize: 14,
+  //             fontColor: HexColor.fromHex(ColorConst.color5)),
+  //         floatingLabelStyle: customizeTextStyle(
+  //             fontWeight: FontWeight.w400,
+  //             fontSize: 17,
+  //             fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
+  //         focusedBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: const BorderSide(
+  //             color: Colors.blue,
+  //             width: 1,
+  //           ),
+  //         ),
+  //         disabledBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: const BorderSide(
+  //             color: Colors.white,
+  //             width: 1,
+  //           ),
+  //         ),
+  //         enabledBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: BorderSide(
+  //             color: HexColor.fromHex(ColorConst.grey4),
+  //             width: 1,
+  //           ),
+  //         ),
+  //         border: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: const BorderSide(
+  //             width: 1,
+  //           ),
+  //         ),
+  //         errorBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: const BorderSide(
+  //             color: Colors.red,
+  //             width: 1,
+  //           ),
+  //         ),
+  //         focusedErrorBorder: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(6.0),
+  //           borderSide: const BorderSide(
+  //             color: Colors.red,
+  //             width: 1,
+  //           ),
+  //         ),
+  //       ));
+  // }
+}
+
 class CustomDropDownFormField<T> extends StatelessWidget {
   final void Function(T?)? onChanged;
   final List<DropdownMenuItem<T>>? items;
@@ -108,11 +314,11 @@ List<DropdownMenuItem<T>> customItemList<T>({
 }) =>
     List.generate(
         valueList.length,
-            (index) => DropdownMenuItem<T>(
-          value: valueList.elementAt(index).value,
-          child: CustomText(valueList.elementAt(index).title ?? '',
-              color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
-        ));
+        (index) => DropdownMenuItem<T>(
+              value: valueList.elementAt(index).value,
+              child: CustomText(valueList.elementAt(index).title ?? '',
+                  color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+            ));
 
 class CustomDropDownModel<T> {
   T? value;
@@ -157,7 +363,7 @@ class CustomMenuAnchor<T> extends StatelessWidget {
       },
       menuChildren: List<MenuItemButton>.generate(
         items.length,
-            (int index) => MenuItemButton(
+        (int index) => MenuItemButton(
           onPressed: () {
             onPressed(items.elementAt(index).value);
           },
