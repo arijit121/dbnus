@@ -2,6 +2,7 @@ import 'package:dbnus/data/model/forward_geocoding.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
+import 'package:dbnus/widget/custom_text_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -176,10 +177,13 @@ class _LandingUiState extends State<LandingUi> {
                   Colors.blue,
                 ]),
                 child: const CustomText("Download")),
+            CustomTextFormField(),
             CustomDropdownMenu<String>(
                 hintText: "Please choose val",
                 suffix: const Icon(Icons.keyboard_arrow_down_rounded),
-                onChanged: (_) {},
+                onChanged: (value) {
+                  AppLog.d(value);
+                },
                 items: List.generate(
                     10,
                     (index) => CustomDropDownModel<String>(
