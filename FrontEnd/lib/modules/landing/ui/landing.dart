@@ -187,7 +187,19 @@ class _LandingUiState extends State<LandingUi> {
                 items: List.generate(
                     10,
                     (index) => CustomDropDownModel<String>(
-                        value: "test$index", title: "test$index")))
+                        value: "test$index", title: "test$index"))),
+            CustomMenuAnchor<String>(
+              // hintText: "Please choose val",
+              // suffix: const Icon(Icons.keyboard_arrow_down_rounded),
+              onPressed: (value) {
+                AppLog.d(value);
+              },
+              items: List.generate(
+                  10,
+                  (index) => CustomDropDownModel<String>(
+                      value: "test$index", title: "test$index")),
+              icon: Icon(Icons.zoom_out_rounded),
+            )
           ],
         ),
       );

@@ -264,30 +264,38 @@ class CustomMenuAnchor<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MenuAnchor(
-      builder:
-          (BuildContext context, MenuController controller, Widget? child) {
-        return IconButton(
-          iconSize: iconSize,
-          color: color,
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          icon: icon,
-        );
-      },
-      menuChildren: List<MenuItemButton>.generate(
-        items.length,
-        (int index) => MenuItemButton(
-          onPressed: () {
-            onPressed(items.elementAt(index).value);
-          },
-          child: CustomText(items.elementAt(index).title ?? "",
-              color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+    return Theme(
+      data: ThemeData(
+        menuTheme: const MenuThemeData(
+          style: MenuStyle(
+              backgroundColor: WidgetStatePropertyAll<Color>(Colors.white)),
+        ),
+      ),
+      child: MenuAnchor(
+        builder:
+            (BuildContext context, MenuController controller, Widget? child) {
+          return IconButton(
+            iconSize: iconSize,
+            color: color,
+            onPressed: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            icon: icon,
+          );
+        },
+        menuChildren: List<MenuItemButton>.generate(
+          items.length,
+          (int index) => MenuItemButton(
+            onPressed: () {
+              onPressed(items.elementAt(index).value);
+            },
+            child: CustomText(items.elementAt(index).title ?? "",
+                color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+          ),
         ),
       ),
     );
