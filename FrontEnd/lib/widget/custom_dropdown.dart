@@ -248,18 +248,14 @@ class CustomDropDownModel<T> {
 
 class CustomMenuAnchor<T> extends StatelessWidget {
   final void Function(T?) onPressed;
-  final Widget icon;
+  final Widget child;
   final List<CustomDropDownModel<T>> items;
-  final double? iconSize;
-  final Color? color;
 
   const CustomMenuAnchor({
     super.key,
     required this.onPressed,
-    required this.icon,
+    required this.child,
     required this.items,
-    this.iconSize,
-    this.color,
   });
 
   @override
@@ -274,17 +270,15 @@ class CustomMenuAnchor<T> extends StatelessWidget {
       child: MenuAnchor(
         builder:
             (BuildContext context, MenuController controller, Widget? child) {
-          return IconButton(
-            iconSize: iconSize,
-            color: color,
-            onPressed: () {
+          return InkWell(
+            onTap: () {
               if (controller.isOpen) {
                 controller.close();
               } else {
                 controller.open();
               }
             },
-            icon: icon,
+            child: child,
           );
         },
         menuChildren: List<MenuItemButton>.generate(

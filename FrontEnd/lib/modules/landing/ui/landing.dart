@@ -177,7 +177,7 @@ class _LandingUiState extends State<LandingUi> {
                   Colors.blue,
                 ]),
                 child: const CustomText("Download")),
-            CustomTextFormField(),
+            const CustomTextFormField(),
             CustomDropdownMenu<String>(
                 hintText: "Please choose val",
                 suffix: const Icon(Icons.keyboard_arrow_down_rounded),
@@ -198,7 +198,10 @@ class _LandingUiState extends State<LandingUi> {
                   10,
                   (index) => CustomDropDownModel<String>(
                       value: "test$index", title: "test$index")),
-              icon: Icon(Icons.zoom_out_rounded),
+              child: const Icon(
+                Icons.zoom_out_rounded,
+                color: Colors.amber,
+              ),
             )
           ],
         ),
