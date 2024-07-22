@@ -68,6 +68,7 @@ class CustomDropdownMenuFormField<T> extends FormField<T> {
                 builder: (BuildContext context, BoxConstraints constraints) {
               return DropdownButtonHideUnderline(
                 child: DropdownMenu<T?>(
+                    errorText: field.errorText,
                     width: constraints.maxWidth,
                     menuStyle: const MenuStyle(
                       backgroundColor:
