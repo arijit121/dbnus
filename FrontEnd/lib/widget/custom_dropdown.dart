@@ -43,13 +43,14 @@ class CustomDropDown<T> extends StatelessWidget {
   }
 }
 
-class CustomDropdownMenu<T> extends FormField<T> {
+class CustomDropdownMenuFormField<T> extends FormField<T> {
   final List<CustomDropDownModel<T>> items;
   final void Function(T?)? onChanged;
   final String? hintText;
   final Widget? prefix, suffix;
   final T? value;
-  CustomDropdownMenu({
+
+  CustomDropdownMenuFormField({
     super.key,
     required this.onChanged,
     required this.items,

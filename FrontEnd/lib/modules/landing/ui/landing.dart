@@ -178,7 +178,7 @@ class _LandingUiState extends State<LandingUi> {
                 ]),
                 child: const CustomText("Download")),
             const CustomTextFormField(),
-            CustomDropdownMenu<String>(
+            CustomDropdownMenuFormField<String>(
                 hintText: "Please choose val",
                 suffix: const Icon(Icons.keyboard_arrow_down_rounded),
                 onChanged: (value) {
