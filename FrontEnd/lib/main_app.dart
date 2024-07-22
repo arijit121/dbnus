@@ -92,20 +92,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: TextUtils.appTitle,
         themeMode: ThemeMode.system,
-        theme: ThemeData(
-          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
-          useMaterial3: true,
-          brightness: Brightness.light,
-          appBarTheme:
-          AppBarTheme(systemOverlayStyle: ThemeConst.systemOverlayStyle),
-        ),
-        darkTheme: ThemeData(
-          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
-          useMaterial3: true,
-          brightness: Brightness.dark,
-          appBarTheme:
-          AppBarTheme(systemOverlayStyle: ThemeConst.systemOverlayStyle),
-        ),
+        theme: ThemeConst.theme,
+        darkTheme: ThemeConst.darkTheme,
         routerConfig: RouterManager.getInstance.router,
       ),
     );

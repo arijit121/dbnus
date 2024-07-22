@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'const/color_const.dart';
+import 'const/theme_const.dart';
 import 'extension/hex_color.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
@@ -73,18 +74,8 @@ class _MyWebAppState extends State<MyWebApp> {
           },
         ),
         themeMode: ThemeMode.system,
-        theme: ThemeData(
-          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
-          useMaterial3: true,
-          brightness: Brightness.light,
-          pageTransitionsTheme: NoTransitionsOnWeb(),
-        ),
-        darkTheme: ThemeData(
-          colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
-          useMaterial3: true,
-          brightness: Brightness.dark,
-          pageTransitionsTheme: NoTransitionsOnWeb(),
-        ),
+        theme: ThemeConst.theme,
+        darkTheme: ThemeConst.darkTheme,
         routerConfig: RouterManager.getInstance.router,
       ),
     );
