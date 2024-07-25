@@ -43,14 +43,16 @@ class CustomDropDown<T> extends StatelessWidget {
   }
 }
 
-class CustomDropdownMenuFormField<T> extends FormField<T> {
+class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final List<CustomDropDownModel<T>> items;
   final void Function(T?)? onChanged;
   final String? hintText;
   final Widget? prefix, suffix;
   final T? value;
+  final String? Function(T?)? validator;
+  final AutovalidateMode? autovalidateMode;
 
-  CustomDropdownMenuFormField({
+  const CustomDropdownMenuFormField({
     super.key,
     required this.onChanged,
     required this.items,
@@ -58,113 +60,202 @@ class CustomDropdownMenuFormField<T> extends FormField<T> {
     this.prefix,
     this.suffix,
     this.value,
+    this.validator,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return _DropdownMenuFormField<T?>(
+          validator: validator,
+          autovalidateMode: autovalidateMode,
+          width: constraints.maxWidth,
+          menuStyle: const MenuStyle(
+            backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+          ),
+          initialSelection: value,
+          leadingIcon: prefix,
+          trailingIcon: suffix ??
+              Icon(Icons.arrow_drop_down,
+                  size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+          selectedTrailingIcon: suffix != null
+              ? RotatedBox(
+                  quarterTurns: 2,
+                  child: suffix,
+                )
+              : Icon(Icons.arrow_drop_up,
+                  size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+          hintText: hintText,
+          textStyle: customizeTextStyle(
+              fontColor: HexColor.fromHex(ColorConst.primaryDark),
+              fontSize: 16),
+          onSelected: onChanged,
+          dropdownMenuEntries: List.generate(
+              items.length,
+              (index) => DropdownMenuEntry<T?>(
+                  value: items.elementAt(index).value,
+                  label: items.elementAt(index).title ?? "",
+                  labelWidget: CustomText(
+                    items.elementAt(index).title ?? "",
+                    color: HexColor.fromHex(ColorConst.primaryDark),
+                    size: 16,
+                  ))),
+          inputDecorationTheme: InputDecorationTheme(
+            errorStyle: customizeTextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                fontColor: Colors.red),
+            hintStyle: customizeTextStyle(
+                fontColor: HexColor.fromHex(ColorConst.grey), fontSize: 16),
+            labelStyle: customizeTextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+                fontColor: HexColor.fromHex(ColorConst.color5)),
+            floatingLabelStyle: customizeTextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 17,
+                fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(
+                color: Colors.blue,
+                width: 1,
+              ),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(
+                color: Colors.white,
+                width: 1,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: BorderSide(
+                color: HexColor.fromHex(ColorConst.grey4),
+                width: 1,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(
+                width: 1,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6.0),
+              borderSide: const BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            ),
+          ));
+    });
+  }
+}
+
+class _DropdownMenuFormField<T> extends FormField<T> {
+  _DropdownMenuFormField({
+    super.key,
+    bool enabled = true,
+    double? width,
+    double? menuHeight,
+    Widget? leadingIcon,
+    Widget? trailingIcon,
+    Widget? label,
+    String? hintText,
+    String? helperText,
+    String? errorText,
+    Widget? selectedTrailingIcon,
+    bool enableFilter = false,
+    bool enableSearch = true,
+    TextStyle? textStyle,
+    InputDecorationTheme? inputDecorationTheme,
+    MenuStyle? menuStyle,
+    this.controller,
+    T? initialSelection,
+    this.onSelected,
+    bool? requestFocusOnTap,
+    EdgeInsets? expandedInsets,
+    required List<DropdownMenuEntry<T>> dropdownMenuEntries,
+    super.autovalidateMode = AutovalidateMode.disabled,
     super.validator,
-    super.autovalidateMode = AutovalidateMode.onUserInteraction,
-  }) : super(builder: (FormFieldState<T> field) {
-          return Focus(
-            canRequestFocus: false,
-            skipTraversal: true,
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return DropdownButtonHideUnderline(
-                child: DropdownMenu<T?>(
-                    errorText: field.errorText,
-                    width: constraints.maxWidth,
-                    menuStyle: const MenuStyle(
-                      backgroundColor:
-                          WidgetStatePropertyAll<Color>(Colors.white),
-                    ),
-                    initialSelection: value,
-                    leadingIcon: prefix,
-                    trailingIcon: suffix ??
-                        Icon(Icons.arrow_drop_down,
-                            size: 24,
-                            color: HexColor.fromHex(ColorConst.primaryDark)),
-                    selectedTrailingIcon: suffix != null
-                        ? RotatedBox(
-                            quarterTurns: 2,
-                            child: suffix,
-                          )
-                        : Icon(Icons.arrow_drop_up,
-                            size: 24,
-                            color: HexColor.fromHex(ColorConst.primaryDark)),
-                    hintText: hintText,
-                    textStyle: customizeTextStyle(
-                        fontColor: HexColor.fromHex(ColorConst.primaryDark),
-                        fontSize: 16),
-                    onSelected: onChanged,
-                    dropdownMenuEntries: List.generate(
-                        items.length,
-                        (index) => DropdownMenuEntry<T?>(
-                            value: items.elementAt(index).value,
-                            label: items.elementAt(index).title ?? "",
-                            labelWidget: CustomText(
-                              items.elementAt(index).title ?? "",
-                              color: HexColor.fromHex(ColorConst.primaryDark),
-                              size: 16,
-                            ))),
-                    inputDecorationTheme: InputDecorationTheme(
-                      errorStyle: customizeTextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          fontColor: Colors.red),
-                      hintStyle: customizeTextStyle(
-                          fontColor: HexColor.fromHex(ColorConst.grey),
-                          fontSize: 16),
-                      labelStyle: customizeTextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          fontColor: HexColor.fromHex(ColorConst.color5)),
-                      floatingLabelStyle: customizeTextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 17,
-                          fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: const BorderSide(
-                          color: Colors.blue,
-                          width: 1,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: BorderSide(
-                          color: HexColor.fromHex(ColorConst.grey4),
-                          width: 1,
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: const BorderSide(
-                          width: 1,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: const BorderSide(
-                          color: Colors.red,
-                          width: 1,
-                        ),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: const BorderSide(
-                          color: Colors.red,
-                          width: 1,
-                        ),
-                      ),
-                    )),
+  }) : super(
+            initialValue: initialSelection,
+            builder: (FormFieldState<T> field) {
+              final _DropdownMenuFormFieldState<T> state =
+                  field as _DropdownMenuFormFieldState<T>;
+              void onSelectedHandler(T? value) {
+                field.didChange(value);
+                onSelected?.call(value);
+              }
+
+              return DropdownMenu<T>(
+                key: key,
+                enabled: enabled,
+                width: width,
+                menuHeight: menuHeight,
+                leadingIcon: leadingIcon,
+                trailingIcon: trailingIcon,
+                label: label,
+                hintText: hintText,
+                helperText: helperText,
+                errorText: state.errorText,
+                selectedTrailingIcon: selectedTrailingIcon,
+                enableFilter: enableFilter,
+                enableSearch: enableSearch,
+                textStyle: textStyle,
+                inputDecorationTheme: inputDecorationTheme,
+                menuStyle: menuStyle,
+                controller: controller,
+                initialSelection: state.value,
+                onSelected: onSelectedHandler,
+                requestFocusOnTap: requestFocusOnTap,
+                expandedInsets: expandedInsets,
+                dropdownMenuEntries: dropdownMenuEntries,
               );
-            }),
-          );
-        });
+            });
+
+  final ValueChanged<T?>? onSelected;
+
+  final TextEditingController? controller;
+
+  @override
+  FormFieldState<T> createState() => _DropdownMenuFormFieldState<T>();
+}
+
+class _DropdownMenuFormFieldState<T> extends FormFieldState<T> {
+  _DropdownMenuFormField<T> get _dropdownMenuFormField =>
+      widget as _DropdownMenuFormField<T>;
+
+  @override
+  void didChange(T? value) {
+    super.didChange(value);
+    _dropdownMenuFormField.onSelected!(value);
+  }
+
+  @override
+  void didUpdateWidget(_DropdownMenuFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      setValue(widget.initialValue);
+    }
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    _dropdownMenuFormField.onSelected!(value);
+  }
 }
 
 class CustomDropDownFormField<T> extends StatelessWidget {
