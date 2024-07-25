@@ -270,8 +270,7 @@ class CustomMenuAnchor<T> extends StatelessWidget {
         ),
       ),
       child: MenuAnchor(
-        builder:
-            (BuildContext context, MenuController controller, Widget? child) {
+        builder: (BuildContext context, MenuController controller, Widget? _) {
           return InkWell(
             onTap: () {
               if (controller.isOpen) {
