@@ -174,7 +174,6 @@ class _DropdownMenuFormField<T> extends FormField<T> {
     Widget? label,
     String? hintText,
     String? helperText,
-    String? errorText,
     Widget? selectedTrailingIcon,
     bool enableFilter = false,
     bool enableSearch = true,
