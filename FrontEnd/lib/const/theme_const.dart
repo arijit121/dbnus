@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +12,7 @@ class ThemeConst {
       systemStatusBarContrastEnforced: true);
 
   static ThemeData theme = ThemeData(
+    pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
     colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
@@ -18,9 +20,32 @@ class ThemeConst {
   );
 
   static ThemeData darkTheme = ThemeData(
+    pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
     colorSchemeSeed: HexColor.fromHex(ColorConst.baseHexColor),
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.dark,
     appBarTheme: AppBarTheme(systemOverlayStyle: systemOverlayStyle),
   );
+}
+
+class NoTransitionsOnWeb extends PageTransitionsTheme {
+  @override
+  Widget buildTransitions<T>(
+    route,
+    context,
+    animation,
+    secondaryAnimation,
+    child,
+  ) {
+    if (kIsWeb) {
+      return child;
+    }
+    return super.buildTransitions(
+      route,
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    );
+  }
 }

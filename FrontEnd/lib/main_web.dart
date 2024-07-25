@@ -81,24 +81,4 @@ class _MyWebAppState extends State<MyWebApp> {
   }
 }
 
-class NoTransitionsOnWeb extends PageTransitionsTheme {
-  @override
-  Widget buildTransitions<T>(
-    route,
-    context,
-    animation,
-    secondaryAnimation,
-    child,
-  ) {
-    if (kIsWeb) {
-      return child;
-    }
-    return super.buildTransitions(
-      route,
-      context,
-      animation,
-      secondaryAnimation,
-      child,
-    );
-  }
-}
+
