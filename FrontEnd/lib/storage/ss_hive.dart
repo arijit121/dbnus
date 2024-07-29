@@ -26,6 +26,7 @@ import 'local_preferences.dart';
 class SsHive {
   static const String searchBoxKey = "SearchBox";
   static const String productBoxKey = "ProductBox";
+  static const String serviceBoxKey = "ServiceBox";
   static const String _collectionName = "SsHiveBox";
   static const Set<String> _boxNames = {searchBoxKey, productBoxKey};
 

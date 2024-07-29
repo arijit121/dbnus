@@ -1,11 +1,25 @@
+import 'dart:convert';
+
+import 'package:hive/hive.dart';
+
 import '../../../extension/logger_extension.dart';
-import 'package:localstore/localstore.dart';
+// import 'package:localstore/localstore.dart';
 
 import '../../../data/model/service_model.dart';
+import '../../ss_hive.dart';
 import '../model/cart_service_model.dart';
 
 class LocalCartRepo {
-  String path = "servicePath";
+  LocalCartRepo._();
+
+  static final instance = LocalCartRepo._().._init();
+
+  String name = SsHive.serviceBoxKey;
+  BoxCollection? collection;
+
+  Future<void> _init() async {
+    collection = await SsHive.getHiveCollection();
+  }
 
   bool checkIfServiceContainInCart(
       {required List<CartServiceModel> allServiceList,
@@ -72,21 +86,41 @@ class LocalCartRepo {
 
   Future<List<CartServiceModel>> getStoreDataList() async {
     try {
-      final db = Localstore.instance;
-      Iterable<MapEntry<String, dynamic>>? json =
-          (await db.collection(path).get())?.entries;
-      List<CartServiceModel> serviceList = <CartServiceModel>[];
-      if (json?.isNotEmpty == true) {
-        json?.forEach((v) {
-          serviceList
-              .add(CartServiceModel.fromJson(v.value as Map<String, dynamic>));
+      List<CartServiceModel> resultList = [];
+      if (collection == null) {
+        await _init();
+      }
+      final productBox = await collection?.openBox<Map>(name);
+      Map<String, Map>? value = await productBox?.getAllValues();
+
+      if (value?.isNotEmpty == true) {
+        value?.forEach((key, v) {
+          String value = json.encode(v);
+          resultList.add(CartServiceModel.fromJson(json.decode(value)));
         });
       }
-      return serviceList;
+
+      return resultList;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return [];
     }
+    // try {
+    //   final db = Localstore.instance;
+    //   Iterable<MapEntry<String, dynamic>>? json =
+    //       (await db.collection(path).get())?.entries;
+    //   List<CartServiceModel> serviceList = <CartServiceModel>[];
+    //   if (json?.isNotEmpty == true) {
+    //     json?.forEach((v) {
+    //       serviceList
+    //           .add(CartServiceModel.fromJson(v.value as Map<String, dynamic>));
+    //     });
+    //   }
+    //   return serviceList;
+    // } catch (e, stacktrace) {
+    //   AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    //   return [];
+    // }
   }
 
   List<Services> getAssociatedService({ServiceModel? serviceModel}) {
@@ -114,20 +148,27 @@ class LocalCartRepo {
   }
 
   Future<void> addServiceToCart(CartServiceModel serviceModel) async {
-    final db = Localstore.instance;
-    await db
-        .collection(path)
-        .doc(serviceModel.serviceId)
-        .set(serviceModel.toJson());
+    if (collection == null) {
+      await _init();
+    }
+    final productBox = await collection?.openBox<Map>(name);
+    await productBox?.put(serviceModel.serviceId ?? "",
+        json.decode((serviceModel.toJson()).toString()));
   }
 
   Future<void> removeServiceFromCart(String serviceId) async {
-    final db = Localstore.instance;
-    await db.collection(path).doc(serviceId).delete();
+    if (collection == null) {
+      await _init();
+    }
+    final productBox = await collection?.openBox<Map>(name);
+    await productBox?.delete(serviceId);
   }
 
   Future<void> clearCart() async {
-    final db = Localstore.instance;
-    await db.collection(path).delete();
+    if (collection == null) {
+      await _init();
+    }
+    final productBox = await collection?.openBox<Map>(name);
+    await productBox?.clear();
   }
 }

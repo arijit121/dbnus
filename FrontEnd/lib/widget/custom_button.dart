@@ -198,7 +198,7 @@ Widget customCartButton(
     BlocBuilder<LocalCartBloc, LocalCartState>(
       builder: (context, state) {
         return Container(
-          child: LocalCartRepo().checkIfServiceContainInCart(
+          child: LocalCartRepo.instance.checkIfServiceContainInCart(
                   allServiceList: state.serviceList.value ?? [],
                   serviceId: "${serviceModel?.serviceId}")
               ? CustomGOEButton(
@@ -212,7 +212,7 @@ Widget customCartButton(
                       color: Colors.white,
                       size: 14,
                       fontWeight: FontWeight.w700))
-              : LocalCartRepo().checkIfPackageServiceContainInCart(
+              : LocalCartRepo.instance.checkIfPackageServiceContainInCart(
                       allServiceList: state.serviceList.value ?? [],
                       serviceModel: serviceModel)
                   ? Container()
@@ -224,7 +224,7 @@ Widget customCartButton(
                                 price: serviceModel?.offerFees ??
                                     serviceModel?.fees ??
                                     0.0,
-                                listOfPackageService: LocalCartRepo()
+                                listOfPackageService: LocalCartRepo.instance
                                     .getAssociatedService(
                                         serviceModel: serviceModel)
                                     .map((e) => CartPackageService(

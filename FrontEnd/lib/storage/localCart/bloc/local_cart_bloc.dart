@@ -17,7 +17,7 @@ class LocalCartBloc extends Bloc<LocalCartEvent, LocalCartState> {
     on<LocalCartEvent>((event, emit) async {
       if (event is InItLocalCartEvent) {
         List<CartServiceModel> serviceList =
-            await LocalCartRepo().getStoreDataList();
+            await LocalCartRepo.instance.getStoreDataList();
         emit(state.copyWith(
             serviceList: DynamicBlocData<List<CartServiceModel>>.loading()));
         emit(state.copyWith(
@@ -31,27 +31,27 @@ class LocalCartBloc extends Bloc<LocalCartEvent, LocalCartState> {
                 : null));
       } else if (event is AddServiceToCart) {
         List<CartServiceModel> serviceList =
-            await LocalCartRepo().getStoreDataList();
+            await LocalCartRepo.instance.getStoreDataList();
         if (serviceList
             .where(
                 (element) => element.serviceId == event.serviceModel.serviceId)
             .isEmpty) {
-          await LocalCartRepo().addServiceToCart(event.serviceModel);
+          await LocalCartRepo.instance.addServiceToCart(event.serviceModel);
 
           add(InItLocalCartEvent());
         }
       } else if (event is RemoveServiceFromCart) {
         List<CartServiceModel> serviceList =
-            await LocalCartRepo().getStoreDataList();
+            await LocalCartRepo.instance.getStoreDataList();
         if (serviceList
             .where((element) => element.serviceId == event.serviceId)
             .isNotEmpty) {
-          await LocalCartRepo().removeServiceFromCart(event.serviceId);
+          await LocalCartRepo.instance.removeServiceFromCart(event.serviceId);
 
           add(InItLocalCartEvent());
         }
       } else if (event is ClearCart) {
-        await LocalCartRepo().clearCart();
+        await LocalCartRepo.instance.clearCart();
         add(InItLocalCartEvent());
       }
     });
