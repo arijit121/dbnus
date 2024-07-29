@@ -14,8 +14,6 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
-
   # state management
   equatable: ^2.0.5
   flutter_bloc: ^8.1.4
@@ -85,6 +83,7 @@ dependencies:
   flutter_widget_from_html_core: ^0.15.1
   # dyte_uikit: ^0.7.0
   flutter_inappwebview: ^6.0.0
+  cupertino_icons: ^1.0.2
 
   #payment
   paytm_allinonesdk: ^1.2.4
