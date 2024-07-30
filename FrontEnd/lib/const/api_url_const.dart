@@ -8,5 +8,5 @@ class ApiUrlConst {
 
 
 
-  static String hostUrl = "https://www.stg-googleapis.com/";
+  static String hostUrl = "https://www.stg-googleapis.com";
 }
