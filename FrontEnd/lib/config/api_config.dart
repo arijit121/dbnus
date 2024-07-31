@@ -57,6 +57,7 @@ class ApiConfig {
 enum ContentType {
   json('application/json'),
   urlencoded_char_utf8('application/x-www-form-urlencoded; charset=utf-8'),
+  textplain_char_utf8('text/plain; charset=utf-8'),
   xml('application/xml');
 
   final String value;
