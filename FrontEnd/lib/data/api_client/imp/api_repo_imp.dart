@@ -108,7 +108,8 @@ class ApiRepoImp extends ApiRepo {
                   : request)
               .send()
               .timeout(timeout());
-
+      AppLog.i(
+          tag: "$tag Response Code", response.statusCode, time: DateTime.now());
       if (response.statusCode == 200) {
         String responseReturn = await response.stream.bytesToString();
         AppLog.i(tag: "$tag Response", responseReturn, time: DateTime.now());
