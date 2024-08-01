@@ -5,6 +5,7 @@ import 'package:universal_html/html.dart' as html;
 
 import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/context_service.dart';
+import '../../../service/value_handler.dart';
 import '../../router_manager.dart';
 
 class CustomRouterWeb {
@@ -129,7 +130,8 @@ class CustomRouterWeb {
   int historyIndex() {
     int index = 0;
     try {
-      index = html.window.history.state["serialCount"];
+      index =
+          ValueHandler().intify(html.window.history.state["serialCount"]) ?? 0;
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
