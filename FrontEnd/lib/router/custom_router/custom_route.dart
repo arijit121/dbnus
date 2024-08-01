@@ -78,18 +78,15 @@ class CustomRoute {
                 "/:${keyList.join("/:")}", "/${valueList.join("/")}"))
             .toString();
       }
-      Router.neglect(CurrentContext().context, () async {
-        if (CustomRouterWeb().historyIndex() != 0) {
-          CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
-        }
-        await Future.delayed(
-            Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
-          CustomRouterWeb().goToNameAndOff(name,
-              queryParameters: queryParameters,
-              pathParameters: pathParameters,
-              extra: extra);
-        });
-        JsProvider().changeUrl(path: url);
+      if (CustomRouterWeb().historyIndex() != 0) {
+        CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
+      }
+      Future.delayed(
+          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
+        CustomRouterWeb().goToNameAndOff(name,
+            queryParameters: queryParameters,
+            pathParameters: pathParameters,
+            extra: extra);
       });
     }
   }
