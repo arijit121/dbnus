@@ -32,7 +32,7 @@ class NoDataFound extends StatelessWidget {
             30.ph,
             CustomAssetImageView(
               path: AssetsConst.noRecordFound,
-              // width: width - 20,
+              width: width - 20,
               height: height -
                   (80 +
                       44 +
