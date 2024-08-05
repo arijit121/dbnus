@@ -57,9 +57,16 @@ class ValueHandler {
     return null;
   }
 
-  String dateTimeFormatter({required DateTime dateTime, String? newPattern}) {
-    String date = DateFormat(newPattern ?? "yyyy-MM-dd").format(dateTime);
-    return date;
+  String? dateTimeFormatter({required DateTime? dateTime, String? newPattern}) {
+    try {
+      if (dateTime != null) {
+        String date = DateFormat(newPattern ?? "yyyy-MM-dd").format(dateTime);
+        return date;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 
   /// Fri, 12 may 2023
