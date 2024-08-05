@@ -31,7 +31,7 @@ class OpenService {
   Future<void> openUrl(
       {required Uri uri, LaunchMode mode = LaunchMode.platformDefault}) async {
     try {
-      AppLog.i("OpenUrl==> $uri");
+      AppLog.i("$uri", tag: "OpenUrl");
       await launchUrl(uri, mode: mode);
     } catch (e) {
       AppLog.e('Could not launch $uri', error: e);
@@ -59,5 +59,27 @@ class OpenService {
   Future<ShareResultStatus> share({required String text}) async {
     final result = await Share.share(text);
     return result.status;
+  }
+
+  Future<void> openAddressInMap(
+      {required String address, bool? direction}) async {
+    String url = direction == true
+        ? "https://www.google.com/maps/dir/?api=1&layer=traffic&destination=$address"
+        : "https://www.google.com/maps/search/?api=1&query=$address";
+    await openUrl(
+      uri: Uri.parse(url),
+    );
+  }
+
+  Future<void> openCoordinatesInMap(
+      {required double latitude,
+      required double longitude,
+      bool? direction}) async {
+    String url = direction == true
+        ? "https://www.google.com/maps/dir/?api=1&layer=traffic&destination=$latitude,$longitude"
+        : "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+    await openUrl(
+      uri: Uri.parse(url),
+    );
   }
 }

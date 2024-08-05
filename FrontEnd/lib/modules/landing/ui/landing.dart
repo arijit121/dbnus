@@ -11,6 +11,7 @@ import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
 import '../../../service/geocoding.dart';
+import '../../../service/open_service.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_dropdown.dart';
@@ -202,7 +203,23 @@ class _LandingUiState extends State<LandingUi> {
                 Icons.zoom_out_rounded,
                 color: Colors.amber,
               ),
-            )
+            ),
+            CustomIconButton(
+                color: Colors.black,
+                icon: Icon(Icons.map),
+                onPressed: () {
+                  OpenService()
+                      .openAddressInMap(address: 'Kolkata', direction: true);
+                }),
+            CustomIconButton(
+                color: Colors.black,
+                icon: Icon(Icons.map),
+                onPressed: () {
+                  OpenService().openCoordinatesInMap(
+                    latitude: 22.5354273,
+                    longitude: 88.3473527,
+                  );
+                }),
           ],
         ),
       );
