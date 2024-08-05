@@ -15,6 +15,7 @@ import '../../../service/open_service.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_dropdown.dart';
+import '../../reorderable_list/ui/my_reorderable_list.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
@@ -157,7 +158,8 @@ class _LandingUiState extends State<LandingUi> {
         ],
       );
 
-  Widget _mediumUiBody({required LandingState state}) => Container();
+  Widget _mediumUiBody({required LandingState state}) =>
+      SizedBox(width: ScreenUtils.aw() - 120, child: MyReorderableList());
 
   Widget _largeUiBody({required LandingState state}) => Flexible(
         child: Column(
