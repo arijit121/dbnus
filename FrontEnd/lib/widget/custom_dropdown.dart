@@ -239,7 +239,7 @@ class _DropdownMenuFormFieldState<T> extends FormFieldState<T> {
   @override
   void didChange(T? value) {
     super.didChange(value);
-    _dropdownMenuFormField.onSelected!(value);
+    // _dropdownMenuFormField.onSelected!(value);
   }
 
   @override
