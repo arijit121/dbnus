@@ -153,7 +153,7 @@ class LocalCartRepo {
     }
     final productBox = await collection?.openBox<Map>(name);
     await productBox?.put(serviceModel.serviceId ?? "",
-        json.decode((serviceModel.toJson()).toString()));
+        json.decode(json.encode(serviceModel.toJson()).toString()));
   }
 
   Future<void> removeServiceFromCart(String serviceId) async {
