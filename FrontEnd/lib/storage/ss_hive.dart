@@ -28,7 +28,11 @@ class SsHive {
   static const String productBoxKey = "ProductBox";
   static const String serviceBoxKey = "ServiceBox";
   static const String _collectionName = "SsHiveBox";
-  static const Set<String> _boxNames = {searchBoxKey, productBoxKey};
+  static const Set<String> _boxNames = {
+    searchBoxKey,
+    productBoxKey,
+    serviceBoxKey
+  };
 
   ///Get hive collection:-<br />
   ///<br />
