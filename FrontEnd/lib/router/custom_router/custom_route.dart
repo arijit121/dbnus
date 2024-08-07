@@ -48,36 +48,6 @@ class CustomRoute {
           pathParameters: pathParameters,
           extra: extra);
     } else {
-      RouterManager routerManager = RouterManager.getInstance;
-      RouteBase routeBase = routerManager.router.configuration.routes
-          .firstWhere((element) => element.toString().contains(name),
-              orElse: () {
-        return routerManager.router.configuration.routes.first;
-      });
-      // GoRoute#dda94(name: "/return_order", path: "/return_order/:orderID/:invoiceID")
-      // [GoRoute#e5eb9(name: "/return_order",  path: "/return_order/:orderID/:invoiceID")]
-      List<String> res = routeBase.toString().split(",");
-      String res2 = res.last.replaceAll(")", "");
-      String res3 = res2.replaceAll("path:", "").trim();
-      String res4 = res3.replaceAll('"', "").trim();
-
-      String url = res4;
-
-      if (queryParameters.isNotEmpty) {
-        url = Uri.parse(name)
-            .replace(queryParameters: queryParameters)
-            .toString();
-      }
-
-      if (pathParameters.isNotEmpty && res3.contains("/:")) {
-        String temp = url;
-
-        List<String> keyList = pathParameters.keys.toList();
-        List<String> valueList = pathParameters.values.toList();
-        url = Uri.parse(temp.replaceAll(
-                "/:${keyList.join("/:")}", "/${valueList.join("/")}"))
-            .toString();
-      }
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }

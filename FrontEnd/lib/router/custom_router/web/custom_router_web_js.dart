@@ -18,31 +18,26 @@ class CustomRouterWeb {
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
   }) {
-    String url = name;
-
+    //routerManager.router.configuration.routes.first
+    List<GoRoute> goRouteList = RouterManager
+        .getInstance.router.configuration.routes
+        .map((e) => e as GoRoute)
+        .toList();
+    GoRoute goRoute = goRouteList.firstWhere((element) => element.name == name,
+        orElse: () => GoRoute(path: name));
+    String temp = goRoute.path;
+    String url = temp;
     if (queryParameters.isNotEmpty) {
-      url =
-          Uri.parse(name).replace(queryParameters: queryParameters).toString();
+      url = Uri.parse(url).replace(queryParameters: queryParameters).toString();
     }
 
-    if (pathParameters.isNotEmpty) {
-      List<GoRoute> goRouteList = RouterManager
-          .getInstance.router.configuration.routes
-          .map((e) => e as GoRoute)
-          .toList();
-      GoRoute goRoute = goRouteList.firstWhere(
-          (element) => element.name == name,
-          orElse: () => GoRoute(path: name));
-      String temp = goRoute.path;
-
-      List<String> keyList = pathParameters.keys.toList();
-      List<String> valueList = pathParameters.values.toList();
-      url = Uri.parse(temp.replaceAll(
-              "/:${keyList.join("/:")}", "/${valueList.join("/")}"))
-          .toString();
+    if (pathParameters.isNotEmpty && url.contains("/:")) {
+      pathParameters.forEach((key, value) {
+        url = Uri.parse(url.replaceAll("/:$key", "/$value")).toString();
+      });
     }
     Router.neglect(CurrentContext().context, () {
-      CurrentContext().context.goNamed(name,
+      RouterManager.getInstance.router.goNamed(name,
           queryParameters: queryParameters,
           pathParameters: pathParameters,
           extra: extra);
