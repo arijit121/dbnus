@@ -12,7 +12,7 @@ class CustomRouterWeb {
   /// Go To name page and Replace Current Page
   ///
   ///
-  void goToNameAndOff(
+  void goReplacementNamed(
     String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
@@ -36,13 +36,21 @@ class CustomRouterWeb {
         url = Uri.parse(url.replaceAll("/:$key", "/$value")).toString();
       });
     }
-    Router.neglect(CurrentContext().context, () {
-      RouterManager.getInstance.router.goNamed(name,
-          queryParameters: queryParameters,
-          pathParameters: pathParameters,
-          extra: extra);
-      JsProvider().changeUrl(path: url);
-    });
+    String host =
+        "${html.window.location.protocol}//${html.window.location.host}";
+    String currentUrl = (html.window.location.href).replaceAll(host, "");
+
+    if (url != currentUrl) {
+      Future.delayed(Duration(milliseconds: historyIndex() * 10), () {
+        Router.neglect(CurrentContext().context, () {
+          RouterManager.getInstance.router.goNamed(name,
+              queryParameters: queryParameters,
+              pathParameters: pathParameters,
+              extra: extra);
+          JsProvider().changeUrl(path: url);
+        });
+      });
+    }
   }
 
   /// open the Page in same tab
