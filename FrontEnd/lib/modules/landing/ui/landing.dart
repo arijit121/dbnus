@@ -1,4 +1,6 @@
-import 'package:dbnus/data/model/forward_geocoding.dart';
+import 'package:dbnus/router/router_name.dart';
+
+import '../../../data/model/forward_geocoding.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/service/download_handler.dart';
 import 'package:dbnus/widget/custom_text.dart';
@@ -221,6 +223,12 @@ class _LandingUiState extends State<LandingUi> {
                     latitude: 22.5354273,
                     longitude: 88.3473527,
                   );
+                }),
+            CustomIconButton(
+                color: Colors.black,
+                icon: Icon(Icons.arrow_right_alt_outlined),
+                onPressed: () {
+                  CustomRoute().clearAndNavigate(RouteName.leaderBoard);
                 }),
           ],
         ),
