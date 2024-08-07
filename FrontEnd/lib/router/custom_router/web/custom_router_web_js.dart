@@ -18,30 +18,32 @@ class CustomRouterWeb {
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
   }) {
-    //routerManager.router.configuration.routes.first
-    List<GoRoute> goRouteList = RouterManager
-        .getInstance.router.configuration.routes
-        .map((e) => e as GoRoute)
-        .toList();
-    GoRoute goRoute = goRouteList.firstWhere((element) => element.name == name,
-        orElse: () => GoRoute(path: name));
-    String temp = goRoute.path;
-    String url = temp;
-    if (queryParameters.isNotEmpty) {
-      url = Uri.parse(url).replace(queryParameters: queryParameters).toString();
-    }
+    try {
+      String host =
+          "${html.window.location.protocol}//${html.window.location.host}";
+      String currentUrl = (html.window.location.href).replaceAll(host, "");
 
-    if (pathParameters.isNotEmpty && url.contains("/:")) {
-      pathParameters.forEach((key, value) {
-        url = Uri.parse(url.replaceAll("/:$key", "/$value")).toString();
-      });
-    }
-    String host =
-        "${html.window.location.protocol}//${html.window.location.host}";
-    String currentUrl = (html.window.location.href).replaceAll(host, "");
+      List<GoRoute> goRouteList = RouterManager
+          .getInstance.router.configuration.routes
+          .map((e) => e as GoRoute)
+          .toList();
+      GoRoute goRoute = goRouteList.firstWhere(
+          (element) => element.name == name,
+          orElse: () => GoRoute(path: name));
+      String temp = goRoute.path;
+      String url = temp;
+      if (queryParameters.isNotEmpty) {
+        url =
+            Uri.parse(url).replace(queryParameters: queryParameters).toString();
+      }
 
-    if (url != currentUrl) {
-      Future.delayed(Duration(milliseconds: historyIndex() * 10), () {
+      if (pathParameters.isNotEmpty && url.contains("/:")) {
+        pathParameters.forEach((key, value) {
+          url = Uri.parse(url.replaceAll("/:$key", "/$value")).toString();
+        });
+      }
+
+      if (url != currentUrl) {
         Router.neglect(CurrentContext().context, () {
           RouterManager.getInstance.router.goNamed(name,
               queryParameters: queryParameters,
@@ -49,7 +51,9 @@ class CustomRouterWeb {
               extra: extra);
           JsProvider().changeUrl(path: url);
         });
-      });
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
 

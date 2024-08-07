@@ -51,10 +51,13 @@ class CustomRoute {
       if (CustomRouterWeb().historyIndex() != 0) {
         CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
       }
-      CustomRouterWeb().goReplacementNamed(name,
-          queryParameters: queryParameters,
-          pathParameters: pathParameters,
-          extra: extra);
+      Future.delayed(
+          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
+        CustomRouterWeb().goReplacementNamed(name,
+            queryParameters: queryParameters,
+            pathParameters: pathParameters,
+            extra: extra);
+      });
     }
   }
 
