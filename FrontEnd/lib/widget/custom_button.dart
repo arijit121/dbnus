@@ -119,14 +119,14 @@ class CustomIconButton extends StatelessWidget {
 class CustomGOEButton extends StatelessWidget {
   const CustomGOEButton(
       {super.key,
-        required this.onPressed,
-        required this.child,
-        this.borderColor,
-        this.backGroundColor,
-        this.radius,
-        this.size = const Size(88, 36),
-        this.gradient,
-        this.padding});
+      required this.onPressed,
+      required this.child,
+      this.borderColor,
+      this.backGroundColor,
+      this.radius,
+      this.size = const Size(88, 36),
+      this.gradient,
+      this.padding});
 
   final void Function()? onPressed;
   final Widget child;
@@ -156,8 +156,8 @@ class CustomGOEButton extends StatelessWidget {
                 color: backGroundColor,
                 border: borderColor != null
                     ? Border.all(
-                  color: borderColor!,
-                )
+                        color: borderColor!,
+                      )
                     : null,
               ),
               padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
@@ -186,6 +186,37 @@ class CustomCheckbox extends StatelessWidget {
       activeColor: activeColor ?? Colors.blue,
       value: value,
       shape: isRounded == true ? const CircleBorder() : null,
+      onChanged: onChanged,
+    );
+  }
+}
+
+class CustomRadioButton<T> extends StatelessWidget {
+  const CustomRadioButton(
+      {super.key,
+      required this.value,
+      required this.groupValue,
+      required this.onChanged,
+      this.activeColor});
+
+  final T value;
+  final T? groupValue;
+  final void Function(T?)? onChanged;
+  final Color? activeColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Radio<T>(
+      fillColor: WidgetStateProperty.resolveWith(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return activeColor ?? Colors.blue;
+          }
+          return Colors.grey;
+        },
+      ),
+      value: value,
+      groupValue: groupValue,
       onChanged: onChanged,
     );
   }
