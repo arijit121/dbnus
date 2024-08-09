@@ -159,11 +159,11 @@ class CustomFilePicker {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   if (tag == 3)
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context, 'Camera');
-                      },
-                      child: Expanded(
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context, 'Camera');
+                        },
                         child: Column(
                           children: [
                             const Icon(
@@ -183,11 +183,11 @@ class CustomFilePicker {
                         ),
                       ),
                     ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context, 'Gallery');
-                    },
-                    child: Expanded(
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context, 'Gallery');
+                      },
                       child: Column(
                         children: [
                           const Icon(
@@ -207,11 +207,11 @@ class CustomFilePicker {
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context, 'Folder');
-                    },
-                    child: Expanded(
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context, 'Folder');
+                      },
                       child: Column(
                         children: [
                           const Icon(
