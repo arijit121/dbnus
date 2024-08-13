@@ -18,19 +18,20 @@ import '../service/context_service.dart';
 class CustomFilePicker {
   final int _maxFileSize = 5;
 
-  Future<CustomFile?> pickSingleFile() async {
+  Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
     try {
-      List<String> allowedExtensions = ['jpeg', 'jpg', 'pdf'];
+      List<String> _allowedExtensions =
+          allowedExtensions ?? ['jpeg', 'jpg', 'pdf'];
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: allowedExtensions,
+        allowedExtensions: _allowedExtensions,
       );
 
       if (result != null) {
         PlatformFile platformFile = result.files.single;
         int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
-        if (!allowedExtensions.contains(platformFile.extension)) {
+        if (!_allowedExtensions.contains(platformFile.extension)) {
           PopUpItems().toastMessage("Invalid file type.", Colors.red,
               durationSeconds: 4);
         } else if (sizeInMb > _maxFileSize) {
@@ -54,11 +55,12 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<List<CustomFile>?> pickMultipleFile() async {
+  Future<List<CustomFile>?> pickMultipleFile(
+      {List<String>? allowedExtensions}) async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: ['jpeg', 'jpg', 'pdf'],
+          allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
           allowMultiple: true);
 
       if (result != null) {

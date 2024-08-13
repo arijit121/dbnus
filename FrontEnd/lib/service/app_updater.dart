@@ -18,12 +18,14 @@ import '../widget/custom_text.dart';
 import 'context_service.dart';
 
 class AppUpdater {
-  Future<void> startUpdate() async {
+  Future<void> startUpdate({bool? isForceUpdate}) async {
     try {
       if (Platform.isIOS) {
-        _checkAndUpdateIos();
+        _checkAndUpdateIos(isForceUpdate: isForceUpdate);
       } else if (Platform.isAndroid) {
-        _checkForFlexibleUpdateAndUpdate();
+        isForceUpdate == true
+            ? _checkForImmediateUpdateAndUpdate()
+            : _checkForFlexibleUpdateAndUpdate();
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
