@@ -58,7 +58,7 @@ class PopUpItems {
     );
   }
 
-Future<void> cupertinoPopup({
+  Future<void> cupertinoPopup({
     String? title,
     required void Function()? cancelBtnPresses,
     required void Function()? okBtnPressed,
@@ -113,6 +113,7 @@ Future<void> cupertinoPopup({
     showDialog<String>(
       context: CurrentContext().context,
       builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: CustomText(msg,
             color: HexColor.fromHex(ColorConst.primaryDark),
             size: 13,
@@ -152,22 +153,22 @@ class ToastMassage extends StatelessWidget {
         shadowColor: Colors.grey,
         color: color,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
                   child: CustomAssetImageView(
-                    path: AssetsConst.genuIcon,
-                    height: 40,
-                    width: 40,
+                    path: AssetsConst.dbnusNoImageLogo,
+                    height: 24,
+                    width: 24,
                     color: HexColor.fromHex(ColorConst.deepBlue),
                   )),
               10.pw,

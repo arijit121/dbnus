@@ -1,4 +1,7 @@
+import 'package:dbnus/const/color_const.dart';
+import 'package:dbnus/extension/hex_color.dart';
 import 'package:dbnus/router/router_name.dart';
+import 'package:dbnus/utils/pop_up_items.dart';
 
 import '../../../data/model/forward_geocoding.dart';
 import 'package:dbnus/extension/spacing.dart';
@@ -229,6 +232,13 @@ class _LandingUiState extends State<LandingUi> {
                 icon: Icon(Icons.arrow_right_alt_outlined),
                 onPressed: () {
                   CustomRoute().clearAndNavigate(RouteName.leaderBoard);
+                }),
+            CustomIconButton(
+                color: Colors.black,
+                icon: Icon(Icons.add_box),
+                onPressed: () {
+                  PopUpItems().toastMessage("Show tost msg..",
+                      HexColor.fromHex(ColorConst.primaryDark));
                 }),
           ],
         ),
