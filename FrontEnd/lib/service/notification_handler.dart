@@ -19,8 +19,7 @@ import 'redirect_engine.dart';
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.',
+    description: 'This channel is used for important notifications.',
     ledColor: Colors.white);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -172,14 +171,10 @@ class NotificationHandler {
 
   Future<void> showFlutterNotification(RemoteMessage message) async {
     var massagePayload = {
-      'Title': message.notification?.title,
-      'Message': Platform.isAndroid
-          ? message.notification?.android?.tag
-          : message.notification?.apple?.subtitle,
-      'BigText': message.notification?.body,
-      'ImageUrl': Platform.isAndroid
-          ? message.notification?.android?.imageUrl
-          : message.notification?.apple?.imageUrl,
+      'Title': message.data['title'],
+      'Message': message.data['message'],
+      'BigText': message.data['body'],
+      'ImageUrl': message.data['image'],
       'ActionURL': message.data['ActionURL']
     };
 
