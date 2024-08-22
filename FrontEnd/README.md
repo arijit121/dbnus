@@ -11,7 +11,6 @@ flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 
 https://www.figma.com/file/LSOW045UzL7VZtymWvrbzP/Sales-Dashboard-Design-(Community)?type=design&node-id=804-24216&mode=design&t=Nz3iax801ZaHTguw-0
 
-
 Post Man Old
 
 ```
@@ -62,12 +61,11 @@ contentAvailable: true,
 headers: {
 "apns-push-type": "background",
 "apns-priority": "5", // Must be 5 when contentAvailable is set to true.
-"apns-topic": "com.******.presence", // bundle identifier
+"apns-topic": "com.******.presence", // bundle identifier "apns-topic": "io.flutter.plugins.firebase.messaging"
 },
 },
 });
 ```
-
 
 On Android, set the priority field to high.
 On Apple (iOS & macOS), set the content-available field to true.
