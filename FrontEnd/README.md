@@ -40,7 +40,7 @@ V1 admin sdk
 
 ```
 Notification Sample Payload:
-{
+
 admin.messaging().send({
 token: "device token",
 data: {
