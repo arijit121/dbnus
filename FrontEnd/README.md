@@ -61,11 +61,7 @@ contentAvailable: true,
 headers: {
 "apns-push-type": "background",
 "apns-priority": "5", // Must be 5 when contentAvailable is set to true.
-<<<<<<< HEAD
-"apns-topic": "com.******.presence", // bundle identifier "apns-topic": "io.flutter.plugins.firebase.messaging"
-=======
 "apns-topic": "com.******.presence", // bundle identifier "apns-topic": "io.flutter.plugins.firebase.messaging",
->>>>>>> d0fbeaeb177c7167801c406cddd3ba91b4484863
 },
 },
 });
