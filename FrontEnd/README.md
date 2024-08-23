@@ -11,7 +11,6 @@ flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 
 https://www.figma.com/file/LSOW045UzL7VZtymWvrbzP/Sales-Dashboard-Design-(Community)?type=design&node-id=804-24216&mode=design&t=Nz3iax801ZaHTguw-0
 
-
 Post Man Old
 
 ```
@@ -41,7 +40,7 @@ V1 admin sdk
 
 ```
 Notification Sample Payload:
-{
+
 admin.messaging().send({
 token: "device token",
 data: {
@@ -70,7 +69,6 @@ headers: {
 },
 });
 ```
-
 
 On Android, set the priority field to high.
 On Apple (iOS & macOS), set the content-available field to true.
