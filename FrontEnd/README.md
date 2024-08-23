@@ -46,7 +46,10 @@ admin.messaging().send({
 token: "device token",
 data: {
 "title": "Silent Notification",
-"body": "Hello World!",
+"message":"test",
+"body": "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
+"image": "https://res.genupathlabs.com/genu_path_lab/GenuPushImage/900X450_1695990869.jpg",
+"ActionURL": "http://gplab.in/m04oLk"
 },
 // Set Android priority to "high"
 android: {
