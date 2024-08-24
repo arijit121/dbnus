@@ -71,5 +71,5 @@ app.post("/fcm-send", async (req: Request, res: Response) => {
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(port, () => {
-  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, "server");
+  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, {tag:"server"});
 });
