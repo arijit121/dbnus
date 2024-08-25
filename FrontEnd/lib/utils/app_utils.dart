@@ -37,9 +37,17 @@ class AppUtils {
   }
 
   double gridViewRation(
-      {required num elementWidth, required num elementHeight, num? extra}) {
+      {required num elementWidth,
+      required num elementHeight,
+      num? extra,
+      required double crossAxisSpacing}) {
+    num valExtra = extra ?? 0;
     int valGridViewCount =
         gridViewCount(elementWidth: elementWidth, extra: extra);
-    return (ScreenUtils.nw() / valGridViewCount) / elementHeight;
+    if (valGridViewCount > 1) {
+      valExtra = valExtra + (crossAxisSpacing * (valGridViewCount - 1));
+    }
+
+    return ((ScreenUtils.nw() - valExtra) / valGridViewCount) / elementHeight;
   }
 }
