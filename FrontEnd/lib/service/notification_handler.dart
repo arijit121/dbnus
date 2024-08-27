@@ -251,9 +251,9 @@ class NotificationHandler {
             // largeIcon: largeIcon,
             contentTitle: fcmNotificationModel.title,
             summaryText: ValueHandler()
-                    .isTextNotEmptyOrNull(fcmNotificationModel.message)
-                ? "${fcmNotificationModel.message}${ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText) ? "<br>${fcmNotificationModel.bigText}" : ""}"
-                : fcmNotificationModel.bigText,
+                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+                ? fcmNotificationModel.bigText
+                : fcmNotificationModel.message,
             htmlFormatContentTitle: true,
             htmlFormatSummaryText: true,
             htmlFormatContent: true,
