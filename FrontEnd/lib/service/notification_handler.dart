@@ -246,36 +246,26 @@ class NotificationHandler {
                 await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!))
             : null;
 
-    StyleInformation? styleInformation = bigPicture != null &&
-            ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+    StyleInformation? styleInformation = bigPicture != null
         ? BigPictureStyleInformation(bigPicture,
             // largeIcon: largeIcon,
             contentTitle: fcmNotificationModel.title,
             htmlFormatContentTitle: true,
             summaryText: ValueHandler()
                     .isTextNotEmptyOrNull(fcmNotificationModel.message)
-                ? "${fcmNotificationModel.message}<br>${fcmNotificationModel.bigText}"
+                ? "${fcmNotificationModel.message}${ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText) ? "<br>${fcmNotificationModel.bigText}" : ""}"
                 : fcmNotificationModel.bigText,
             htmlFormatSummaryText: true)
-        : bigPicture != null &&
-                !ValueHandler()
-                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-            ? BigPictureStyleInformation(bigPicture,
-                // largeIcon: largeIcon,
+        : ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
+            ? BigTextStyleInformation(
+                fcmNotificationModel.bigText ?? "",
+                htmlFormatBigText: true,
                 contentTitle: fcmNotificationModel.title,
                 htmlFormatContentTitle: true,
                 summaryText: fcmNotificationModel.message,
-                htmlFormatSummaryText: true)
-            : ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-                ? BigTextStyleInformation(
-                    fcmNotificationModel.bigText ?? "",
-                    htmlFormatBigText: true,
-                    contentTitle: fcmNotificationModel.title,
-                    htmlFormatContentTitle: true,
-                    summaryText: fcmNotificationModel.message,
-                    htmlFormatSummaryText: true,
-                  )
-                : null;
+                htmlFormatSummaryText: true,
+              )
+            : null;
 
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channel.id, channel.name,
