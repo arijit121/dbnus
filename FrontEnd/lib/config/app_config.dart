@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:custom_platform_device_id/platform_device_id.dart';
+// import 'package:custom_platform_device_id/platform_device_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,9 +17,6 @@ import '../utils/screen_utils.dart';
 
 class AppConfig {
   Future<String> getAppVersion() async {
-    if (kIsWeb && kDebugMode) {
-      return "5.0";
-    }
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return packageInfo.version;
   }
@@ -39,7 +36,7 @@ class AppConfig {
 
   Future<String?> _getBrowserId() async {
     String? browserId =
-        await LocalPreferences().getString(key: LocalPreferences.browserId);
+    await LocalPreferences().getString(key: LocalPreferences.browserId);
     if (ValueHandler().isTextNotEmptyOrNull(browserId)) {
       return browserId;
     } else {
@@ -62,8 +59,8 @@ class AppConfig {
         return Platform.isAndroid
             ? "A"
             : Platform.isIOS
-                ? "I"
-                : "";
+            ? "I"
+            : "";
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -91,7 +88,7 @@ class AppConfig {
       }
       String? deviceId;
 
-      deviceId = await PlatformDeviceId.getDeviceId;
+      // deviceId = await PlatformDeviceId.getDeviceId;
       return deviceId;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
