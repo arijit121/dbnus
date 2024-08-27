@@ -250,21 +250,23 @@ class NotificationHandler {
         ? BigPictureStyleInformation(bigPicture,
             // largeIcon: largeIcon,
             contentTitle: fcmNotificationModel.title,
-            htmlFormatContentTitle: true,
             summaryText: ValueHandler()
                     .isTextNotEmptyOrNull(fcmNotificationModel.message)
                 ? "${fcmNotificationModel.message}${ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText) ? "<br>${fcmNotificationModel.bigText}" : ""}"
                 : fcmNotificationModel.bigText,
-            htmlFormatSummaryText: true)
+            htmlFormatContentTitle: true,
+            htmlFormatSummaryText: true,
+            htmlFormatContent: true,
+            htmlFormatTitle: true)
         : ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-            ? BigTextStyleInformation(
-                fcmNotificationModel.bigText ?? "",
-                htmlFormatBigText: true,
+            ? BigTextStyleInformation(fcmNotificationModel.bigText ?? "",
                 contentTitle: fcmNotificationModel.title,
-                htmlFormatContentTitle: true,
                 summaryText: fcmNotificationModel.message,
-                htmlFormatSummaryText: true,
-              )
+                htmlFormatTitle: true,
+                htmlFormatBigText: true,
+                htmlFormatContent: true,
+                htmlFormatContentTitle: true,
+                htmlFormatSummaryText: true)
             : null;
 
     AndroidNotificationDetails androidNotificationDetails =
