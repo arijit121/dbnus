@@ -61,8 +61,8 @@ dependencies:
   geolocator: ^12.0.0
 
   #device info
- # custom_platform_device_id: ^1.0.8
-  device_info_plus: ^10.1.0
+#  custom_platform_device_id: ^1.0.8
+  device_info_plus: ^10.1.2
   universal_io: ^2.2.2
   package_info_plus: ^8.0.0
 

@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:universal_html/html.dart' as html;
 
 import '../data/connection/connection_status.dart';
@@ -27,16 +28,13 @@ class AppConfig {
   }
 
   Future<String> getAppVersionCode() async {
-    if (kIsWeb && kDebugMode) {
-      return "55";
-    }
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     return packageInfo.buildNumber;
   }
 
   Future<String?> _getBrowserId() async {
     String? browserId =
-    await LocalPreferences().getString(key: LocalPreferences.browserId);
+        await LocalPreferences().getString(key: LocalPreferences.browserId);
     if (ValueHandler().isTextNotEmptyOrNull(browserId)) {
       return browserId;
     } else {
@@ -56,11 +54,7 @@ class AppConfig {
       if (kIsWeb) {
         return "M";
       } else {
-        return Platform.isAndroid
-            ? "A"
-            : Platform.isIOS
-            ? "I"
-            : "";
+        return Platform.operatingSystem[0].toUpperCase();
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -73,7 +67,7 @@ class AppConfig {
       if (kIsWeb) {
         return "web";
       } else {
-        return Platform.operatingSystem;
+        return Platform.operatingSystem.toLowerCase();
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -87,6 +81,25 @@ class AppConfig {
         return await _getBrowserId();
       }
       String? deviceId;
+
+      var deviceInfo = DeviceInfoPlugin();
+      if (Platform.isIOS) {
+        // import 'dart:io'
+        var iosDeviceInfo = await deviceInfo.iosInfo;
+        deviceId = iosDeviceInfo.identifierForVendor; // unique ID
+      } else if (Platform.isAndroid) {
+        var androidDeviceInfo = await deviceInfo.androidInfo;
+        deviceId = androidDeviceInfo.id; // unique ID
+      } else if (Platform.isWindows) {
+        var windowsDeviceInfo = await deviceInfo.windowsInfo;
+        deviceId = windowsDeviceInfo.deviceId; // unique ID
+      } else if (Platform.isMacOS) {
+        var macOsDeviceInfo = await deviceInfo.macOsInfo;
+        deviceId = macOsDeviceInfo.systemGUID; // unique ID
+      } else if (Platform.isLinux) {
+        var linuxDeviceInfo = await deviceInfo.linuxInfo;
+        deviceId = linuxDeviceInfo.machineId; // unique ID
+      }
 
       // deviceId = await PlatformDeviceId.getDeviceId;
       return deviceId;

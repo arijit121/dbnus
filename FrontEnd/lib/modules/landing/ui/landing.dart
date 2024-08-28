@@ -1,3 +1,4 @@
+import 'package:dbnus/config/app_config.dart';
 import 'package:dbnus/const/color_const.dart';
 import 'package:dbnus/extension/hex_color.dart';
 import 'package:dbnus/router/router_name.dart';
@@ -156,6 +157,17 @@ class _LandingUiState extends State<LandingUi> {
                     ]),
                     child: const CustomText(
                         "Reverse Geocoding latitude: 22.5754, longitude: 88.4798")),
+                20.ph,
+                CustomGOEButton(
+                    onPressed: () async {
+                      String? deviceId = await AppConfig().getDeviceId();
+                      AppLog.i(deviceId);
+                    },
+                    gradient: const LinearGradient(colors: [
+                      Colors.red,
+                      Colors.blue,
+                    ]),
+                    child: const CustomText("Get Device Id")),
                 20.ph,
               ],
             ),
