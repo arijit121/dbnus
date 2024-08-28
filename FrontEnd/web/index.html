@@ -20,30 +20,25 @@
 
     <title>Test des</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="preload" href="styles.css" as="style" />
-    <link rel="preload" href="main.dart.js" as="script" />
+    <link rel="preload" href="styles.css" as="style"/>
+    <link rel="preload" href="main.dart.js" as="script"/>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-analytics.js";
-        import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messagin.js";
-
-    </script>
     <!--script-->
-    <script src="js/customScript.js"></script>
+    <script src="js/customScript.js" defer></script>
 
     <!--Get CurrentUrl Iframe-->
-    <script src="js/getCurrentUrlIframe.js"></script>
+    <script src="js/getCurrentUrlIframe.js" defer></script>
 
+    <!-- For Fcm-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <!-- For Download-->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" defer></script>
 
     <!--staging-->
     <script crossorigin="anonymous" onload="onScriptLoad();"
-        src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js"
-        type="application/javascript"></script>
+            src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js"
+            type="application/javascript" defer></script>
 
     <!--Live-->
     <!--    <script type="application/javascript"-->
@@ -51,27 +46,28 @@
     <!--            onload="onScriptLoad();" crossorigin="anonymous"></script>-->
 
     <!--paytm-->
-    <script src="js/paytm.js" type="text/javascript"></script>
+    <script src="js/paytm.js" type="text/javascript" defer></script>
 
 
     <!--download-->
-    <script src="js/download.js" type="text/javascript"></script>
+    <script src="js/download.js" type="text/javascript" defer></script>
 
 
     <!-- Import helper to load UI Kit components -->
-    <script type="module">
+    <script type="module" defer>
         import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/@dytesdk/ui-kit@latest/loader/index.es2017.js';
         defineCustomElements();
     </script>
 
     <!-- Import Web Core via CDN too -->
-    <script src="https://cdn.dyte.in/core/dyte.js"></script>
+    <script src="https://cdn.dyte.in/core/dyte.js" defer></script>
 
     <script type="application/javascript"
-        src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"></script>
+            src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
+            defer></script>
 
     <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
+
 </head>
 
 <body>
