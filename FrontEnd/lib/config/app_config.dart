@@ -88,7 +88,7 @@ class AppConfig {
         deviceId = iosDeviceInfo.identifierForVendor; // unique ID
       } else if (Platform.isAndroid) {
         var androidDeviceInfo = await deviceInfo.androidInfo;
-        deviceId = androidDeviceInfo.serialNumber; // unique ID
+        deviceId = androidDeviceInfo.id; // unique ID
       } else if (Platform.isWindows) {
         var windowsDeviceInfo = await deviceInfo.windowsInfo;
         deviceId = windowsDeviceInfo.deviceId; // unique ID
