@@ -3,7 +3,7 @@
 <head>
     <base href="$FLUTTER_BASE_HREF">
     <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="Test Content">
 
@@ -24,51 +24,32 @@
     <link rel="preload" href="main.dart.js" as="script"/>
     <link rel="stylesheet" href="styles.css">
 
-    <!-- For Fcm-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <!--script-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
     <script src="js/customScript.js" defer></script>
-
-    <!--Get CurrentUrl Iframe-->
-    <script src="js/getCurrentUrlIframe.js" defer></script>
-
     <!-- For Download-->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js" defer></script>
-
+    <script src="js/download.js" type="text/javascript" defer></script>
+    <!--paytm-->
     <!--staging-->
     <script crossorigin="anonymous" onload="onScriptLoad();"
             src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js"
             type="application/javascript" defer></script>
-
     <!--Live-->
     <!--    <script type="application/javascript"-->
     <!--            src="https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/SYTREU36121227859525.js"-->
     <!--            onload="onScriptLoad();" crossorigin="anonymous"></script>-->
-
-    <!--paytm-->
     <script src="js/paytm.js" type="text/javascript" defer></script>
-
-
-    <!--download-->
-    <script src="js/download.js" type="text/javascript" defer></script>
-
-
+    <!-- dyte-->
     <!-- Import helper to load UI Kit components -->
     <script type="module" defer>
         import { defineCustomElements } from 'https://cdn.jsdelivr.net/npm/@dytesdk/ui-kit@latest/loader/index.es2017.js';
         defineCustomElements();
     </script>
-
     <!-- Import Web Core via CDN too -->
     <script src="https://cdn.dyte.in/core/dyte.js" defer></script>
-
-    <script type="application/javascript"
-            src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
-            defer></script>
-
-    <!-- This script adds the flutter initialization JS code -->
-
+    <!-- flutter_inappwebview-->
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
 </head>
 
 <body>

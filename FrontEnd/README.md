@@ -9,6 +9,8 @@ flutter build apk -t lib/main_app.dart --no-tree-shake-icons
 
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 
+flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="--disable-web-security"
+
 https://www.figma.com/file/LSOW045UzL7VZtymWvrbzP/Sales-Dashboard-Design-(Community)?type=design&node-id=804-24216&mode=design&t=Nz3iax801ZaHTguw-0
 
 https://pub.dev/packages/android_id
