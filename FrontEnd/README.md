@@ -13,6 +13,8 @@ https://www.figma.com/file/LSOW045UzL7VZtymWvrbzP/Sales-Dashboard-Design-(Commun
 
 https://pub.dev/packages/android_id
 
+firebase deploy
+
 Post Man Old
 
 ```
