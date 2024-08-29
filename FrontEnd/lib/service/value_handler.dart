@@ -23,7 +23,7 @@ class ValueHandler {
           value.toString().trim().isEmpty) {
         return null;
       } else {
-        return int.parse("$value");
+        return num.parse("$value").toInt();
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
