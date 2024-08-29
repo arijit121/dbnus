@@ -258,89 +258,94 @@ class _LandingUiState extends State<LandingUi> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LandingBloc()..add(ChangeIndex(index: widget.index)),
-      child: BlocBuilder<LandingBloc, LandingState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: state.pageIndex.value != 0
-                ? AppBar(
-                    leading: CustomIconButton(
-                        onPressed: () {
-                          CustomRoute().back();
-                        },
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-                  )
-                : null,
-            key: _scaffoldKey,
-            drawer: SafeArea(
-              child: LandingWidget().drawerNavigationRail(
-                  selectedIndex: state.pageIndex.value,
-                  withTitle: true,
-                  chooseIndex: (int value) {
-                    Navigator.of(context).pop();
-                    if (value == 6) {
-                      AppLog.i("Log out");
-                    } else if (kIsWeb) {
-                      LandingUtils.redirect(value);
-                    } else {
-                      context
-                          .read<LandingBloc>()
-                          .add(ChangeIndex(index: value));
-                    }
-                  }),
-            ),
-            backgroundColor: Colors.white,
-            body: SafeArea(
-                child: ResponsiveUI(
-              narrowUI: (BuildContext context) {
-                return _narrowUiBody();
-              },
-              mediumUI: (BuildContext context) {
-                return Row(
-                  children: [
-                    LandingWidget().drawerNavigationRail(
-                        selectedIndex: state.pageIndex.value,
-                        chooseIndex: (int value) {
-                          if (value == 6) {
-                            AppLog.i("Log out");
-                          } else if (kIsWeb) {
-                            LandingUtils.redirect(value);
-                          } else {
-                            context
-                                .read<LandingBloc>()
-                                .add(ChangeIndex(index: value));
-                          }
-                        }),
-                    _mediumUiBody(state: state),
-                  ],
-                );
-              },
-              largeUI: (BuildContext context) {
-                return Row(
-                  children: [
-                    LandingWidget().drawerNavigationRail(
-                        selectedIndex: state.pageIndex.value,
-                        withTitle: true,
-                        chooseIndex: (int value) {
-                          if (value == 6) {
-                            AppLog.i("Log out");
-                          } else if (kIsWeb) {
-                            LandingUtils.redirect(value);
-                          } else {
-                            context
-                                .read<LandingBloc>()
-                                .add(ChangeIndex(index: value));
-                          }
-                        }),
-                    _largeUiBody(state: state),
-                  ],
-                );
-              },
-            )),
-          );
-        },
-      ),
-    );
+    return ResponsiveBuilder(builder: (context, widthState) {
+      return BlocProvider(
+        create: (context) =>
+            LandingBloc()..add(ChangeIndex(index: widget.index)),
+        child: BlocBuilder<LandingBloc, LandingState>(
+          builder: (context, state) {
+            return Scaffold(
+              appBar: state.pageIndex.value != 0
+                  ? AppBar(
+                      leading: CustomIconButton(
+                          onPressed: () {
+                            CustomRoute().back();
+                          },
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+                    )
+                  : null,
+              key: _scaffoldKey,
+              drawer: widthState != WidthState.narrow
+                  ? null
+                  : SafeArea(
+                      child: LandingWidget().drawerNavigationRail(
+                          selectedIndex: state.pageIndex.value,
+                          withTitle: true,
+                          chooseIndex: (int value) {
+                            Navigator.of(context).pop();
+                            if (value == 6) {
+                              AppLog.i("Log out");
+                            } else if (kIsWeb) {
+                              LandingUtils.redirect(value);
+                            } else {
+                              context
+                                  .read<LandingBloc>()
+                                  .add(ChangeIndex(index: value));
+                            }
+                          }),
+                    ),
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                  child: ResponsiveUI(
+                narrowUI: (BuildContext context) {
+                  return _narrowUiBody();
+                },
+                mediumUI: (BuildContext context) {
+                  return Row(
+                    children: [
+                      LandingWidget().drawerNavigationRail(
+                          selectedIndex: state.pageIndex.value,
+                          chooseIndex: (int value) {
+                            if (value == 6) {
+                              AppLog.i("Log out");
+                            } else if (kIsWeb) {
+                              LandingUtils.redirect(value);
+                            } else {
+                              context
+                                  .read<LandingBloc>()
+                                  .add(ChangeIndex(index: value));
+                            }
+                          }),
+                      _mediumUiBody(state: state),
+                    ],
+                  );
+                },
+                largeUI: (BuildContext context) {
+                  return Row(
+                    children: [
+                      LandingWidget().drawerNavigationRail(
+                          selectedIndex: state.pageIndex.value,
+                          withTitle: true,
+                          chooseIndex: (int value) {
+                            if (value == 6) {
+                              AppLog.i("Log out");
+                            } else if (kIsWeb) {
+                              LandingUtils.redirect(value);
+                            } else {
+                              context
+                                  .read<LandingBloc>()
+                                  .add(ChangeIndex(index: value));
+                            }
+                          }),
+                      _largeUiBody(state: state),
+                    ],
+                  );
+                },
+              )),
+            );
+          },
+        ),
+      );
+    });
   }
 }
