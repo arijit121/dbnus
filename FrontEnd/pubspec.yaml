@@ -39,7 +39,7 @@ dependencies:
   encrypt: ^5.0.3
   web: ^0.5.1
   permission_handler: ^11.3.0
-  camera: ^0.11.0
+  camera: ^0.11.0+2
   universal_html: ^2.2.4
 
   #feature
