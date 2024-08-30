@@ -108,3 +108,37 @@ console.log("iframe_id: " + iframeId );
   let result = await promise;
   return result;
 }
+
+//Speech To Text
+
+runSpeechRecog = () => {
+
+            let recognization = new webkitSpeechRecognition();
+            recognization.onstart = () => {
+
+            }
+            recognization.onresult = (e) => {
+               var transcript = e.results[0][0].transcript;
+
+            }
+            recognization.start();
+         }
+
+//Download
+
+function download(url,name){
+          axios({
+              url:url,
+              method:'GET',
+              responseType: 'blob'
+      })
+      .then((response) => {
+             const url = window.URL
+             .createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', name);
+                    document.body.appendChild(link);
+                    link.click();
+      })
+      }
