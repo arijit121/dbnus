@@ -117,8 +117,9 @@ class RouterManager {
       //       return BookingReschedule(
       //         bookingNo: state.pathParameters["booking_no"] ?? "",
       //       );
+      //     } else {
+      //       return errorRoute();
       //     }
-      //     return errorRoute();
       //   },
       // ),
       // GoRoute(
