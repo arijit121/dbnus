@@ -60,8 +60,8 @@ class PopUpItems {
 
   Future<void> cupertinoPopup({
     String? title,
-    required void Function()? cancelBtnPresses,
-    required void Function()? okBtnPressed,
+    void Function()? cancelBtnPresses,
+    void Function()? okBtnPressed,
     String? content,
     String? cancelBtnText,
     String? okBtnText,
@@ -69,12 +69,10 @@ class PopUpItems {
     String? result = await showCupertinoDialog<String>(
       context: CurrentContext().context,
       barrierDismissible: true,
-      builder: (BuildContext context) => Theme(
-        data: ThemeData.light(),
+      builder: (BuildContext context) => CupertinoTheme(
+        data: const CupertinoThemeData(brightness: Brightness.light),
         child: CupertinoAlertDialog(
-          title: title != null
-              ? CustomText(title, color: Colors.black, size: 14)
-              : null,
+          title: title != null ? CustomText(title, size: 14) : null,
           content: content != null
               ? CustomText(content, color: Colors.black, size: 14)
               : null,
@@ -87,13 +85,14 @@ class PopUpItems {
                 child: CustomText(cancelBtnText ?? "Cancel",
                     color: Colors.black, size: 14),
               ),
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.pop(context, "Yes");
-              },
-              child:
-                  CustomText(okBtnText ?? "Ok", color: Colors.black, size: 14),
-            ),
+            if (okBtnPressed != null)
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context, "Yes");
+                },
+                child: CustomText(okBtnText ?? "Ok",
+                    color: Colors.black, size: 14),
+              ),
           ],
         ),
       ),
