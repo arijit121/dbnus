@@ -40,7 +40,7 @@ class AppUtils {
       {required num elementWidth,
       required num elementHeight,
       num? extra,
-      required double crossAxisSpacing}) {
+      double crossAxisSpacing = 0}) {
     num valExtra = extra ?? 0;
     int valGridViewCount =
         gridViewCount(elementWidth: elementWidth, extra: extra);
