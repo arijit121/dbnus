@@ -1,10 +1,9 @@
 part of 'custom_expansion_tile_bloc.dart';
 
-// ignore: must_be_immutable
 class CustomExpansionTileState extends Equatable {
-  bool isExpanded;
+  final bool isExpanded;
 
-  CustomExpansionTileState({
+  const CustomExpansionTileState({
     required this.isExpanded,
   });
 

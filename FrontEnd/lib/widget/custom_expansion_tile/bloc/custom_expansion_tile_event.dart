@@ -7,8 +7,7 @@ sealed class CustomExpansionTileEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// ignore: must_be_immutable
 class ChangeExpanded extends CustomExpansionTileEvent {
-  ChangeExpanded({this.expanded});
-  bool? expanded;
+  const ChangeExpanded({this.expanded});
+  final bool? expanded;
 }

@@ -4,22 +4,22 @@ import '../const/assects_const.dart';
 import '../const/color_const.dart';
 import '../extension/hex_color.dart';
 
-// ignore: must_be_immutable
 class CustomNetWorkImageView extends StatelessWidget {
-  CustomNetWorkImageView(
+  const CustomNetWorkImageView(
       {super.key,
       required this.url,
       this.height,
       this.width,
       this.fit,
-      this.radius});
+      this.radius,
+      this.color});
 
-  String url;
-  double? height;
-  double? width;
-  BoxFit? fit;
-  double? radius;
-
+  final String url;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final double? radius;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -29,6 +29,7 @@ class CustomNetWorkImageView extends StatelessWidget {
         width: width != 0.0 ? width : null,
         height: height != 0.0 ? height : null,
         fit: fit ?? BoxFit.contain,
+        color: color,
         frameBuilder: (BuildContext context, Widget child, int? frame,
             bool? wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded == true) {
@@ -59,9 +60,8 @@ class CustomNetWorkImageView extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class CustomAssetImageView extends StatelessWidget {
-  CustomAssetImageView(
+  const CustomAssetImageView(
       {super.key,
       required this.path,
       this.height,
@@ -70,12 +70,12 @@ class CustomAssetImageView extends StatelessWidget {
       this.radius,
       this.color});
 
-  String path;
-  double? height;
-  double? width;
-  BoxFit? fit;
-  double? radius;
-  Color? color;
+  final String path;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final double? radius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -117,23 +117,22 @@ class CustomAssetImageView extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class CustomSvgAssetImageView extends StatelessWidget {
-  CustomSvgAssetImageView(
+  const CustomSvgAssetImageView(
       {super.key,
-        required this.path,
-        this.height,
-        this.width,
-        this.fit,
-        this.radius,
-        this.color});
+      required this.path,
+      this.height,
+      this.width,
+      this.fit,
+      this.radius,
+      this.color});
 
-  String path;
-  double? height;
-  double? width;
-  BoxFit? fit;
-  double? radius;
-  Color? color;
+  final String path;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final double? radius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +147,10 @@ class CustomSvgAssetImageView extends StatelessWidget {
           height: height != 0.0 ? height : null,
           fit: fit ?? BoxFit.contain,
           colorFilter:
-          color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+              color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
           placeholderBuilder: (
-              BuildContext context,
-              ) {
+            BuildContext context,
+          ) {
             return Container(
               color: HexColor.fromHex(ColorConst.baseHexColor).withOpacity(0.3),
               height: height,
@@ -164,3 +163,48 @@ class CustomSvgAssetImageView extends StatelessWidget {
   }
 }
 
+class CustomSvgNetworkImageView extends StatelessWidget {
+  const CustomSvgNetworkImageView(
+      {super.key,
+      required this.url,
+      this.height,
+      this.width,
+      this.fit,
+      this.radius,
+      this.color});
+
+  final String url;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final double? radius;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width != 0.0 ? width : null,
+      height: height != 0.0 ? height : null,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius ?? 0.0),
+        child: SvgPicture.network(
+          url,
+          width: width != 0.0 ? width : null,
+          height: height != 0.0 ? height : null,
+          fit: fit ?? BoxFit.contain,
+          colorFilter:
+              color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+          placeholderBuilder: (
+            BuildContext context,
+          ) {
+            return Container(
+              color: HexColor.fromHex(ColorConst.baseHexColor).withOpacity(0.3),
+              height: height,
+              width: width,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}

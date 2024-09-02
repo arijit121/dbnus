@@ -19,6 +19,7 @@ import '../../../router/custom_router/custom_route.dart';
 import '../../../service/geocoding.dart';
 import '../../../service/open_service.dart';
 import '../../../utils/screen_utils.dart';
+import '../../../utils/text_utils.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_dropdown.dart';
 import '../../reorderable_list/ui/my_reorderable_list.dart';
@@ -26,11 +27,10 @@ import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
 
-// ignore: must_be_immutable
 class LandingUi extends StatefulWidget {
   LandingUi({super.key, required this.index});
 
-  int index;
+  final int index;
 
   @override
   State<LandingUi> createState() => _LandingUiState();
@@ -256,6 +256,17 @@ class _LandingUiState extends State<LandingUi> {
         ),
       );
 
+  void _onChooseIndex({required int index, required BuildContext context}) {
+    if (LandingUtils.listNavigationBar.elementAt(index).action ==
+        TextUtils.logout) {
+      AppLog.i("Log out");
+    } else if (kIsWeb) {
+      LandingUtils.redirect(index);
+    } else {
+      context.read<LandingBloc>().add(ChangeIndex(index: index));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(builder: (context, widthState) {
@@ -278,20 +289,12 @@ class _LandingUiState extends State<LandingUi> {
               drawer: widthState != WidthState.narrow
                   ? null
                   : SafeArea(
-                      child: LandingWidget().drawerNavigationRail(
+                      child: DrawerNavigationRail(
                           selectedIndex: state.pageIndex.value,
                           withTitle: true,
                           chooseIndex: (int value) {
                             Navigator.of(context).pop();
-                            if (value == 6) {
-                              AppLog.i("Log out");
-                            } else if (kIsWeb) {
-                              LandingUtils.redirect(value);
-                            } else {
-                              context
-                                  .read<LandingBloc>()
-                                  .add(ChangeIndex(index: value));
-                            }
+                            _onChooseIndex(index: value, context: context);
                           }),
                     ),
               backgroundColor: Colors.white,
@@ -303,18 +306,10 @@ class _LandingUiState extends State<LandingUi> {
                 mediumUI: (BuildContext context) {
                   return Row(
                     children: [
-                      LandingWidget().drawerNavigationRail(
+                      DrawerNavigationRail(
                           selectedIndex: state.pageIndex.value,
                           chooseIndex: (int value) {
-                            if (value == 6) {
-                              AppLog.i("Log out");
-                            } else if (kIsWeb) {
-                              LandingUtils.redirect(value);
-                            } else {
-                              context
-                                  .read<LandingBloc>()
-                                  .add(ChangeIndex(index: value));
-                            }
+                            _onChooseIndex(index: value, context: context);
                           }),
                       _mediumUiBody(state: state),
                     ],
@@ -323,19 +318,11 @@ class _LandingUiState extends State<LandingUi> {
                 largeUI: (BuildContext context) {
                   return Row(
                     children: [
-                      LandingWidget().drawerNavigationRail(
+                      DrawerNavigationRail(
                           selectedIndex: state.pageIndex.value,
                           withTitle: true,
                           chooseIndex: (int value) {
-                            if (value == 6) {
-                              AppLog.i("Log out");
-                            } else if (kIsWeb) {
-                              LandingUtils.redirect(value);
-                            } else {
-                              context
-                                  .read<LandingBloc>()
-                                  .add(ChangeIndex(index: value));
-                            }
+                            _onChooseIndex(index: value, context: context);
                           }),
                       _largeUiBody(state: state),
                     ],
