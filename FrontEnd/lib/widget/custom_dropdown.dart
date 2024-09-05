@@ -279,6 +279,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      isExpanded: true,
       dropdownColor: Colors.white,
       value: value,
       items: List.generate(
