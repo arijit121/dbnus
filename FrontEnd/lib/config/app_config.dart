@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'package:custom_platform_device_id/platform_device_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -82,24 +83,25 @@ class AppConfig {
       }
       String? deviceId;
 
-      var deviceInfo = DeviceInfoPlugin();
-      if (Platform.isIOS) {
-        // import 'dart:io'
-        var iosDeviceInfo = await deviceInfo.iosInfo;
-        deviceId = iosDeviceInfo.identifierForVendor; // unique ID
-      } else if (Platform.isAndroid) {
-        var androidDeviceInfo = await deviceInfo.androidInfo;
-        deviceId = androidDeviceInfo.id; // unique ID
-      } else if (Platform.isWindows) {
-        var windowsDeviceInfo = await deviceInfo.windowsInfo;
-        deviceId = windowsDeviceInfo.deviceId; // unique ID
-      } else if (Platform.isMacOS) {
-        var macOsDeviceInfo = await deviceInfo.macOsInfo;
-        deviceId = macOsDeviceInfo.systemGUID; // unique ID
-      } else if (Platform.isLinux) {
-        var linuxDeviceInfo = await deviceInfo.linuxInfo;
-        deviceId = linuxDeviceInfo.machineId; // unique ID
-      }
+      deviceId = await FlutterUdid.udid;
+      // var deviceInfo = DeviceInfoPlugin();
+      // if (Platform.isIOS) {
+      //   // import 'dart:io'
+      //   var iosDeviceInfo = await deviceInfo.iosInfo;
+      //   deviceId = iosDeviceInfo.identifierForVendor; // unique ID
+      // } else if (Platform.isAndroid) {
+      //   var androidDeviceInfo = await deviceInfo.androidInfo;
+      //   deviceId = androidDeviceInfo.id; // unique ID
+      // } else if (Platform.isWindows) {
+      //   var windowsDeviceInfo = await deviceInfo.windowsInfo;
+      //   deviceId = windowsDeviceInfo.deviceId; // unique ID
+      // } else if (Platform.isMacOS) {
+      //   var macOsDeviceInfo = await deviceInfo.macOsInfo;
+      //   deviceId = macOsDeviceInfo.systemGUID; // unique ID
+      // } else if (Platform.isLinux) {
+      //   var linuxDeviceInfo = await deviceInfo.linuxInfo;
+      //   deviceId = linuxDeviceInfo.machineId; // unique ID
+      // }
 
       // deviceId = await PlatformDeviceId.getDeviceId;
       return deviceId;

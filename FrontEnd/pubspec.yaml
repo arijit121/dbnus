@@ -61,6 +61,7 @@ dependencies:
   geolocator: ^12.0.0
 
   #device info
+  flutter_udid: ^3.0.0
   # custom_platform_device_id: ^1.0.8
   device_info_plus: ^10.1.2
   universal_io: ^2.2.2
