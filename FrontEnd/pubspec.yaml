@@ -69,7 +69,7 @@ dependencies:
 
   #file picker
   file_picker: ^8.0.7
-  image_picker: ^1.0.7
+  image_picker: ^1.1.2
 
   # Ui & animations
   shimmer: ^3.0.0
