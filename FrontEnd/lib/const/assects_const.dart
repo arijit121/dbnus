@@ -72,6 +72,7 @@ class AssetsConst {
   static String shoppingCart = "assets/icon/shopping-cart.svg";
   static String shopping = "assets/icon/shopping.svg";
   static String signOut = "assets/icon/sign_out.svg";
+  static String pdf = "assets/icon/pdf.svg";
 
   static String noRecordFound = "assets/design/no_record_found.png";
   static String pageNotFound = "assets/design/page_not_found.png";
