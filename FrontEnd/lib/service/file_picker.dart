@@ -134,7 +134,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> customFilePicker() async {
+  Future<CustomFile?> customFilePicker({bool? noDocs}) async {
     int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -243,7 +243,8 @@ class CustomFilePicker {
         } else if (result == "Gallery") {
           return galleryPicker();
         } else if (result == "Folder") {
-          return await pickSingleFile();
+          return await pickSingleFile(
+              allowedExtensions: noDocs == true ? ['jpeg', 'jpg'] : null);
         }
       }
     } catch (e) {
