@@ -189,6 +189,7 @@ class _CustomGridView extends StatelessWidget {
   final List<Widget>? children;
   final IndexedWidgetBuilder? builder;
   final CrossAxisAlignment rowCrossAxisAlignment;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
@@ -201,55 +202,32 @@ class _CustomGridView extends StatelessWidget {
         return Row(
           crossAxisAlignment: rowCrossAxisAlignment,
           children: List.generate(
-            crossAxisCount,
-            (rowIndex) {
-              // return CustomText(
-              //   "[Row $rowIndex, Column $columnIndex] = index ${rowIndex + (crossAxisCount * columnIndex)} ",
-              //   color: Colors.black,
-              // );
-              int itemIndex = rowIndex + (crossAxisCount * columnIndex);
-              if (itemIndex > itemCount - 1) {
-                return Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        right: (rowIndex + 1) != crossAxisCount
-                            ? crossAxisSpacing
-                            : 0),
-                  ),
-                );
-              }
-              return children != null || builder != null
-                  ? Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            right: (rowIndex + 1) != crossAxisCount
-                                ? crossAxisSpacing
-                                : 0),
+            crossAxisCount * 2 - 1,
+            (tempRowIndex) {
+              if (tempRowIndex.isEven) {
+                int rowIndex = tempRowIndex ~/ 2;
+                // return CustomText(
+                //   "[Row $rowIndex, Column $columnIndex] = index ${rowIndex + (crossAxisCount * columnIndex)} ",
+                //   color: Colors.black,
+                // );
+
+                int itemIndex = rowIndex + (crossAxisCount * columnIndex);
+                if (itemIndex > itemCount - 1) {
+                  return const Expanded(child: SizedBox(width: 0));
+                }
+                // if ((rowIndex + 1) != crossAxisCount)
+                //                             SizedBox(width: crossAxisSpacing)
+                return children != null || builder != null
+                    ? Expanded(
                         child: children?.elementAt(itemIndex) ??
                             builder!(context, itemIndex),
-                      ),
-                    )
-                  : ErrorWidget.withDetails(
-                      message: "Children abd builder both can't be null.",
-                    );
-
-              // final rowNum = rowIndex + 1;
-              // if (rowNum % 2 == 0) {
-              //   return SizedBox(width: crossAxisSpacing);
-              // }
-              // final rowItemIndex = ((rowNum + 1) ~/ 2) - 1;
-              // final itemIndex = (columnIndex * crossAxisCount) + rowItemIndex;
-              // if (itemIndex > itemCount - 1) {
-              // return const Expanded(child: SizedBox());
-              // }
-              // return children != null || builder != null
-              //     ? Expanded(
-              //         child: children?.elementAt(itemIndex) ??
-              //             builder!(context, itemIndex),
-              //       )
-              //     : ErrorWidget.withDetails(
-              //         message: "Children abd builder both can't be null.",
-              //       );
+                      )
+                    : ErrorWidget.withDetails(
+                        message: "Children abd builder both can't be null.",
+                      );
+              } else {
+                return SizedBox(width: crossAxisSpacing);
+              }
             },
           ),
         );
