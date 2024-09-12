@@ -134,7 +134,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> customFilePicker() async {
+  Future<CustomFile?> customFilePicker({bool? noDocs, bool? noCamera}) async {
     int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -144,7 +144,7 @@ class CustomFilePicker {
       } on CameraException catch (e) {
         AppLog.i(e);
       }
-      if (cameraDescription.isEmpty) {
+      if (cameraDescription.isEmpty || noCamera == true) {
         tag = 2;
       }
       BuildContext context = CurrentContext().context;
@@ -243,7 +243,8 @@ class CustomFilePicker {
         } else if (result == "Gallery") {
           return galleryPicker();
         } else if (result == "Folder") {
-          return await pickSingleFile();
+          return await pickSingleFile(
+              allowedExtensions: noDocs == true ? ['jpeg', 'jpg'] : null);
         }
       }
     } catch (e) {
