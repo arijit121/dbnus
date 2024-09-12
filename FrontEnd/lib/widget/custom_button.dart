@@ -187,6 +187,7 @@ class CustomCheckbox extends StatelessWidget {
       value: value,
       shape: isRounded == true ? const CircleBorder() : null,
       onChanged: onChanged,
+      visualDensity: const VisualDensity(horizontal: -4.0, vertical: -4.0),
     );
   }
 }
