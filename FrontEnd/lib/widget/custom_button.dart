@@ -185,7 +185,9 @@ class CustomCheckbox extends StatelessWidget {
       checkColor: Colors.white,
       activeColor: activeColor ?? Colors.blue,
       value: value,
-      shape: isRounded == true ? const CircleBorder() : null,
+      shape: isRounded == true
+          ? const CircleBorder()
+          : RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       onChanged: onChanged,
       visualDensity: const VisualDensity(
           horizontal: VisualDensity.minimumDensity,
