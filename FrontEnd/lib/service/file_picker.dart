@@ -167,6 +167,7 @@ class CustomFilePicker {
                           Navigator.pop(context, 'Camera');
                         },
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
                               CupertinoIcons.photo_camera_solid,
@@ -194,6 +195,7 @@ class CustomFilePicker {
                         Navigator.pop(context, 'Gallery');
                       },
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
                             CupertinoIcons.photo,
@@ -221,6 +223,7 @@ class CustomFilePicker {
                         Navigator.pop(context, 'Folder');
                       },
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(
                             CupertinoIcons.folder_solid,
