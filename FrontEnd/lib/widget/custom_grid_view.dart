@@ -68,7 +68,7 @@ class CustomGridView extends StatelessWidget {
     this.shrinkWrap = false,
     this.padding,
     required this.children,
-    this.rowCrossAxisAlignment = CrossAxisAlignment.center,
+    this.rowCrossAxisAlignment = CrossAxisAlignment.start,
   });
 
   /// The [ScrollController] to control the grid's scrolling behavior.
