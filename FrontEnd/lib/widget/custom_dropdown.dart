@@ -50,7 +50,8 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final Widget? prefix, suffix;
   final T? value;
   final String? Function(T?)? validator;
-  final AutovalidateMode? autovalidateMode;
+  final AutovalidateMode? autoValidateMode;
+  final Widget? label;
 
   const CustomDropdownMenuFormField({
     super.key,
@@ -61,7 +62,8 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
     this.suffix,
     this.value,
     this.validator,
-    this.autovalidateMode = AutovalidateMode.onUserInteraction,
+    this.autoValidateMode = AutovalidateMode.onUserInteraction,
+    this.label,
   });
 
   @override
@@ -69,8 +71,9 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return _DropdownMenuFormField<T?>(
+          label: label,
           validator: validator,
-          autovalidateMode: autovalidateMode,
+          autovalidateMode: autoValidateMode,
           width: constraints.maxWidth,
           menuStyle: const MenuStyle(
             backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
@@ -101,6 +104,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                     items.elementAt(index).title ?? "",
                     color: HexColor.fromHex(ColorConst.primaryDark),
                     size: 16,
+                    fontWeight: FontWeight.w500,
                   ))),
           inputDecorationTheme: InputDecorationTheme(
             errorStyle: customizeTextStyle(
@@ -114,9 +118,9 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                 fontSize: 14,
                 fontColor: HexColor.fromHex(ColorConst.color5)),
             floatingLabelStyle: customizeTextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 17,
-                fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                fontColor: HexColor.fromHex(ColorConst.primaryDark)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: const BorderSide(
