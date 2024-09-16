@@ -166,12 +166,25 @@ class ValueHandler {
   }
 
   bool isTextNotEmptyOrNull(dynamic src) {
-    var value = src != null &&
-        src.toString().isNotEmpty &&
-        src != "null" &&
-        src != "Null" &&
-        src != "";
-    return value;
+    String value = src.toString().replaceAll(" ", "");
+    var result = src != null &&
+        value.toString().isNotEmpty &&
+        value != "null" &&
+        value != "Null" &&
+        value != "";
+    return result;
+  }
+
+  bool isNonZeroOrNull(dynamic src) {
+    try {
+      String value = src.toString();
+      if (isTextNotEmptyOrNull(value)) {
+        return num.parse(value) > 0;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return false;
   }
 
   double dp({required double val, required int places}) {
