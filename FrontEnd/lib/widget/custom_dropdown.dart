@@ -268,6 +268,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
   final String? Function(T?)? validator;
   final T? value;
   final Widget? prefix, suffix;
+  final Widget? label;
 
   const CustomDropDownFormField({
     super.key,
@@ -278,6 +279,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
     this.value,
     this.prefix,
     this.suffix,
+    this.label,
   });
 
   @override
@@ -305,6 +307,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
         suffixIcon: suffix ??
             Icon(Icons.arrow_drop_down,
                 size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+        label: label,
         contentPadding: const EdgeInsets.only(left: 8),
         hintStyle: customizeTextStyle(
             fontWeight: FontWeight.w400,
