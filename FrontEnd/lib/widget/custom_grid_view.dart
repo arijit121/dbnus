@@ -123,20 +123,21 @@ class CustomGridView extends StatelessWidget {
   ///   },
   /// );
   /// ```
-  static Widget count(
-      {Key? key,
-      ScrollController? controller,
-      required int crossAxisCount,
-      required double crossAxisSpacing,
-      required double mainAxisSpacing,
-      ScrollPhysics? physics,
-      bool shrinkWrap = false,
-      EdgeInsetsGeometry? padding,
-      required int itemCount,
-      required IndexedWidgetBuilder builder,
-      CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.center,
-      ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
-          ScrollViewKeyboardDismissBehavior.manual}) {
+  static Widget count({
+    Key? key,
+    ScrollController? controller,
+    required int crossAxisCount,
+    required double crossAxisSpacing,
+    required double mainAxisSpacing,
+    ScrollPhysics? physics,
+    bool shrinkWrap = false,
+    EdgeInsetsGeometry? padding,
+    required int itemCount,
+    required IndexedWidgetBuilder builder,
+    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.center,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+  }) {
     return _CustomGridView(
       key: key,
       crossAxisCount: crossAxisCount,
