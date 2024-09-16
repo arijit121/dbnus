@@ -37,7 +37,7 @@ dependencies:
   intl:
   xml2json: ^6.2.2
   encrypt: ^5.0.3
-  web: ^0.5.1
+  web: ^1.0.0
   permission_handler: ^11.3.0
   camera: ^0.11.0+2
   universal_html: ^2.2.4
@@ -58,7 +58,7 @@ dependencies:
 
   #location:
   geocoding: ^3.0.0
-  geolocator: ^12.0.0
+  geolocator: ^13.0.1
 
   #device info
   flutter_udid: ^3.0.0
@@ -95,7 +95,7 @@ dependencies:
 
   #update:
   in_app_update: ^4.2.2
-  upgrader: ^10.0.1
+  upgrader: ^11.1.0
 
   #player
   audioplayers: ^6.1.0
