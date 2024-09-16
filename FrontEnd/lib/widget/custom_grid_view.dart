@@ -69,6 +69,7 @@ class CustomGridView extends StatelessWidget {
     this.padding,
     required this.children,
     this.rowCrossAxisAlignment = CrossAxisAlignment.start,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
   });
 
   /// The [ScrollController] to control the grid's scrolling behavior.
@@ -102,6 +103,11 @@ class CustomGridView extends StatelessWidget {
   /// Defaults to [CrossAxisAlignment.center].
   final CrossAxisAlignment rowCrossAxisAlignment;
 
+  /// Determines how the keyboard is dismissed during scrolling.
+  ///
+  /// Defaults to [ScrollViewKeyboardDismissBehavior.manual].
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
   /// Creates a [CustomGridView] with a specified item count and builder function.
   ///
   /// The [crossAxisCount], [crossAxisSpacing], [mainAxisSpacing], [itemCount],
@@ -117,19 +123,20 @@ class CustomGridView extends StatelessWidget {
   ///   },
   /// );
   /// ```
-  static Widget count({
-    Key? key,
-    ScrollController? controller,
-    required int crossAxisCount,
-    required double crossAxisSpacing,
-    required double mainAxisSpacing,
-    ScrollPhysics? physics,
-    bool shrinkWrap = false,
-    EdgeInsetsGeometry? padding,
-    required int itemCount,
-    required IndexedWidgetBuilder builder,
-    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.center,
-  }) {
+  static Widget count(
+      {Key? key,
+      ScrollController? controller,
+      required int crossAxisCount,
+      required double crossAxisSpacing,
+      required double mainAxisSpacing,
+      ScrollPhysics? physics,
+      bool shrinkWrap = false,
+      EdgeInsetsGeometry? padding,
+      required int itemCount,
+      required IndexedWidgetBuilder builder,
+      CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.center,
+      ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+          ScrollViewKeyboardDismissBehavior.manual}) {
     return _CustomGridView(
       key: key,
       crossAxisCount: crossAxisCount,
@@ -142,6 +149,7 @@ class CustomGridView extends StatelessWidget {
       builder: builder,
       padding: padding,
       rowCrossAxisAlignment: rowCrossAxisAlignment,
+      keyboardDismissBehavior: keyboardDismissBehavior,
     );
   }
 
@@ -158,6 +166,7 @@ class CustomGridView extends StatelessWidget {
       itemCount: children.length,
       padding: padding,
       rowCrossAxisAlignment: rowCrossAxisAlignment,
+      keyboardDismissBehavior: keyboardDismissBehavior,
       children: children,
     );
   }
@@ -177,6 +186,7 @@ class _CustomGridView extends StatelessWidget {
     this.builder,
     this.children,
     this.rowCrossAxisAlignment = CrossAxisAlignment.center,
+    required this.keyboardDismissBehavior,
   }) : assert(children != null || builder != null,
             "Children abd builder both can't be null.");
   final ScrollController? controller;
@@ -189,10 +199,11 @@ class _CustomGridView extends StatelessWidget {
   final List<Widget>? children;
   final IndexedWidgetBuilder? builder;
   final CrossAxisAlignment rowCrossAxisAlignment;
-
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      keyboardDismissBehavior: keyboardDismissBehavior,
       controller: controller,
       shrinkWrap: shrinkWrap,
       physics: physics,
