@@ -18,13 +18,7 @@ class ValueHandler {
 
   int? intify(var value) {
     try {
-      if (value == null ||
-          value.toString().toLowerCase() == "null" ||
-          value.toString().trim().isEmpty) {
-        return null;
-      } else {
-        return num.parse("$value").toInt();
-      }
+      return numify(value.toString().replaceAll(" ", ""))?.toInt();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -38,7 +32,7 @@ class ValueHandler {
           value.toString().trim().isEmpty) {
         return null;
       } else {
-        return num.parse("$value");
+        return num.parse(value.toString().replaceAll(" ", ""));
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
