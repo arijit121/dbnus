@@ -100,7 +100,7 @@ class CustomGridView extends StatelessWidget {
 
   /// How the children should be aligned in the cross axis within each row.
   ///
-  /// Defaults to [CrossAxisAlignment.center].
+  /// Defaults to [CrossAxisAlignment.start].
   final CrossAxisAlignment rowCrossAxisAlignment;
 
   /// Determines how the keyboard is dismissed during scrolling.
@@ -134,7 +134,7 @@ class CustomGridView extends StatelessWidget {
     EdgeInsetsGeometry? padding,
     required int itemCount,
     required IndexedWidgetBuilder builder,
-    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.center,
+    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
         ScrollViewKeyboardDismissBehavior.manual,
   }) {
