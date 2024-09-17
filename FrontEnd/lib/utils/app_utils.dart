@@ -29,10 +29,13 @@ class AppUtils {
     return await Geolocator.getCurrentPosition();
   }
 
-  int gridViewCount({required num elementWidth, num? extra}) {
+  int gridViewCount(
+      {required num elementWidth, num? extra, double crossAxisSpacing = 0}) {
     num valExtra = extra ?? 0;
-    return ((ScreenUtils.nw() - valExtra) ~/ elementWidth) > 1
-        ? ((ScreenUtils.nw() - valExtra) ~/ elementWidth)
+    double screenWidth = ScreenUtils.nw() - valExtra + crossAxisSpacing;
+    double aElementWidth = elementWidth + crossAxisSpacing;
+    return ((screenWidth) ~/ aElementWidth) > 1
+        ? ((screenWidth) ~/ aElementWidth)
         : 1;
   }
 
@@ -42,11 +45,13 @@ class AppUtils {
       num? extra,
       double crossAxisSpacing = 0}) {
     num valExtra = extra ?? 0;
-    int valGridViewCount =
-        gridViewCount(elementWidth: elementWidth, extra: extra);
-    if (valGridViewCount > 1) {
-      valExtra = valExtra + (crossAxisSpacing * (valGridViewCount - 1));
-    }
+    int valGridViewCount = gridViewCount(
+        elementWidth: elementWidth,
+        extra: extra,
+        crossAxisSpacing: crossAxisSpacing);
+    // if (valGridViewCount > 1) {
+    //   valExtra = valExtra + (crossAxisSpacing * (valGridViewCount - 1));
+    // }
 
     return ((ScreenUtils.nw() - valExtra) / valGridViewCount) / elementHeight;
   }
