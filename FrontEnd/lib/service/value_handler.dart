@@ -169,7 +169,7 @@ class ValueHandler {
     return result;
   }
 
-  bool isNonZeroOrNull(dynamic src) {
+  bool isNonZeroNumericValue(dynamic src) {
     try {
       String value = src.toString();
       if (isTextNotEmptyOrNull(value)) {
