@@ -1,32 +1,43 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../extension/logger_extension.dart';
+import 'pop_up_items.dart';
 import 'screen_utils.dart';
 
 class AppUtils {
-  Future<Position> getCurrentPosition() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+  Future<Position?> getCurrentPosition() async {
+    try {
+      LocationPermission permission;
+      permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      if (kIsWeb) {
         permission = await Geolocator.requestPermission();
-      } else {
-        await Geolocator.openAppSettings();
-        permission = await Geolocator.checkPermission();
-        if (permission == LocationPermission.deniedForever) {
-          return Future.error(
-              'Location permissions are permanently denied, we cannot request permissions.');
+        if (permission == LocationPermission.denied) {
+          return Future.error('Location permissions are denied');
         }
       }
-    }
+      if (permission == LocationPermission.deniedForever) {
+        if (kIsWeb) {
+          permission = await Geolocator.requestPermission();
+        } else {
+          await Geolocator.openAppSettings();
+          permission = await Geolocator.checkPermission();
+          if (permission == LocationPermission.deniedForever) {
+            return Future.error(
+                'Location permissions are permanently denied, we cannot request permissions.');
+          }
+        }
+      }
 
-    return await Geolocator.getCurrentPosition();
+      return await Geolocator.getCurrentPosition();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      PopUpItems().toastMessage(
+          "There is a problem to fetch you's location. Please allow location permission and enable location.",
+          Colors.red);
+    }
+    return null;
   }
 
   int gridViewCount(
