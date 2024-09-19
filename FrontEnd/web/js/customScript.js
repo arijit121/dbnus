@@ -82,7 +82,7 @@ async function jsOpenTabFunction(url) {
 }
 function changeUrl(path) {
     console.log(`Js InPut Path : ${path}`);
-    window.history.pushState('', '', path);
+    history.pushState('', '', path);
 }
 
 function setVolumeFunction(volume){
