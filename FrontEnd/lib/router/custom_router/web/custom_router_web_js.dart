@@ -12,17 +12,18 @@ class CustomRouterWeb {
   /// Go To name page and Replace Current Page
   ///
   ///
-  void goReplacementNamed(
-    String name, {
-    Map<String, String> pathParameters = const <String, String>{},
-    Map<String, dynamic> queryParameters = const <String, dynamic>{},
-    Object? extra,
-  }) {
-    try {
-      String host =
-          "${html.window.location.protocol}//${html.window.location.host}";
-      String currentUrl = (html.window.location.href).replaceAll(host, "");
+  void goToNameAndOff(String name,
+      {Map<String, String> pathParameters = const <String, String>{},
+      Map<String, dynamic> queryParameters = const <String, dynamic>{},
+      Object? extra}) {
+    String url = name;
 
+    if (queryParameters.isNotEmpty) {
+      url =
+          Uri.parse(name).replace(queryParameters: queryParameters).toString();
+    }
+
+    if (pathParameters.isNotEmpty) {
       List<GoRoute> goRouteList = RouterManager
           .getInstance.router.configuration.routes
           .map((e) => e as GoRoute)
@@ -31,30 +32,20 @@ class CustomRouterWeb {
           (element) => element.name == name,
           orElse: () => GoRoute(path: name));
       String temp = goRoute.path;
-      String url = temp;
-      if (queryParameters.isNotEmpty) {
-        url =
-            Uri.parse(url).replace(queryParameters: queryParameters).toString();
-      }
 
-      if (pathParameters.isNotEmpty && url.contains("/:")) {
-        pathParameters.forEach((key, value) {
-          url = Uri.parse(url.replaceAll("/:$key", "/$value")).toString();
-        });
-      }
-
-      if (url != currentUrl) {
-        Router.neglect(CurrentContext().context, () {
-          RouterManager.getInstance.router.goNamed(name,
-              queryParameters: queryParameters,
-              pathParameters: pathParameters,
-              extra: extra);
-          JsProvider().changeUrl(path: url);
-        });
-      }
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      List<String> keyList = pathParameters.keys.toList();
+      List<String> valueList = pathParameters.values.toList();
+      url = Uri.parse(temp.replaceAll(
+              "/:${keyList.join("/:")}", "/${valueList.join("/")}"))
+          .toString();
     }
+    Router.neglect(CurrentContext().context, () {
+      CurrentContext().context.goNamed(name,
+          queryParameters: queryParameters,
+          pathParameters: pathParameters,
+          extra: extra);
+      JsProvider().changeUrl(path: url);
+    });
   }
 
   /// open the Page in same tab
@@ -137,8 +128,7 @@ class CustomRouterWeb {
   int historyIndex() {
     int index = 0;
     try {
-      index =
-          ValueHandler().intify(html.window.history.state["serialCount"]) ?? 0;
+      index = html.window.history.state["serialCount"];
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
