@@ -5,7 +5,7 @@ import '../../../extension/hex_color.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/custom_ui.dart';
-import '../model/navigation_bar_model.dart';
+import '../model/navigation_model.dart';
 import '../utils/landing_utils.dart';
 
 class DrawerNavigationRail extends StatelessWidget {
@@ -38,7 +38,7 @@ class DrawerNavigationRail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
               List.generate(LandingUtils.listNavigationBar.length, (index) {
-            NavigationBarModel navigationBarModel =
+            NavigationModel navigationBarModel =
                 LandingUtils.listNavigationBar.elementAt(index);
             return InkWell(
               onTap: () {
@@ -97,7 +97,7 @@ class _DrawerNavigationRailWidget extends StatelessWidget {
       {this.showTitle, this.color, required this.navigationBarModel});
   final bool? showTitle;
   final Color? color;
-  final NavigationBarModel navigationBarModel;
+  final NavigationModel navigationBarModel;
   @override
   Widget build(BuildContext context) {
     return Row(

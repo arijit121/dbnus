@@ -6,6 +6,7 @@ import '../../../data/bloc_data_model/dynamic_data.dart';
 import '../../../data/connection/connection_status.dart';
 import '../model/landing_banner_response.dart';
 import '../repo/landing_repo.dart';
+import '../utils/landing_utils.dart';
 
 part 'landing_event.dart';
 
