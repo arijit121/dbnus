@@ -12,6 +12,7 @@ import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
+import 'service/crashView/utils/crashUtils.dart';
 import 'service/firebase_service.dart';
 import 'service/notification_handler.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
@@ -27,6 +28,28 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  CrashUtils().setValue(value: false);
+  FlutterError.onError = (errorDetails) {
+    AppLog.i("Error log ::==>  ${errorDetails.library}");
+    if (errorDetails.library?.contains("widgets library") == true) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      CrashUtils().navigateToCrashPage({
+        "error": "${errorDetails.exception}",
+        "stack": "${errorDetails.stack}",
+      });
+    } else {
+      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    }
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    AppLog.e("$error", stackTrace: stack);
+    return true;
+  };
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  FirebaseMessaging.instance.setAutoInitEnabled(false);
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
@@ -79,5 +102,3 @@ class _MyWebAppState extends State<MyWebApp> {
     );
   }
 }
-
-

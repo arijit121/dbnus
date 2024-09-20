@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:dbnus/service/crashView/utils/crashUtils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +46,28 @@ Future<void> main() async {
       );
     }
   });
+  CrashUtils().setValue(value: false);
+  FlutterError.onError = (errorDetails) {
+    AppLog.i("Error log ::==>  ${errorDetails.library}");
+    if (errorDetails.library?.contains("widgets library") == true) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      CrashUtils().navigateToCrashPage({
+        "error": "${errorDetails.exception}",
+        "stack": "${errorDetails.stack}",
+      });
+    } else {
+      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    }
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    AppLog().errLog(err: "$error", stackTrace: stack);
+    return true;
+  };
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  FirebaseMessaging.instance.setAutoInitEnabled(false);
 
   await FirebaseService().getInitialMessage();
   await NotificationHandler().requestPermissions();
