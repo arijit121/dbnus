@@ -40,20 +40,24 @@ class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _narrowUiBody({required LandingState state}) =>
-      LandingUtils.listNavigation.elementAt(state.pageIndex.value ?? 0).ui ??
-      Container();
+      state.pageIndex.value != null
+          ? LandingUtils.listNavigation.elementAt(state.pageIndex.value!).ui ??
+              Container()
+          : Container();
 
   Widget _mediumUiBody({required LandingState state}) => Flexible(
-      child: LandingUtils.listNavigation
-              .elementAt(state.pageIndex.value ?? 0)
-              .ui ??
-          Container());
+      child: state.pageIndex.value != null
+          ? LandingUtils.listNavigation.elementAt(state.pageIndex.value!).ui ??
+              Container()
+          : Container());
 
   Widget _largeUiBody({required LandingState state}) => Flexible(
-        child: LandingUtils.listNavigation
-                .elementAt(state.pageIndex.value ?? 0)
-                .ui ??
-            Container(),
+        child: state.pageIndex.value != null
+            ? LandingUtils.listNavigation
+                    .elementAt(state.pageIndex.value!)
+                    .ui ??
+                Container()
+            : Container(),
       );
 
   void _onChooseIndex({required int index, required BuildContext context}) {
