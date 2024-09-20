@@ -8,7 +8,7 @@ import '../../ui_temp/ui/ui_temp.dart';
 import '../model/navigation_model.dart';
 
 class LandingUtils {
-  static List<NavigationModel> listNavigationBar = [
+  static List<NavigationModel> listNavigation = [
     NavigationModel(
         title: TextUtils.dashboard,
         icon:
@@ -45,6 +45,6 @@ class LandingUtils {
 
   static void redirect(int index) {
     RouterManager.getInstance.router
-        .goNamed(listNavigationBar.elementAt(index).action);
+        .goNamed(listNavigation.elementAt(index).action);
   }
 }

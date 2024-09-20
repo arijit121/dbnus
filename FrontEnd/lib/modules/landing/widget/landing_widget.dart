@@ -37,9 +37,9 @@ class DrawerNavigationRail extends StatelessWidget {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
-              List.generate(LandingUtils.listNavigationBar.length, (index) {
+              List.generate(LandingUtils.listNavigation.length, (index) {
             NavigationModel navigationBarModel =
-                LandingUtils.listNavigationBar.elementAt(index);
+                LandingUtils.listNavigation.elementAt(index);
             return InkWell(
               onTap: () {
                 chooseIndex(index);
@@ -82,7 +82,7 @@ class DrawerNavigationRail extends StatelessWidget {
                       showTitle: withTitle == true,
                       navigationBarModel: navigationBarModel,
                     ),
-                  if (index != (LandingUtils.listNavigationBar.length - 1))
+                  if (index != (LandingUtils.listNavigation.length - 1))
                     30.ph,
                 ],
               ),

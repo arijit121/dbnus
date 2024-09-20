@@ -40,24 +40,24 @@ class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _narrowUiBody({required LandingState state}) =>
-      LandingUtils.listNavigationBar.elementAt(state.pageIndex.value ?? 0).ui ??
+      LandingUtils.listNavigation.elementAt(state.pageIndex.value ?? 0).ui ??
       Container();
 
   Widget _mediumUiBody({required LandingState state}) => Flexible(
-      child: LandingUtils.listNavigationBar
+      child: LandingUtils.listNavigation
               .elementAt(state.pageIndex.value ?? 0)
               .ui ??
           Container());
 
   Widget _largeUiBody({required LandingState state}) => Flexible(
-        child: LandingUtils.listNavigationBar
+        child: LandingUtils.listNavigation
                 .elementAt(state.pageIndex.value ?? 0)
                 .ui ??
             Container(),
       );
 
   void _onChooseIndex({required int index, required BuildContext context}) {
-    if (LandingUtils.listNavigationBar.elementAt(index).action ==
+    if (LandingUtils.listNavigation.elementAt(index).action ==
         TextUtils.logout) {
       AppLog.i("Log out");
     } else if (kIsWeb) {
