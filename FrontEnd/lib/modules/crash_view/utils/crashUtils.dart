@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:dbnus/router/custom_router/custom_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../utils/navigationService.dart';
-import '../../../utils/routes/routes_name.dart';
+import '../../../router/router_name.dart';
 
 class CrashUtils {
   String crashUiKey = "crashUiKeyPref";
@@ -16,10 +15,9 @@ class CrashUtils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool nav = prefs.getBool(crashUiKey) ?? false;
     await setValue(value: true);
+
     if (!nav) {
-      await Navigator.pushNamedAndRemoveUntil(
-          CurrentContext().context, MyRoutes.crashUi, ModalRoute.withName('/'),
-          arguments: args);
+      CustomRoute().clearAndNavigate(RouteName.error, extra: args);
     }
   }
 }

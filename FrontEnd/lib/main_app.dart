@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:dbnus/service/crashView/utils/crashUtils.dart';
+import 'package:dbnus/modules/crash_view/utils/crashUtils.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,21 +49,22 @@ Future<void> main() async {
   });
   CrashUtils().setValue(value: false);
   FlutterError.onError = (errorDetails) {
-    AppLog.i("Error log ::==>  ${errorDetails.library}");
     if (errorDetails.library?.contains("widgets library") == true) {
+      AppLog.i("${errorDetails.library}", tag: "Serious Error");
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       CrashUtils().navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
     } else {
+      AppLog.i("${errorDetails.library}", tag: "Error");
       FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     }
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack);
-    AppLog().errLog(err: "$error", stackTrace: stack);
+    AppLog.e("$error", stackTrace: stack, tag: "Error");
     return true;
   };
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);

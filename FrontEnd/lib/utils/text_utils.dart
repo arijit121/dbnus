@@ -923,6 +923,11 @@ class TextUtils {
   static String vital_insights_des =
       "The doctor will delve into your vitals and test reports, providing a comprehensive understanding of your health status.";
 
+  static String crashMassage = """<h1>Error: Something went wrong</h1>
+        <p>We encountered an unexpected issue. Please try again later.</p>""";
+
+  static String sendReport = "Send Report";
+
   // ignore: non_constant_identifier_names
   static List<String> relation_list({bool? isMyself}) => isMyself == true
       ? [

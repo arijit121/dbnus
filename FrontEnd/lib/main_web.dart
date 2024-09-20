@@ -6,15 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'const/theme_const.dart';
-import 'const/color_const.dart';
-import 'extension/hex_color.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
-import 'service/crashView/utils/crashUtils.dart';
+import 'modules/crash_view/utils/crashUtils.dart';
 import 'service/firebase_service.dart';
-import 'service/notification_handler.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
 import 'utils/text_utils.dart';
 
@@ -30,24 +27,21 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   CrashUtils().setValue(value: false);
   FlutterError.onError = (errorDetails) {
-    AppLog.i("Error log ::==>  ${errorDetails.library}");
     if (errorDetails.library?.contains("widgets library") == true) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       CrashUtils().navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
+      AppLog.i("${errorDetails.library}", tag: "Serious Error");
     } else {
-      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      AppLog.i("${errorDetails.library}", tag: "Error");
     }
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack);
-    AppLog.e("$error", stackTrace: stack);
+    AppLog.e("$error", stackTrace: stack, tag: "Error");
     return true;
   };
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   FirebaseMessaging.instance.setAutoInitEnabled(false);
   SystemChrome.setPreferredOrientations(

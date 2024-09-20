@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../const/assects_const.dart';
 import '../modules/landing/utils/landing_utils.dart';
+import '../modules/crash_view/ui/crash_ui.dart' deferred as crash;
 import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_image.dart';
@@ -111,6 +112,23 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await landing.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.error,
+        path: RouteName.error,
+        builder: (BuildContext context, GoRouterState state) {
+          if (state.extra is Map<String, dynamic>) {
+            return crash.CrashUi(
+              errorDetails: state.extra as Map<String, dynamic>,
+            );
+          } else {
+            return errorRoute();
+          }
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await crash.loadLibrary();
           return null;
         },
       ),

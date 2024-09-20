@@ -5,4 +5,5 @@ class RouteName {
   static const String products = "/products";
   static const String massage = "/massage";
   static const String settings = "/settings";
+  static const String error = "/error";
 }
