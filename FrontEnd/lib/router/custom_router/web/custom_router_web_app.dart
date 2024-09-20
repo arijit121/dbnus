@@ -2,7 +2,7 @@ class CustomRouterWeb {
   /// Go To name page and Replace Current Page
   ///
   ///
-  void goReplacementNamed(
+  void goToNameAndOff(
     String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
