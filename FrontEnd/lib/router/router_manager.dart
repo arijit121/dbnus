@@ -2,6 +2,7 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../const/assects_const.dart';
+import '../modules/landing/utils/landing_utils.dart';
 import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_image.dart';
@@ -48,7 +49,8 @@ class RouterManager {
         path: RouteName.leaderBoard,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
-            index: 1,
+            index: LandingUtils.listNavigation.indexWhere(
+                (element) => element.action == RouteName.leaderBoard),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -61,7 +63,8 @@ class RouterManager {
         path: RouteName.order,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
-            index: 2,
+            index: LandingUtils.listNavigation
+                .indexWhere((element) => element.action == RouteName.order),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -74,7 +77,8 @@ class RouterManager {
         path: RouteName.products,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
-            index: 3,
+            index: LandingUtils.listNavigation
+                .indexWhere((element) => element.action == RouteName.products),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -87,7 +91,8 @@ class RouterManager {
         path: RouteName.massage,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
-            index: 4,
+            index: LandingUtils.listNavigation
+                .indexWhere((element) => element.action == RouteName.massage),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -100,7 +105,8 @@ class RouterManager {
         path: RouteName.settings,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
-            index: 5,
+            index: LandingUtils.listNavigation
+                .indexWhere((element) => element.action == RouteName.settings),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
