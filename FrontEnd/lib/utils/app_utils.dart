@@ -33,9 +33,7 @@ class AppUtils {
       return await Geolocator.getCurrentPosition();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-      PopUpItems().toastMessage(
-          "There is a problem to fetch you's location. Please allow location permission and enable location.",
-          Colors.red);
+      PopUpItems().toastMessage(e.toString(), Colors.red, durationSeconds: 4);
     }
     return null;
   }
