@@ -1,3 +1,4 @@
+import 'package:dbnus/const/assects_const.dart';
 import 'package:flutter/cupertino.dart';
 import '../../../router/router_manager.dart';
 import '../../../router/router_name.dart';
@@ -11,34 +12,32 @@ class LandingUtils {
   static List<NavigationModel> listNavigation = [
     NavigationModel(
         title: TextUtils.dashboard,
-        icon:
-            'https://dbnus-df986.web.app/assets/assets/icon/dashboard_Icon.png',
+        icon: AssetsConst.dashboardIcon,
         action: RouteName.initialView,
         ui: const TestPage()),
     NavigationModel(
         title: TextUtils.leaderBoard,
-        icon: 'https://dbnus-df986.web.app/assets/assets/icon/leaderBoard.svg',
+        icon: AssetsConst.leaderBoard,
         action: RouteName.leaderBoard,
         ui: MyReorderableList()),
     NavigationModel(
         title: TextUtils.order,
-        icon:
-            'https://dbnus-df986.web.app/assets/assets/icon/shopping-cart.svg',
+        icon: AssetsConst.shoppingCart,
         action: RouteName.order,
         ui: const UiTemp()),
     NavigationModel(
         title: TextUtils.products,
-        icon: 'https://dbnus-df986.web.app/assets/assets/icon/shopping.svg',
+        icon: AssetsConst.shopping,
         action: RouteName.products,
         ui: Container()),
     NavigationModel(
         title: TextUtils.settings,
-        icon: 'https://dbnus-df986.web.app/assets/assets/icon/setting.svg',
+        icon: AssetsConst.setting,
         action: RouteName.settings,
         ui: Container()),
     NavigationModel(
         title: TextUtils.logout,
-        icon: 'https://dbnus-df986.web.app/assets/assets/icon/sign_out.svg',
+        icon: AssetsConst.signOut,
         action: TextUtils.logout,
         ui: null),
   ];

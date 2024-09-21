@@ -50,6 +50,15 @@ class UiTemp extends StatelessWidget {
               Colors.blue,
             ]),
             child: const CustomText("loadJsAndPassValueWithCallbackAsync")),
+        CustomGOEButton(
+            onPressed: () async {
+              await JsProvider().changeUrl(path: "/test");
+            },
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Change Url")),
         const CustomTextFormField(),
         CustomDropdownMenuFormField<String>(
             hintText: "Please choose val",
