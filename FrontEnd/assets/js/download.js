@@ -1,53 +1,32 @@
-function download(url, name){
-  if (typeof axios == 'undefined') {
-    // Create a script element to load Axios from the CDN
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js';
+function download(url, fileName) {
+  // Use the Fetch API to get the file as a blob
+  fetch(url)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.blob();  // Convert response to a Blob
+      })
+      .then(blob => {
+          const downloadUrl = window.URL.createObjectURL(blob);  // Create a URL for the blob
 
-    // Once Axios is loaded, define the download function
-    script.onload = function() {
-      _download(url, name);
-    };
+          // Create an anchor element and set its attributes
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.download = fileName;
 
-    // Append the script to the document head
-    document.head.appendChild(script);
-  } else {
-    // If Axios is already loaded, set up the download function immediately
-    _download(url, name);
-  }
-}
+          // Append the link to the document body (required for Firefox)
+          document.body.appendChild(link);
 
-// Function to download a file using Axios and trigger download
-function _download(url, fileName) {
-  axios({
-      url: url,  // The file's download URL
-      method: 'GET',  // HTTP GET request
-      responseType: 'blob'  // Important: ensure the response is a Blob (binary data)
-  })
-  .then(function (response) {
-      // Create a Blob from the response data
-      const blob = new Blob([response.data]);
+          // Trigger the download
+          link.click();
 
-      // Create a download URL for the Blob object
-      const downloadUrl = window.URL.createObjectURL(blob);
-
-      // Create an anchor element and set its href and download attributes
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = fileName;
-
-      // Append the anchor to the body (required for Firefox)
-      document.body.appendChild(link);
-
-      // Trigger the download by programmatically clicking the anchor
-      link.click();
-
-      // Clean up: remove the anchor and revoke the object URL
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl);
-  })
-  .catch(function (error) {
-      console.error('Download failed:', error);  // Handle errors here
-  });
+          // Clean up: remove the link and revoke the object URL
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(downloadUrl);
+      })
+      .catch(error => {
+          console.error('Error downloading file:', error);
+      });
 }
 
