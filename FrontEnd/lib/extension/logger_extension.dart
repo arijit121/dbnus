@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 /// 2) AppLog.i("Home Page", tag: "User Logging");
 ///
 class AppLog {
+  static const bool _enableOnRelease = false;
   static const String _DEFAULT_TAG_PREFIX = "AppLog";
 
   ///use Log.v. Print all Logs
@@ -41,20 +42,18 @@ class AppLog {
 
   static _log(int priority, String tag, String message,
       {Object? error, StackTrace? stackTrace, DateTime? time}) {
-    if (_currentLogLevel <= priority && !kReleaseMode) {
-      debugPrint(
-          _ascieEscape(priority,
-              text: "${_getPriorityText(priority)}$tag::==>  $message"),
-          wrapWidth: 1024);
+    if (_currentLogLevel <= priority && (!kReleaseMode || _enableOnRelease)) {
+      print(_ascieEscape(priority,
+          text: "${_getPriorityText(priority)}$tag::==>  $message"));
       if (error != null) {
-        debugPrint(_ascieEscape(priority, text: error.toString()));
+        print(_ascieEscape(priority, text: error.toString()));
       }
 
       if (stackTrace != null) {
-        debugPrint(_ascieEscape(priority, text: stackTrace.toString()));
+        print(_ascieEscape(priority, text: stackTrace.toString()));
       }
       if (time != null) {
-        debugPrint(_ascieEscape(priority, text: time.toString()));
+        print(_ascieEscape(priority, text: time.toString()));
       }
     }
   }

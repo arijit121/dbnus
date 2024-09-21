@@ -97,43 +97,70 @@ class JSHelper {
   ///
   /// ```
   ///
-  Future<T> loadJs<T>(
-      {required String jsFilePath,
-      required String jsFunctionName,
-      List<Object?>? jsFunctionArgs,
-      bool usePromise = false}) async {
-    // Check if the script is already loaded
-    if (html.document.querySelector('script[src="$jsFilePath"]') == null) {
-      // Create a script element
-      final script = html.ScriptElement()
-        ..type = 'application/javascript'
-        ..src = '$jsFilePath';
+  Future<T?> loadJs<T>({
+    required String jsFilePath,
+    required String jsFunctionName,
+    List<Object?>? jsFunctionArgs,
+    bool usePromise = false,
+  }) async {
+    try {
+      // Check if the script is already loaded
+      if (html.document.querySelector('script[src="$jsFilePath"]') == null) {
+        // Create a script element
+        final script = html.ScriptElement()
+          ..type = 'application/javascript'
+          ..src = jsFilePath;
 
-      // Append the script to the document head
-      html.document.head!.append(script);
+        // Append the script to the document head
+        html.document.head!.append(script);
 
-      // Wait for the script to load
-      await script.onLoad.first;
-    }
-    if (usePromise) {
-      // Call the JavaScript function and handle the Promise using `promiseToFuture`
-      final promise = js_util.callMethod(
-          html.window, '$jsFunctionName', jsFunctionArgs ?? []);
-      return await js_util.promiseToFuture<T>(promise);
-    } else {
-      // Call the JavaScript function that uses a callback
-      final completer = Completer<T>();
+        // Wait for the script to load or throw an error if it fails
+        await script.onLoad.first.catchError((error) {
+          throw Exception('Error loading JS script: $error');
+        });
+      }
 
-      // Call the JS function with value and a Dart callback
-      js.context.callMethod('$jsFunctionName', [
-        ...(jsFunctionArgs ?? []),
-        js.allowInterop((result) {
-          completer.complete(result);
-        })
-      ]);
+      if (usePromise) {
+        if (jsFunctionName.isEmpty) {
+          throw Exception('JavaScript function name is empty.');
+        }
 
-      // Return the result from the Completer (for callback-based function)
-      return completer.future;
+        try {
+          // Call the JavaScript function and handle the Promise using `promiseToFuture`
+          final promise = js_util.callMethod(
+              html.window, jsFunctionName, jsFunctionArgs ?? []);
+          if (promise == null) {
+            return null; // Handle `null` result from JS function
+          }
+          return await js_util.promiseToFuture<T>(promise);
+        } catch (error) {
+          throw Exception('Error calling JS function with Promise: $error');
+        }
+      } else {
+        try {
+          final completer = Completer<T?>();
+
+          if (jsFunctionName.isEmpty) {
+            throw Exception('JavaScript function name is empty.');
+          }
+
+          // Call the JavaScript function and handle null return values
+          js.context.callMethod(jsFunctionName, [
+            ...(jsFunctionArgs ?? []),
+            js.allowInterop((result) {
+              // Allow `null` or `undefined` results
+              completer.complete(
+                  result); // Complete with `null` if JS returns `undefined`
+            })
+          ]);
+
+          return await completer.future;
+        } catch (error) {
+          throw Exception('Error calling JS function with callback: $error');
+        }
+      }
+    } catch (error) {
+      throw Exception('Unexpected error in loadJs: $error');
     }
   }
 }

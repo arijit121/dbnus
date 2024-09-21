@@ -34,7 +34,7 @@ class JsProvider {
     try {
       return await jsHelper.loadJs<String>(
           jsFilePath: jsPath,
-          jsFunctionName: 'processValueWithPromise',
+          jsFunctionName: 'processValueWithCallback',
           jsFunctionArgs: [value],
           usePromise: true);
     } catch (e, stacktrace) {
