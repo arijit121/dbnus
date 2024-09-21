@@ -44,4 +44,9 @@ class JSHelper {
   }
 
   void submitForm(actionUrl, String obj, String id) {}
+
+  Future<String?> loadJsAndPassValueWithCallbackAsync(
+      {required String value}) async {
+    return null;
+  }
 }

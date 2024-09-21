@@ -65,4 +65,9 @@ class JsProvider {
   void submitForm(actionUrl, String obj, String id) {
     jsHelper.submitForm(actionUrl, obj, id);
   }
+
+  Future<String?> loadJsAndPassValueWithCallbackAsync(
+      {required String value}) async {
+    return await jsHelper.loadJsAndPassValueWithCallbackAsync(value: value);
+  }
 }

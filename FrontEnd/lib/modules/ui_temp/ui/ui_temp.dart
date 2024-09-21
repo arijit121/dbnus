@@ -6,6 +6,7 @@ import '../../../extension/hex_color.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
 import '../../../router/router_name.dart';
+import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/open_service.dart';
 import '../../../utils/pop_up_items.dart';
@@ -15,7 +16,7 @@ import '../../../widget/custom_text.dart';
 import '../../../widget/custom_text_formfield.dart';
 
 class UiTemp extends StatelessWidget {
-  const UiTemp ({super.key});
+  const UiTemp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +31,25 @@ class UiTemp extends StatelessWidget {
             onPressed: () {
               DownloadHandler().download(
                   url:
-                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
             gradient: const LinearGradient(colors: [
               Colors.red,
               Colors.blue,
             ]),
             child: const CustomText("Download")),
+        CustomGOEButton(
+            onPressed: () async {
+              String? value = await JsProvider()
+                  .loadJsAndPassValueWithCallbackAsync(
+                      value: "testvdshvhfvsfhvs");
+              AppLog.i(value);
+            },
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("loadJsAndPassValueWithCallbackAsync")),
         const CustomTextFormField(),
         CustomDropdownMenuFormField<String>(
             hintText: "Please choose val",
@@ -46,7 +59,7 @@ class UiTemp extends StatelessWidget {
             },
             items: List.generate(
                 10,
-                    (index) => CustomDropDownModel<String>(
+                (index) => CustomDropDownModel<String>(
                     value: "test$index", title: "test$index"))),
         CustomMenuAnchor<String>(
           // hintText: "Please choose val",
@@ -56,7 +69,7 @@ class UiTemp extends StatelessWidget {
           },
           items: List.generate(
               10,
-                  (index) => CustomDropDownModel<String>(
+              (index) => CustomDropDownModel<String>(
                   value: "test$index", title: "test$index")),
           child: const Icon(
             Icons.zoom_out_rounded,
@@ -89,8 +102,8 @@ class UiTemp extends StatelessWidget {
             color: Colors.black,
             icon: Icon(Icons.add_box),
             onPressed: () {
-              PopUpItems().toastMessage("Show tost msg..",
-                  HexColor.fromHex(ColorConst.primaryDark));
+              PopUpItems().toastMessage(
+                  "Show tost msg..", HexColor.fromHex(ColorConst.primaryDark));
             }),
       ],
     );
