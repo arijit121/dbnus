@@ -50,7 +50,7 @@ class JSHelper {
   //   return null;
   // }
 
-  Future<T> loadJs<T>(
+  Future<T> loadAssetJs<T>(
       {required String jsFilePath,
       required String jsFunctionName,
       List<Object?>? jsFunctionArgs,

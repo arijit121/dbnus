@@ -32,7 +32,7 @@ class JsProvider {
       {required String value}) async {
     String jsPath = "assets/js/test_process_value.js";
     try {
-      return await jsHelper.loadJs<String>(
+      return await jsHelper.loadAssetJs<String>(
           jsFilePath: jsPath,
           jsFunctionName: 'processValueWithCallback',
           jsFunctionArgs: [value],
@@ -46,7 +46,7 @@ class JsProvider {
   Future<void> changeUrl({required String path}) async {
     try {
       String jsPath = "assets/js/change_url.js";
-      await jsHelper.loadJs(
+      await jsHelper.loadAssetJs(
           jsFilePath: jsPath,
           jsFunctionName: 'changeUrl',
           jsFunctionArgs: [path]);
@@ -56,10 +56,10 @@ class JsProvider {
   }
 
   Future<String?> getDeviceId() async {
-    String jsPath = "assets/js/device_id.js";
+    // String jsPath = "assets/js/device_id.js";
     try {
-      return await jsHelper.loadJs<String>(
-          jsFilePath: jsPath,
+      return await jsHelper.callJs<String>(
+          // jsFilePath: jsPath,
           jsFunctionName: 'getDeviceIdFunction',
           usePromise: true);
     } catch (e, stacktrace) {
@@ -71,7 +71,7 @@ class JsProvider {
   Future<void> downloadFile({required String url, required String name}) async {
     try {
       String jsPath = "assets/js/download.js";
-      await jsHelper.loadJs(
+      await jsHelper.loadAssetJs(
           jsFilePath: jsPath,
           jsFunctionName: 'download',
           jsFunctionArgs: [url, name]);
@@ -87,7 +87,7 @@ class JsProvider {
       required String mid}) async {
     try {
       String jsPath = "assets/js/paytm.js";
-      await jsHelper.loadJs(
+      await jsHelper.loadAssetJs(
           jsFilePath: jsPath,
           jsFunctionName: 'paytm',
           jsFunctionArgs: [txnToken, orderId, amount, mid],
@@ -103,7 +103,7 @@ class JsProvider {
       required String id}) async {
     try {
       String jsPath = "assets/js/submit_form.js";
-      await jsHelper.loadJs(
+      await jsHelper.loadAssetJs(
           jsFilePath: jsPath,
           jsFunctionName: 'submitFormFunction',
           jsFunctionArgs: [actionUrl, obj, id]);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <base href="$FLUTTER_BASE_HREF">
     <meta charset="UTF-8">
@@ -42,6 +43,8 @@
     <!-- <script src="js/paytm.js" type="text/javascript"></script> -->
     <!--Custom Script-->
     <!-- <script src="js/customScript.js" defer></script> -->
+    <!--Custom Js-->
+    <!-- <script src="js/custom_js.js" defer></script> -->
     <!-- dyte-->
     <!-- Import helper to load UI Kit components -->
     <!-- <script type="module" defer>
@@ -51,12 +54,13 @@
     <!-- Import Web Core via CDN too -->
     <!-- <script src="https://cdn.dyte.in/core/dyte.js" defer></script> -->
     <!-- flutter_inappwebview-->
-    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
+        defer></script>
 </head>
 
 <body>
     <script>
-        {{flutter_service_worker_version}}
+        { { flutter_service_worker_version } }
     </script>
     <div id="web-initial-loader" class="container">
         <section class="content" id="desktopContent">
