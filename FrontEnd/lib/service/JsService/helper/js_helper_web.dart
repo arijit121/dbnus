@@ -5,6 +5,7 @@ import 'dart:js_util' as js_util;
 // import '../library/js_library.dart';
 import 'dart:async';
 import '../../../extension/logger_extension.dart';
+import 'package:flutter/foundation.dart';
 
 class JSHelper {
   // Future paytmLoadScript(
@@ -104,12 +105,14 @@ class JSHelper {
     bool usePromise = false,
   }) async {
     try {
+      String _jsFilePath = kReleaseMode ? "assets/$jsFilePath" : jsFilePath;
+
       // Check if the script is already loaded
-      if (html.document.querySelector('script[src="$jsFilePath"]') == null) {
+      if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
         // Create a script element
         final script = html.ScriptElement()
           ..type = 'application/javascript'
-          ..src = jsFilePath;
+          ..src = _jsFilePath;
 
         // Append the script to the document head
         html.document.head!.append(script);

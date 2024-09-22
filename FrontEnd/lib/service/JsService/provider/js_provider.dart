@@ -36,7 +36,7 @@ class JsProvider {
           jsFilePath: jsPath,
           jsFunctionName: 'processValueWithCallback',
           jsFunctionArgs: [value],
-          usePromise: true);
+          usePromise: false);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
