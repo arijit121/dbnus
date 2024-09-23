@@ -98,28 +98,34 @@ class JSHelper {
   ///
   /// ```
   ///
-  Future<T?> loadAssetJs<T>(
-      {required String jsFilePath,
+  Future<T?> loadJs<T>(
+      {String? jsPath,
       required String jsFunctionName,
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
     try {
-      String _jsFilePath = kReleaseMode ? "assets/$jsFilePath" : jsFilePath;
+      if (jsPath != null && jsPath.isNotEmpty) {
+        String _jsFilePath = kReleaseMode &&
+                !jsPath.contains("https://") &&
+                !jsPath.contains("http://")
+            ? "assets/$jsPath"
+            : jsFilePath;
 
-      // Check if the script is already loaded
-      if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
-        // Create a script element
-        final script = html.ScriptElement()
-          ..type = 'application/javascript'
-          ..src = _jsFilePath;
+        // Check if the script is already loaded
+        if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
+          // Create a script element
+          final script = html.ScriptElement()
+            ..type = 'application/javascript'
+            ..src = _jsFilePath;
 
-        // Append the script to the document head
-        html.document.head!.append(script);
+          // Append the script to the document head
+          html.document.head!.append(script);
 
-        // Wait for the script to load or throw an error if it fails
-        await script.onLoad.first.catchError((error) {
-          throw Exception('Error loading JS script: $error');
-        });
+          // Wait for the script to load or throw an error if it fails
+          await script.onLoad.first.catchError((error) {
+            throw Exception('Error loading JS script: $error');
+          });
+        }
       }
 
       if (usePromise) {
@@ -162,56 +168,8 @@ class JSHelper {
         }
       }
     } catch (error) {
-      throw Exception('Unexpected error in loadJs: $error');
-    }
-  }
-
-  Future<T?> callJs<T>(
-      {required String jsFunctionName,
-      List<Object?>? jsFunctionArgs,
-      bool usePromise = false}) async {
-    try {
-      if (usePromise) {
-        if (jsFunctionName.isEmpty) {
-          throw Exception('JavaScript function name is empty.');
-        }
-
-        try {
-          // Call the JavaScript function and handle the Promise using `promiseToFuture`
-          final promise = js_util.callMethod(
-              html.window, jsFunctionName, jsFunctionArgs ?? []);
-          if (promise == null) {
-            return null; // Handle `null` result from JS function
-          }
-          return await js_util.promiseToFuture<T>(promise);
-        } catch (error) {
-          throw Exception('Error calling JS function with Promise: $error');
-        }
-      } else {
-        try {
-          final completer = Completer<T?>();
-
-          if (jsFunctionName.isEmpty) {
-            throw Exception('JavaScript function name is empty.');
-          }
-
-          // Call the JavaScript function and handle null return values
-          js.context.callMethod(jsFunctionName, [
-            ...(jsFunctionArgs ?? []),
-            js.allowInterop((result) {
-              // Allow `null` or `undefined` results
-              completer.complete(
-                  result); // Complete with `null` if JS returns `undefined`
-            })
-          ]);
-
-          return await completer.future;
-        } catch (error) {
-          throw Exception('Error calling JS function with callback: $error');
-        }
-      }
-    } catch (error) {
-      throw Exception('Unexpected error in loadJs: $error');
+      throw Exception(
+          'Unexpected error in ${jsPath.isEmpty || jsPath == null ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
     }
   }
 }

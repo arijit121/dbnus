@@ -32,8 +32,8 @@ class JsProvider {
       {required String value}) async {
     String jsPath = "assets/js/test_process_value.js";
     try {
-      return await jsHelper.loadAssetJs<String>(
-          jsFilePath: jsPath,
+      return await jsHelper.loadJs<String>(
+          jsPath: jsPath,
           jsFunctionName: 'processValueWithCallback',
           jsFunctionArgs: [value],
           usePromise: false);
@@ -46,10 +46,8 @@ class JsProvider {
   Future<void> changeUrl({required String path}) async {
     try {
       String jsPath = "assets/js/change_url.js";
-      await jsHelper.loadAssetJs(
-          jsFilePath: jsPath,
-          jsFunctionName: 'changeUrl',
-          jsFunctionArgs: [path]);
+      await jsHelper.loadJs(
+          jsPath: jsPath, jsFunctionName: 'changeUrl', jsFunctionArgs: [path]);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -58,7 +56,7 @@ class JsProvider {
   Future<String?> getDeviceId() async {
     // String jsPath = "assets/js/device_id.js";
     try {
-      return await jsHelper.callJs<String>(
+      return await jsHelper.loadJs<String>(
           // jsFilePath: jsPath,
           jsFunctionName: 'getDeviceIdCJSFunction',
           usePromise: true);
@@ -71,8 +69,8 @@ class JsProvider {
   Future<void> downloadFile({required String url, required String name}) async {
     try {
       String jsPath = "assets/js/download.js";
-      await jsHelper.loadAssetJs(
-          jsFilePath: jsPath,
+      await jsHelper.loadJs(
+          jsPath: jsPath,
           jsFunctionName: 'download',
           jsFunctionArgs: [url, name]);
     } catch (e, stacktrace) {
@@ -87,8 +85,8 @@ class JsProvider {
       required String mid}) async {
     try {
       String jsPath = "assets/js/paytm.js";
-      await jsHelper.loadAssetJs(
-          jsFilePath: jsPath,
+      await jsHelper.loadJs(
+          jsPath: jsPath,
           jsFunctionName: 'paytm',
           jsFunctionArgs: [txnToken, orderId, amount, mid],
           usePromise: true);
@@ -103,8 +101,8 @@ class JsProvider {
       required String id}) async {
     try {
       String jsPath = "assets/js/submit_form.js";
-      await jsHelper.loadAssetJs(
-          jsFilePath: jsPath,
+      await jsHelper.loadJs(
+          jsPath: jsPath,
           jsFunctionName: 'submitFormFunction',
           jsFunctionArgs: [actionUrl, obj, id]);
     } catch (e, stacktrace) {
