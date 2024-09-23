@@ -109,4 +109,12 @@ class JsProvider {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
+
+  Future<void> loadJs({required String jsPath}) async {
+    try {
+      await jsHelper.loadJs(jsPath: jsPath);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+  }
 }
