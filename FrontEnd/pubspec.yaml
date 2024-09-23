@@ -28,9 +28,9 @@ dependencies:
   go_router: ^14.2.7
 
   #firebase
-  firebase_core: ^3.4.0
-  firebase_messaging: ^15.1.0
-  firebase_analytics: ^11.3.0
+  firebase_core: ^3.5.0
+  firebase_messaging: ^15.1.2
+  firebase_analytics: ^11.3.2
   firebase_crashlytics: ^4.1.2
   firebase_performance: ^0.10.0+7
 
