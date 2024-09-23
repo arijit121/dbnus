@@ -100,10 +100,16 @@ class JSHelper {
   ///
   Future<T?> loadJs<T>(
       {String? jsPath,
-      required String jsFunctionName,
+      String? jsFunctionName,
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
     try {
+      if ((jsPath == null || jsPath.isEmpty) &&
+          (jsFunctionName == null || jsFunctionName.isEmpty)) {
+        throw Exception(
+            "Both jsPath and jsFunctionName can't be null or empty. Atleast pass one value.");
+      }
+
       if (jsPath != null && jsPath.isNotEmpty) {
         String _jsFilePath = kReleaseMode &&
                 !jsPath.contains("https://") &&
@@ -127,44 +133,45 @@ class JSHelper {
           });
         }
       }
-
-      if (usePromise) {
-        if (jsFunctionName.isEmpty) {
-          throw Exception('JavaScript function name is empty.');
-        }
-
-        try {
-          // Call the JavaScript function and handle the Promise using `promiseToFuture`
-          final promise = js_util.callMethod(
-              html.window, jsFunctionName, jsFunctionArgs ?? []);
-          if (promise == null) {
-            return null; // Handle `null` result from JS function
-          }
-          return await js_util.promiseToFuture<T>(promise);
-        } catch (error) {
-          throw Exception('Error calling JS function with Promise: $error');
-        }
-      } else {
-        try {
-          final completer = Completer<T?>();
-
+      if (jsFunctionName != null && jsFunctionName.isNotEmpty) {
+        if (usePromise) {
           if (jsFunctionName.isEmpty) {
             throw Exception('JavaScript function name is empty.');
           }
 
-          // Call the JavaScript function and handle null return values
-          js.context.callMethod(jsFunctionName, [
-            ...(jsFunctionArgs ?? []),
-            js.allowInterop((result) {
-              // Allow `null` or `undefined` results
-              completer.complete(
-                  result); // Complete with `null` if JS returns `undefined`
-            })
-          ]);
+          try {
+            // Call the JavaScript function and handle the Promise using `promiseToFuture`
+            final promise = js_util.callMethod(
+                html.window, jsFunctionName, jsFunctionArgs ?? []);
+            if (promise == null) {
+              return null; // Handle `null` result from JS function
+            }
+            return await js_util.promiseToFuture<T>(promise);
+          } catch (error) {
+            throw Exception('Error calling JS function with Promise: $error');
+          }
+        } else {
+          try {
+            final completer = Completer<T?>();
 
-          return await completer.future;
-        } catch (error) {
-          throw Exception('Error calling JS function with callback: $error');
+            if (jsFunctionName.isEmpty) {
+              throw Exception('JavaScript function name is empty.');
+            }
+
+            // Call the JavaScript function and handle null return values
+            js.context.callMethod(jsFunctionName, [
+              ...(jsFunctionArgs ?? []),
+              js.allowInterop((result) {
+                // Allow `null` or `undefined` results
+                completer.complete(
+                    result); // Complete with `null` if JS returns `undefined`
+              })
+            ]);
+
+            return await completer.future;
+          } catch (error) {
+            throw Exception('Error calling JS function with callback: $error');
+          }
         }
       }
     } catch (error) {
