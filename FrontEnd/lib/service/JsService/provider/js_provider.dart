@@ -60,7 +60,7 @@ class JsProvider {
     try {
       return await jsHelper.callJs<String>(
           // jsFilePath: jsPath,
-          jsFunctionName: 'getDeviceIdFunction',
+          jsFunctionName: 'getDeviceIdCJSFunction',
           usePromise: true);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);

@@ -17,7 +17,7 @@ class CrashUtils {
     await setValue(value: true);
 
     if (!nav) {
-      CustomRoute().clearAndNavigate(RouteName.error, extra: args);
+      CustomRoute().pushNamed(name: RouteName.error, arguments: args);
     }
   }
 }

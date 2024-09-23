@@ -10,7 +10,7 @@ import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
-import 'modules/crash_view/utils/crashUtils.dart';
+import 'service/crash/utils/crashUtils.dart';
 import 'service/firebase_service.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
 import 'utils/text_utils.dart';

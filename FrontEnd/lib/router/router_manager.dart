@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../const/assects_const.dart';
 import '../modules/landing/utils/landing_utils.dart';
-import '../modules/crash_view/ui/crash_ui.dart' deferred as crash;
+import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_image.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:dbnus/modules/crash_view/utils/crashUtils.dart';
+import 'service/crash/utils/crashUtils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -69,7 +69,7 @@ Future<void> main() async {
   };
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  FirebaseMessaging.instance.setAutoInitEnabled(false);
+
 
   await FirebaseService().getInitialMessage();
   await NotificationHandler().requestPermissions();

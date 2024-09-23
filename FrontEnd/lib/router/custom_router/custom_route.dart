@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/JsService/provider/js_provider.dart';
 import '../../service/context_service.dart';
+import '../../service/crash/ui/crash_ui.dart';
 import '../router_manager.dart';
 import '../router_name.dart';
 import 'web/custom_router_web.dart';
@@ -93,15 +94,16 @@ class CustomRoute {
     }
   }
 
-  MaterialPageRoute getRoute({required String name, dynamic arguments}) {
+  MaterialPageRoute _getRoute({required String name, dynamic arguments}) {
     switch (name) {
-      // case RouteName.cartUploadPrescription:
-      //   return MaterialPageRoute(builder: (_) {
-      //     if (arguments is Map) {
-      //       return PhonePeWebViewScreen(phonePeDetails: arguments);
-      //     }
-      //     return RouterManager.errorRoute();
-      //   });
+      case RouteName.error:
+        return MaterialPageRoute(builder: (_) {
+          if (arguments is Map<String, dynamic>) {
+            return CrashUi(errorDetails: arguments);
+          } else {
+            return RouterManager.errorRoute();
+          }
+        });
       default:
         return MaterialPageRoute(builder: (_) {
           return RouterManager.errorRoute();
@@ -111,7 +113,7 @@ class CustomRoute {
 
   Future pushNamed({required String name, dynamic arguments}) {
     return Navigator.push(
-        CurrentContext().context, getRoute(name: name, arguments: arguments));
+        CurrentContext().context, _getRoute(name: name, arguments: arguments));
   }
 
   String currentRoute() {
