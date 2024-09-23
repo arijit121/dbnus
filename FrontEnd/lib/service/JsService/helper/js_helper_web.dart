@@ -114,8 +114,8 @@ class JSHelper {
         String _jsFilePath = kReleaseMode &&
                 !jsPath.contains("https://") &&
                 !jsPath.contains("http://")
-            ? "assets/$jsPath"
-            : jsFilePath;
+            ? "assets/${jsPath ?? ""}"
+            : jsPath ?? "";
 
         // Check if the script is already loaded
         if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
@@ -176,7 +176,7 @@ class JSHelper {
       }
     } catch (error) {
       throw Exception(
-          'Unexpected error in ${jsPath.isEmpty || jsPath == null ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
+          'Unexpected error in ${jsPath == null || !(jsPath?.isNotEmpty == true) ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
     }
   }
 }

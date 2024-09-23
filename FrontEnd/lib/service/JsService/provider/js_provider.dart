@@ -54,11 +54,11 @@ class JsProvider {
   }
 
   Future<String?> getDeviceId() async {
-    // String jsPath = "assets/js/device_id.js";
+    String jsPath = "assets/js/device_id.js";
     try {
       return await jsHelper.loadJs<String>(
-          // jsFilePath: jsPath,
-          jsFunctionName: 'getDeviceIdCJSFunction',
+          jsPath: jsPath,
+          jsFunctionName: 'getDeviceIdFunction',
           usePromise: true);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);

@@ -1,21 +1,14 @@
 // Function to get the device ID using the FingerprintJS library and return a Promise
 function getDeviceIdFunction() {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // Dynamically import the FingerprintJS library from the CDN
-            const FingerprintJS = await import('https://openfpcdn.io/fingerprintjs/v4');
-
-            // Load the FingerprintJS instance
-            const fp = await FingerprintJS.load();
-
-            // Get the visitor identifier
-            const result = await fp.get();
-            const visitorId = result.visitorId;  // This is the visitor identifier
-
-            resolve(visitorId);  // Resolve the promise with the visitorId
-        } catch (error) {
-            console.error('Error getting device ID:', error);
-            reject(error);  // Reject the promise in case of an error
-        }
-    });
+    return new Promise((resolve, reject) => {
+        import('https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4.5/+esm')
+          .then(FingerprintJS => FingerprintJS.load())  // Initialize the agent
+          .then(fp => fp.get())  // Get the fingerprint
+          .then(result => {
+            resolve(result.visitorId);  // Resolve the Promise with the visitor ID
+          })
+          .catch(error => {
+            reject(error);  // Reject the Promise in case of an error
+          });
+      });
 }
