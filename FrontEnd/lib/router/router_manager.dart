@@ -1,4 +1,5 @@
 import 'package:dbnus/extension/spacing.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 import '../const/assects_const.dart';
@@ -28,8 +29,13 @@ class RouterManager {
   //This is what's used to retrieve the instance through the app
   static RouterManager getInstance = _singleton;
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
+    observers: <NavigatorObserver>[observer],
     redirectLimit: 30,
     routes: <RouteBase>[
       GoRoute(
