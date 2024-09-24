@@ -9,45 +9,6 @@ import '../../../service/value_handler.dart';
 import '../../router_manager.dart';
 
 class CustomRouterWeb {
-  /// Go To name page and Replace Current Page
-  ///
-  ///
-  void goToNameAndOff(String name,
-      {Map<String, String> pathParameters = const <String, String>{},
-      Map<String, dynamic> queryParameters = const <String, dynamic>{},
-      Object? extra}) {
-    String url = name;
-
-    if (queryParameters.isNotEmpty) {
-      url =
-          Uri.parse(name).replace(queryParameters: queryParameters).toString();
-    }
-
-    if (pathParameters.isNotEmpty) {
-      List<GoRoute> goRouteList = RouterManager
-          .getInstance.router.configuration.routes
-          .map((e) => e as GoRoute)
-          .toList();
-      GoRoute goRoute = goRouteList.firstWhere(
-          (element) => element.name == name,
-          orElse: () => GoRoute(path: name));
-      String temp = goRoute.path;
-
-      List<String> keyList = pathParameters.keys.toList();
-      List<String> valueList = pathParameters.values.toList();
-      url = Uri.parse(temp.replaceAll(
-              "/:${keyList.join("/:")}", "/${valueList.join("/")}"))
-          .toString();
-    }
-    Router.neglect(CurrentContext().context, () {
-      CurrentContext().context.goNamed(name,
-          queryParameters: queryParameters,
-          pathParameters: pathParameters,
-          extra: extra);
-      JsProvider().changeUrl(path: url);
-    });
-  }
-
   /// open the Page in same tab
   ///
   ///
