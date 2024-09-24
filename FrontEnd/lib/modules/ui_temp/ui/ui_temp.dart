@@ -101,12 +101,16 @@ class UiTemp extends StatelessWidget {
                 longitude: 88.3473527,
               );
             }),
-        CustomIconButton(
-            color: Colors.black,
-            icon: Icon(Icons.arrow_right_alt_outlined),
-            onPressed: () {
+        CustomGOEButton(
+            size: const Size(200, 36),
+            onPressed: () async {
               CustomRoute().clearAndNavigate(RouteName.leaderBoard);
-            }),
+            },
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Clear And Navigate to leaderBoard")),
         CustomIconButton(
             color: Colors.black,
             icon: Icon(Icons.add_box),
