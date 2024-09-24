@@ -34,9 +34,11 @@ Future<void> main() async {
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
-      AppLog.i("${errorDetails.library}", tag: "Serious Error");
+      AppLog.e("${errorDetails.exception}",
+          tag: "Serious Error", stackTrace: errorDetails.stack);
     } else {
-      AppLog.i("${errorDetails.library}", tag: "Error");
+      AppLog.e("${errorDetails.exception}",
+          tag: "Error", stackTrace: errorDetails.stack);
     }
   };
 

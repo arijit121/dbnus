@@ -53,14 +53,16 @@ Future<void> main() async {
   CrashUtils().setValue(value: false);
   FlutterError.onError = (errorDetails) {
     if (errorDetails.library?.contains("widgets library") == true) {
-      AppLog.i("${errorDetails.library}", tag: "Serious Error");
+      AppLog.e("${errorDetails.exception}",
+          tag: "Serious Error", stackTrace: errorDetails.stack);
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       CrashUtils().navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
     } else {
-      AppLog.i("${errorDetails.library}", tag: "Error");
+      AppLog.e("${errorDetails.exception}",
+          tag: "Error", stackTrace: errorDetails.stack);
       FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
     }
   };
@@ -71,8 +73,6 @@ Future<void> main() async {
     return true;
   };
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-
-
 
   await FirebaseService().getInitialMessage();
   await NotificationHandler().requestPermissions();
