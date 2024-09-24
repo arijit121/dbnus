@@ -1,5 +1,7 @@
 import 'package:dbnus/extension/spacing.dart';
+import 'package:dbnus/router/router_name.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
 import '../../../data/model/forward_geocoding.dart';
@@ -134,6 +136,16 @@ class TestPage extends StatelessWidget {
                     Colors.blue,
                   ]),
                   child: const CustomText("Get Device Id")),
+              20.ph,
+              CustomGOEButton(
+                  onPressed: () async {
+                    context.pushNamed(RouteName.leaderBoard);
+                  },
+                  gradient: const LinearGradient(colors: [
+                    Colors.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("Navigate to leaderBoard")),
               20.ph,
             ],
           ),

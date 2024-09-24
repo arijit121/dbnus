@@ -51,8 +51,8 @@ class JSHelper {
   // }
 
   Future<T> loadJs<T>(
-      {required String jsFilePath,
-      required String? jsFunctionName,
+      {String? jsPath,
+      String? jsFunctionName,
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
     return "" as T;

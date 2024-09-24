@@ -1,5 +1,6 @@
 import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../const/color_const.dart';
 import '../../../extension/hex_color.dart';
@@ -111,6 +112,15 @@ class UiTemp extends StatelessWidget {
               Colors.blue,
             ]),
             child: const CustomText("Clear And Navigate to leaderBoard")),
+        CustomGOEButton(
+            onPressed: () async {
+              context.pushNamed(RouteName.products);
+            },
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Navigate to products")),
         CustomIconButton(
             color: Colors.black,
             icon: Icon(Icons.add_box),
