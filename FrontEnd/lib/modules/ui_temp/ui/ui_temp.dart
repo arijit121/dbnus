@@ -1,4 +1,5 @@
 import 'package:dbnus/extension/spacing.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -113,8 +114,11 @@ class UiTemp extends StatelessWidget {
             ]),
             child: const CustomText("Clear And Navigate to leaderBoard")),
         CustomGOEButton(
+            size: const Size(200, 36),
             onPressed: () async {
-              context.pushNamed(RouteName.products);
+              kIsWeb
+                  ? context.goNamed(RouteName.products)
+                  : context.pushNamed(RouteName.products);
             },
             gradient: const LinearGradient(colors: [
               Colors.red,

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,8 +21,11 @@ class _MyReorderableListState extends State<MyReorderableList> {
     return Column(
       children: [
         CustomGOEButton(
+            size: const Size(200, 36),
             onPressed: () async {
-              context.pushNamed(RouteName.order);
+              kIsWeb
+                  ? context.goNamed(RouteName.order)
+                  : context.pushNamed(RouteName.order);
             },
             gradient: const LinearGradient(colors: [
               Colors.red,

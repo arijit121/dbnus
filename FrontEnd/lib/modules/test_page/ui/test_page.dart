@@ -1,5 +1,6 @@
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -138,8 +139,11 @@ class TestPage extends StatelessWidget {
                   child: const CustomText("Get Device Id")),
               20.ph,
               CustomGOEButton(
+                  size: const Size(200, 36),
                   onPressed: () async {
-                    context.pushNamed(RouteName.leaderBoard);
+                    kIsWeb
+                        ? context.goNamed(RouteName.leaderBoard)
+                        : context.pushNamed(RouteName.leaderBoard);
                   },
                   gradient: const LinearGradient(colors: [
                     Colors.red,
