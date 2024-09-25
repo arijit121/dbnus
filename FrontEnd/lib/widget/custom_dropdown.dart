@@ -368,6 +368,10 @@ class CustomMenuAnchor<T> extends StatelessWidget {
         ),
       ),
       child: MenuAnchor(
+        style: MenuStyle(
+          backgroundColor: WidgetStateProperty.all(
+              Colors.white), // Set background color to white
+        ),
         builder: (BuildContext context, MenuController controller, Widget? _) {
           return InkWell(
             onTap: () {
