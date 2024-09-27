@@ -108,35 +108,75 @@ class PopUpItems {
     }
   }
 
-  void customMsgDialog({required String msg, String? content}) {
-    showDialog<String>(
+  Future<void> customMsgDialog(
+      {String? title, String? content, DialogType? type}) async {
+    IconData? icon;
+    Color? iconButtonColor;
+    if (type != null) {
+      switch (type) {
+        case DialogType.success:
+          icon = Icons.check_circle;
+          iconButtonColor = Colors.green;
+          break;
+        case DialogType.error:
+          icon = Icons.error;
+          iconButtonColor = Colors.red;
+          break;
+        case DialogType.warning:
+          icon = Icons.warning;
+          iconButtonColor = Colors.amber;
+          break;
+        case DialogType.info:
+          icon = Icons.info;
+          iconButtonColor = Colors.blue;
+          break;
+      }
+    }
+
+    await showDialog<String>(
       context: CurrentContext().context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: CustomText(msg,
-            color: HexColor.fromHex(ColorConst.primaryDark),
-            size: 13,
-            textAlign: TextAlign.start),
-        content: content != null
-            ? CustomText(content,
+        title: title != null
+            ? CustomText(
+                title,
                 color: HexColor.fromHex(ColorConst.primaryDark),
-                size: 12,
-                textAlign: TextAlign.start)
+                size: 16,
+              )
+            : null,
+        content: content != null || icon != null
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null)
+                    Icon(icon, color: iconButtonColor, size: 60.0),
+                  if (content != null && icon != null) 12.ph,
+                  if (content != null)
+                    CustomText(content,
+                        color: HexColor.fromHex(ColorConst.primaryDark),
+                        size: 14,
+                        textAlign: TextAlign.start),
+                ],
+              )
             : null,
         actions: <Widget>[
           CustomGOEButton(
-            radius: 10,
-            backGroundColor: Colors.blueAccent,
+            size: const Size(72, 36),
+            radius: 8,
+            backGroundColor: iconButtonColor ?? Colors.blueAccent,
             onPressed: () {
               Navigator.pop(context);
             },
-            child: CustomText(TextUtils.ok, color: Colors.white, size: 20),
+            child: CustomText(TextUtils.ok, color: Colors.white, size: 16),
           ),
         ],
       ),
     );
   }
 }
+
+// Enum for dialog types
+enum DialogType { success, error, warning, info }
 
 //ignore: must_be_immutable
 class ToastMassage extends StatelessWidget {
