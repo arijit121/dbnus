@@ -145,6 +145,7 @@ class RouterManager {
       //   builder: (BuildContext context, GoRouterState state) {
       //     if (state.pathParameters["booking_no"]?.isNotEmpty == true) {
       //       return BookingReschedule(
+      //         key: ValueKey(state.pathParameters["booking_no"] ?? ""),
       //         bookingNo: state.pathParameters["booking_no"] ?? "",
       //       );
       //     } else {
@@ -173,6 +174,7 @@ class RouterManager {
       //     if (state.pathParameters["booking_id"]?.isNotEmpty == true &&
       //         state.pathParameters["patient_id"]?.isNotEmpty == true) {
       //       return ConsultationPatientInfo(
+      //         key: ValueKey("${state.pathParameters["booking_id"] ?? ""}${state.pathParameters["patient_id"] ?? ""}"),
       //         bookingId: state.pathParameters["booking_id"] ?? "",
       //         patientId: state.pathParameters["patient_id"] ?? "",
       //         isPayment: queryParameters["isPayment"] == "true",
