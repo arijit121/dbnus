@@ -35,7 +35,6 @@ class _MyReorderableListState extends State<MyReorderableList> {
         Expanded(
           child: ReorderableListView(
             shrinkWrap: true,
-            buildDefaultDragHandles: false,
             onReorder: (oldIndex, newIndex) {
               setState(() {
                 if (oldIndex < newIndex) {
@@ -62,26 +61,22 @@ class _MyReorderableListState extends State<MyReorderableList> {
             },
             children: List.generate(
               items.length,
-              (index) => ReorderableDragStartListener(
-                index: index,
+              (index) => Card(
                 key: Key('$index'),
-                child: Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    title: Text(
-                      items[index],
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          items.removeAt(index);
-                        });
-                      },
-                    ),
+                elevation: 5,
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                child: ListTile(
+                  title: Text(
+                    items[index],
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      setState(() {
+                        items.removeAt(index);
+                      });
+                    },
                   ),
                 ),
               ),
