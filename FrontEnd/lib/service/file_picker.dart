@@ -139,10 +139,12 @@ class CustomFilePicker {
     try {
       FocusManager.instance.primaryFocus?.unfocus();
       List<CameraDescription> cameraDescription = [];
-      try {
-        cameraDescription = await availableCameras();
-      } on CameraException catch (e) {
-        AppLog.i(e);
+      if (noCamera != true) {
+        try {
+          cameraDescription = await availableCameras();
+        } on CameraException catch (e) {
+          AppLog.i(e);
+        }
       }
       if (cameraDescription.isEmpty || noCamera == true) {
         tag = 2;
