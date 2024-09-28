@@ -1,10 +1,9 @@
+// import '../library/js_library.dart';
+import 'dart:async';
 import 'dart:html' as html;
 import 'dart:js' as js;
 import 'dart:js_util' as js_util;
 
-// import '../library/js_library.dart';
-import 'dart:async';
-import '../../../extension/logger_extension.dart';
 import 'package:flutter/foundation.dart';
 
 class JSHelper {

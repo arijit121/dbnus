@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
-import 'open_service.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
@@ -16,6 +15,7 @@ import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_text.dart';
 import 'context_service.dart';
+import 'open_service.dart';
 
 class AppUpdater {
   Future<void> startUpdate({bool? isForceUpdate}) async {

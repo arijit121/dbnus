@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import '../extension/logger_extension.dart';
-
-import '../const/api_url_const.dart';
 import '../data/api_client/imp/api_repo_imp.dart';
 import '../data/api_client/repo/api_repo.dart';
 import '../data/model/api_return_model.dart';
 import '../data/model/forward_geocoding.dart';
 import '../data/model/reverse_geocoding.dart';
+import '../extension/logger_extension.dart';
 
 class Geocoding {
   final String _reverseGeocode = "https://nominatim.openstreetmap.org/reverse";

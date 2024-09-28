@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
 import '../../../extension/logger_extension.dart';
 import '../../model/api_return_model.dart';
 import '../repo/api_repo.dart';
-import 'package:mime/mime.dart';
-import 'package:http_parser/http_parser.dart';
 
 class ApiRepoImp extends ApiRepo {
   @override

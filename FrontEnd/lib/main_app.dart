@@ -1,27 +1,24 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:firebase_performance/firebase_performance.dart';
-
-import 'service/crash/utils/crashUtils.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'const/theme_const.dart';
-import 'service/app_updater.dart';
 
-import 'const/color_const.dart';
-import 'extension/hex_color.dart';
+import 'const/theme_const.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
+import 'service/app_updater.dart';
+import 'service/crash/utils/crashUtils.dart';
 import 'service/download_handler.dart';
 import 'service/firebase_service.dart';
-import 'service/redirect_engine.dart';
 import 'service/notification_handler.dart';
+import 'service/redirect_engine.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
 import 'utils/text_utils.dart';
 

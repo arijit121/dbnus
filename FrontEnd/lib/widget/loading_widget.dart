@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import '../const/color_const.dart';
 import '../extension/hex_color.dart';
-
 import '../service/context_service.dart';
 
 //ignore: must_be_immutable

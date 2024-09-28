@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../widget/custom_text.dart';
 
 import '../const/color_const.dart';
 import '../data/model/service_model.dart';
@@ -10,7 +9,7 @@ import '../storage/localCart/bloc/local_cart_bloc.dart';
 import '../storage/localCart/model/cart_service_model.dart';
 import '../storage/localCart/repo/local_cart_repo.dart';
 import '../utils/text_utils.dart';
-import 'custom_ui.dart';
+import '../widget/custom_text.dart';
 
 class CustomTextButton extends StatelessWidget {
   const CustomTextButton(

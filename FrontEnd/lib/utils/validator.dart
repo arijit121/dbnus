@@ -1,6 +1,7 @@
+import 'package:intl/intl.dart';
+
 import '../extension/logger_extension.dart';
 import '../utils/text_utils.dart';
-import 'package:intl/intl.dart';
 
 class Validator {
   String? textValidatorAlphanumericWithSpacialCharacters(

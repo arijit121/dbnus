@@ -3,17 +3,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../const/color_const.dart';
+import '../data/model/custom_file.dart';
 import '../extension/hex_color.dart';
 import '../extension/logger_extension.dart';
 import '../extension/spacing.dart';
-import '../utils/pop_up_items.dart';
-import '../utils/screen_utils.dart';
-import '../widget/custom_text.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../data/model/custom_file.dart';
 import '../service/context_service.dart';
+import '../utils/pop_up_items.dart';
+import '../widget/custom_text.dart';
 
 class CustomFilePicker {
   final int _maxFileSize = 5;

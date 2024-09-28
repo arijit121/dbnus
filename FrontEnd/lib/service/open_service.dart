@@ -1,10 +1,10 @@
+import 'package:in_app_review/in_app_review.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../extension/logger_extension.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class OpenService {
   void openWhatsApp({required String contactNo, String? message}) {

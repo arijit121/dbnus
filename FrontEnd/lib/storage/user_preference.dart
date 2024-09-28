@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import '../extension/logger_extension.dart';
-
 import '../data/model/user_model.dart';
+import '../extension/logger_extension.dart';
 import 'local_preferences.dart';
 
 class UserPreference {

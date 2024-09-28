@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widget/custom_text.dart';
 
 import '../const/assects_const.dart';
+import '../widget/custom_text.dart';
 import 'custom_image.dart';
 
 //ignore: must_be_immutable

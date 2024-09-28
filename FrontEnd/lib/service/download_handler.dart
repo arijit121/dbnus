@@ -1,11 +1,13 @@
 import 'dart:io';
+
 import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../config/app_config.dart';
-import '../utils/pop_up_items.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../config/app_config.dart';
 import '../extension/logger_extension.dart';
+import '../utils/pop_up_items.dart';
 import 'JsService/provider/js_provider.dart';
 import 'open_service.dart';
 

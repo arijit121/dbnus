@@ -2,8 +2,9 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import '../service/open_service.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../service/open_service.dart';
 
 TextStyle customizeTextStyle(
     {FontWeight? fontWeight,

@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import '../extension/logger_extension.dart';
 
+import '../extension/logger_extension.dart';
 import 'redirect_engine.dart';
 
 class FirebaseService {

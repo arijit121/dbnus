@@ -1,7 +1,7 @@
 // THIS FILE WILL PREVENT COMPILE TIME ERRORS,
 // WHICH OCCURS BECAUSE OF PLATFORM DEPENDENT IMPORTS...
 
-export '../main_app.dart' // By default
+export 'main_app.dart' // By default
     if (dart.library.js) 'main_web.dart'
     if (dart.library.io) 'main_app.dart';
 
