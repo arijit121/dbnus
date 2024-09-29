@@ -147,24 +147,24 @@ class CustomGOEButton extends StatelessWidget {
     final Gradient? effectiveGradient = onPressed == null ? null : gradient;
 
     // Determine splash, highlight, and hover colors based on background or gradient
-    Color? shlhColor = effectiveGradient != null
+    Color? sHlHColor = effectiveGradient != null
         ? (effectiveGradient.colors.last)
         : (effectiveBackgroundColor);
 
-    final Color? splashColor = shlhColor != null
+    final Color? splashColor = sHlHColor != null
         ? effectiveGradient != null
-            ? shlhColor.withOpacity(0.5)
-            : ColorExe.darken(shlhColor, 0.05)
+            ? sHlHColor.withOpacity(0.5)
+            : ColorExe.darken(sHlHColor, 0.05)
         : null;
-    final Color? highlightColor = shlhColor != null
+    final Color? highlightColor = sHlHColor != null
         ? effectiveGradient != null
-            ? shlhColor.withOpacity(0.125)
-            : ColorExe.darken(shlhColor, 0.0125)
+            ? sHlHColor.withOpacity(0.125)
+            : ColorExe.darken(sHlHColor, 0.0125)
         : null;
-    final Color? hoverColor = shlhColor != null
+    final Color? hoverColor = sHlHColor != null
         ? effectiveGradient != null
-            ? shlhColor.withOpacity(0.25)
-            : ColorExe.darken(shlhColor, 0.025)
+            ? sHlHColor.withOpacity(0.25)
+            : ColorExe.darken(sHlHColor, 0.025)
         : null;
 
     final Color? effectiveBorderColor = onPressed == null && borderColor != null
