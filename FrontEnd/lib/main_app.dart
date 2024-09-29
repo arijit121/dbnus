@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,28 +48,31 @@ Future<void> main() async {
       );
     }
   });
-  CrashUtils().setValue(value: false);
-  FlutterError.onError = (errorDetails) {
-    if (errorDetails.library?.contains("widgets library") == true) {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Serious Error", stackTrace: errorDetails.stack);
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-      CrashUtils().navigateToCrashPage({
-        "error": "${errorDetails.exception}",
-        "stack": "${errorDetails.stack}",
-      });
-    } else {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Error", stackTrace: errorDetails.stack);
-      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-    }
-  };
 
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack);
-    AppLog.e("$error", stackTrace: stack, tag: "Error");
-    return true;
-  };
+  if (!kDebugMode) {
+    CrashUtils().setValue(value: false);
+    FlutterError.onError = (errorDetails) {
+      if (errorDetails.library?.contains("widgets library") == true) {
+        AppLog.e("${errorDetails.exception}",
+            tag: "Serious Error", stackTrace: errorDetails.stack);
+        FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+        CrashUtils().navigateToCrashPage({
+          "error": "${errorDetails.exception}",
+          "stack": "${errorDetails.stack}",
+        });
+      } else {
+        AppLog.e("${errorDetails.exception}",
+            tag: "Error", stackTrace: errorDetails.stack);
+        FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      }
+    };
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack);
+      AppLog.e("$error", stackTrace: stack, tag: "Error");
+      return true;
+    };
+  }
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   await FirebaseService().getInitialMessage();

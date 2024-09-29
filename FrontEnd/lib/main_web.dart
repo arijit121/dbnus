@@ -28,25 +28,28 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  CrashUtils().setValue(value: false);
-  FlutterError.onError = (errorDetails) {
-    if (errorDetails.library?.contains("widgets library") == true) {
-      CrashUtils().navigateToCrashPage({
-        "error": "${errorDetails.exception}",
-        "stack": "${errorDetails.stack}",
-      });
-      AppLog.e("${errorDetails.exception}",
-          tag: "Serious Error", stackTrace: errorDetails.stack);
-    } else {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Error", stackTrace: errorDetails.stack);
-    }
-  };
 
-  PlatformDispatcher.instance.onError = (error, stack) {
-    AppLog.e("$error", stackTrace: stack, tag: "Error");
-    return true;
-  };
+  if (!kDebugMode) {
+    CrashUtils().setValue(value: false);
+    FlutterError.onError = (errorDetails) {
+      if (errorDetails.library?.contains("widgets library") == true) {
+        CrashUtils().navigateToCrashPage({
+          "error": "${errorDetails.exception}",
+          "stack": "${errorDetails.stack}",
+        });
+        AppLog.e("${errorDetails.exception}",
+            tag: "Serious Error", stackTrace: errorDetails.stack);
+      } else {
+        AppLog.e("${errorDetails.exception}",
+            tag: "Error", stackTrace: errorDetails.stack);
+      }
+    };
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      AppLog.e("$error", stackTrace: stack, tag: "Error");
+      return true;
+    };
+  }
 
   FirebaseMessaging.instance.setAutoInitEnabled(false);
   SystemChrome.setPreferredOrientations(
