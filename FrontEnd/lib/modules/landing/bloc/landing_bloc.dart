@@ -13,9 +13,8 @@ part 'landing_state.dart';
 class LandingBloc extends Bloc<LandingEvent, LandingState> {
   LandingBloc()
       : super(LandingState(
-          bannerData: DynamicBlocData<LandingBannerResponse>.init(),
-          pageIndex: DynamicBlocData<int>.init(value: 0),
-        )) {
+            bannerData: DynamicBlocData<LandingBannerResponse>.init(),
+            pageIndex: DynamicBlocData.init())) {
     ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
     on<LandingEvent>((event, emit) async {
       if (event is InitiateSplash) {
