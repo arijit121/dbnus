@@ -138,30 +138,59 @@ class CustomGOEButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine the effective background color and gradient when disabled
+    final Color effectiveBackgroundColor =
+        onPressed == null && backGroundColor != null
+            ? Colors.grey.shade400 // Disabled background color
+            : backGroundColor ?? Colors.transparent;
+    final Gradient? effectiveGradient = onPressed == null ? null : gradient;
+
+    // Determine splash, highlight, and hover colors based on background or gradient
+    final Color splashColor = effectiveGradient != null
+        ? (effectiveGradient.colors.last.withOpacity(0.3))
+        : (effectiveBackgroundColor.withOpacity(0.3));
+    final Color highlightColor = effectiveGradient != null
+        ? (effectiveGradient.colors.first.withOpacity(0.1))
+        : (effectiveBackgroundColor.withOpacity(0.1));
+    final Color hoverColor = effectiveGradient != null
+        ? (effectiveGradient.colors.last.withOpacity(0.2))
+        : (effectiveBackgroundColor.withOpacity(0.2));
+
+    final Color? effectiveBorderColor = onPressed == null && borderColor != null
+        ? Colors.grey.shade400 // Disabled border color
+        : borderColor;
+
     return Material(
-        color: Colors.transparent,
+      color: Colors.transparent,
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: effectiveGradient,
+          borderRadius: BorderRadius.circular(radius ?? 16),
+          color: effectiveGradient == null ? effectiveBackgroundColor : null,
+          border: effectiveBorderColor != null
+              ? Border.all(
+                  color: effectiveBorderColor,
+                )
+              : null,
+        ),
         child: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius ?? 16),
-            ),
-            onTap: onPressed,
-            child: Container(
-              height: size?.height,
-              width: size?.width,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                gradient: gradient,
-                borderRadius: BorderRadius.circular(radius ?? 16),
-                color: backGroundColor,
-                border: borderColor != null
-                    ? Border.all(
-                        color: borderColor!,
-                      )
-                    : null,
-              ),
-              padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
-              child: child,
-            )));
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius ?? 16),
+          ),
+          onTap: onPressed, // Disable onTap if disabled
+          splashColor: splashColor,
+          highlightColor: highlightColor,
+          hoverColor: hoverColor,
+          child: Container(
+            height: size?.height,
+            width: size?.width,
+            alignment: Alignment.center,
+            padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
+            child: child,
+          ),
+        ),
+      ),
+    );
   }
 }
 
