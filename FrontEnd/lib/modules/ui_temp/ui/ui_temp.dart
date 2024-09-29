@@ -71,6 +71,14 @@ class UiTemp extends StatelessWidget {
             )),
         CustomGOEButton(
             size: const Size(160, 36),
+            onPressed: () {},
+            borderColor: Colors.amber,
+            child: const CustomText(
+              "Check",
+              color: Colors.amber,
+            )),
+        CustomGOEButton(
+            size: const Size(160, 36),
             onPressed: () async {
               PopUpItems().customMsgDialog(
                   title: "Success",
