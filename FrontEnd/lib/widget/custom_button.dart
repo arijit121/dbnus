@@ -151,12 +151,21 @@ class CustomGOEButton extends StatelessWidget {
         ? (effectiveGradient.colors.last)
         : (effectiveBackgroundColor);
 
-    final Color? splashColor =
-        shlhColor != null ? ColorExe.darken(shlhColor, 0.05) : null;
-    final Color? highlightColor =
-        shlhColor != null ? ColorExe.darken(shlhColor, 0.0125) : null;
-    final Color? hoverColor =
-        shlhColor != null ? ColorExe.darken(shlhColor, 0.025) : null;
+    final Color? splashColor = shlhColor != null
+        ? effectiveGradient != null
+            ? shlhColor.withOpacity(0.5)
+            : ColorExe.darken(shlhColor, 0.05)
+        : null;
+    final Color? highlightColor = shlhColor != null
+        ? effectiveGradient != null
+            ? shlhColor.withOpacity(0.125)
+            : ColorExe.darken(shlhColor, 0.0125)
+        : null;
+    final Color? hoverColor = shlhColor != null
+        ? effectiveGradient != null
+            ? shlhColor.withOpacity(0.25)
+            : ColorExe.darken(shlhColor, 0.025)
+        : null;
 
     final Color? effectiveBorderColor = onPressed == null && borderColor != null
         ? Colors.grey.shade400 // Disabled border color
