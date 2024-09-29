@@ -61,6 +61,27 @@ class UiTemp extends StatelessWidget {
               Colors.blue,
             ]),
             child: const CustomText("Change Url")),
+        CustomGOEButton(
+            size: const Size(160, 36),
+            onPressed: () {},
+            backGroundColor: Colors.amber,
+            child: const CustomText(
+              "Check",
+              color: Colors.white,
+            )),
+        CustomGOEButton(
+            size: const Size(160, 36),
+            onPressed: () async {
+              PopUpItems().customMsgDialog(
+                  title: "Success",
+                  content: "Thank you, transaction complete.",
+                  type: DialogType.success);
+            },
+            backGroundColor: Colors.amber,
+            child: const CustomText(
+              "Show Success",
+              color: Colors.white,
+            )),
         const CustomTextFormField(),
         CustomDropdownMenuFormField<String>(
             hintText: "Please choose val",

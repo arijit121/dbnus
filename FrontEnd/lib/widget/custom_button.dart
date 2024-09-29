@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../const/color_const.dart';
 import '../data/model/service_model.dart';
+import '../extension/color_exe.dart';
 import '../extension/hex_color.dart';
 import '../service/redirect_engine.dart';
 import '../storage/localCart/bloc/local_cart_bloc.dart';
@@ -139,22 +140,23 @@ class CustomGOEButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine the effective background color and gradient when disabled
-    final Color effectiveBackgroundColor =
-        onPressed == null && backGroundColor != null
+    final Color? effectiveBackgroundColor =
+        onPressed == null && (backGroundColor != null || gradient != null)
             ? Colors.grey.shade400 // Disabled background color
-            : backGroundColor ?? Colors.transparent;
+            : backGroundColor;
     final Gradient? effectiveGradient = onPressed == null ? null : gradient;
 
     // Determine splash, highlight, and hover colors based on background or gradient
-    final Color splashColor = effectiveGradient != null
-        ? (effectiveGradient.colors.last.withOpacity(0.3))
-        : (effectiveBackgroundColor.withOpacity(0.3));
-    final Color highlightColor = effectiveGradient != null
-        ? (effectiveGradient.colors.first.withOpacity(0.1))
-        : (effectiveBackgroundColor.withOpacity(0.1));
-    final Color hoverColor = effectiveGradient != null
-        ? (effectiveGradient.colors.last.withOpacity(0.2))
-        : (effectiveBackgroundColor.withOpacity(0.2));
+    Color? shlhColor = effectiveGradient != null
+        ? (effectiveGradient.colors.last)
+        : (effectiveBackgroundColor);
+
+    final Color? splashColor =
+        shlhColor != null ? ColorExe.darken(shlhColor, 0.05) : null;
+    final Color? highlightColor =
+        shlhColor != null ? ColorExe.darken(shlhColor, 0.0125) : null;
+    final Color? hoverColor =
+        shlhColor != null ? ColorExe.darken(shlhColor, 0.025) : null;
 
     final Color? effectiveBorderColor = onPressed == null && borderColor != null
         ? Colors.grey.shade400 // Disabled border color
