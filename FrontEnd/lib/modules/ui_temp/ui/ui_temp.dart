@@ -63,6 +63,14 @@ class UiTemp extends StatelessWidget {
             child: const CustomText("Change Url")),
         CustomGOEButton(
             size: const Size(160, 36),
+            onPressed: () async {},
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Check")),
+        CustomGOEButton(
+            size: const Size(160, 36),
             onPressed: () {},
             backGroundColor: Colors.amber,
             child: const CustomText(
