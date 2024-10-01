@@ -1,5 +1,7 @@
+import 'package:dbnus/data/model/custom_file.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
+import 'package:dbnus/service/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -150,6 +152,19 @@ class TestPage extends StatelessWidget {
                     Colors.blue,
                   ]),
                   child: const CustomText("Navigate to leaderBoard")),
+              20.ph,
+              CustomGOEButton(
+                  size: const Size(200, 36),
+                  onPressed: () async {
+                    CustomFile? customFile =
+                        await CustomFilePicker().customFilePicker();
+                    AppLog.i(customFile?.name, tag: "CustomFile");
+                  },
+                  gradient: const LinearGradient(colors: [
+                    Colors.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("File Pick")),
               20.ph,
             ],
           ),

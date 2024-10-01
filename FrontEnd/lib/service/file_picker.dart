@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:path_provider/path_provider.dart';
 import '../const/color_const.dart';
 import '../data/model/custom_file.dart';
 import '../extension/hex_color.dart';
@@ -13,9 +16,14 @@ import '../extension/spacing.dart';
 import '../service/context_service.dart';
 import '../utils/pop_up_items.dart';
 import '../widget/custom_text.dart';
+import 'dart:ui' as ui;
+
+import '../widget/loading_widget.dart';
 
 class CustomFilePicker {
   final int _maxFileSize = 5;
+  final String _notJpgErrorMsg =
+      "Invalid file format. Please select an image in JPG format";
 
   Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
     try {
@@ -33,6 +41,18 @@ class CustomFilePicker {
         if (!_allowedExtensions.contains(platformFile.extension)) {
           PopUpItems().toastMessage("Invalid file type.", Colors.red,
               durationSeconds: 4);
+        } else if (platformFile.extension == 'jpg' ||
+            platformFile.extension == 'jpeg') {
+          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+            name: platformFile.name,
+            path: kIsWeb ? null : platformFile.path,
+            bytes: platformFile.bytes,
+          ));
+          return CustomFile(
+            name: compressFile?.name,
+            path: kIsWeb ? null : compressFile?.path,
+            bytes: kIsWeb ? compressFile?.bytes : null,
+          );
         } else if (sizeInMb > _maxFileSize) {
           PopUpItems().toastMessage(
               "Can't upload file more than 5 mb.", Colors.red,
@@ -88,18 +108,19 @@ class CustomFilePicker {
       XFile? image = await picker.pickImage(source: ImageSource.camera);
 
       if (image != null) {
-        int sizeInBytes = await image.length();
-        double sizeInMb = sizeInBytes / (1024 * 1024);
-        if (sizeInMb > _maxFileSize) {
-          PopUpItems().toastMessage(
-              "Can't upload file more than 5 mb.", Colors.red,
-              durationSeconds: 4);
-        } else {
+        if (image.name.endsWith('.jpg') || image.name.endsWith('.jpeg')) {
+          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              bytes: await image.readAsBytes(),
+              name: image.name,
+              path: image.path));
           return CustomFile(
-            name: image.name,
-            path: kIsWeb ? null : image.path,
-            bytes: kIsWeb ? (await image.readAsBytes()) : null,
+            name: compressFile?.name,
+            path: kIsWeb ? null : compressFile?.path,
+            bytes: kIsWeb ? compressFile?.bytes : null,
           );
+        } else {
+          PopUpItems()
+              .toastMessage(_notJpgErrorMsg, Colors.red, durationSeconds: 4);
         }
       }
     } catch (e, stacktrace) {
@@ -112,19 +133,21 @@ class CustomFilePicker {
     try {
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
       if (image != null) {
-        int sizeInBytes = await image.length();
-        double sizeInMb = sizeInBytes / (1024 * 1024);
-        if (sizeInMb > _maxFileSize) {
-          PopUpItems().toastMessage(
-              "Can't upload file more than 5 mb.", Colors.red,
-              durationSeconds: 4);
-        } else {
+        if (image.name.endsWith('.jpg') || image.name.endsWith('.jpeg')) {
+          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              bytes: await image.readAsBytes(),
+              name: image.name,
+              path: image.path));
           return CustomFile(
-            name: image.name,
-            path: kIsWeb ? null : image.path,
-            bytes: kIsWeb ? (await image.readAsBytes()) : null,
+            name: compressFile?.name,
+            path: kIsWeb ? null : compressFile?.path,
+            bytes: kIsWeb ? compressFile?.bytes : null,
           );
+        } else {
+          PopUpItems()
+              .toastMessage(_notJpgErrorMsg, Colors.red, durationSeconds: 4);
         }
       }
     } catch (e, stacktrace) {
@@ -264,5 +287,56 @@ class CustomFilePicker {
       AppLog.e(e, error: e);
     }
     return null;
+  }
+
+  Future<CustomFile?> _compressAndResizeImage(CustomFile file) async {
+    showLoading();
+    CustomFile? customFile;
+    try {
+      ui.Image image = await decodeImageFromList(file.bytes!);
+
+      // Resize the image to have the longer side be 800 pixels
+      int width;
+      int height;
+
+      if (image.width > image.height) {
+        width = 800;
+        height = (image.height / image.width * 800).round();
+      } else {
+        height = 800;
+        width = (image.width / image.height * 800).round();
+      }
+
+      Uint8List compressedJpegBytes =
+          await FlutterImageCompress.compressWithList(file.bytes!,
+              minWidth: width,
+              minHeight: height,
+              quality: 85,
+              format: CompressFormat.jpeg);
+      String? extension = file.name?.split(".").last;
+      String? name = file.name?.split(".$extension").first;
+      name = "${name ?? ""}_compressed.jpg";
+      if (kIsWeb) {
+        customFile = CustomFile(bytes: compressedJpegBytes, name: name);
+      } else {
+        final Directory tempDir = await getApplicationCacheDirectory();
+        // Ensure the directory exists, if not create it
+        if (!await tempDir.exists()) {
+          await tempDir.create(recursive: true);
+        }
+        String path = tempDir.path + name;
+        File compressedFile = File(path);
+        compressedFile.writeAsBytesSync(compressedJpegBytes);
+        customFile = CustomFile(path: compressedFile.path, name: name);
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    BuildContext context = CurrentContext().context;
+    if (Navigator.of(context).canPop()) {
+      Navigator.pop(context);
+    }
+
+    return customFile;
   }
 }
