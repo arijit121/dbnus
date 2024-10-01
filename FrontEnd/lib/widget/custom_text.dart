@@ -105,11 +105,15 @@ class CustomInkWellText extends StatelessWidget {
 class CustomRichText extends StatelessWidget {
   final List<TextSpan> textSpanList;
   final TextAlign textAlign;
+  final TextOverflow overflow;
+  final int? maxLines;
 
   const CustomRichText({
     super.key,
     required this.textSpanList,
     this.textAlign = TextAlign.start,
+    this.overflow = TextOverflow.clip,
+    this.maxLines,
   });
 
   @override
@@ -119,6 +123,8 @@ class CustomRichText extends StatelessWidget {
       text: TextSpan(
         children: textSpanList,
       ),
+      overflow: overflow, // Handle text overflow
+      maxLines: maxLines,
     );
   }
 }
