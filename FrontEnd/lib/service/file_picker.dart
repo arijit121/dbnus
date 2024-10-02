@@ -19,6 +19,7 @@ import '../widget/custom_text.dart';
 import 'dart:ui' as ui;
 
 import '../widget/loading_widget.dart';
+import 'JsService/provider/js_provider.dart';
 
 class CustomFilePicker {
   final int _maxFileSize = 5;
@@ -293,6 +294,8 @@ class CustomFilePicker {
     showLoading();
     CustomFile? customFile;
     try {
+      await JsProvider().loadJs(
+          jsPath: "https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js");
       ui.Image image = await decodeImageFromList(file.bytes!);
 
       // Resize the image to have the longer side be 800 pixels
