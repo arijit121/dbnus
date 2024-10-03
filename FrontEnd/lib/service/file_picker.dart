@@ -109,20 +109,15 @@ class CustomFilePicker {
       XFile? image = await picker.pickImage(source: ImageSource.camera);
 
       if (image != null) {
-        if (image.name.endsWith('.jpg') || image.name.endsWith('.jpeg')) {
-          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
-              bytes: await image.readAsBytes(),
-              name: image.name,
-              path: image.path));
-          return CustomFile(
-            name: compressFile?.name,
-            path: kIsWeb ? null : compressFile?.path,
-            bytes: kIsWeb ? compressFile?.bytes : null,
-          );
-        } else {
-          PopUpItems()
-              .toastMessage(_notJpgErrorMsg, Colors.red, durationSeconds: 4);
-        }
+        CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+            bytes: await image.readAsBytes(),
+            name: image.name,
+            path: image.path));
+        return CustomFile(
+          name: compressFile?.name,
+          path: kIsWeb ? null : compressFile?.path,
+          bytes: kIsWeb ? compressFile?.bytes : null,
+        );
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -136,20 +131,15 @@ class CustomFilePicker {
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
       if (image != null) {
-        if (image.name.endsWith('.jpg') || image.name.endsWith('.jpeg')) {
-          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
-              bytes: await image.readAsBytes(),
-              name: image.name,
-              path: image.path));
-          return CustomFile(
-            name: compressFile?.name,
-            path: kIsWeb ? null : compressFile?.path,
-            bytes: kIsWeb ? compressFile?.bytes : null,
-          );
-        } else {
-          PopUpItems()
-              .toastMessage(_notJpgErrorMsg, Colors.red, durationSeconds: 4);
-        }
+        CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+            bytes: await image.readAsBytes(),
+            name: image.name,
+            path: image.path));
+        return CustomFile(
+          name: compressFile?.name,
+          path: kIsWeb ? null : compressFile?.path,
+          bytes: kIsWeb ? compressFile?.bytes : null,
+        );
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -314,7 +304,7 @@ class CustomFilePicker {
           await FlutterImageCompress.compressWithList(file.bytes!,
               minWidth: width,
               minHeight: height,
-              quality: 85,
+              quality: 95,
               format: CompressFormat.jpeg);
       String? extension = file.name?.split(".").last;
       String? name = file.name?.split(".$extension").first;
