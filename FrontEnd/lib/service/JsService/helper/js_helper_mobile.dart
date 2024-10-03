@@ -50,11 +50,11 @@ class JSHelper {
   //   return null;
   // }
 
-  Future<T> loadJs<T>(
+  Future<T?> loadJs<T>(
       {String? jsPath,
       String? jsFunctionName,
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
-    return "" as T;
+    return null;
   }
 }

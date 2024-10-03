@@ -177,5 +177,6 @@ class JSHelper {
       throw Exception(
           'Unexpected error in ${jsPath == null || !(jsPath?.isNotEmpty == true) ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
     }
+    return null;
   }
 }
