@@ -113,11 +113,13 @@ class CustomFilePicker {
             bytes: await image.readAsBytes(),
             name: image.name,
             path: image.path));
-        return CustomFile(
-          name: compressFile?.name,
-          path: kIsWeb ? null : compressFile?.path,
-          bytes: kIsWeb ? compressFile?.bytes : null,
-        );
+        if (compressFile != null) {
+          return CustomFile(
+            name: compressFile.name,
+            path: kIsWeb ? null : compressFile.path,
+            bytes: kIsWeb ? compressFile.bytes : null,
+          );
+        }
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -135,11 +137,13 @@ class CustomFilePicker {
             bytes: await image.readAsBytes(),
             name: image.name,
             path: image.path));
-        return CustomFile(
-          name: compressFile?.name,
-          path: kIsWeb ? null : compressFile?.path,
-          bytes: kIsWeb ? compressFile?.bytes : null,
-        );
+        if (compressFile != null) {
+          return CustomFile(
+            name: compressFile.name,
+            path: kIsWeb ? null : compressFile.path,
+            bytes: kIsWeb ? compressFile.bytes : null,
+          );
+        }
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
