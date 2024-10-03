@@ -5,8 +5,7 @@ class ApiUrlConst {
       : "https://www.stg-googleapis.com/";
 
   static String books = "${baseUrl}books/v1/volumes";
+  static String hostUrl = "https://www.google.com";
 
-
-
-  static String hostUrl = "https://www.stg-googleapis.com";
+  static String testImgUrl = "https://picsum.photos/512/512.jpg";
 }
