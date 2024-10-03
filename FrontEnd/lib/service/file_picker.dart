@@ -49,11 +49,13 @@ class CustomFilePicker {
             path: kIsWeb ? null : platformFile.path,
             bytes: platformFile.bytes,
           ));
-          return CustomFile(
-            name: compressFile?.name,
-            path: kIsWeb ? null : compressFile?.path,
-            bytes: kIsWeb ? compressFile?.bytes : null,
-          );
+          if (compressFile != null) {
+            return CustomFile(
+              name: compressFile.name,
+              path: kIsWeb ? null : compressFile.path,
+              bytes: kIsWeb ? compressFile.bytes : null,
+            );
+          }
         } else if (sizeInMb > _maxFileSize) {
           PopUpItems().toastMessage(
               "Can't upload file more than 5 mb.", Colors.red,
