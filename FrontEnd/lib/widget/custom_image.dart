@@ -36,15 +36,17 @@ class CustomNetWorkImageView extends StatelessWidget {
         height: height != 0.0 ? height : null,
         fit: fit,
         color: color,
-        placeholder: (context, url) => Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            width: width,
-            height: height,
-            color: Colors.white, // Shimmer background color
-          ),
-        ),
+        progressIndicatorBuilder: (context, url, downloadProgress) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              width: width,
+              height: height,
+              color: Colors.white, // Shimmer background color
+            ),
+          );
+        },
         errorWidget: (_, __, ___) {
           return Image.asset(
             AssetsConst.dbnusNoImageLogo,
