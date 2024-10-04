@@ -36,7 +36,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    // Initialize PageController with a large initial page value to allow seamless scrolling.
+    _pageController = PageController(initialPage: 0);
+    _currentIndex.value = 0; // Set the initial current index.
     if (widget.sliderList.length > 1) {
       _startAutoScroll();
     }
@@ -45,20 +47,19 @@ class _CarouselSliderState extends State<CarouselSlider> {
   void _startAutoScroll() {
     _autoScrollTimer?.cancel(); // Cancel existing timer if any
     _autoScrollTimer = Timer.periodic(widget.autoScrollDuration, (timer) {
-      int nextIndex = (_currentIndex.value + 1) % widget.sliderList.length;
+      int nextIndex = _pageController.page!.toInt() + 1;
 
-      // Apply special animation when nextIndex is 0 (loop back to first page)
-      final curve = nextIndex == 0 ? Curves.elasticOut : Curves.easeInOut;
-      final duration = nextIndex == 0
+      // Apply special animation when nextIndex is a loop
+      final duration = nextIndex % widget.sliderList.length == 0
           ? widget.transitionDuration + const Duration(milliseconds: 200)
           : widget.transitionDuration;
 
       _pageController.animateToPage(
         nextIndex,
         duration: duration,
-        curve: curve,
+        curve: Curves.easeInOut,
       );
-      _currentIndex.value = nextIndex;
+      _currentIndex.value = nextIndex % widget.sliderList.length;
     });
   }
 
@@ -90,12 +91,15 @@ class _CarouselSliderState extends State<CarouselSlider> {
       builder: (_, __, ___) {
         return PageView.builder(
           controller: _pageController,
-          itemCount: widget.sliderList.length,
           onPageChanged: (newIndex) {
-            _currentIndex.value = newIndex;
+            // Calculate the correct index by using modulo operation
+            int actualIndex = newIndex % widget.sliderList.length;
+            _currentIndex.value = actualIndex;
           },
           itemBuilder: (context, pageIndex) {
-            return _buildPageItem(pageIndex);
+            // Use modulo to repeat the list infinitely
+            int actualIndex = pageIndex % widget.sliderList.length;
+            return _buildPageItem(actualIndex);
           },
         );
       },
@@ -104,9 +108,6 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   Widget _buildPageItem(int pageIndex) {
     final bool isActive = pageIndex == _currentIndex.value;
-    final bool isLoopingBack =
-        _currentIndex.value == widget.sliderList.length - 1 && pageIndex == 0;
-
     return GestureDetector(
       onTap: () {
         final actionUrl = widget.sliderList.elementAt(pageIndex).actionUrl;
@@ -117,11 +118,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
         }
       },
       child: Transform.scale(
-        scale: isLoopingBack
-            ? 1.05 // Pop a little more when transitioning back to the first page
-            : isActive
-                ? 1.0
-                : widget.scaleFactor,
+        scale: isActive ? 1.0 : widget.scaleFactor,
         child: Opacity(
           opacity: isActive ? 1.0 : widget.fadeFactor,
           child: CustomNetWorkImageView(

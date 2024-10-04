@@ -356,11 +356,13 @@ class TestPage extends StatelessWidget {
                 // autoScrollDuration: const Duration(seconds: 3),
                 // transitionDuration: const Duration(milliseconds: 800),
                 // scaleFactor: 0.95,
-                sliderList: List.generate(
-                    5,
-                    (int index) => CarouselSliderModel(
-                        imageUrl: ApiUrlConst.testImgUrl,
-                        actionUrl: RouteName.products)),
+                sliderList: List.generate(5, (int index) {
+                  return CarouselSliderModel(
+                      imageUrl: index == 4
+                          ? "https://picsum.photos/512/800.jpg"
+                          : ApiUrlConst.testImgUrl,
+                      actionUrl: RouteName.products);
+                }),
               ),
               20.ph,
             ],
