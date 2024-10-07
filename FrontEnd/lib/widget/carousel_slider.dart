@@ -12,6 +12,7 @@ class CarouselSlider extends StatefulWidget {
     this.fadeFactor = 0.5,
     required this.height,
     this.onTap,
+    this.noScroll,
   });
 
   final List<String> imageList;
@@ -19,6 +20,7 @@ class CarouselSlider extends StatefulWidget {
   final Duration transitionDuration;
   final double scaleFactor, fadeFactor, height;
   final void Function(int index)? onTap;
+  final bool? noScroll;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -35,7 +37,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
     // Initialize PageController with a large initial page value to allow seamless scrolling.
     _pageController = PageController(initialPage: 0);
     _currentIndex.value = 0; // Set the initial current index.
-    if (widget.imageList.length > 1) {
+    if (widget.imageList.length > 1 && widget.noScroll != true) {
       _startAutoScroll();
     }
   }
