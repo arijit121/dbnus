@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import 'package:physiodoktor/repositories/api_repo.dart';
+import '../../../data/api_client/repo/api_repo.dart';
 
 part 'network_image_event.dart';
 
