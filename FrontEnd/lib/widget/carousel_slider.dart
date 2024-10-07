@@ -1,28 +1,24 @@
-import 'package:dbnus/extension/spacing.dart';
-import 'package:dbnus/service/redirect_engine.dart';
-import 'package:dbnus/service/value_handler.dart';
-import 'package:dbnus/widget/custom_image.dart';
 import 'package:flutter/material.dart';
-
-import '../model/carousel_slider_model.dart';
-
 import 'dart:async';
+import 'custom_image.dart';
 
 class CarouselSlider extends StatefulWidget {
   const CarouselSlider({
     super.key,
-    required this.sliderList,
+    required this.imageList,
     this.autoScrollDuration = const Duration(seconds: 2),
     this.transitionDuration = const Duration(milliseconds: 600),
     this.scaleFactor = 0.9,
     this.fadeFactor = 0.5,
+    this.onTap,
   });
 
-  final List<CarouselSliderModel> sliderList;
+  final List<String> imageList;
   final Duration autoScrollDuration;
   final Duration transitionDuration;
   final double scaleFactor;
   final double fadeFactor;
+  final void Function(int index)? onTap;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -39,7 +35,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
     // Initialize PageController with a large initial page value to allow seamless scrolling.
     _pageController = PageController(initialPage: 0);
     _currentIndex.value = 0; // Set the initial current index.
-    if (widget.sliderList.length > 1) {
+    if (widget.imageList.length > 1) {
       _startAutoScroll();
     }
   }
@@ -50,7 +46,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
       int nextIndex = _pageController.page!.toInt() + 1;
 
       // Apply special animation when nextIndex is a loop
-      final duration = nextIndex % widget.sliderList.length == 0
+      final duration = nextIndex % widget.imageList.length == 0
           ? widget.transitionDuration + const Duration(milliseconds: 200)
           : widget.transitionDuration;
 
@@ -59,7 +55,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
         duration: duration,
         curve: Curves.easeInOut,
       );
-      _currentIndex.value = nextIndex % widget.sliderList.length;
+      _currentIndex.value = nextIndex % widget.imageList.length;
     });
   }
 
@@ -78,7 +74,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
       child: Column(
         children: [
           Expanded(child: _buildPageView()),
-          4.ph,
+          const SizedBox(height: 4),
           _buildIndicator(),
         ],
       ),
@@ -93,12 +89,12 @@ class _CarouselSliderState extends State<CarouselSlider> {
           controller: _pageController,
           onPageChanged: (newIndex) {
             // Calculate the correct index by using modulo operation
-            int actualIndex = newIndex % widget.sliderList.length;
+            int actualIndex = newIndex % widget.imageList.length;
             _currentIndex.value = actualIndex;
           },
           itemBuilder: (context, pageIndex) {
             // Use modulo to repeat the list infinitely
-            int actualIndex = pageIndex % widget.sliderList.length;
+            int actualIndex = pageIndex % widget.imageList.length;
             return _buildPageItem(actualIndex);
           },
         );
@@ -110,11 +106,8 @@ class _CarouselSliderState extends State<CarouselSlider> {
     final bool isActive = pageIndex == _currentIndex.value;
     return GestureDetector(
       onTap: () {
-        final actionUrl = widget.sliderList.elementAt(pageIndex).actionUrl;
-        if (ValueHandler().isTextNotEmptyOrNull(actionUrl)) {
-          RedirectEngine().redirectRoutes(
-            redirectUrl: Uri.parse(actionUrl!),
-          );
+        if (widget.onTap != null) {
+          widget.onTap!(pageIndex);
         }
       },
       child: Transform.scale(
@@ -123,7 +116,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
           opacity: isActive ? 1.0 : widget.fadeFactor,
           child: CustomNetWorkImageView(
             radius: 8,
-            url: widget.sliderList.elementAt(pageIndex).imageUrl,
+            url: widget.imageList.elementAt(pageIndex),
             fit: BoxFit.cover,
             width: double.infinity,
           ),
@@ -138,7 +131,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
       builder: (context, index, _) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.sliderList.length, (i) {
+          children: List.generate(widget.imageList.length, (i) {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,

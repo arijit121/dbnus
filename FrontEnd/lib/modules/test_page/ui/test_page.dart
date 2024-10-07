@@ -13,8 +13,7 @@ import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
-import '../../../widget/carousel_slider/model/carousel_slider_model.dart';
-import '../../../widget/carousel_slider/ui/carousel_slider.dart';
+import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
@@ -353,16 +352,16 @@ class TestPage extends StatelessWidget {
               ),
               20.ph,
               CarouselSlider(
-                // autoScrollDuration: const Duration(seconds: 3),
-                // transitionDuration: const Duration(milliseconds: 800),
-                // scaleFactor: 0.95,
-                sliderList: List.generate(5, (int index) {
-                  return CarouselSliderModel(
-                      imageUrl: index == 4
-                          ? "https://picsum.photos/512/800.jpg"
-                          : ApiUrlConst.testImgUrl,
-                      actionUrl: RouteName.products);
+                imageList: List.generate(5, (int index) {
+                  return index == 4
+                      ? "https://picsum.photos/512/800.jpg"
+                      : ApiUrlConst.testImgUrl;
                 }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.products)
+                      : context.pushNamed(RouteName.products);
+                },
               ),
               20.ph,
             ],
