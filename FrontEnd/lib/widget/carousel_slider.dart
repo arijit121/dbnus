@@ -10,14 +10,14 @@ class CarouselSlider extends StatefulWidget {
     this.transitionDuration = const Duration(milliseconds: 600),
     this.scaleFactor = 0.9,
     this.fadeFactor = 0.5,
+    required this.height,
     this.onTap,
   });
 
   final List<String> imageList;
   final Duration autoScrollDuration;
   final Duration transitionDuration;
-  final double scaleFactor;
-  final double fadeFactor;
+  final double scaleFactor, fadeFactor, height;
   final void Function(int index)? onTap;
 
   @override
@@ -70,7 +70,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 400,
+      height: widget.height,
       child: Column(
         children: [
           Expanded(child: _buildPageView()),

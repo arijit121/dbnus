@@ -362,6 +362,7 @@ class TestPage extends StatelessWidget {
                       ? context.goNamed(RouteName.products)
                       : context.pushNamed(RouteName.products);
                 },
+                height: 400,
               ),
               20.ph,
             ],
