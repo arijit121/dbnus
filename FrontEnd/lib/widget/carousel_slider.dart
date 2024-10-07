@@ -76,8 +76,10 @@ class _CarouselSliderState extends State<CarouselSlider> {
       child: Column(
         children: [
           Expanded(child: _buildPageView()),
-          const SizedBox(height: 4),
-          _buildIndicator(),
+          if (widget.imageList.length > 1) ...[
+            const SizedBox(height: 4),
+            _buildIndicator(),
+          ],
         ],
       ),
     );
@@ -119,7 +121,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
           child: CustomNetWorkImageView(
             radius: 8,
             url: widget.imageList.elementAt(pageIndex),
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
             width: double.infinity,
           ),
         ),
