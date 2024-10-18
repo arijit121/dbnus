@@ -13,6 +13,7 @@ import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
+import '../../../utils/pop_up_items.dart';
 import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
@@ -325,6 +326,20 @@ class TestPage extends StatelessWidget {
                 ],
               ),
               20.ph,
+              CustomGOEButton(
+                  size: const Size(160, 36),
+                  onPressed: () async {
+                    PopUpItems().customMsgDialog(
+                        title: "Success",
+                        content: "Thank you, transaction complete.",
+                        type: DialogType.success);
+                  },
+                  backGroundColor: Colors.amber,
+                  child: const CustomText(
+                    "Show Success",
+                    color: Colors.white,
+                  )),
+              20.ph,
               Row(
                 children: [
                   CustomNetWorkImageView(
@@ -352,6 +367,7 @@ class TestPage extends StatelessWidget {
               ),
               20.ph,
               CarouselSlider(
+                autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
                   return index == 4
                       ? "https://picsum.photos/512/800.jpg"

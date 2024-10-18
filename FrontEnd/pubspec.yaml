@@ -65,7 +65,7 @@ dependencies:
   #device info
   flutter_udid: ^3.0.0
   # custom_platform_device_id: ^1.0.8
-  device_info_plus: ^10.1.2
+  device_info_plus: ^11.0.0
   universal_io: ^2.2.2
   package_info_plus: ^8.0.0
 
@@ -113,7 +113,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
 
