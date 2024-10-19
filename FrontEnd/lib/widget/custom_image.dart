@@ -33,11 +33,27 @@ class CustomNetWorkImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius ?? 0), // Apply radius
-      child: kIsWeb ? _buildWebImage(context) : _buildMobileImage(context),
+      child: kIsWeb
+          ? _WebImageView(
+              url: url, width: width, height: height, fit: fit, color: color)
+          : _MobileImageView(
+              url: url, width: width, height: height, fit: fit, color: color),
     );
   }
+}
 
-  Widget _buildWebImage(BuildContext context) {
+class _WebImageView extends StatelessWidget {
+  const _WebImageView(
+      {required this.url, this.height, this.width, this.fit, this.color});
+
+  final String url;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
     final String localStorageKey =
         'cached_image_$url'; // Unique key for caching
 
@@ -53,7 +69,6 @@ class CustomNetWorkImageView extends StatelessWidget {
       (int viewId) {
         final imageElement = web.HTMLImageElement()
           ..src = url
-          ..crossOrigin = 'anonymous' // Enable CORS
           ..style.width = '100%'
           ..style.height = '100%'
           ..style.objectFit = _getObjectFit(fit)
@@ -102,34 +117,10 @@ class CustomNetWorkImageView extends StatelessWidget {
       }
     });
 
-    return FutureBuilder<void>(
-      future: Future.delayed(Duration.zero),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
-            child: Container(
-              width: width,
-              height: height,
-              color: Colors.white,
-            ),
-          );
-        } else {
-          return snapshot.hasError
-              ? Image.asset(
-                  AssetsConst.dbnusNoImageLogo,
-                  width: width,
-                  height: height,
-                  fit: fit,
-                )
-              : SizedBox(
-                  width: width,
-                  height: height,
-                  child: HtmlElementView(viewType: url),
-                );
-        }
-      },
+    return SizedBox(
+      width: width,
+      height: height,
+      child: HtmlElementView(viewType: url),
     );
   }
 
@@ -167,8 +158,41 @@ class CustomNetWorkImageView extends StatelessWidget {
     );
   }
 
-  // Mobile implementation using CachedNetworkImage
-  Widget _buildMobileImage(BuildContext context) {
+  // Convert Flutter's BoxFit to CSS object-fit for web
+  String _getObjectFit(BoxFit? fit) {
+    switch (fit) {
+      case BoxFit.cover:
+        return 'cover';
+      case BoxFit.contain:
+        return 'contain';
+      case BoxFit.fill:
+        return 'fill';
+      case BoxFit.fitWidth:
+        return 'scale-down';
+      case BoxFit.fitHeight:
+        return 'scale-down';
+      case BoxFit.none:
+        return 'none';
+      case BoxFit.scaleDown:
+        return 'scale-down';
+      default:
+        return '';
+    }
+  }
+}
+
+class _MobileImageView extends StatelessWidget {
+  const _MobileImageView(
+      {required this.url, this.height, this.width, this.fit, this.color});
+
+  final String url;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: url,
       width: width != 0.0 ? width : null,
@@ -188,7 +212,7 @@ class CustomNetWorkImageView extends StatelessWidget {
       },
       errorWidget: (_, __, ___) {
         return Image.asset(
-          AssetsConst.dbnusNoImageLogo,
+          AssetsConst.dbnusNoImageLogo, // Use your local error image asset
           width: width,
           height: height,
           fit: fit,
@@ -204,28 +228,6 @@ class CustomNetWorkImageView extends StatelessWidget {
         );
       },
     );
-  }
-
-  // Convert Flutter's BoxFit to CSS object-fit for web
-  String _getObjectFit(BoxFit fit) {
-    switch (fit) {
-      case BoxFit.cover:
-        return 'cover';
-      case BoxFit.contain:
-        return 'contain';
-      case BoxFit.fill:
-        return 'fill';
-      case BoxFit.fitWidth:
-        return 'scale-down';
-      case BoxFit.fitHeight:
-        return 'scale-down';
-      case BoxFit.none:
-        return 'none';
-      case BoxFit.scaleDown:
-        return 'scale-down';
-      default:
-        return '';
-    }
   }
 }
 
