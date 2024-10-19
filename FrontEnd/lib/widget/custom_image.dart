@@ -118,34 +118,19 @@ class _WebImageView extends StatelessWidget {
       }
     });
 
-    return FutureBuilder<void>(
-      future: Future.delayed(Duration.zero),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
-            child: Container(
-              width: width,
-              height: height,
-              color: Colors.white,
-            ),
-          );
-        } else {
-          return snapshot.hasError
-              ? Image.asset(
-                  AssetsConst.dbnusNoImageLogo,
-                  width: width,
-                  height: height,
-                  fit: fit,
-                )
-              : SizedBox(
-                  width: width,
-                  height: height,
-                  child: HtmlElementView(viewType: url),
-                );
-        }
-      },
+    return Stack(
+      children: [
+        Image.asset(
+          AssetsConst.dbnusNoImageLogo,
+          width: width != 0.0 ? width : null,
+          height: height != 0.0 ? height : null,
+        ),
+        SizedBox(
+          width: width,
+          height: height,
+          child: HtmlElementView(viewType: url),
+        ),
+      ],
     );
   }
 
