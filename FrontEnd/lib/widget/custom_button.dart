@@ -142,7 +142,7 @@ class CustomGOEButton extends StatelessWidget {
     // Determine the effective background color and gradient when disabled
     final Color? effectiveBackgroundColor =
         onPressed == null && (backGroundColor != null || gradient != null)
-            ? Colors.grey.shade200// Disabled background color
+            ? Colors.grey.shade200 // Disabled background color
             : backGroundColor;
     final Gradient? effectiveGradient = onPressed == null ? null : gradient;
 
@@ -253,6 +253,9 @@ class CustomRadioButton<T> extends StatelessWidget {
       value: value,
       groupValue: groupValue,
       onChanged: onChanged,
+      visualDensity: const VisualDensity(
+          horizontal: VisualDensity.minimumDensity,
+          vertical: VisualDensity.minimumDensity),
     );
   }
 }
