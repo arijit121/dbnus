@@ -150,7 +150,7 @@ class _WebImageView extends StatelessWidget {
             child: frame != null
                 ? child
                 : Container(
-                    color: HexColor.fromHex(ColorConst.baseHexColor)
+                    color: ColorConst.baseHexColor
                         .withOpacity(0.3),
                     height: height,
                     width: width,
@@ -278,7 +278,7 @@ class CustomAssetImageView extends StatelessWidget {
               child: frame != null
                   ? child
                   : Container(
-                      color: HexColor.fromHex(ColorConst.baseHexColor)
+                      color: ColorConst.baseHexColor
                           .withOpacity(0.3),
                       height: height,
                       width: width,
@@ -331,7 +331,7 @@ class CustomSvgAssetImageView extends StatelessWidget {
               color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
           placeholderBuilder: (BuildContext context) {
             return Container(
-              color: HexColor.fromHex(ColorConst.baseHexColor).withOpacity(0.3),
+              color: ColorConst.baseHexColor.withOpacity(0.3),
               height: height,
               width: width,
             );
@@ -375,7 +375,7 @@ class CustomSvgNetworkImageView extends StatelessWidget {
               color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
           placeholderBuilder: (BuildContext context) {
             return Container(
-              color: HexColor.fromHex(ColorConst.baseHexColor).withOpacity(0.3),
+              color: ColorConst.baseHexColor.withOpacity(0.3),
               height: height,
               width: width,
             );

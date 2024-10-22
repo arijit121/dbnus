@@ -30,14 +30,14 @@ class CustomDropDown<T> extends StatelessWidget {
       style: customizeTextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
-          fontColor: HexColor.fromHex(ColorConst.primaryDark)),
+          fontColor: ColorConst.primaryDark),
       onChanged: onChanged,
       items: List.generate(
           items.length,
           (index) => DropdownMenuItem<T>(
                 value: items.elementAt(index).value,
                 child: CustomText(items.elementAt(index).title ?? '',
-                    color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+                    color: ColorConst.primaryDark, size: 13),
               )),
     );
   }
@@ -82,18 +82,17 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
           leadingIcon: prefix,
           trailingIcon: suffix ??
               Icon(Icons.arrow_drop_down,
-                  size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+                  size: 24, color: ColorConst.primaryDark),
           selectedTrailingIcon: suffix != null
               ? RotatedBox(
                   quarterTurns: 2,
                   child: suffix,
                 )
               : Icon(Icons.arrow_drop_up,
-                  size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+                  size: 24, color: ColorConst.primaryDark),
           hintText: hintText,
           textStyle: customizeTextStyle(
-              fontColor: HexColor.fromHex(ColorConst.primaryDark),
-              fontSize: 16),
+              fontColor: ColorConst.primaryDark, fontSize: 16),
           onSelected: onChanged,
           dropdownMenuEntries: List.generate(
               items.length,
@@ -102,7 +101,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                   label: items.elementAt(index).title ?? "",
                   labelWidget: CustomText(
                     items.elementAt(index).title ?? "",
-                    color: HexColor.fromHex(ColorConst.primaryDark),
+                    color: ColorConst.primaryDark,
                     size: 16,
                     fontWeight: FontWeight.w500,
                   ))),
@@ -111,16 +110,16 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
                 fontColor: Colors.red),
-            hintStyle: customizeTextStyle(
-                fontColor: HexColor.fromHex(ColorConst.grey), fontSize: 16),
+            hintStyle:
+                customizeTextStyle(fontColor: ColorConst.redGrey, fontSize: 16),
             labelStyle: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                fontColor: HexColor.fromHex(ColorConst.color5)),
+                fontColor: ColorConst.blueGrey),
             floatingLabelStyle: customizeTextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
-                fontColor: HexColor.fromHex(ColorConst.primaryDark)),
+                fontColor: ColorConst.primaryDark),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: const BorderSide(
@@ -138,7 +137,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: BorderSide(
-                color: HexColor.fromHex(ColorConst.grey4),
+                color: ColorConst.grey,
                 width: 1,
               ),
             ),
@@ -293,7 +292,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
           (index) => DropdownMenuItem<T>(
                 value: items.elementAt(index).value,
                 child: CustomText(items.elementAt(index).title ?? '',
-                    color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+                    color: ColorConst.primaryDark, size: 13),
               )),
       onChanged: onChanged,
       hint: hintText != null
@@ -306,13 +305,13 @@ class CustomDropDownFormField<T> extends StatelessWidget {
         prefixIcon: prefix,
         suffixIcon: suffix ??
             Icon(Icons.arrow_drop_down,
-                size: 24, color: HexColor.fromHex(ColorConst.primaryDark)),
+                size: 24, color: ColorConst.primaryDark),
         label: label,
         contentPadding: const EdgeInsets.only(left: 8),
         hintStyle: customizeTextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 14,
-            fontColor: HexColor.fromHex(ColorConst.color5)),
+            fontColor: ColorConst.blueGrey),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(9.0),
           borderSide: const BorderSide(
@@ -323,7 +322,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(9.0),
           borderSide: BorderSide(
-            color: HexColor.fromHex(ColorConst.color5),
+            color: ColorConst.blueGrey,
             width: 1,
           ),
         ),
@@ -391,7 +390,7 @@ class CustomMenuAnchor<T> extends StatelessWidget {
               onPressed(items.elementAt(index).value);
             },
             child: CustomText(items.elementAt(index).title ?? "",
-                color: HexColor.fromHex(ColorConst.primaryDark), size: 13),
+                color: ColorConst.primaryDark, size: 13),
           ),
         ),
       ),

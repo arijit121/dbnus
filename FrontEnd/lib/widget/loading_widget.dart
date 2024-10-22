@@ -32,8 +32,8 @@ class LoadingWidget extends StatelessWidget {
               return DecoratedBox(
                 decoration: BoxDecoration(
                     color: index.isEven
-                        ? HexColor.fromHex(ColorConst.baseHexColor)
-                        : HexColor.fromHex(ColorConst.baseHexColor)
+                        ?ColorConst.baseHexColor
+                        :ColorConst.baseHexColor
                             .withOpacity(0.2),
                     borderRadius: const BorderRadius.all(Radius.circular(50))),
               );
@@ -53,8 +53,8 @@ void showLoading() {
           return DecoratedBox(
             decoration: BoxDecoration(
                 color: index.isEven
-                    ? HexColor.fromHex(ColorConst.baseHexColor)
-                    : HexColor.fromHex(ColorConst.baseHexColor)
+                    ?ColorConst.baseHexColor
+                    :ColorConst.baseHexColor
                         .withOpacity(0.2),
                 borderRadius: const BorderRadius.all(Radius.circular(50))),
           );

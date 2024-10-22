@@ -167,7 +167,7 @@ class UiTemp extends StatelessWidget {
             icon: Icon(Icons.add_box),
             onPressed: () {
               PopUpItems().toastMessage(
-                  "Show tost msg..", HexColor.fromHex(ColorConst.primaryDark));
+                  "Show tost msg..", ColorConst.primaryDark);
             }),
       ],
     );

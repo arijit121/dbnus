@@ -15,9 +15,11 @@ class DrawerNavigationRail extends StatelessWidget {
       required this.chooseIndex,
       this.withTitle,
       this.selectedIndex});
+
   final void Function(int) chooseIndex;
   final bool? withTitle;
   final int? selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +31,7 @@ class DrawerNavigationRail extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: HexColor.fromHex(ColorConst.grey4),
+            color: ColorConst.grey,
             blurRadius: 4.0,
             spreadRadius: 1.0,
           ),
@@ -37,8 +39,7 @@ class DrawerNavigationRail extends StatelessWidget {
       ),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:
-              List.generate(LandingUtils.listNavigation.length, (index) {
+          children: List.generate(LandingUtils.listNavigation.length, (index) {
             NavigationModel navigationBarModel =
                 LandingUtils.listNavigation.elementAt(index);
             return InkWell(
@@ -57,7 +58,7 @@ class DrawerNavigationRail extends StatelessWidget {
                             width: 44,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 6),
-                            color: HexColor.fromHex(ColorConst.baseHexColor),
+                            color: ColorConst.baseHexColor,
                             child: _DrawerNavigationRailWidget(
                               showTitle: withTitle == true,
                               color: Colors.white,
@@ -71,7 +72,7 @@ class DrawerNavigationRail extends StatelessWidget {
                             width: 172,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 22, vertical: 6),
-                            color: HexColor.fromHex(ColorConst.baseHexColor),
+                            color: ColorConst.baseHexColor,
                             child: _DrawerNavigationRailWidget(
                               showTitle: withTitle == true,
                               color: Colors.white,
@@ -83,8 +84,7 @@ class DrawerNavigationRail extends StatelessWidget {
                       showTitle: withTitle == true,
                       navigationBarModel: navigationBarModel,
                     ),
-                  if (index != (LandingUtils.listNavigation.length - 1))
-                    30.ph,
+                  if (index != (LandingUtils.listNavigation.length - 1)) 30.ph,
                 ],
               ),
             );
@@ -96,9 +96,11 @@ class DrawerNavigationRail extends StatelessWidget {
 class _DrawerNavigationRailWidget extends StatelessWidget {
   const _DrawerNavigationRailWidget(
       {this.showTitle, this.color, required this.navigationBarModel});
+
   final bool? showTitle;
   final Color? color;
   final NavigationModel navigationBarModel;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -110,29 +112,29 @@ class _DrawerNavigationRailWidget extends StatelessWidget {
                 ? CustomSvgNetworkImageView(
                     url: navigationBarModel.icon,
                     height: 32,
-                    color: color ?? HexColor.fromHex(ColorConst.grey),
+                    color: color ?? ColorConst.redGrey,
                   )
                 : CustomNetWorkImageView(
                     url: navigationBarModel.icon,
                     height: 32,
-                    color: color ?? HexColor.fromHex(ColorConst.grey),
+                    color: color ?? ColorConst.redGrey,
                   )
             : navigationBarModel.icon.contains(".svg")
                 ? CustomSvgAssetImageView(
                     path: navigationBarModel.icon,
                     height: 32,
-                    color: color ?? HexColor.fromHex(ColorConst.grey),
+                    color: color ?? ColorConst.redGrey,
                   )
                 : CustomAssetImageView(
                     path: navigationBarModel.icon,
                     height: 32,
-                    color: color ?? HexColor.fromHex(ColorConst.grey),
+                    color: color ?? ColorConst.redGrey,
                   ),
         if (showTitle == true)
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: CustomText(navigationBarModel.title,
-                color: color ?? HexColor.fromHex(ColorConst.primaryDark)),
+                color: color ?? ColorConst.primaryDark),
           )
       ],
     );

@@ -140,7 +140,7 @@ class PopUpItems {
         title: title != null
             ? CustomText(
                 title,
-                color: HexColor.fromHex(ColorConst.primaryDark),
+                color: ColorConst.primaryDark,
                 size: 16,
               )
             : null,
@@ -153,7 +153,7 @@ class PopUpItems {
                   if (content != null && icon != null) 12.ph,
                   if (content != null)
                     CustomText(content,
-                        color: HexColor.fromHex(ColorConst.primaryDark),
+                        color: ColorConst.primaryDark,
                         size: 14,
                         textAlign: TextAlign.start),
                 ],
@@ -208,7 +208,7 @@ class ToastMassage extends StatelessWidget {
                     path: AssetsConst.dbnusNoImageLogo,
                     height: 24,
                     width: 24,
-                    color: HexColor.fromHex(ColorConst.deepBlue),
+                    color: ColorConst.deepBlue,
                   )),
               10.pw,
               SizedBox(
@@ -236,8 +236,7 @@ class _EmailPickerState extends State<EmailPicker> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          HexColor.fromHex(ColorConst.primaryDark).withOpacity(0.26),
+      backgroundColor: ColorConst.primaryDark.withOpacity(0.26),
       body: Form(
         key: key,
         child: Column(
@@ -252,7 +251,7 @@ class _EmailPickerState extends State<EmailPicker> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: HexColor.fromHex(ColorConst.baseHexColor),
+                    color: ColorConst.baseHexColor,
                     blurRadius: 7,
                     spreadRadius: 3,
                   )

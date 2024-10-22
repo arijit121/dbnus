@@ -304,7 +304,7 @@ Widget customCartButton(
                               redirectUrl: Uri.parse(redirectUrl));
                         }
                       },
-                      backGroundColor: HexColor.fromHex(ColorConst.green),
+                      backGroundColor: ColorConst.green,
                       radius: 5,
                       child: CustomText(TextUtils.book_now,
                           color: Colors.white,

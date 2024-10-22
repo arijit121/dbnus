@@ -47,7 +47,7 @@ class CrashUi extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: CustomHtmlText(
                       TextUtils.crashMassage,
-                      color: HexColor.fromHex(ColorConst.primaryDark),
+                      color: ColorConst.primaryDark,
                     )),
                 const Spacer(),
                 Padding(

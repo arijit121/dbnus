@@ -66,7 +66,7 @@ class CustomTextFormField extends StatelessWidget {
           Row(
             children: [
               CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
-                  color: HexColor.fromHex(ColorConst.primaryDark),
+                  color: ColorConst.primaryDark,
                   size: 14,
                   fontWeight: FontWeight.w400),
             ],
@@ -74,8 +74,8 @@ class CustomTextFormField extends StatelessWidget {
         if (title?.isNotEmpty == true) 5.ph,
         TextFormField(
             autofocus: autofocus,
-            cursorColor: HexColor.fromHex(ColorConst.primaryDark),
-            cursorErrorColor: HexColor.fromHex(ColorConst.primaryDark),
+            cursorColor: ColorConst.primaryDark,
+            cursorErrorColor: ColorConst.primaryDark,
             onChanged: onChanged,
             readOnly: readOnly,
             controller: controller,
@@ -94,7 +94,7 @@ class CustomTextFormField extends StatelessWidget {
             style: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                fontColor: HexColor.fromHex(ColorConst.primaryDark)),
+                fontColor: ColorConst.primaryDark),
             decoration: InputDecoration(
               errorText: errorText,
               counterText: "",
@@ -113,15 +113,15 @@ class CustomTextFormField extends StatelessWidget {
               hintStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  fontColor: HexColor.fromHex(ColorConst.color5)),
+                  fontColor: ColorConst.blueGrey),
               labelStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  fontColor: HexColor.fromHex(ColorConst.color5)),
+                  fontColor: ColorConst.blueGrey),
               floatingLabelStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 17,
-                  fontColor: HexColor.fromHex(ColorConst.baseHexColor)),
+                  fontColor: ColorConst.baseHexColor),
               focusedBorder: OutlineInputBorder(
                 borderRadius: borderRadius,
                 borderSide: const BorderSide(
@@ -139,7 +139,7 @@ class CustomTextFormField extends StatelessWidget {
               enabledBorder: OutlineInputBorder(
                 borderRadius: borderRadius,
                 borderSide: BorderSide(
-                  color: HexColor.fromHex(ColorConst.grey4),
+                  color: ColorConst.grey,
                   width: 1,
                 ),
               ),

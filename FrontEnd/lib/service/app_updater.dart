@@ -74,7 +74,7 @@ class AppUpdater {
           context: context,
           builder: (BuildContext context) => CupertinoAlertDialog(
             title: CustomText(TextUtils.update_app,
-                color: HexColor.fromHex(ColorConst.primaryDark),
+                color: ColorConst.primaryDark,
                 size: 16,
                 textAlign: TextAlign.center,
                 fontWeight: FontWeight.bold),
@@ -86,7 +86,7 @@ class AppUpdater {
                       .replaceAll(
                           "{{currentAppStoreVersion}}", storeVersion ?? "")
                       .replaceAll("{{currentInstalledVersion}}", localVersion),
-                  color: HexColor.fromHex(ColorConst.primaryDark),
+                  color: ColorConst.primaryDark,
                   size: 12,
                 ),
               ],

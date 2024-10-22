@@ -191,7 +191,7 @@ class RouterManager {
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         title: CustomText(TextUtils.notFound,
-            color: HexColor.fromHex(ColorConst.primaryDark), size: 20),
+            color: ColorConst.primaryDark, size: 20),
       ),
       body: SafeArea(
         child: Center(
@@ -206,19 +206,19 @@ class RouterManager {
               8.ph,
               CustomText(
                 'Oops! Something went wrong...',
-                color: HexColor.fromHex(ColorConst.primaryDark),
+                color: ColorConst.primaryDark,
                 size: 20,
               ),
               8.ph,
               CustomText(
                 '404',
-                color: HexColor.fromHex(ColorConst.primaryDark),
+                color: ColorConst.primaryDark,
                 size: 50,
               ),
               8.ph,
               CustomText(
                 'Page Not Found',
-                color: HexColor.fromHex(ColorConst.primaryDark),
+                color: ColorConst.primaryDark,
                 size: 20,
               ),
               12.ph,

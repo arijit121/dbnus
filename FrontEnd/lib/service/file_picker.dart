@@ -200,7 +200,7 @@ class CustomFilePicker {
                               height: 36,
                               child: CustomText(
                                 "Capture Photo.",
-                                color: HexColor.fromHex(ColorConst.primaryDark),
+                                color:ColorConst.primaryDark,
                                 size: 14,
                                 fontWeight: FontWeight.w500,
                                 textAlign: TextAlign.center,
@@ -228,7 +228,7 @@ class CustomFilePicker {
                             height: 36,
                             child: CustomText(
                               "Choose from Gallery.",
-                              color: HexColor.fromHex(ColorConst.primaryDark),
+                              color: ColorConst.primaryDark,
                               size: 14,
                               fontWeight: FontWeight.w500,
                               textAlign: TextAlign.center,
@@ -256,7 +256,7 @@ class CustomFilePicker {
                             height: 36,
                             child: CustomText(
                               "Choose file from device.",
-                              color: HexColor.fromHex(ColorConst.primaryDark),
+                              color: ColorConst.primaryDark,
                               size: 14,
                               fontWeight: FontWeight.w500,
                               textAlign: TextAlign.center,
