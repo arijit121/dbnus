@@ -12,8 +12,10 @@ class ThemeConst {
     systemStatusBarContrastEnforced: true,
     statusBarColor: Colors.white,
   );
+
   static AppBarTheme appBarTheme =
       AppBarTheme(systemOverlayStyle: systemOverlayStyle, titleSpacing: 0);
+
   static ThemeData theme = ThemeData(
     pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
     colorSchemeSeed: ColorConst.baseHexColor,
