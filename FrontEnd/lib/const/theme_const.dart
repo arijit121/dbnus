@@ -12,13 +12,14 @@ class ThemeConst {
     systemStatusBarContrastEnforced: true,
     statusBarColor: Colors.white,
   );
-
+  static AppBarTheme appBarTheme =
+      AppBarTheme(systemOverlayStyle: systemOverlayStyle, titleSpacing: 0);
   static ThemeData theme = ThemeData(
     pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
     colorSchemeSeed: ColorConst.baseHexColor,
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
-    appBarTheme: AppBarTheme(systemOverlayStyle: systemOverlayStyle),
+    appBarTheme: appBarTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -26,7 +27,7 @@ class ThemeConst {
     colorSchemeSeed: ColorConst.baseHexColor,
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.dark,
-    appBarTheme: AppBarTheme(systemOverlayStyle: systemOverlayStyle),
+    appBarTheme: appBarTheme,
   );
 }
 
