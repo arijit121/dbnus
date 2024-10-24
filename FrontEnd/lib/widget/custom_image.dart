@@ -124,6 +124,7 @@ class _WebImageView extends StatelessWidget {
           AssetsConst.dbnusNoImageLogo,
           width: width != 0.0 ? width : null,
           height: height != 0.0 ? height : null,
+          color: ColorConst.blueGrey,
         ),
         SizedBox(
           width: width,
@@ -150,8 +151,7 @@ class _WebImageView extends StatelessWidget {
             child: frame != null
                 ? child
                 : Container(
-                    color: ColorConst.baseHexColor
-                        .withOpacity(0.3),
+                    color: ColorConst.baseHexColor.withOpacity(0.3),
                     height: height,
                     width: width,
                   ),
@@ -278,8 +278,7 @@ class CustomAssetImageView extends StatelessWidget {
               child: frame != null
                   ? child
                   : Container(
-                      color: ColorConst.baseHexColor
-                          .withOpacity(0.3),
+                      color: ColorConst.baseHexColor.withOpacity(0.3),
                       height: height,
                       width: width,
                     ),
