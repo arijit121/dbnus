@@ -200,7 +200,7 @@ class CustomFilePicker {
                               height: 36,
                               child: CustomText(
                                 "Capture Photo.",
-                                color:ColorConst.primaryDark,
+                                color: ColorConst.primaryDark,
                                 size: 14,
                                 fontWeight: FontWeight.w500,
                                 textAlign: TextAlign.center,
@@ -292,6 +292,7 @@ class CustomFilePicker {
     try {
       await JsProvider().loadJs(
           jsPath: "https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js");
+      file.bytes ??= await File(file.path!).readAsBytes();
       ui.Image image = await decodeImageFromList(file.bytes!);
 
       // Resize the image to have the longer side be 800 pixels
