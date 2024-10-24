@@ -1,8 +1,7 @@
+import 'package:dbnus/widget/custom_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../extension/hex_color.dart';
 import 'color_const.dart';
 
 class ThemeConst {
@@ -13,8 +12,25 @@ class ThemeConst {
     statusBarColor: Colors.white,
   );
 
-  static AppBarTheme appBarTheme =
-      AppBarTheme(systemOverlayStyle: systemOverlayStyle, titleSpacing: 0);
+  static AppBarTheme appBarTheme = AppBarTheme(
+    systemOverlayStyle: systemOverlayStyle,
+    titleSpacing: 0,
+    color: Colors.white,
+    foregroundColor: Colors.white,
+    surfaceTintColor: Colors.white,
+    shadowColor: kIsWeb ? ColorConst.grey : ColorConst.lightGrey,
+    iconTheme: IconThemeData(color: ColorConst.primaryDark),
+    elevation: 0.5,
+  );
+
+  static TextTheme textTheme = TextTheme(
+    bodyLarge: customizeTextStyle(
+        fontColor: ColorConst.primaryDark), // Replaces bodyText1
+    bodyMedium: customizeTextStyle(
+        fontColor: ColorConst.primaryDark), // Replaces bodyText2
+    bodySmall: customizeTextStyle(fontColor: ColorConst.primaryDark),
+    // For smaller body text
+  );
 
   static ThemeData theme = ThemeData(
     pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
@@ -22,6 +38,7 @@ class ThemeConst {
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
     appBarTheme: appBarTheme,
+    textTheme: textTheme,
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -30,6 +47,7 @@ class ThemeConst {
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.dark,
     appBarTheme: appBarTheme,
+    textTheme: textTheme,
   );
 }
 
