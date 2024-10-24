@@ -12,8 +12,7 @@ class ApiConfig {
       bool? isArticleUrl,
       bool? onlyContentType,
       bool? noAuthentication,
-        ContentType? contentType = ContentType.json
-      }) async {
+      ContentType? contentType = ContentType.json}) async {
     Headers headers = onlyContentType == true
         ? Headers(
             contentType: contentType?.value,
@@ -39,7 +38,8 @@ class ApiConfig {
             accessToken: noAuthentication == true
                 ? null
                 : (await UserPreference().getData())?.accessToken,
-          );
+            deviceIpV6: "${await AppConfig().getWifiIpV6()}",
+            deviceIpV4: "${await AppConfig().getWifiIpV4()}");
     return headers.toJson();
   }
 

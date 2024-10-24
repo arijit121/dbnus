@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -150,5 +151,25 @@ class AppConfig {
     ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
     String networkInfo = await connectionStatus.getNetworkInfo();
     return networkInfo;
+  }
+
+  Future<String?> getWifiIpV4() async {
+    if (kIsWeb) {
+      return "";
+    } else {
+      final info = NetworkInfo();
+      var wifiIP = await info.getWifiIP();
+      return wifiIP;
+    }
+  }
+
+  Future<String?> getWifiIpV6() async {
+    if (kIsWeb) {
+      return "";
+    } else {
+      final info = NetworkInfo();
+      var wifiIPv6 = await info.getWifiIPv6();
+      return wifiIPv6;
+    }
   }
 }
