@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
 import 'custom_text.dart';
 
 class CustomContainer extends StatelessWidget {
@@ -81,6 +82,8 @@ class PaginationPullRefreshWidget extends StatelessWidget {
           return true;
         },
         child: RefreshIndicator(
+            color: ColorConst.baseHexColor,
+            backgroundColor: Colors.white,
             onRefresh: () async {
               if (onRefresh != null) {
                 onRefresh!();
