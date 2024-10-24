@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/network_image_bloc.dart';
+import '../bloc/network_bytes_Img_bloc.dart';
 
-class CustomNetworkImg extends StatelessWidget {
-  const CustomNetworkImg(
+class NetworkBytesImage extends StatelessWidget {
+  const NetworkBytesImage(
       {super.key,
       this.height,
       this.width,
@@ -22,8 +22,8 @@ class CustomNetworkImg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NetWorkImageBloc()..add(GetData(url: imgUri)),
-      child: BlocBuilder<NetWorkImageBloc, NetWorkImageState>(
+      create: (context) => NetworkBytesImgBloc()..add(GetData(url: imgUri)),
+      child: BlocBuilder<NetworkBytesImgBloc, NetworkBytesImgState>(
           builder: (context, state) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(radius ?? 0.0),
