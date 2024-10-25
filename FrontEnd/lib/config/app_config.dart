@@ -155,7 +155,7 @@ class AppConfig {
 
   Future<String?> getWifiIpV4() async {
     if (kIsWeb) {
-      return "";
+      return null;
     } else {
       final info = NetworkInfo();
       var wifiIP = await info.getWifiIP();
@@ -165,7 +165,7 @@ class AppConfig {
 
   Future<String?> getWifiIpV6() async {
     if (kIsWeb) {
-      return "";
+      return null;
     } else {
       final info = NetworkInfo();
       var wifiIPv6 = await info.getWifiIPv6();

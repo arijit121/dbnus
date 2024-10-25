@@ -38,8 +38,8 @@ class ApiConfig {
             accessToken: noAuthentication == true
                 ? null
                 : (await UserPreference().getData())?.accessToken,
-            deviceIpV6: "${await AppConfig().getWifiIpV6()}",
-            deviceIpV4: "${await AppConfig().getWifiIpV4()}");
+            deviceIpV6: await AppConfig().getWifiIpV6(),
+            deviceIpV4: await AppConfig().getWifiIpV4());
     return headers.toJson();
   }
 
