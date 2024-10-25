@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../const/color_const.dart';
-import '../../../extension/hex_color.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/text_utils.dart';
 import '../../../widget/custom_button.dart';

@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+
 import 'custom_image.dart';
 
 class CarouselSlider extends StatefulWidget {

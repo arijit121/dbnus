@@ -9,7 +9,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../const/color_const.dart';
-import '../extension/hex_color.dart';
 import '../extension/logger_extension.dart';
 import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';

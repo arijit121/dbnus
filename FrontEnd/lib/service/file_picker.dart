@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,16 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+
 import '../const/color_const.dart';
 import '../data/model/custom_file.dart';
-import '../extension/hex_color.dart';
 import '../extension/logger_extension.dart';
 import '../extension/spacing.dart';
 import '../service/context_service.dart';
 import '../utils/pop_up_items.dart';
 import '../widget/custom_text.dart';
-import 'dart:ui' as ui;
-
 import '../widget/loading_widget.dart';
 import 'JsService/provider/js_provider.dart';
 

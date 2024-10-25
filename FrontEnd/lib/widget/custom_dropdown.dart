@@ -2,7 +2,6 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../const/color_const.dart';
-import '../extension/hex_color.dart';
 import 'custom_text.dart';
 
 class CustomDropDown<T> extends StatelessWidget {

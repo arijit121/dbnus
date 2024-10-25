@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 import '../../../data/api_client/repo/api_repo.dart';
 
 part 'network_bytes_Img_event.dart';
-
 part 'network_bytes_Img_state.dart';
 
 class NetworkBytesImgBloc

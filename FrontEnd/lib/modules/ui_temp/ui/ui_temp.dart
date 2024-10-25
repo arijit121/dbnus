@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../const/color_const.dart';
-import '../../../extension/hex_color.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
 import '../../../router/router_name.dart';
