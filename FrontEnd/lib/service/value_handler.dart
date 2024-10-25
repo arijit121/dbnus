@@ -195,4 +195,8 @@ class ValueHandler {
     String formData = parts.join('&');
     return formData;
   }
+
+  String? setNullBlankTextToNullAbleString(final String? input) {
+    return !isTextNotEmptyOrNull(input) ? null : input;
+  }
 }
