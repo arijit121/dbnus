@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/model/razorpay_merchant_details.dart';
 import '../../extension/logger_extension.dart';
+import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart';
 import '../../service/context_service.dart';
 import '../../service/crash/ui/crash_ui.dart';
 import '../router_manager.dart';
@@ -58,6 +60,14 @@ class CustomRoute {
 
   MaterialPageRoute _getRoute({required String name, dynamic arguments}) {
     switch (name) {
+      case RouteName.rayzorpay:
+        return MaterialPageRoute(builder: (_) {
+          if (arguments is RazorpayMerchantDetails) {
+            return RayzorPay(razorpayMerchantDetails: arguments);
+          } else {
+            return RouterManager.errorRoute();
+          }
+        });
       case RouteName.error:
         return MaterialPageRoute(builder: (_) {
           if (arguments is Map<String, dynamic>) {

@@ -3,6 +3,9 @@ class TextUtils {
   static String user_is_inActive = "User is inActive.";
 
   // ignore: non_constant_identifier_names
+  static String loading = "loading...";
+
+  // ignore: non_constant_identifier_names
   static String dashboard = "Dashboard";
 
   // ignore: non_constant_identifier_names
