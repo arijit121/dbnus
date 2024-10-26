@@ -47,10 +47,8 @@ class _LandingUiState extends State<LandingUi> {
     if (LandingUtils.listNavigation.elementAt(index).action ==
         TextUtils.logout) {
       AppLog.i("Log out");
-    } else if (kIsWeb) {
-      LandingUtils.redirect(index);
     } else {
-      context.read<LandingBloc>().add(ChangeIndex(index: index));
+      LandingUtils.redirect(index);
     }
   }
 

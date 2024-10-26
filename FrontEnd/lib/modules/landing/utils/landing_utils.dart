@@ -1,5 +1,7 @@
 import 'package:dbnus/const/assects_const.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../router/router_manager.dart';
 import '../../../router/router_name.dart';
@@ -44,7 +46,9 @@ class LandingUtils {
   ];
 
   static void redirect(int index) {
-    RouterManager.getInstance.router
-        .goNamed(listNavigation.elementAt(index).action);
+    GoRouter router = RouterManager.getInstance.router;
+    kIsWeb
+        ? router.goNamed(listNavigation.elementAt(index).action)
+        : router.replaceNamed(listNavigation.elementAt(index).action);
   }
 }
