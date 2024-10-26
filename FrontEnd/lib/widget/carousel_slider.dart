@@ -75,8 +75,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: widget.padding,
+    return SizedBox(
       height: widget.height,
       child: Column(
         children: [
@@ -104,7 +103,10 @@ class _CarouselSliderState extends State<CarouselSlider> {
           itemBuilder: (context, pageIndex) {
             // Use modulo to repeat the list infinitely
             int actualIndex = pageIndex % widget.imageList.length;
-            return _buildPageItem(actualIndex);
+            return Container(
+              padding: widget.padding,
+              child: _buildPageItem(actualIndex),
+            );
           },
         );
       },
@@ -135,24 +137,27 @@ class _CarouselSliderState extends State<CarouselSlider> {
   }
 
   Widget _buildIndicator() {
-    return ValueListenableBuilder<int>(
-      valueListenable: _currentIndex,
-      builder: (context, index, _) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.imageList.length, (i) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: i == index ? Colors.blue : Colors.grey,
-              ),
-            );
-          }),
-        );
-      },
+    return Container(
+      padding: widget.padding,
+      child: ValueListenableBuilder<int>(
+        valueListenable: _currentIndex,
+        builder: (context, index, _) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.imageList.length, (i) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: i == index ? Colors.blue : Colors.grey,
+                ),
+              );
+            }),
+          );
+        },
+      ),
     );
   }
 }
