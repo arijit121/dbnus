@@ -15,6 +15,7 @@ class CarouselSlider extends StatefulWidget {
     required this.height,
     this.onTap,
     this.noScroll,
+    this.padding,
   });
 
   final List<String> imageList;
@@ -23,6 +24,7 @@ class CarouselSlider extends StatefulWidget {
   final double scaleFactor, fadeFactor, height;
   final void Function(int index)? onTap;
   final bool? noScroll;
+  final EdgeInsetsGeometry? padding;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -73,7 +75,8 @@ class _CarouselSliderState extends State<CarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: widget.padding,
       height: widget.height,
       child: Column(
         children: [
