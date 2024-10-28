@@ -22,10 +22,10 @@ class SplashActivity : AppCompatActivity() {
             .load(R.drawable.sspl_health_happiness_animation) // Replace with your GIF file in `drawable` or `raw` folder
             .into(gifImageView)
 
-        // Delay for the splash screen (e.g., 1 seconds) before starting main activity
+        // Delay for the splash screen (e.g., 1 second(s)) before starting main activity
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, 1000) // 1000 ms = 1 seconds
+        }, 1000) // 1000 ms = 1 second(s)
     }
 }
