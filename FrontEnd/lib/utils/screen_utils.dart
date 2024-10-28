@@ -110,7 +110,7 @@ class ResponsiveBuilder extends StatelessWidget {
 /// [WidthState] is enum for screen width (narrow, medium, large).
 ///
 enum WidthState {
-  narrow(450, "narrow"),
+  narrow(540, "narrow"),
   medium(1000, "medium"),
   large(1500, "large");
 
