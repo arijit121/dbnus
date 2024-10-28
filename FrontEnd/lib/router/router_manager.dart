@@ -75,12 +75,12 @@ class RouterManager {
         },
       ),
       GoRoute(
-        name: RouteName.products,
-        path: RouteName.products,
+        name: RouteName.games,
+        path: RouteName.games,
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
             index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.products),
+                .indexWhere((element) => element.action == RouteName.games),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {

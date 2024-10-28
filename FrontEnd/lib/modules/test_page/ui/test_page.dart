@@ -916,8 +916,8 @@ class TestPage extends StatelessWidget {
                 }),
                 onTap: (index) {
                   kIsWeb
-                      ? context.goNamed(RouteName.products)
-                      : context.pushNamed(RouteName.products);
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
                 },
                 height: 400,
               ),

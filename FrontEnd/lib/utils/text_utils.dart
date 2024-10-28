@@ -923,6 +923,9 @@ class TextUtils {
   static String dr = "Dr.";
 
   // ignore: non_constant_identifier_names
+  static String game = "Game";
+
+  // ignore: non_constant_identifier_names
   static String vital_insights_des =
       "The doctor will delve into your vitals and test reports, providing a comprehensive understanding of your health status.";
 

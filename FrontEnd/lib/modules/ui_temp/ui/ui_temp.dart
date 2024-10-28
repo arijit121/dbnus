@@ -153,8 +153,8 @@ class UiTemp extends StatelessWidget {
             size: const Size(200, 36),
             onPressed: () async {
               kIsWeb
-                  ? context.goNamed(RouteName.products)
-                  : context.pushNamed(RouteName.products);
+                  ? context.goNamed(RouteName.games)
+                  : context.pushNamed(RouteName.games);
             },
             gradient: const LinearGradient(colors: [
               Colors.red,
@@ -165,8 +165,8 @@ class UiTemp extends StatelessWidget {
             color: Colors.black,
             icon: Icon(Icons.add_box),
             onPressed: () {
-              PopUpItems().toastMessage(
-                  "Show tost msg..", ColorConst.primaryDark);
+              PopUpItems()
+                  .toastMessage("Show tost msg..", ColorConst.primaryDark);
             }),
       ],
     );

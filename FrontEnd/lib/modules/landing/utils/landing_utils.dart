@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../router/router_manager.dart';
 import '../../../router/router_name.dart';
 import '../../../utils/text_utils.dart';
+import '../../flame_game/ui/flame_game.dart';
 import '../../reorderable_list/ui/my_reorderable_list.dart';
 import '../../test_page/ui/test_page.dart';
 import '../../ui_temp/ui/ui_temp.dart';
@@ -29,10 +30,10 @@ class LandingUtils {
         action: RouteName.order,
         ui: const UiTemp()),
     NavigationModel(
-        title: TextUtils.products,
-        icon: AssetsConst.shopping,
-        action: RouteName.products,
-        ui: Container()),
+        title: TextUtils.game,
+        icon: AssetsConst.game,
+        action: RouteName.games,
+        ui: FlameGame()),
     NavigationModel(
         title: TextUtils.settings,
         icon: AssetsConst.setting,
