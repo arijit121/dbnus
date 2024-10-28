@@ -14,6 +14,7 @@ class CustomContainer extends StatelessWidget {
   final Color? borderColor;
   final List<BoxShadow>? boxShadow;
   final Gradient? gradient;
+  final DecorationImage? image;
 
   const CustomContainer(
       {super.key,
@@ -26,7 +27,8 @@ class CustomContainer extends StatelessWidget {
       this.margin,
       this.borderColor,
       this.boxShadow,
-      this.gradient});
+      this.gradient,
+      this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class CustomContainer extends StatelessWidget {
             : null,
         borderRadius: borderRadius,
         boxShadow: boxShadow,
+        image: image,
       ),
       child: child,
     );
