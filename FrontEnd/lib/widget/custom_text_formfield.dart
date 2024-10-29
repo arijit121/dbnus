@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../const/color_const.dart';
-import '../extension/spacing.dart';
 import '../widget/custom_text.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -60,17 +59,16 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title?.isNotEmpty == true)
-          Row(
-            children: [
-              CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
-                  color: ColorConst.primaryDark,
-                  size: 14,
-                  fontWeight: FontWeight.w400),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
+                color: ColorConst.primaryDark,
+                size: 14,
+                fontWeight: FontWeight.w400),
           ),
-        if (title?.isNotEmpty == true) 5.ph,
         TextFormField(
             autofocus: autofocus,
             cursorColor: ColorConst.primaryDark,
