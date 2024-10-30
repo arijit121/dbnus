@@ -199,4 +199,9 @@ class ValueHandler {
   String? setNullBlankTextToNullAbleString(final String? input) {
     return !isTextNotEmptyOrNull(input) ? null : input;
   }
+
+  bool isHtml(String text) {
+    final RegExp htmlRegExp = RegExp(r'<[^>]*>');
+    return htmlRegExp.hasMatch(text);
+  }
 }

@@ -6,6 +6,7 @@ import '../const/color_const.dart';
 import '../extension/logger_extension.dart';
 import '../extension/spacing.dart';
 import '../service/context_service.dart';
+import '../service/value_handler.dart';
 import '../utils/screen_utils.dart';
 import '../utils/text_utils.dart';
 import '../utils/validator.dart';
@@ -151,10 +152,13 @@ class PopUpItems {
                     Icon(icon, color: iconButtonColor, size: 60.0),
                   if (content != null && icon != null) 12.ph,
                   if (content != null)
-                    CustomText(content,
-                        color: ColorConst.primaryDark,
-                        size: 14,
-                        textAlign: TextAlign.start),
+                    ValueHandler().isHtml(content)
+                        ? CustomHtmlText(content,
+                            color: ColorConst.primaryDark, size: 14)
+                        : CustomText(content,
+                            color: ColorConst.primaryDark,
+                            size: 14,
+                            textAlign: TextAlign.start),
                 ],
               )
             : null,
