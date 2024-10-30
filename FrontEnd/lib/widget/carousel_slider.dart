@@ -16,6 +16,7 @@ class CarouselSlider extends StatefulWidget {
     this.onTap,
     this.noScroll,
     this.padding,
+    this.radius,
   });
 
   final List<String> imageList;
@@ -25,6 +26,7 @@ class CarouselSlider extends StatefulWidget {
   final void Function(int index)? onTap;
   final bool? noScroll;
   final EdgeInsetsGeometry? padding;
+  final double? radius;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -129,7 +131,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
         child: Opacity(
           opacity: isActive ? 1.0 : widget.fadeFactor,
           child: CustomNetWorkImageView(
-            radius: 8,
+            radius: widget.radius,
             url: widget.imageList.elementAt(pageIndex),
             fit: BoxFit.fill,
             width: double.infinity,
