@@ -94,6 +94,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
       valueListenable: _currentIndex,
       builder: (_, __, ___) {
         return PageView.builder(
+          physics: widget.imageList.length == 1
+              ? const NeverScrollableScrollPhysics()
+              : null,
           controller: _pageController,
           onPageChanged: (newIndex) {
             // Calculate the correct index by using modulo operation
