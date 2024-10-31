@@ -903,11 +903,13 @@ class TestPage extends StatelessWidget {
                     height: 100,
                     width: 120,
                     fit: BoxFit.fill,
+                    color: Colors.black,
                   ),
                 ],
               ),
               20.ph,
               CarouselSlider(
+                radius: 8,
                 autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
                   return index == 4

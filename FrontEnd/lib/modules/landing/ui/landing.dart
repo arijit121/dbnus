@@ -43,12 +43,17 @@ class _LandingUiState extends State<LandingUi> {
             : Container(),
       );
 
-  void _onChooseIndex({required int index, required BuildContext context}) {
+  void _onChooseIndex(
+      {required int index,
+      required int? selectedIndex,
+      required BuildContext context}) {
     if (LandingUtils.listNavigation.elementAt(index).action ==
         TextUtils.logout) {
       AppLog.i("Log out");
     } else {
-      LandingUtils.redirect(index);
+      if (index != selectedIndex) {
+        LandingUtils.redirect(index);
+      }
     }
   }
 
@@ -80,7 +85,10 @@ class _LandingUiState extends State<LandingUi> {
                           withTitle: true,
                           chooseIndex: (int value) {
                             Navigator.of(context).pop();
-                            _onChooseIndex(index: value, context: context);
+                            _onChooseIndex(
+                                index: value,
+                                context: context,
+                                selectedIndex: state.pageIndex.value);
                           }),
                     ),
               backgroundColor: Colors.white,
@@ -95,7 +103,10 @@ class _LandingUiState extends State<LandingUi> {
                       DrawerNavigationRail(
                           selectedIndex: state.pageIndex.value,
                           chooseIndex: (int value) {
-                            _onChooseIndex(index: value, context: context);
+                            _onChooseIndex(
+                                index: value,
+                                context: context,
+                                selectedIndex: state.pageIndex.value);
                           }),
                       _mediumUiBody(state: state),
                     ],
@@ -108,7 +119,10 @@ class _LandingUiState extends State<LandingUi> {
                           selectedIndex: state.pageIndex.value,
                           withTitle: true,
                           chooseIndex: (int value) {
-                            _onChooseIndex(index: value, context: context);
+                            _onChooseIndex(
+                                index: value,
+                                context: context,
+                                selectedIndex: state.pageIndex.value);
                           }),
                       _largeUiBody(state: state),
                     ],
