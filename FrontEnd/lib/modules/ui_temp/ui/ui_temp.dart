@@ -96,7 +96,6 @@ class _UiTempState extends State<UiTemp> {
             size: const Size(160, 36),
             onPressed: () {
               controller.text = "55555";
-              // controller = TextEditingController(text: "55555");
             },
             borderColor: Colors.amber,
             child: const CustomText(
