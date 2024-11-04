@@ -89,7 +89,7 @@ class _UiTempState extends State<UiTemp> {
             },
             backGroundColor: Colors.amber,
             child: const CustomText(
-              "Check",
+              "Clear pin-code and show hide.",
               color: Colors.white,
             )),
         20.ph,
@@ -100,7 +100,7 @@ class _UiTempState extends State<UiTemp> {
             },
             borderColor: Colors.amber,
             child: const CustomText(
-              "Check",
+              "Put 55555 in otp.",
               color: Colors.amber,
             )),
         ValueListenableBuilder<bool>(
