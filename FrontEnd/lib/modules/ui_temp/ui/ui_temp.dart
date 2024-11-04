@@ -84,6 +84,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             size: const Size(160, 36),
             onPressed: () {
+              controller.clear();
               boolNotifier.value = !boolNotifier.value;
             },
             backGroundColor: Colors.amber,
