@@ -1,3 +1,4 @@
+import 'package:dbnus/utils/screen_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../widget/boat_game.dart';
@@ -8,6 +9,11 @@ class FlameGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GameWidget(game: BoatGame());
+    return ResponsiveBuilder(builder: (context, widthState) {
+      return GameWidget(
+          game: BoatGame(
+        widthState: widthState,
+      ));
+    });
   }
 }
