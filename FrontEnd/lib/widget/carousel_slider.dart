@@ -17,6 +17,7 @@ class CarouselSlider extends StatefulWidget {
     this.noScroll,
     this.padding,
     this.radius,
+    this.fit = BoxFit.contain,
   });
 
   final List<String> imageList;
@@ -27,6 +28,7 @@ class CarouselSlider extends StatefulWidget {
   final bool? noScroll;
   final EdgeInsetsGeometry? padding;
   final double? radius;
+  final BoxFit fit;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -133,7 +135,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
           child: CustomNetWorkImageView(
             radius: widget.radius,
             url: widget.imageList.elementAt(pageIndex),
-            fit: BoxFit.fill,
+            fit: widget.fit,
             width: double.infinity,
           ),
         ),
