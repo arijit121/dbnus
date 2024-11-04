@@ -1,6 +1,7 @@
 import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -25,7 +26,7 @@ class UiTemp extends StatefulWidget {
 }
 
 class _UiTempState extends State<UiTemp> {
-  TextEditingController controller = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
   final ValueNotifier<bool> boolNotifier = ValueNotifier<bool>(true);
 
   @override
@@ -84,19 +85,8 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             size: const Size(160, 36),
             onPressed: () {
-              controller.clear();
-              boolNotifier.value = !boolNotifier.value;
-            },
-            backGroundColor: Colors.amber,
-            child: const CustomText(
-              "Clear pin-code and show hide.",
-              color: Colors.white,
-            )),
-        20.ph,
-        CustomGOEButton(
-            size: const Size(160, 36),
-            onPressed: () {
-              controller.text = "55555";
+              boolNotifier.value = true;
+              _pinController.text = "55555";
             },
             borderColor: Colors.amber,
             child: const CustomText(
@@ -109,16 +99,72 @@ class _UiTempState extends State<UiTemp> {
               return boolNotifier.value
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20),
-                      child: PinCodeTextField(
-                        length: 5,
-                        appContext: context,
-                        autoDisposeControllers: false,
-                        controller: controller,
-                        onCompleted: (_) {
-                          AppLog.i(controller.text);
-                        },
-                      ),
-                    )
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CustomGOEButton(
+                              size: const Size(160, 36),
+                              onPressed: () {
+                                _pinController.clear();
+                                boolNotifier.value = false;
+                              },
+                              backGroundColor: Colors.amber,
+                              child: const CustomText(
+                                "Clear pin-code hide.",
+                                color: Colors.white,
+                              )),
+                          20.ph,
+                          PinCodeTextField(
+                            textStyle: customizeTextStyle(
+                                fontColor: ColorConst.primaryDark),
+                            cursorColor: Colors.black,
+                            scrollPadding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom +
+                                        140),
+                            autoFocus: true,
+                            appContext: context,
+                            length: 5,
+                            blinkWhenObscuring: true,
+                            animationType: AnimationType.fade,
+                            animationDuration:
+                                const Duration(milliseconds: 300),
+                            enableActiveFill: true,
+                            autoDisposeControllers: false,
+                            controller: _pinController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              borderRadius: BorderRadius.circular(4),
+                              fieldHeight: 50,
+                              fieldWidth: 46,
+                              activeFillColor: Colors.grey.shade100,
+                              inactiveFillColor: Colors.grey.shade100,
+                              selectedFillColor: Colors.grey.shade100,
+                              activeColor: Colors.transparent,
+                              inactiveColor: Colors.transparent,
+                              selectedColor: Colors.blue,
+                            ),
+                            backgroundColor: Colors.transparent,
+                            onCompleted: (value) {
+                              AppLog.i(_pinController.text);
+                            },
+                          ),
+                        ],
+                      )
+                      // PinCodeTextField(
+                      //   length: 5,
+                      //   appContext: context,
+                      //   autoDisposeControllers: false,
+                      //   controller: controller,
+                      //   onCompleted: (_) {
+                      //     AppLog.i(controller.text);
+                      //   },
+                      // ),
+                      )
                   : 0.ph;
             }),
         20.ph,
