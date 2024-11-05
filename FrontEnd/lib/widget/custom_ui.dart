@@ -88,7 +88,7 @@ class _PaginationPullRefreshWidgetState
                       scrollInfo.metrics.minScrollExtent) /
                   2)) {
             if (widget.paginate != null) {
-              kIsWeb
+              mounted
                   ? widget.paginate!()
                   : SchedulerBinding.instance.addPostFrameCallback((_) {
                       if (mounted) {
