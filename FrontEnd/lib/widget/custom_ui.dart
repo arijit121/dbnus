@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../const/color_const.dart';
 import 'custom_text.dart';
@@ -54,7 +56,7 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-class PaginationPullRefreshWidget extends StatelessWidget {
+class PaginationPullRefreshWidget extends StatefulWidget {
   final Function? paginate;
   final Function? onRefresh;
   final Widget child;
@@ -67,6 +69,13 @@ class PaginationPullRefreshWidget extends StatelessWidget {
   });
 
   @override
+  State<PaginationPullRefreshWidget> createState() =>
+      _PaginationPullRefreshWidgetState();
+}
+
+class _PaginationPullRefreshWidgetState
+    extends State<PaginationPullRefreshWidget> {
+  @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollEndNotification>(
         onNotification: (scrollInfo) {
@@ -78,8 +87,14 @@ class PaginationPullRefreshWidget extends StatelessWidget {
               ((scrollInfo.metrics.maxScrollExtent +
                       scrollInfo.metrics.minScrollExtent) /
                   2)) {
-            if (paginate != null) {
-              paginate!();
+            if (widget.paginate != null) {
+              kIsWeb
+                  ? widget.paginate!()
+                  : SchedulerBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        widget.paginate!();
+                      }
+                    });
             }
           }
           return true;
@@ -88,11 +103,11 @@ class PaginationPullRefreshWidget extends StatelessWidget {
             color: ColorConst.baseHexColor,
             backgroundColor: Colors.white,
             onRefresh: () async {
-              if (onRefresh != null) {
-                onRefresh!();
+              if (widget.onRefresh != null) {
+                widget.onRefresh!();
               }
             },
-            child: child));
+            child: widget.child));
   }
 }
 
