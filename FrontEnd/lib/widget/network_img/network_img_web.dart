@@ -15,13 +15,15 @@ class NetworkImg extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.color});
+      this.color,
+      this.errorWidget});
 
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
   final Color? color;
+  final Widget? errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +93,13 @@ class NetworkImg extends StatelessWidget {
 
     return Stack(
       children: [
-        Image.asset(
-          AssetsConst.dbnusNoImageLogo,
-          width: width != 0.0 ? width : null,
-          height: height != 0.0 ? height : null,
-          color: ColorConst.blueGrey,
-        ),
+        errorWidget ??
+            Image.asset(
+              AssetsConst.dbnusNoImageLogo,
+              width: width != 0.0 ? width : null,
+              height: height != 0.0 ? height : null,
+              color: ColorConst.blueGrey,
+            ),
         SizedBox(
           width: width,
           height: height,
@@ -130,11 +133,12 @@ class NetworkImg extends StatelessWidget {
         }
       },
       errorBuilder: (_, __, ___) {
-        return Image.asset(
-          AssetsConst.dbnusNoImageLogo,
-          width: width != 0.0 ? width : null,
-          height: height != 0.0 ? height : null,
-        );
+        return errorWidget ??
+            Image.asset(
+              AssetsConst.dbnusNoImageLogo,
+              width: width != 0.0 ? width : null,
+              height: height != 0.0 ? height : null,
+            );
       },
     );
   }

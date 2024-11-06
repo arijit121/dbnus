@@ -11,13 +11,15 @@ class NetworkImg extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.color});
+      this.color,
+      this.errorWidget});
 
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
   final Color? color;
+  final Widget? errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +41,13 @@ class NetworkImg extends StatelessWidget {
         );
       },
       errorWidget: (_, __, ___) {
-        return Image.asset(
-          AssetsConst.dbnusNoImageLogo, // Use your local error image asset
-          width: width,
-          height: height,
-          fit: fit,
-        );
+        return errorWidget ??
+            Image.asset(
+              AssetsConst.dbnusNoImageLogo, // Use your local error image asset
+              width: width,
+              height: height,
+              fit: fit,
+            );
       },
       imageBuilder: (context, imageProvider) {
         return Image(

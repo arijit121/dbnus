@@ -14,6 +14,7 @@ class CustomNetWorkImageView extends StatelessWidget {
     this.fit = BoxFit.contain, // Default BoxFit value
     this.radius,
     this.color,
+    this.errorWidget,
   });
 
   final String url;
@@ -22,13 +23,20 @@ class CustomNetWorkImageView extends StatelessWidget {
   final BoxFit fit;
   final double? radius;
   final Color? color;
+  final Widget? errorWidget;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius ?? 0), // Apply radius
       child: NetworkImg(
-          url: url, width: width, height: height, fit: fit, color: color),
+        url: url,
+        width: width,
+        height: height,
+        fit: fit,
+        color: color,
+        errorWidget: errorWidget,
+      ),
     );
   }
 }
