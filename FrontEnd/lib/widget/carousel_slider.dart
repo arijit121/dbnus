@@ -14,10 +14,12 @@ class CarouselSlider extends StatefulWidget {
     this.fadeFactor = 0.5,
     required this.height,
     this.onTap,
+    this.onPageChanged,
     this.noScroll,
     this.padding,
     this.radius,
     this.fit = BoxFit.contain,
+    this.initialIndex = 0,
   });
 
   final List<String> imageList;
@@ -25,10 +27,12 @@ class CarouselSlider extends StatefulWidget {
   final Duration transitionDuration;
   final double scaleFactor, fadeFactor, height;
   final void Function(int index)? onTap;
+  final void Function(int)? onPageChanged;
   final bool? noScroll;
   final EdgeInsetsGeometry? padding;
   final double? radius;
   final BoxFit fit;
+  final int initialIndex;
 
   @override
   State<CarouselSlider> createState() => _CarouselSliderState();
@@ -43,8 +47,8 @@ class _CarouselSliderState extends State<CarouselSlider> {
   void initState() {
     super.initState();
     // Initialize PageController with a large initial page value to allow seamless scrolling.
-    _pageController = PageController(initialPage: 0);
-    _currentIndex.value = 0; // Set the initial current index.
+    _pageController = PageController(initialPage: widget.initialIndex);
+    _currentIndex.value = widget.initialIndex; // Set the initial current index.
     if (widget.imageList.length > 1 && widget.noScroll != true) {
       _startAutoScroll();
     }
@@ -106,6 +110,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
             // Calculate the correct index by using modulo operation
             int actualIndex = newIndex % widget.imageList.length;
             _currentIndex.value = actualIndex;
+            if (widget.onPageChanged != null) {
+              widget.onPageChanged!(actualIndex);
+            }
           },
           itemBuilder: (context, pageIndex) {
             // Use modulo to repeat the list infinitely
