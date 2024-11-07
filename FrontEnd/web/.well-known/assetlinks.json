@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.dbnus.app",
+      "sha256_cert_fingerprints":
+      ["2F:14:D6:3F:06:EA:13:A6:38:4D:D9:C6:AD:85:F9:AB:09:97:37:0D:56:3E:36:B4:2D:A2:69:17:6F:8F:21:F6"]
+    }
+  }]
