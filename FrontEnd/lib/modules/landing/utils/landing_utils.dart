@@ -35,11 +35,6 @@ class LandingUtils {
         action: RouteName.games,
         ui: FlameGame()),
     NavigationModel(
-        title: TextUtils.settings,
-        icon: AssetsConst.setting,
-        action: RouteName.settings,
-        ui: Container()),
-    NavigationModel(
         title: TextUtils.logout,
         icon: AssetsConst.signOut,
         action: TextUtils.logout,

@@ -128,8 +128,7 @@
                 <data android:scheme="@string/url_http_scheme" />
                 <data android:scheme="@string/url_https_scheme" />
                 <data android:pathPrefix="@string/url_path_prefix" />
-                <data android:host="@string/genupathlabs_url_short" />
-                <data android:host="@string/genupathlabs_url" />
+                <data android:host="@string/dbnus_url" />
             </intent-filter>
 
         </activity>

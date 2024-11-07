@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="genupathlabs_url">www.genupathlabs.com</string>
-    <string name="genupathlabs_url_short">gplab.in</string>
+    <string name="dbnus_url">dbnus-df986.web.app</string>
     <string name="url_path_prefix">/</string>
     <string name="url_http_scheme">http</string>
     <string name="url_https_scheme">https</string>

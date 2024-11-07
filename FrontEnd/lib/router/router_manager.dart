@@ -7,6 +7,9 @@ import '../const/assects_const.dart';
 import '../const/color_const.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
+import '../modules/order_details/ui/order_details.dart'
+    deferred as order_details;
+import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../utils/text_utils.dart';
 import '../widget/custom_button.dart';
@@ -103,16 +106,33 @@ class RouterManager {
         },
       ),
       GoRoute(
+        name: RouteName.orderDetails,
+        path: "${RouteName.orderDetails}/:order_id",
+        builder: (BuildContext context, GoRouterState state) {
+          if (state.pathParameters["order_id"]?.isNotEmpty == true) {
+            return order_details.OrderDetails(
+              orderId: state.pathParameters["order_id"] ?? "",
+            );
+          } else {
+            return errorRoute();
+          }
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await order_details.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
         name: RouteName.settings,
         path: RouteName.settings,
         builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.settings),
+          Map<String, String> queryParameters = state.uri.queryParameters;
+          return settings.Settings(
+            accountSetting: queryParameters["account_setting"] == "true",
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
-          await landing.loadLibrary();
+          await settings.loadLibrary();
           return null;
         },
       ),
