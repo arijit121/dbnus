@@ -11,6 +11,7 @@ import '../../../router/custom_router/custom_route.dart';
 import '../../../router/router_name.dart';
 import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/download_handler.dart';
+import '../../../service/file_picker.dart';
 import '../../../service/open_service.dart';
 import '../../../utils/pop_up_items.dart';
 import '../../../widget/custom_button.dart';
@@ -76,12 +77,14 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             size: const Size(160, 36),
-            onPressed: () async {},
+            onPressed: () async {
+              CustomFilePicker().customFilePicker();
+            },
             gradient: const LinearGradient(colors: [
               Colors.red,
               Colors.blue,
             ]),
-            child: const CustomText("Check")),
+            child: const CustomText("File Picker")),
         20.ph,
         ValueListenableBuilder<bool>(
             valueListenable: boolNotifier,

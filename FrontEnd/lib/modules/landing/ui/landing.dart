@@ -11,7 +11,7 @@ import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
 
 class LandingUi extends StatefulWidget {
-  LandingUi({super.key, required this.index});
+  const LandingUi({super.key, required this.index});
 
   final int index;
 
