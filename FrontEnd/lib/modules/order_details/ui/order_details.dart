@@ -6,6 +6,6 @@ class OrderDetails extends StatelessWidget {
   final String orderId;
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold();
   }
 }
