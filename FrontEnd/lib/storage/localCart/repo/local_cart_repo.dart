@@ -156,6 +156,30 @@ class LocalCartRepo {
         json.decode(json.encode(serviceModel.toJson()).toString()));
   }
 
+  Future<void> addServiceListToCart(
+      List<CartServiceModel> serviceModelList) async {
+    if (collection == null) {
+      await _init();
+    }
+    final productBox = await collection?.openBox<Map>(name);
+    // await productBox?.put(serviceModel.serviceId ?? "",
+    //     json.decode(json.encode(serviceModel.toJson()).toString()));
+
+    // Speed up write actions with transactions
+    await collection?.transaction(
+      () async {
+        for (var serviceModel in serviceModelList) {
+          await productBox?.put(
+            serviceModel.serviceId ?? "", // Use serviceId as the key
+            serviceModel.toJson(), // Serialize model to JSON
+          );
+        }
+      },
+      boxNames: [name],
+      readOnly: false,
+    );
+  }
+
   Future<void> removeServiceFromCart(String serviceId) async {
     if (collection == null) {
       await _init();

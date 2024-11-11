@@ -1,33 +1,21 @@
 part of 'local_cart_bloc.dart';
 
-abstract class LocalCartEvent extends Equatable {
+sealed class LocalCartEvent extends Equatable {
   const LocalCartEvent();
-}
-
-class InItLocalCartEvent extends LocalCartEvent {
   @override
   List<Object?> get props => [];
 }
-//ignore: must_be_immutable
+
+class InItLocalCartEvent extends LocalCartEvent {}
+
 class AddServiceToCart extends LocalCartEvent {
-  AddServiceToCart({required this.serviceModel});
-
-  CartServiceModel serviceModel;
-
-  @override
-  List<Object?> get props => [];
+  const AddServiceToCart({required this.serviceModel});
+  final CartServiceModel serviceModel;
 }
-//ignore: must_be_immutable
+
 class RemoveServiceFromCart extends LocalCartEvent {
-  RemoveServiceFromCart({required this.serviceId});
-
-  String serviceId;
-
-  @override
-  List<Object?> get props => [];
+  const RemoveServiceFromCart({required this.serviceId});
+  final String serviceId;
 }
 
-class ClearCart extends LocalCartEvent {
-  @override
-  List<Object?> get props => [];
-}
+class ClearCart extends LocalCartEvent {}

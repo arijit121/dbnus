@@ -27,7 +27,7 @@ class SsHive {
   static const String searchBoxKey = "SearchBox";
   static const String productBoxKey = "ProductBox";
   static const String serviceBoxKey = "ServiceBox";
-  static const String _collectionName = "SsHiveBox";
+  static const String _collectionName = "DbnusHiveBox";
   static const Set<String> _boxNames = {
     searchBoxKey,
     productBoxKey,
@@ -40,7 +40,7 @@ class SsHive {
   static Future<BoxCollection> getHiveCollection() async {
     List<int> key = await _getKey();
     String storePath =
-        kIsWeb ? "./" : (await getApplicationDocumentsDirectory()).path;
+        kIsWeb ? "./" : "${(await getApplicationDocumentsDirectory()).path}/hive_box";
     BoxCollection collection = await BoxCollection.open(
       _collectionName,
       _boxNames,
