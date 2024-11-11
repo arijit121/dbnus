@@ -7,10 +7,11 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   file_selector_windows
   firebase_core
+  flutter_inappwebview_windows
+  flutter_udid
   flutter_volume_controller
   geolocator_windows
   permission_handler_windows
-  platform_device_id_windows
   share_plus
   url_launcher_windows
 )

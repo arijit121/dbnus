@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -49,7 +46,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
     authDomain: 'dbnus-df986.firebaseapp.com',
-    storageBucket: 'dbnus-df986.appspot.com',
+    databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
+    storageBucket: 'dbnus-df986.firebasestorage.app',
     measurementId: 'G-8YSKF8B4G1',
   );
 
@@ -63,19 +61,33 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAxw1WbItbE1GEOJWiI8yCTLQ3sFQ93llA',
-    appId: '1:783534429855:ios:68ae1fb09dc68722e6f4aa',
+    appId: '1:783534429855:ios:7003b2b4c3048f9de6f4aa',
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
-    storageBucket: 'dbnus-df986.appspot.com',
-    iosBundleId: 'com.genupathlabs.dbnus',
+    databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
+    storageBucket: 'dbnus-df986.firebasestorage.app',
+    iosBundleId: 'com.dbnus.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAxw1WbItbE1GEOJWiI8yCTLQ3sFQ93llA',
-    appId: '1:783534429855:ios:b2c42208bfe976dae6f4aa',
+    appId: '1:783534429855:ios:7003b2b4c3048f9de6f4aa',
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
-    storageBucket: 'dbnus-df986.appspot.com',
-    iosBundleId: 'com.genupathlabs.dbnus.RunnerTests',
+    databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
+    storageBucket: 'dbnus-df986.firebasestorage.app',
+    iosBundleId: 'com.dbnus.app',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDWoA9iCdpB8hkSZW20KGXX4rzcLv21cLQ',
+    appId: '1:783534429855:web:a259db0dd9a7b318e6f4aa',
+    messagingSenderId: '783534429855',
+    projectId: 'dbnus-df986',
+    authDomain: 'dbnus-df986.firebaseapp.com',
+    databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
+    storageBucket: 'dbnus-df986.firebasestorage.app',
+    measurementId: 'G-K53JP17WSN',
+  );
+
 }
