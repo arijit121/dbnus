@@ -1,25 +1,47 @@
 import 'dart:ui';
 
+import 'package:dbnus/extension/spacing.dart';
+import 'package:dbnus/storage/localCart/bloc/local_cart_bloc.dart';
+import 'package:dbnus/storage/localCart/model/cart_service_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../router/router_name.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_text.dart';
 
-class MyReorderableList extends StatefulWidget {
+class MyReOrderAbleList extends StatefulWidget {
+  const MyReOrderAbleList({super.key});
+
   @override
-  _MyReorderableListState createState() => _MyReorderableListState();
+  State<MyReOrderAbleList> createState() => _MyReOrderAbleListState();
 }
 
-class _MyReorderableListState extends State<MyReorderableList> {
+class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
   List<String> items = List.generate(5, (index) => 'Item ${index + 1}');
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        12.ph,
+        CustomGOEButton(
+            size: const Size(200, 36),
+            onPressed: () async {
+              context.read<LocalCartBloc>().add(AddServiceToCart(
+                      serviceModel: CartServiceModel(
+                    serviceId: "hvsdhvfshv",
+                    price: 20.6,
+                  )));
+            },
+            gradient: const LinearGradient(colors: [
+              Colors.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Add to cart")),
+        12.ph,
         CustomGOEButton(
             size: const Size(200, 36),
             onPressed: () async {
@@ -32,6 +54,7 @@ class _MyReorderableListState extends State<MyReorderableList> {
               Colors.blue,
             ]),
             child: const CustomText("Navigate to order")),
+        12.ph,
         Expanded(
           child: ReorderableListView(
             shrinkWrap: true,

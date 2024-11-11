@@ -23,7 +23,7 @@ class LandingUtils {
         title: TextUtils.leaderBoard,
         icon: AssetsConst.leaderBoard,
         action: RouteName.leaderBoard,
-        ui: MyReorderableList()),
+        ui: MyReOrderAbleList()),
     NavigationModel(
         title: TextUtils.order,
         icon: AssetsConst.shoppingCart,
