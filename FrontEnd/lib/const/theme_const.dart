@@ -22,6 +22,7 @@ class ThemeConst {
     shadowColor: kIsWeb ? ColorConst.grey : ColorConst.lightGrey,
     iconTheme: IconThemeData(color: ColorConst.primaryDark),
     elevation: 0.5,
+    centerTitle: false,
   );
 
   static TextTheme textTheme = TextTheme(
