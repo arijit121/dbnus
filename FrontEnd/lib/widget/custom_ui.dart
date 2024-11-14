@@ -90,7 +90,7 @@ class _PaginationPullRefreshWidgetState
             if (widget.paginate != null) {
               mounted
                   ? widget.paginate!()
-                  : SchedulerBinding.instance.addPostFrameCallback((_) {
+                  : WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (mounted) {
                         widget.paginate!();
                       }
