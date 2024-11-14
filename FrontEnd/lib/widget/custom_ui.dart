@@ -84,9 +84,7 @@ class _PaginationPullRefreshWidgetState
               "MaxScrollExtent ${scrollInfo.metrics.maxScrollExtent}");*/
 
           if (scrollInfo.metrics.pixels >=
-              ((scrollInfo.metrics.maxScrollExtent +
-                      scrollInfo.metrics.minScrollExtent) /
-                  2)) {
+              (scrollInfo.metrics.maxScrollExtent / 2)) {
             if (widget.paginate != null) {
               mounted
                   ? widget.paginate!()
