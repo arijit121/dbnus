@@ -28,6 +28,34 @@ class CustomFilePicker {
 
   Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
     try {
+      final permissionStatus = await Permission.storage.request();
+      if (!permissionStatus.isGranted) {
+        final currentStatus = await Permission.storage.status;
+        bool permanentlyDenied = currentStatus.isPermanentlyDenied;
+        if (permanentlyDenied) {
+          await PopUpItems().cupertinoPopup(
+            title: "Permission Required",
+            content:
+                "File access is permanently denied. Please enable it in settings to use this feature.",
+            cancelBtnPresses: () {},
+            okBtnPressed: () async {
+              await openAppSettings();
+            },
+          );
+        } else {
+          PopUpItems().toastMessage(
+            "File access is required to use this feature. Please grant permission to continue.",
+            ColorConst.baseHexColor,
+            durationSeconds: 3,
+          );
+        }
+        final updatedStatus =
+            await Permission.storage.status; // Adjust for iOS if needed
+        if (!updatedStatus.isGranted) {
+          return null;
+        }
+      }
+
       List<String> _allowedExtensions =
           allowedExtensions ?? ['jpeg', 'jpg', 'pdf'];
       FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -80,6 +108,34 @@ class CustomFilePicker {
   Future<List<CustomFile>?> pickMultipleFile(
       {List<String>? allowedExtensions}) async {
     try {
+      final permissionStatus = await Permission.storage.request();
+      if (!permissionStatus.isGranted) {
+        final currentStatus = await Permission.storage.status;
+        bool permanentlyDenied = currentStatus.isPermanentlyDenied;
+        if (permanentlyDenied) {
+          await PopUpItems().cupertinoPopup(
+            title: "Permission Required",
+            content:
+                "File access is permanently denied. Please enable it in settings to use this feature.",
+            cancelBtnPresses: () {},
+            okBtnPressed: () async {
+              await openAppSettings();
+            },
+          );
+        } else {
+          PopUpItems().toastMessage(
+            "File access is required to use this feature. Please grant permission to continue.",
+            ColorConst.baseHexColor,
+            durationSeconds: 3,
+          );
+        }
+        final updatedStatus =
+            await Permission.storage.status; // Adjust for iOS if needed
+        if (!updatedStatus.isGranted) {
+          return null;
+        }
+      }
+
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
@@ -107,12 +163,12 @@ class CustomFilePicker {
 
   Future<CustomFile?> cameraPicker() async {
     try {
-      final result = await Permission.camera.request();
-      if (!(result.isGranted)) {
-        final result = await Permission.camera.status;
-        bool permanentlyDenied = result.isPermanentlyDenied;
+      final permissionStatus = await Permission.camera.request();
+      if (!permissionStatus.isGranted) {
+        final currentStatus = await Permission.camera.status;
+        bool permanentlyDenied = currentStatus.isPermanentlyDenied;
         if (permanentlyDenied) {
-          PopUpItems().cupertinoPopup(
+          await PopUpItems().cupertinoPopup(
               title: "Permission Required",
               content:
                   "Camera access is permanently denied. Please enable it in settings to use this feature.",
@@ -120,9 +176,14 @@ class CustomFilePicker {
               okBtnPressed: () async {
                 await openAppSettings();
               });
+        } else {
+          PopUpItems().toastMessage(
+              "Camera access is required to use this feature. Please grant permission to continue.",
+              ColorConst.baseHexColor,
+              durationSeconds: 3);
         }
-        final result0 = await Permission.camera.status;
-        if (!(result0.isGranted)) {
+        final updatedStatus = await Permission.camera.status;
+        if (!updatedStatus.isGranted) {
           return null;
         }
       }
@@ -151,6 +212,37 @@ class CustomFilePicker {
 
   Future<CustomFile?> galleryPicker() async {
     try {
+      final permissionStatus = await Permission.photos
+          .request(); // Use Permission.storage for Android if necessary
+      if (!permissionStatus.isGranted) {
+        final currentStatus = await Permission
+            .photos.status; // Use Permission.storage for Android if necessary
+        bool permanentlyDenied = currentStatus.isPermanentlyDenied;
+        if (permanentlyDenied) {
+          await PopUpItems().cupertinoPopup(
+            title: "Permission Required",
+            content:
+                "Gallery access is permanently denied. Please enable it in settings to use this feature.",
+            cancelBtnPresses: () {},
+            okBtnPressed: () async {
+              await openAppSettings();
+            },
+          );
+        } else {
+          PopUpItems().toastMessage(
+            "Gallery access is required to use this feature. Please grant permission to continue.",
+            ColorConst.baseHexColor,
+            durationSeconds: 3,
+          );
+        }
+
+        final updatedStatus = await Permission
+            .photos.status; // Use Permission.storage for Android if necessary
+        if (!updatedStatus.isGranted) {
+          return null;
+        }
+      }
+
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
