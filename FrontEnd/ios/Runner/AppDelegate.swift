@@ -1,6 +1,5 @@
 import Flutter
 import UIKit
-import Firebase
 import flutter_local_notifications
 
 @UIApplicationMain
@@ -13,7 +12,6 @@ import flutter_local_notifications
      FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
         GeneratedPluginRegistrant.register(with: registry)
       }
-    FirebaseApp.configure()
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }

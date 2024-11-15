@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:universal_html/parsing.dart';
 
 import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
@@ -204,4 +206,29 @@ class ValueHandler {
     final RegExp htmlRegExp = RegExp(r'<[^>]*>');
     return htmlRegExp.hasMatch(text);
   }
+
+  String parseHtmlToText(String htmlString) {
+    // Create a document from the HTML string
+    final document = parseHtmlDocument(htmlString);
+    // Extract all text content
+    return document.body?.text ?? ''; // Extracts all text content from the body
+  }
+
+  /// *
+  /// todo
+  ///  @Note Please don't change this encryption algo as it same as in Phonegap app
+  ///  msg, key , algo
+  ///  return different types of hmac encryption in md5
+  ///  Link: http://www.supermind.org/blog/1102/generating-hmac-md5-sha1-sha256-etc-in-java
+  String hmacDigest(String msg, String keyString, Hash algo) {
+    var key = utf8.encode(keyString);
+    var bytes = utf8.encode(msg);
+
+    var hmacSha256 = Hmac(algo, key);
+    var digest = hmacSha256.convert(bytes);
+
+    return '$digest';
+  }
+
+  String frontCapitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }

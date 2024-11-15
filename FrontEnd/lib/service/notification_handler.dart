@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:dbnus/service/value_handler.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,14 +11,13 @@ import 'package:path_provider/path_provider.dart';
 
 import '../data/model/fcm_notification_model.dart';
 import 'redirect_engine.dart';
+import 'value_handler.dart';
 
-///
-/// Don't change this configuration other wise there will be duplicate notification android.
-///
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description: 'This channel is used for important notifications.',
+    'shbl_app', // id
+    'shbl_fcm', // name
+    description: 'shbl app fcm notification', // description
+    importance: Importance.high,
     ledColor: Colors.white);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -109,6 +107,7 @@ class NotificationHandler {
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin,
+      macOS: initializationSettingsDarwin,
     );
 
     await flutterLocalNotificationsPlugin.initialize(
@@ -143,22 +142,31 @@ class NotificationHandler {
 
   Future<void> requestPermissions() async {
     if (Platform.isIOS || Platform.isMacOS) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              MacOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      if (Platform.isIOS) {
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin>()
+            ?.requestPermissions(
+              alert: true,
+              badge: true,
+              sound: true,
+            );
+      } else if (Platform.isMacOS) {
+        await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                MacOSFlutterLocalNotificationsPlugin>()
+            ?.requestPermissions(
+              alert: true,
+              badge: true,
+              sound: true,
+            );
+      }
     } else if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
           flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
@@ -200,7 +208,8 @@ class NotificationHandler {
         DarwinNotificationDetails(
             subtitle: ValueHandler()
                     .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-                ? fcmNotificationModel.message
+                ? ValueHandler()
+                    .parseHtmlToText(fcmNotificationModel.message ?? "")
                 : null,
             attachments: bigPicturePath != null
                 ? <DarwinNotificationAttachment>[
@@ -215,7 +224,8 @@ class NotificationHandler {
     await flutterLocalNotificationsPlugin.show(
         getId(),
         fcmNotificationModel.title ?? "",
-        fcmNotificationModel.bigText ?? fcmNotificationModel.message ?? "",
+        ValueHandler().parseHtmlToText(
+            fcmNotificationModel.bigText ?? fcmNotificationModel.message ?? ""),
         notificationDetailsImage,
         payload: fcmNotificationModel.actionURL);
   }
@@ -308,7 +318,7 @@ class NotificationHandler {
       final NotificationDetails notificationDetails = NotificationDetails(
           android: androidNotificationDetails, iOS: darwinNotificationDetails);
       await flutterLocalNotificationsPlugin.show(
-          progressId, 'Loading .... ', '', notificationDetails,
+          progressId, 'Downloading .... ', '', notificationDetails,
           payload: 'item x');
     });
   }
