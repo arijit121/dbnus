@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../const/color_const.dart';
 import '../data/model/custom_file.dart';
@@ -106,6 +107,28 @@ class CustomFilePicker {
 
   Future<CustomFile?> cameraPicker() async {
     try {
+      final result = await Permission.camera.request();
+      if (!(result.isGranted)) {
+        final result = await Permission.camera.status;
+        bool permanentlyDenied = result.isPermanentlyDenied;
+        if (permanentlyDenied) {
+          PopUpItems().cupertinoPopup(
+              title: "Permission Required",
+              content:
+                  "Camera access is permanently denied. Please enable it in settings to use this feature.",
+              cancelBtnPresses: () {},
+              okBtnPressed: () async {
+                if (permanentlyDenied) {
+                  await openAppSettings();
+                }
+              });
+        }
+        final result0 = await Permission.camera.status;
+        if (!(result0.isGranted)) {
+          return null;
+        }
+      }
+
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.camera);
 

@@ -45,10 +45,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>For people to see you during meetings, we need access to your camera.</string>
+	<string>This app requires access to the camera.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need access to your location to check if our service is available at your current location, even when the app is in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need access to your location to check if our service is available at your current location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>For people to hear you during meetings, we need access to your microphone.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to the photo library.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>We need permission to save images to your photo library.</string
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
