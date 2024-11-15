@@ -118,9 +118,7 @@ class CustomFilePicker {
                   "Camera access is permanently denied. Please enable it in settings to use this feature.",
               cancelBtnPresses: () {},
               okBtnPressed: () async {
-                if (permanentlyDenied) {
-                  await openAppSettings();
-                }
+                await openAppSettings();
               });
         }
         final result0 = await Permission.camera.status;
