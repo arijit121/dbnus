@@ -58,12 +58,14 @@ class CustomContainer extends StatelessWidget {
 
 class PaginationPullRefreshWidget extends StatefulWidget {
   final Function? paginate;
+  final Function? reversePaginate;
   final Function? onRefresh;
   final Widget child;
 
   const PaginationPullRefreshWidget({
     super.key,
     this.paginate,
+    this.reversePaginate,
     this.onRefresh,
     required this.child,
   });
@@ -91,6 +93,17 @@ class _PaginationPullRefreshWidgetState
                   : WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (mounted) {
                         widget.paginate!();
+                      }
+                    });
+            }
+          } else if (scrollInfo.metrics.pixels >=
+              (scrollInfo.metrics.minScrollExtent / 2)) {
+            if (widget.reversePaginate != null) {
+              mounted
+                  ? widget.reversePaginate!()
+                  : WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        widget.reversePaginate!();
                       }
                     });
             }
