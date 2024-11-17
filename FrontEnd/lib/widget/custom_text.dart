@@ -350,3 +350,84 @@ class CustomExpandableText extends StatelessWidget {
     );
   }
 }
+
+/// Enum to define various text styles used in the application.
+enum CustomTextStyleType {
+  heading1(36, FontWeight.w400), // Regular
+  heading2(25, FontWeight.w400), // Regular
+  heading3(20, FontWeight.w400), // Regular
+  subHeading1(18, FontWeight.w500), // Medium
+  subHeading2(16, FontWeight.w500), // Medium
+  subHeading3(16, FontWeight.w600), // Semi-bold
+  body1(16, FontWeight.w400), // Regular
+  body2(14, FontWeight.w400), // Regular
+  body3(14, FontWeight.w500); // Medium
+
+  /// Font size for the text style.
+  final double fontSize;
+
+  /// Font weight for the text style.
+  final FontWeight fontWeight;
+
+  /// Constructor to assign properties to the enum values.
+  const CustomTextStyleType(this.fontSize, this.fontWeight);
+}
+
+/// A customizable text widget that uses an enum for predefined text styles.
+///
+/// This widget allows the use of predefined styles while also supporting
+/// additional customizations like font weight, font size, color, text alignment,
+/// and line spacing.
+class CustomTextEnumWidget extends StatelessWidget {
+  /// The text to display.
+  final String text;
+
+  /// The predefined style type for the text.
+  final CustomTextStyleType styleType;
+
+  /// The maximum number of lines the text can occupy.
+  final int? maxLines;
+
+  /// The alignment of the text.
+  final TextAlign? textAlign;
+
+  /// Custom text color to override the default style.
+  final Color? color;
+
+  /// Whether additional line spacing is needed.
+  final bool lineGapNeeded;
+
+  /// Text decoration for underlining, striking, etc.
+  final TextDecoration? decoration;
+
+  /// Custom background color for the text.
+  final Color? backGroundColor;
+
+  /// Creates a `CustomTextEnumWidget` with flexible styling options.
+  const CustomTextEnumWidget({
+    required this.text,
+    required this.styleType,
+    this.maxLines,
+    this.textAlign,
+    this.color,
+    this.lineGapNeeded = false,
+    this.decoration,
+    this.backGroundColor,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomText(
+      text,
+      color: color,
+      size: styleType.fontSize,
+      fontWeight: styleType.fontWeight,
+      maxLines: maxLines,
+      decoration: decoration,
+      lineGapNeeded: lineGapNeeded,
+      textAlign: textAlign,
+      backGroundColor: backGroundColor,
+    );
+  }
+}
