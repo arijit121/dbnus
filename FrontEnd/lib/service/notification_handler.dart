@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:dbnus/extension/logger_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -29,6 +30,11 @@ bool isFlutterLocalNotificationsInitialized = false;
 String navigationActionId = 'id_3';
 String darwinNotificationCategoryPlain = 'plainCategory';
 String darwinNotificationCategoryText = 'textCategory';
+
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  AppLog.i(notificationResponse.payload, tag: "Payload");
+}
 
 class NotificationHandler {
   Future<void> initiateNotification() async {
@@ -116,6 +122,7 @@ class NotificationHandler {
           (NotificationResponse notificationResponse) {
         selectNotificationStream.add(notificationResponse.payload);
       },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
     isFlutterLocalNotificationsInitialized = true;
   }

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../const/color_const.dart';
 import '../extension/logger_extension.dart';
 import 'pop_up_items.dart';
 import 'screen_utils.dart';
@@ -33,7 +34,8 @@ class AppUtils {
       return await Geolocator.getCurrentPosition();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-      PopUpItems().toastMessage(e.toString(), Colors.red, durationSeconds: 4);
+      PopUpItems()
+          .toastMessage(e.toString(), ColorConst.red, durationSeconds: 4);
     }
     return null;
   }

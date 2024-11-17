@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../config/app_config.dart';
 import '../../../const/api_url_const.dart';
+import '../../../const/color_const.dart';
 import '../../../data/model/forward_geocoding.dart';
 import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
@@ -41,7 +42,7 @@ class TestPage extends StatelessWidget {
               CustomGOEButton(
                   onPressed: () {},
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("text")),
@@ -63,7 +64,7 @@ class TestPage extends StatelessWidget {
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("GlucoseFasting")),
@@ -75,7 +76,7 @@ class TestPage extends StatelessWidget {
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("GlucosePP")),
@@ -87,7 +88,7 @@ class TestPage extends StatelessWidget {
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("LipidProfile")),
@@ -99,7 +100,7 @@ class TestPage extends StatelessWidget {
                             "https://storage.googleapis.com/approachcharts/test/5MB-test.ZIP");
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("5MB-test")),
@@ -113,7 +114,7 @@ class TestPage extends StatelessWidget {
                     AppLog.i(forwardGeocoding?.longitude);
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText(
@@ -127,7 +128,7 @@ class TestPage extends StatelessWidget {
                     AppLog.i(reverseGeocoding?.displayName);
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText(
@@ -139,7 +140,7 @@ class TestPage extends StatelessWidget {
                     AppLog.i(deviceId);
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("Get Device Id")),
@@ -152,7 +153,7 @@ class TestPage extends StatelessWidget {
                         : context.pushNamed(RouteName.leaderBoard);
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("Navigate to leaderBoard")),
@@ -165,7 +166,7 @@ class TestPage extends StatelessWidget {
                     AppLog.i(customFile?.name, tag: "CustomFile");
                   },
                   gradient: const LinearGradient(colors: [
-                    Colors.red,
+                    ColorConst.red,
                     Colors.blue,
                   ]),
                   child: const CustomText("File Pick")),
@@ -903,7 +904,7 @@ class TestPage extends StatelessWidget {
                     height: 100,
                     width: 120,
                     fit: BoxFit.fill,
-                    color: Colors.black,
+                    color: ColorConst.primaryDark,
                   ),
                 ],
               ),

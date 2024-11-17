@@ -55,7 +55,7 @@ class LocalCartButtonWidget extends StatelessWidget {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.25),
+                            color: ColorConst.primaryDark.withOpacity(0.25),
                             blurRadius: 5.0,
                             spreadRadius: 3,
                           )
@@ -84,7 +84,7 @@ class LocalCartButtonWidget extends StatelessWidget {
                         22.pw,
                         CustomText(
                             "${TextUtils.rupee} ${state.totalPrice.value?.toInt() ?? ""}",
-                            color: Colors.green,
+                            color: ColorConst.green,
                             size: 18,
                             fontWeight: FontWeight.w600),
                         const Spacer(),

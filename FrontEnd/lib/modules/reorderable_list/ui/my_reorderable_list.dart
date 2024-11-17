@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../const/color_const.dart';
 import '../../../router/router_name.dart';
 import '../../../storage/localCart/bloc/local_cart_bloc.dart';
 import '../../../storage/localCart/model/cart_service_model.dart';
@@ -37,7 +38,7 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
                   )));
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Add to cart")),
@@ -50,7 +51,7 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
                   : context.pushNamed(RouteName.order);
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Navigate to order")),

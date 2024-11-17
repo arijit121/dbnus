@@ -8,6 +8,8 @@ import 'package:dbnus/widget/custom_text.dart';
 import 'package:dbnus/widget/custom_ui.dart';
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
+
 class FileView extends StatelessWidget {
   const FileView({
     super.key,
@@ -55,7 +57,7 @@ class FileView extends StatelessWidget {
                           width: width),
           if (onDelete != null)
             CustomIconButton(
-                color: Colors.red,
+                color: ColorConst.red,
                 icon: const Icon(Icons.delete),
                 onPressed: onDelete),
         ],

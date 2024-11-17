@@ -106,7 +106,7 @@ class CustomTextFormField extends StatelessWidget {
               errorStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  fontColor: Colors.red),
+                  fontColor: ColorConst.red),
               hintStyle: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -149,14 +149,14 @@ class CustomTextFormField extends StatelessWidget {
               errorBorder: OutlineInputBorder(
                 borderRadius: borderRadius,
                 borderSide: const BorderSide(
-                  color: Colors.red,
+                  color: ColorConst.red,
                   width: 1,
                 ),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: borderRadius,
                 borderSide: const BorderSide(
-                  color: Colors.red,
+                  color: ColorConst.red,
                   width: 1,
                 ),
               ),

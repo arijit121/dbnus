@@ -15,8 +15,8 @@ import 'package:flutter/material.dart';
 ///   crossAxisSpacing: 10,
 ///   mainAxisSpacing: 10,
 ///   children: [
-///     Container(color: Colors.red),
-///     Container(color: Colors.green),
+///     Container(color: ColorConst.red),
+///     Container(color: ColorConst.green),
 ///   ],
 /// );
 /// ```
@@ -53,8 +53,8 @@ class CustomGridView extends StatelessWidget {
   ///   crossAxisSpacing: 10,
   ///   mainAxisSpacing: 10,
   ///   children: [
-  ///     Container(color: Colors.red),
-  ///     Container(color: Colors.green),
+  ///     Container(color: ColorConst.red),
+  ///     Container(color: ColorConst.green),
   ///   ],
   /// );
   /// ```
@@ -220,7 +220,7 @@ class _CustomGridView extends StatelessWidget {
                 int rowIndex = tempRowIndex ~/ 2;
                 // return CustomText(
                 //   "[Row $rowIndex, Column $columnIndex] = index ${rowIndex + (crossAxisCount * columnIndex)} ",
-                //   color: Colors.black,
+                //   color: ColorConst.primaryDark,
                 // );
 
                 int itemIndex = rowIndex + (crossAxisCount * columnIndex);

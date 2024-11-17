@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../const/assects_const.dart';
+import '../const/color_const.dart';
 import '../widget/custom_text.dart';
 import 'custom_image.dart';
 
@@ -36,7 +37,8 @@ class CustomErrorWidget extends StatelessWidget {
             if (errorMsg?.isNotEmpty == true)
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: CustomText(errorMsg ?? "", color: Colors.grey, size: 13),
+                child: CustomText(errorMsg ?? "",
+                    color: ColorConst.grey, size: 13),
               )
           ],
         ),

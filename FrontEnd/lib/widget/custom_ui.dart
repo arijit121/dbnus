@@ -135,7 +135,7 @@ class KeyValueWidget extends StatelessWidget {
     this.fontWeight,
     required this.value,
     this.size,
-    this.color = Colors.black,
+    this.color = ColorConst.primaryDark,
   });
 
   @override

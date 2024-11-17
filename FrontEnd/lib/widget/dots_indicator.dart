@@ -4,10 +4,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
+
 typedef OnTap = void Function(int position);
 
 class DotsIndicator extends StatelessWidget {
-  final int dotsCount,position;
+  final int dotsCount, position;
   final DotsDecorator decorator;
   final Axis axis;
   final bool reversed;
@@ -127,7 +129,7 @@ const ShapeBorder kDefaultShape = CircleBorder();
 class DotsDecorator {
   /// Inactive dot color
   ///
-  /// @Default `Colors.grey`
+  /// @Default `ColorConst.grey`
   final Color color;
 
   /// List of inactive dot colors
@@ -197,7 +199,7 @@ class DotsDecorator {
   final EdgeInsets spacing;
 
   const DotsDecorator({
-    this.color = Colors.grey,
+    this.color = ColorConst.grey,
     this.colors = const [],
     this.activeColor,
     this.activeColors = const [],

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
+
 class DashHorizontalDivider extends StatelessWidget {
   const DashHorizontalDivider(
       {super.key,
       this.height = 1,
       this.separatedWidth = 10,
-      this.color = Colors.black});
+      this.color = ColorConst.primaryDark});
 
   final double height;
   final double separatedWidth;

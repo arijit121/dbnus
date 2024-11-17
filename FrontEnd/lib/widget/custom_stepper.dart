@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
 import '../extension/spacing.dart';
 
 class CustomVerticalStepper extends StatelessWidget {
@@ -14,8 +15,8 @@ class CustomVerticalStepper extends StatelessWidget {
     this.customStepperContent,
     this.physics,
     this.shrinkWrap = false,
-    this.activeLineColor = Colors.green,
-    this.inActiveLineColor = Colors.grey,
+    this.activeLineColor = ColorConst.green,
+    this.inActiveLineColor = ColorConst.grey,
   });
 
   @override
@@ -78,8 +79,8 @@ class CustomHorizontalStepper extends StatelessWidget {
     this.lineHeight,
     this.lineWidth = 30,
     this.shrinkWrap = false,
-    this.activeLineColor = Colors.green,
-    this.inActiveLineColor = Colors.grey,
+    this.activeLineColor = ColorConst.green,
+    this.inActiveLineColor = ColorConst.grey,
   });
 
   @override

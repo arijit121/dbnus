@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../const/color_const.dart';
 import 'custom_image.dart';
 
 class CarouselSlider extends StatefulWidget {
@@ -165,7 +166,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
                 height: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: i == index ? Colors.blue : Colors.grey,
+                  color: i == index ? Colors.blue : ColorConst.grey,
                 ),
               );
             }),

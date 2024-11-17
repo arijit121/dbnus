@@ -246,7 +246,7 @@ class CustomRadioButton<T> extends StatelessWidget {
           if (states.contains(WidgetState.selected)) {
             return activeColor ?? Colors.blue;
           }
-          return Colors.grey;
+          return ColorConst.grey;
         },
       ),
       value: value,
@@ -274,7 +274,7 @@ Widget customCartButton(
                     context.read<LocalCartBloc>().add(RemoveServiceFromCart(
                         serviceId: serviceModel?.serviceId ?? ""));
                   },
-                  backGroundColor: Colors.red,
+                  backGroundColor: ColorConst.red,
                   radius: 5,
                   child: CustomText(TextUtils.remove,
                       color: Colors.white,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../const/color_const.dart';
 import '../bloc/network_bytes_Img_bloc.dart';
 
 class NetworkBytesImage extends StatelessWidget {
@@ -36,7 +37,7 @@ class NetworkBytesImage extends StatelessWidget {
                   errorBuilder: (_, __, ___) {
                     return errorWidget ??
                         Container(
-                            color: Colors.grey,
+                            color: ColorConst.grey,
                             width: width,
                             height: height,
                             child: const Center(
@@ -50,7 +51,7 @@ class NetworkBytesImage extends StatelessWidget {
               : state.isError == true
                   ? errorWidget ??
                       Container(
-                          color: Colors.grey,
+                          color: ColorConst.grey,
                           width: width,
                           height: height,
                           child: const Center(
@@ -61,7 +62,7 @@ class NetworkBytesImage extends StatelessWidget {
                           ))
                   : loadingWidget ??
                       Container(
-                        color: Colors.grey,
+                        color: ColorConst.grey,
                         width: width,
                         height: height,
                         child: const Center(child: CircularProgressIndicator()),

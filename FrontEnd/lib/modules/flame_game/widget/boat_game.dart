@@ -7,6 +7,8 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/events.dart';
 
+import '../../../const/color_const.dart';
+
 class BoatGame extends FlameGame with TapDetector {
   BoatGame({
     required this.widthState,
@@ -65,7 +67,7 @@ class BoatGame extends FlameGame with TapDetector {
       add(CircleComponent(
         radius: 10, // Size of the marker
         position: tempPoint, // Position of the marker
-        paint: Paint()..color = Colors.red, // Color of the marker
+        paint: Paint()..color = ColorConst.red, // Color of the marker
       ));
     }
 

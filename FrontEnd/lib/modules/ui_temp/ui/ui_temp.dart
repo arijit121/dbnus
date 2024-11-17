@@ -47,7 +47,7 @@ class _UiTempState extends State<UiTemp> {
                       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Download")),
@@ -60,7 +60,7 @@ class _UiTempState extends State<UiTemp> {
               AppLog.i(value);
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("loadJsAndPassValueWithCallbackAsync")),
@@ -70,7 +70,7 @@ class _UiTempState extends State<UiTemp> {
               await JsProvider().changeUrl(path: "/test");
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Change Url")),
@@ -81,7 +81,7 @@ class _UiTempState extends State<UiTemp> {
               CustomFilePicker().customFilePicker();
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("File Picker")),
@@ -141,7 +141,7 @@ class _UiTempState extends State<UiTemp> {
                       child: PinCodeTextField(
                         textStyle: customizeTextStyle(
                             fontColor: ColorConst.primaryDark),
-                        cursorColor: Colors.black,
+                        cursorColor: ColorConst.primaryDark,
                         scrollPadding: EdgeInsets.only(
                             bottom:
                                 MediaQuery.of(context).viewInsets.bottom + 140),
@@ -232,7 +232,7 @@ class _UiTempState extends State<UiTemp> {
         ),
         20.ph,
         CustomIconButton(
-            color: Colors.black,
+            color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
               OpenService()
@@ -240,7 +240,7 @@ class _UiTempState extends State<UiTemp> {
             }),
         20.ph,
         CustomIconButton(
-            color: Colors.black,
+            color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
               OpenService().openCoordinatesInMap(
@@ -255,7 +255,7 @@ class _UiTempState extends State<UiTemp> {
               CustomRoute().clearAndNavigate(RouteName.leaderBoard);
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Clear And Navigate to leaderBoard")),
@@ -268,13 +268,13 @@ class _UiTempState extends State<UiTemp> {
                   : context.pushNamed(RouteName.games);
             },
             gradient: const LinearGradient(colors: [
-              Colors.red,
+              ColorConst.red,
               Colors.blue,
             ]),
             child: const CustomText("Navigate to products")),
         20.ph,
         CustomIconButton(
-            color: Colors.black,
+            color: ColorConst.primaryDark,
             icon: Icon(Icons.add_box),
             onPressed: () {
               PopUpItems()

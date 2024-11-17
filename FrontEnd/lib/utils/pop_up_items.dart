@@ -74,7 +74,7 @@ class PopUpItems {
         child: CupertinoAlertDialog(
           title: title != null ? CustomText(title, size: 14) : null,
           content: content != null
-              ? CustomText(content, color: Colors.black, size: 14)
+              ? CustomText(content, color: ColorConst.primaryDark, size: 14)
               : null,
           actions: <Widget>[
             if (cancelBtnPresses != null)
@@ -83,7 +83,7 @@ class PopUpItems {
                   Navigator.pop(context);
                 },
                 child: CustomText(cancelBtnText ?? "Cancel",
-                    color: Colors.black, size: 14),
+                    color: ColorConst.primaryDark, size: 14),
               ),
             if (okBtnPressed != null)
               CupertinoDialogAction(
@@ -91,7 +91,7 @@ class PopUpItems {
                   Navigator.pop(context, "Yes");
                 },
                 child: CustomText(okBtnText ?? "Ok",
-                    color: Colors.black, size: 14),
+                    color: ColorConst.primaryDark, size: 14),
               ),
           ],
         ),
@@ -116,11 +116,11 @@ class PopUpItems {
       switch (type) {
         case DialogType.success:
           icon = Icons.check_circle;
-          iconButtonColor = Colors.green;
+          iconButtonColor = ColorConst.green;
           break;
         case DialogType.error:
           icon = Icons.error;
-          iconButtonColor = Colors.red;
+          iconButtonColor = ColorConst.red;
           break;
         case DialogType.warning:
           icon = Icons.warning;
@@ -192,7 +192,7 @@ class ToastMassage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         elevation: 20,
-        shadowColor: Colors.grey,
+        shadowColor: ColorConst.grey,
         color: color,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

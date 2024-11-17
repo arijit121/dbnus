@@ -108,7 +108,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
             errorStyle: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                fontColor: Colors.red),
+                fontColor: ColorConst.red),
             hintStyle:
                 customizeTextStyle(fontColor: ColorConst.redGrey, fontSize: 16),
             labelStyle: customizeTextStyle(
@@ -149,14 +149,14 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: const BorderSide(
-                color: Colors.red,
+                color: ColorConst.red,
                 width: 1,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6.0),
               borderSide: const BorderSide(
-                color: Colors.red,
+                color: ColorConst.red,
                 width: 1,
               ),
             ),
@@ -295,7 +295,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
               )),
       onChanged: onChanged,
       hint: hintText != null
-          ? CustomText(hintText!, color: Colors.grey, size: 13)
+          ? CustomText(hintText!, color: ColorConst.grey, size: 13)
           : null,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -328,7 +328,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(9.0),
           borderSide: const BorderSide(
-            color: Colors.red,
+            color: ColorConst.red,
             width: 1,
           ),
         ),

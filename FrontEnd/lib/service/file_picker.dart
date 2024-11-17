@@ -68,7 +68,7 @@ class CustomFilePicker {
         int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
         if (!_allowedExtensions.contains(platformFile.extension)) {
-          PopUpItems().toastMessage("Invalid file type.", Colors.red,
+          PopUpItems().toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
         } else if (platformFile.extension == 'jpg' ||
             platformFile.extension == 'jpeg') {
@@ -86,7 +86,7 @@ class CustomFilePicker {
           }
         } else if (sizeInMb > _maxFileSize) {
           PopUpItems().toastMessage(
-              "Can't upload file more than 5 mb.", Colors.red,
+              "Can't upload file more than 5 mb.", ColorConst.red,
               durationSeconds: 4);
         } else {
           CustomFile customFile = CustomFile(
