@@ -30,11 +30,14 @@ class CustomFilePicker {
   Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        final androidInfo = (!kIsWeb && Platform.isAndroid)
+            ? await DeviceInfoPlugin().androidInfo
+            : null;
         final permissionStatus = await _fileManagerPermission(
-            permission: androidInfo.version.sdkInt <= 32 || !Platform.isAndroid
-                ? Permission.storage
-                : Permission.manageExternalStorage,
+            permission:
+                (androidInfo?.version.sdkInt ?? 0) <= 32 || !Platform.isAndroid
+                    ? Permission.storage
+                    : Permission.manageExternalStorage,
             name: 'File');
         if (!permissionStatus.isGranted) {
           return null;
@@ -94,11 +97,14 @@ class CustomFilePicker {
       {List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        final androidInfo = (!kIsWeb && Platform.isAndroid)
+            ? await DeviceInfoPlugin().androidInfo
+            : null;
         final permissionStatus = await _fileManagerPermission(
-            permission: androidInfo.version.sdkInt <= 32 || !Platform.isAndroid
-                ? Permission.storage
-                : Permission.manageExternalStorage,
+            permission:
+                (androidInfo?.version.sdkInt ?? 0) <= 32 || !Platform.isAndroid
+                    ? Permission.storage
+                    : Permission.manageExternalStorage,
             name: 'File');
         if (!permissionStatus.isGranted) {
           return null;
@@ -163,11 +169,14 @@ class CustomFilePicker {
   Future<CustomFile?> galleryPicker() async {
     try {
       if (!kIsWeb) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        final androidInfo = (!kIsWeb && Platform.isAndroid)
+            ? await DeviceInfoPlugin().androidInfo
+            : null;
         final permissionStatus = await _fileManagerPermission(
-            permission: androidInfo.version.sdkInt <= 32 || !Platform.isAndroid
-                ? Permission.storage
-                : Permission.photos,
+            permission:
+                (androidInfo?.version.sdkInt ?? 0) <= 32 || !Platform.isAndroid
+                    ? Permission.storage
+                    : Permission.photos,
             name: 'Gallery');
         if (!permissionStatus.isGranted) {
           return null;
