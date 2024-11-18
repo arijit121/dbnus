@@ -351,25 +351,43 @@ class CustomExpandableText extends StatelessWidget {
   }
 }
 
-/// Enum to define various text styles used in the application.
+/// An enum representing various custom text styles.
+/// Each style is defined with a specific font size and font weight.
 enum CustomTextStyleType {
-  heading1(36, FontWeight.w400), // Regular
-  heading2(25, FontWeight.w400), // Regular
-  heading3(20, FontWeight.w400), // Regular
-  subHeading1(18, FontWeight.w500), // Medium
-  subHeading2(16, FontWeight.w500), // Medium
-  subHeading3(16, FontWeight.w600), // Semi-bold
-  body1(16, FontWeight.w400), // Regular
-  body2(14, FontWeight.w400), // Regular
-  body3(14, FontWeight.w500); // Medium
+  /// Heading 1 style with a font size of 36 and a regular font weight.
+  heading1(36, FontWeight.w400),
 
-  /// Font size for the text style.
+  /// Heading 2 style with a font size of 25 and a regular font weight.
+  heading2(25, FontWeight.w400),
+
+  /// Heading 3 style with a font size of 20 and a regular font weight.
+  heading3(20, FontWeight.w400),
+
+  /// Sub-heading 1 style with a font size of 18 and a medium font weight.
+  subHeading1(18, FontWeight.w500),
+
+  /// Sub-heading 2 style with a font size of 16 and a medium font weight.
+  subHeading2(16, FontWeight.w500),
+
+  /// Sub-heading 3 style with a font size of 16 and a semi-bold font weight.
+  subHeading3(16, FontWeight.w600),
+
+  /// Body 1 style with a font size of 16 and a regular font weight.
+  body1(16, FontWeight.w400),
+
+  /// Body 2 style with a font size of 14 and a regular font weight.
+  body2(14, FontWeight.w400),
+
+  /// Body 3 style with a font size of 14 and a medium font weight.
+  body3(14, FontWeight.w500);
+
+  /// The font size for the text style.
   final double fontSize;
 
-  /// Font weight for the text style.
+  /// The font weight for the text style.
   final FontWeight fontWeight;
 
-  /// Constructor to assign properties to the enum values.
+  /// A constructor to assign font size and weight to each text style.
   const CustomTextStyleType(this.fontSize, this.fontWeight);
 }
 
