@@ -28,6 +28,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextAlign? textAlign;
   final String? errorText;
   final BorderRadius borderRadius;
+  final TextInputAction? textInputAction;
 
   const CustomTextFormField({
     super.key,
@@ -54,6 +55,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textAlign,
     this.errorText,
     this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+    this.textInputAction = TextInputAction.done,
   });
 
   @override
@@ -70,6 +72,7 @@ class CustomTextFormField extends StatelessWidget {
                 fontWeight: FontWeight.w400),
           ),
         TextFormField(
+            textInputAction: textInputAction,
             autofocus: autofocus,
             cursorColor: ColorConst.primaryDark,
             cursorErrorColor: ColorConst.primaryDark,
