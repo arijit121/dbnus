@@ -422,8 +422,8 @@ class CustomTextEnumWidget extends StatelessWidget {
   final Color? backGroundColor;
 
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
-  const CustomTextEnumWidget({
-    required this.text,
+  const CustomTextEnumWidget(
+    this.text, {
     required this.styleType,
     this.maxLines,
     this.textAlign,
