@@ -50,6 +50,8 @@
 	<string>We need access to your location to check if our service is available at your current location, even when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need access to your location to check if our service is available at your current location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need access to your location to determine if our services are available in your area and provide a better experience.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>For people to hear you during meetings, we need access to your microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
