@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 /// 2) AppLog.i("Home Page", tag: "User Logging");
 ///
 class AppLog {
-  static const bool _enableOnRelease = true;
+  static const bool _enableOnRelease = false;
   static const String _DEFAULT_TAG_PREFIX = "AppLog";
 
   ///use Log.v. Print all Logs
