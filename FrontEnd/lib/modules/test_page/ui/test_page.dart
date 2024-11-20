@@ -40,12 +40,18 @@ class TestPage extends StatelessWidget {
               ),
               20.ph,
               CustomGOEButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    kIsWeb
+                        ? context.goNamed(RouteName.orderDetails,
+                            pathParameters: {"order_id": "56"})
+                        : context.pushNamed(RouteName.orderDetails,
+                            pathParameters: {"order_id": "56"});
+                  },
                   gradient: const LinearGradient(colors: [
                     ColorConst.red,
                     Colors.blue,
                   ]),
-                  child: const CustomText("text")),
+                  child: const CustomText("OrderDetails")),
               20.ph,
               CustomGOEButton(
                 onPressed: () {},
