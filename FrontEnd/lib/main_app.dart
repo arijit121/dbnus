@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,11 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 
 import 'const/theme_const.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
+import 'router/custom_router/custom_route.dart';
 import 'router/router_manager.dart';
+import 'router/router_name.dart';
 import 'service/app_updater.dart';
 import 'service/crash/utils/crashUtils.dart';
 import 'service/download_handler.dart';
@@ -20,6 +24,7 @@ import 'service/firebase_service.dart';
 import 'service/notification_handler.dart';
 import 'service/redirect_engine.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
+import 'utils/pop_up_items.dart';
 import 'utils/text_utils.dart';
 
 @pragma('vm:entry-point')
@@ -99,6 +104,7 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await FirebaseService().generateToken();
       await AppUpdater().startUpdate();
+      BackButtonInterceptor.add(myInterceptor);
     });
 
     super.initState();
@@ -106,7 +112,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    if (CustomRoute().currentRoute() == RouteName.initialView) {
+      PopUpItems().cupertinoPopup(
+          cancelBtnPresses: () {},
+          okBtnPressed: () {
+            FlutterExitApp.exitApp(iosForceExit: false);
+          },
+          title: "Are you sure?",
+          content: "Do you really want to exit?",
+          okBtnText: "Yes");
+      return true;
+    } else if (RouterManager.getInstance.router.canPop() == true) {
+      return false;
+    } else {
+      CustomRoute().clearAndNavigate(RouteName.initialView);
+      return true;
+    }
   }
 
   @override
