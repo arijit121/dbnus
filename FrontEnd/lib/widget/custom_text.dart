@@ -129,7 +129,7 @@ class CustomRichText extends StatelessWidget {
   }
 }
 
-TextSpan customTextSpan({
+TextSpan CustomTextSpan({
   required String text,
   FontWeight? fontWeight,
   double? size,
