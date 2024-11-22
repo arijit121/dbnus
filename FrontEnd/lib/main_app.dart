@@ -123,8 +123,8 @@ class _MyAppState extends State<MyApp> {
           okBtnPressed: () {
             FlutterExitApp.exitApp(iosForceExit: false);
           },
-          title: "Are you sure?",
-          content: "Do you really want to exit?",
+          title: "Confirm Exit",
+          content: "Do you want to close the app?",
           okBtnText: "Yes");
       return true;
     } else if (RouterManager.getInstance.router.canPop() == true) {
