@@ -29,16 +29,9 @@ class CustomFilePicker {
 
   Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
     try {
-      if (!kIsWeb) {
-        final androidInfo = (!kIsWeb && Platform.isAndroid)
-            ? await DeviceInfoPlugin().androidInfo
-            : null;
+      if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
-            permission:
-                (androidInfo?.version.sdkInt ?? 0) <= 32 || !Platform.isAndroid
-                    ? Permission.storage
-                    : Permission.manageExternalStorage,
-            name: 'File');
+            permission: Permission.storage, name: 'File');
         if (!permissionStatus.isGranted) {
           return null;
         }
@@ -96,16 +89,9 @@ class CustomFilePicker {
   Future<List<CustomFile>?> pickMultipleFile(
       {List<String>? allowedExtensions}) async {
     try {
-      if (!kIsWeb) {
-        final androidInfo = (!kIsWeb && Platform.isAndroid)
-            ? await DeviceInfoPlugin().androidInfo
-            : null;
+      if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
-            permission:
-                (androidInfo?.version.sdkInt ?? 0) <= 32 || !Platform.isAndroid
-                    ? Permission.storage
-                    : Permission.manageExternalStorage,
-            name: 'File');
+            permission: Permission.storage, name: 'File');
         if (!permissionStatus.isGranted) {
           return null;
         }
