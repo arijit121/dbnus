@@ -396,7 +396,7 @@ enum CustomTextStyleType {
 /// This widget allows the use of predefined styles while also supporting
 /// additional customizations like font weight, font size, color, text alignment,
 /// and line spacing.
-class CustomTextEnumWidget extends StatelessWidget {
+class CustomTextEnum extends StatelessWidget {
   /// The text to display.
   final String text;
 
@@ -422,7 +422,7 @@ class CustomTextEnumWidget extends StatelessWidget {
   final Color? backGroundColor;
 
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
-  const CustomTextEnumWidget(
+  const CustomTextEnum(
     this.text, {
     required this.styleType,
     this.maxLines,
