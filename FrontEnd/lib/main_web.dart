@@ -52,6 +52,7 @@ Future<void> main() async {
   }
 
   FirebaseMessaging.instance.setAutoInitEnabled(false);
+  await FirebaseService().setAnalyticsCollectionEnabled();
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {

@@ -80,6 +80,7 @@ Future<void> main() async {
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   await FirebaseService().getInitialMessage();
+  await FirebaseService().setAnalyticsCollectionEnabled();
   await NotificationHandler().requestPermissions();
   await NotificationHandler().initiateNotification();
   await DownloadHandler().config();

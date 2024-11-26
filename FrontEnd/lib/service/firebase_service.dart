@@ -41,13 +41,23 @@ class FirebaseService {
     }
   }
 
-  void logEvent({
+  Future<void> logEvent({
     required String name,
     Map<String, Object>? parameters,
     AnalyticsCallOptions? callOptions,
-  }) {
+  }) async {
+    try {
+      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+      await analytics.logEvent(
+          name: name, parameters: parameters, callOptions: callOptions);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+  }
+
+  Future<void> setAnalyticsCollectionEnabled() async {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-    analytics.logEvent(
-        name: name, parameters: parameters, callOptions: callOptions);
+    await analytics.setAnalyticsCollectionEnabled(true);
+    await analytics.setConsent(analyticsStorageConsentGranted: true);
   }
 }
