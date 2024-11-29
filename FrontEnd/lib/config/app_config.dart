@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 // import 'package:custom_platform_device_id/platform_device_id.dart';
@@ -8,7 +9,10 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:universal_html/html.dart' as html;
 
+import '../data/api_client/imp/api_repo_imp.dart';
+import '../data/api_client/repo/api_repo.dart';
 import '../data/connection/connection_status.dart';
+import '../data/model/api_return_model.dart';
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart';
 import '../service/value_handler.dart';
@@ -155,21 +159,37 @@ class AppConfig {
 
   Future<String?> getWifiIpV4() async {
     if (kIsWeb) {
-      return null;
+      ApiReturnModel? response = await apiRepo().callApi(
+          tag: 'WifiIpV4',
+          uri: 'https://api.ipify.org?format=json',
+          method: Method.get);
+      if (response?.responseString != null && response?.statusCode == 200) {
+        var v = json.decode(response?.responseString ?? "");
+        return v['ip'];
+      }
     } else {
       final info = NetworkInfo();
       var wifiIP = await info.getWifiIP();
       return wifiIP;
     }
+    return null;
   }
 
   Future<String?> getWifiIpV6() async {
     if (kIsWeb) {
-      return null;
+      ApiReturnModel? response = await apiRepo().callApi(
+          tag: 'WifiIpV6',
+          uri: 'https://api6.ipify.org?format=json',
+          method: Method.get);
+      if (response?.responseString != null && response?.statusCode == 200) {
+        var v = json.decode(response?.responseString ?? "");
+        return v['ip'];
+      }
     } else {
       final info = NetworkInfo();
       var wifiIPv6 = await info.getWifiIPv6();
       return wifiIPv6;
     }
+    return null;
   }
 }
