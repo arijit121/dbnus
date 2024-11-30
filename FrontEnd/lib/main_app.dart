@@ -122,7 +122,7 @@ class _MyAppState extends State<MyApp> {
       PopUpItems().cupertinoPopup(
           cancelBtnPresses: () {},
           okBtnPressed: () {
-            FlutterExitApp.exitApp(iosForceExit: false);
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
           },
           title: "Confirm Exit",
           content: "Do you want to close the app?",
