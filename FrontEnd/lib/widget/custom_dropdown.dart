@@ -51,6 +51,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final String? Function(T?)? validator;
   final AutovalidateMode? autoValidateMode;
   final Widget? label;
+  final BorderRadius borderRadius;
 
   const CustomDropdownMenuFormField({
     super.key,
@@ -63,6 +64,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
     this.validator,
     this.autoValidateMode = AutovalidateMode.onUserInteraction,
     this.label,
+    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
   });
 
   @override
@@ -120,41 +122,41 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                 fontSize: 16,
                 fontColor: ColorConst.primaryDark),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: const BorderSide(
                 color: Colors.blue,
                 width: 1,
               ),
             ),
             disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: const BorderSide(
                 color: Colors.white,
                 width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: BorderSide(
                 color: ColorConst.grey,
                 width: 1,
               ),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: const BorderSide(
                 width: 1,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: const BorderSide(
                 color: ColorConst.red,
                 width: 1,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
+              borderRadius: borderRadius,
               borderSide: const BorderSide(
                 color: ColorConst.red,
                 width: 1,
@@ -267,6 +269,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
   final T? value;
   final Widget? prefix, suffix;
   final Widget? label;
+  final BorderRadius borderRadius;
 
   const CustomDropDownFormField({
     super.key,
@@ -278,6 +281,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.label,
+    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
   });
 
   @override
@@ -312,21 +316,21 @@ class CustomDropDownFormField<T> extends StatelessWidget {
             fontSize: 14,
             fontColor: ColorConst.blueGrey),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(9.0),
+          borderRadius: borderRadius,
           borderSide: const BorderSide(
             color: Colors.blue,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(9.0),
+          borderRadius: borderRadius,
           borderSide: BorderSide(
             color: ColorConst.blueGrey,
             width: 1,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(9.0),
+          borderRadius: borderRadius,
           borderSide: const BorderSide(
             color: ColorConst.red,
             width: 1,
