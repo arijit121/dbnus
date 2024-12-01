@@ -168,7 +168,8 @@ class Validator {
       {required String? value,
       required int length,
       required String msg,
-      bool? checkZero}) {
+      bool? checkZero,
+      bool? equalLength}) {
     String p = r'^[0-9]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
@@ -176,6 +177,8 @@ class Validator {
       return "Enter $msg .";
     } else if (checkZero == true && num.parse(value ?? "0") < 1) {
       return "Enter $msg .";
+    } else if ((equalLength == true && value.length != length) || !validate) {
+      return "Enter Valid $msg .";
     } else if (value.length > length || !validate) {
       return "Enter Valid $msg .";
     } else {
