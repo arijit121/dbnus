@@ -667,7 +667,7 @@ class TextUtils {
   static String noInternet = "No internet";
 
   // ignore: non_constant_identifier_names
-  static String somethingWentWrong = "Something went wrong";
+  static String somethingWentWrong = "Something went wrong.";
 
   // ignore: non_constant_identifier_names
   static String notFound = "Not found";
@@ -933,6 +933,9 @@ class TextUtils {
         <p>We encountered an unexpected issue. Please try again later.</p>""";
 
   static String sendReport = "Send Report";
+
+  static String noInternetErrorMessage =
+      'No Internet Connection. Please check your network settings and try again.';
 
   // ignore: non_constant_identifier_names
   static List<String> relation_list({bool? isMyself}) => isMyself == true

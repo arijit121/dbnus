@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:dbnus/extension/logger_extension.dart';
+import 'package:dbnus/utils/text_utils.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../data/bloc_data_model/dynamic_data.dart';
@@ -30,7 +31,7 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
           } else {
             emit(state.copyWith(
                 bannerData: DynamicBlocData<LandingBannerResponse>.error(
-                    message: "Something went wrong.")));
+                    message: TextUtils.somethingWentWrong)));
           }
         } else {
           connectionStatus.connectionChange.listen((onlineStatus) {
