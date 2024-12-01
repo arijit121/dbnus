@@ -5,6 +5,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:google_fonts/google_fonts.dart';
 
 import '../service/open_service.dart';
+import '../service/value_handler.dart';
 
 TextStyle customizeTextStyle(
     {FontWeight? fontWeight,
@@ -13,16 +14,27 @@ TextStyle customizeTextStyle(
     TextDecoration? decoration,
     Color? decorationColor,
     double? height,
-    Color? backgroundColor}) {
-  return GoogleFonts.inter(
-      decoration: decoration,
-      fontWeight: fontWeight,
-      wordSpacing: 0,
-      color: fontColor,
-      fontSize: fontSize,
-      decorationColor: decorationColor,
-      height: height,
-      backgroundColor: backgroundColor);
+    Color? backgroundColor,
+    String? font}) {
+  return ValueHandler().isTextNotEmptyOrNull(font)
+      ? GoogleFonts.getFont(font!,
+          decoration: decoration,
+          fontWeight: fontWeight,
+          wordSpacing: 0,
+          color: fontColor,
+          fontSize: fontSize,
+          decorationColor: decorationColor,
+          height: height,
+          backgroundColor: backgroundColor)
+      : GoogleFonts.inter(
+          decoration: decoration,
+          fontWeight: fontWeight,
+          wordSpacing: 0,
+          color: fontColor,
+          fontSize: fontSize,
+          decorationColor: decorationColor,
+          height: height,
+          backgroundColor: backgroundColor);
 }
 
 class CustomText extends StatelessWidget {
@@ -35,6 +47,7 @@ class CustomText extends StatelessWidget {
   final bool lineGapNeeded;
   final TextAlign? textAlign;
   final Color? backGroundColor;
+  final String? font;
 
   const CustomText(
     this.text, {
@@ -47,6 +60,7 @@ class CustomText extends StatelessWidget {
     this.lineGapNeeded = false,
     this.textAlign,
     this.backGroundColor,
+    this.font,
   });
 
   @override
@@ -56,6 +70,7 @@ class CustomText extends StatelessWidget {
       maxLines: maxLines,
       textAlign: textAlign,
       style: customizeTextStyle(
+          font: font,
           fontWeight: fontWeight,
           fontSize: size,
           fontColor: color,
@@ -67,37 +82,6 @@ class CustomText extends StatelessWidget {
           decoration: decoration,
           backgroundColor: backGroundColor,
           decorationColor: color),
-    );
-  }
-}
-
-class CustomInkWellText extends StatelessWidget {
-  final void Function()? onTap;
-  final String text;
-  final Color? color;
-  final double? size;
-  final FontWeight? fontWeight;
-
-  const CustomInkWellText(
-    this.text, {
-    super.key,
-    this.onTap,
-    this.color,
-    this.size,
-    this.fontWeight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      key: key,
-      onTap: onTap,
-      child: Text(text,
-          style: customizeTextStyle(
-            fontWeight: fontWeight,
-            fontSize: size,
-            fontColor: color,
-          )),
     );
   }
 }
@@ -138,10 +122,12 @@ TextSpan CustomTextSpan({
   Color? decorationColor,
   double? height,
   Color? backgroundColor,
+  String? font,
 }) =>
     TextSpan(
         text: text,
         style: customizeTextStyle(
+            font: font,
             fontWeight: fontWeight,
             fontSize: size,
             fontColor: color,
@@ -150,75 +136,8 @@ TextSpan CustomTextSpan({
             height: height,
             backgroundColor: backgroundColor));
 
-class CustomUnderlineText extends StatelessWidget {
-  final String text;
-  final Color? color;
-  final double? size;
-  final FontWeight? fontWeight;
-  final Color? decorationColor;
-  final TextAlign? textAlign;
-
-  const CustomUnderlineText(
-    this.text, {
-    super.key,
-    this.color,
-    this.size,
-    this.fontWeight,
-    this.decorationColor,
-    this.textAlign,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(text,
-        textAlign: textAlign,
-        style: customizeTextStyle(
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-          decoration: TextDecoration.underline,
-          decorationColor: decorationColor,
-        ));
-  }
-}
-
-class CustomOverflowText extends StatelessWidget {
-  final String text;
-  final Color? color;
-  final double? size;
-  final FontWeight? fontWeight;
-  final int maxLines;
-  final TextAlign? textAlign;
-  final TextOverflow? overflow;
-
-  const CustomOverflowText(
-    this.text, {
-    super.key,
-    this.size,
-    this.color,
-    this.fontWeight,
-    this.maxLines = 2,
-    this.textAlign,
-    this.overflow,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(text,
-        overflow: overflow ?? TextOverflow.ellipsis,
-        textAlign: textAlign,
-        maxLines: maxLines,
-        style: customizeTextStyle(
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-        ));
-  }
-}
-
 class CustomOnlyText extends StatelessWidget {
   final String data;
-
   final TextStyle? style;
   final StrutStyle? strutStyle;
   final TextAlign? textAlign;
@@ -278,8 +197,8 @@ class CustomHtmlText extends StatelessWidget {
   final int? maxLines;
   final TextDecoration? decoration;
   final bool lineGapNeeded;
-
   final Color? backGroundColor;
+  final String? font;
 
   const CustomHtmlText(
     this.html, {
@@ -291,6 +210,7 @@ class CustomHtmlText extends StatelessWidget {
     this.decoration,
     this.lineGapNeeded = false,
     this.backGroundColor,
+    this.font,
   });
 
   @override
@@ -298,6 +218,7 @@ class CustomHtmlText extends StatelessWidget {
     return HtmlWidget(
       html,
       textStyle: customizeTextStyle(
+          font: font,
           fontWeight: fontWeight,
           fontSize: size,
           fontColor: color,
@@ -323,6 +244,7 @@ class CustomExpandableText extends StatelessWidget {
   final double? size;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
+  final String? font;
 
   const CustomExpandableText(
     this.text, {
@@ -331,6 +253,7 @@ class CustomExpandableText extends StatelessWidget {
     this.size,
     this.fontWeight,
     this.textAlign,
+    this.font,
   });
 
   @override
@@ -339,6 +262,7 @@ class CustomExpandableText extends StatelessWidget {
       text,
       textAlign: textAlign,
       style: customizeTextStyle(
+        font: font,
         fontWeight: fontWeight,
         fontSize: size,
         fontColor: color,
@@ -421,6 +345,9 @@ class CustomTextEnum extends StatelessWidget {
   /// Custom background color for the text.
   final Color? backGroundColor;
 
+  /// Custom text font.
+  final String? font;
+
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
   const CustomTextEnum(
     this.text, {
@@ -431,6 +358,7 @@ class CustomTextEnum extends StatelessWidget {
     this.lineGapNeeded = false,
     this.decoration,
     this.backGroundColor,
+    this.font,
     super.key,
   });
 
@@ -446,6 +374,7 @@ class CustomTextEnum extends StatelessWidget {
       lineGapNeeded: lineGapNeeded,
       textAlign: textAlign,
       backGroundColor: backGroundColor,
+      font: font,
     );
   }
 }
