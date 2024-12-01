@@ -113,17 +113,16 @@ class CustomRichText extends StatelessWidget {
   }
 }
 
-TextSpan CustomTextSpan({
-  required String text,
-  FontWeight? fontWeight,
-  double? size,
-  Color? color,
-  TextDecoration? decoration,
-  Color? decorationColor,
-  double? height,
-  Color? backgroundColor,
-  String? font,
-}) =>
+TextSpan CustomTextSpan(
+        {required String text,
+        FontWeight? fontWeight,
+        double? size,
+        Color? color,
+        TextDecoration? decoration,
+        Color? decorationColor,
+        double? height,
+        Color? backgroundColor,
+        String? font}) =>
     TextSpan(
         text: text,
         style: customizeTextStyle(
@@ -135,6 +134,26 @@ TextSpan CustomTextSpan({
             decorationColor: decorationColor,
             height: height,
             backgroundColor: backgroundColor));
+
+TextSpan CustomTextSpanEnum(
+        {required String text,
+        required CustomTextStyleType styleType,
+        Color? color,
+        TextDecoration? decoration,
+        Color? decorationColor,
+        double? height,
+        Color? backgroundColor,
+        String? font}) =>
+    CustomTextSpan(
+        text: text,
+        fontWeight: styleType.fontWeight,
+        size: styleType.fontSize,
+        color: color,
+        decoration: decoration,
+        decorationColor: decorationColor,
+        height: height,
+        backgroundColor: backgroundColor,
+        font: font);
 
 class CustomOnlyText extends StatelessWidget {
   final String data;
