@@ -165,7 +165,7 @@ class Validator {
   }
 
   String? numValidator(
-      {String? value,
+      {required String? value,
       required int length,
       required String msg,
       bool? checkZero}) {
