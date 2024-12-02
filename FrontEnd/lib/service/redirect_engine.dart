@@ -4,6 +4,7 @@ import '../const/api_url_const.dart';
 import '../router/custom_router/custom_route.dart';
 import '../router/router_manager.dart';
 import '../router/router_name.dart';
+import 'value_handler.dart';
 
 class RedirectEngine {
   Future<void> redirectRoutes(
@@ -38,7 +39,9 @@ class RedirectEngine {
               routerManager.router.goNamed(location);
               break;
             default:
-              routerManager.router.push(location);
+              ValueHandler().isTextNotEmptyOrNull(currentRoute)
+                  ? routerManager.router.push(location)
+                  : routerManager.router.go(location);
               break;
           }
         }
