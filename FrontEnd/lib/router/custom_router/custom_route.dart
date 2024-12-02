@@ -95,7 +95,6 @@ class CustomRoute {
         ? lastMatch.matches
         : RouterManager.getInstance.router.routerDelegate.currentConfiguration;
     final String location = matchList.uri.toString();
-    AppLog.i(location, tag: "CurrentRoute");
     return location;
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../const/api_url_const.dart';
+import '../router/custom_router/custom_route.dart';
 import '../router/router_manager.dart';
 import '../router/router_name.dart';
 
@@ -11,11 +12,12 @@ class RedirectEngine {
       RouterManager routerManager = RouterManager.getInstance;
       String location =
           redirectUrl.toString().replaceAll(ApiUrlConst.hostUrl, "").trim();
-
+      String currentRoute = CustomRoute().currentRoute();
       if (routerManager.router.routeInformationParser.configuration
-          .findMatch(Uri(path: redirectUrl.path))
-          .matches
-          .isNotEmpty) {
+              .findMatch(Uri(path: redirectUrl.path))
+              .matches
+              .isNotEmpty &&
+          location != currentRoute) {
         if (kIsWeb) {
           routerManager.router.go(location);
         } else {
