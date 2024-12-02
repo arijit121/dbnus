@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_links/app_links.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -105,6 +106,9 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await FirebaseService().generateToken();
       await AppUpdater().startUpdate();
+      AppLinks().uriLinkStream.listen((uri) {
+        RedirectEngine().redirectRoutes(redirectUrl: uri, delayedSeconds: 3);
+      });
       BackButtonInterceptor.add(myInterceptor);
     });
 
