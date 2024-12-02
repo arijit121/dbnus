@@ -12,7 +12,10 @@ class RedirectEngine {
       RouterManager routerManager = RouterManager.getInstance;
       String location =
           redirectUrl.toString().replaceAll(ApiUrlConst.hostUrl, "").trim();
-      String currentRoute = CustomRoute().currentRoute();
+      String? currentRoute = CustomRoute()
+          .currentRoute()
+          ?.replaceAll(ApiUrlConst.hostUrl, "")
+          .trim();
       if (routerManager.router.routeInformationParser.configuration
               .findMatch(Uri(path: redirectUrl.path))
               .matches

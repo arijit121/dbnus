@@ -88,14 +88,20 @@ class CustomRoute {
         CurrentContext().context, _getRoute(name: name, arguments: arguments));
   }
 
-  String currentRoute() {
-    final RouteMatch lastMatch = RouterManager
-        .getInstance.router.routerDelegate.currentConfiguration.last;
-    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
-        ? lastMatch.matches
-        : RouterManager.getInstance.router.routerDelegate.currentConfiguration;
-    final String location = matchList.uri.toString();
-    return location;
+  String? currentRoute() {
+    try {
+      final RouteMatch lastMatch = RouterManager
+          .getInstance.router.routerDelegate.currentConfiguration.last;
+      final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+          ? lastMatch.matches
+          : RouterManager
+              .getInstance.router.routerDelegate.currentConfiguration;
+      final String location = matchList.uri.toString();
+      return location;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 
   void goto({required String routeName}) {
