@@ -107,7 +107,7 @@ class _MyAppState extends State<MyApp> {
       await FirebaseService().generateToken();
       await AppUpdater().startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
-        RedirectEngine().redirectRoutes(redirectUrl: uri, delayedSeconds: 3);
+        RedirectEngine().redirectRoutes(redirectUrl: uri);
       });
       BackButtonInterceptor.add(myInterceptor);
     });
