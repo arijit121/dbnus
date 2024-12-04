@@ -19,6 +19,16 @@ class FirebaseService {
     }
   }
 
+    Future<String?> getToken() async {
+    try {
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      return fcmToken;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   Future<void> getInitialMessage() async {
     try {
       RemoteMessage? initialMessage =
