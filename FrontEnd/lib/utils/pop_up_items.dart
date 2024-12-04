@@ -74,7 +74,10 @@ class PopUpItems {
         child: CupertinoAlertDialog(
           title: title != null ? CustomText(title, size: 14) : null,
           content: content != null
-              ? CustomText(content, color: ColorConst.primaryDark, size: 14)
+              ? ValueHandler().isHtml(content)
+                  ? CustomHtmlText(content,
+                      color: ColorConst.primaryDark, size: 14)
+                  : CustomText(content, color: ColorConst.primaryDark, size: 14)
               : null,
           actions: <Widget>[
             if (cancelBtnPresses != null)
