@@ -161,6 +161,15 @@ class CustomGOEButton extends StatelessWidget {
     final Color? hoverColor =
         sHlHColor != null ? ColorExe.darken(sHlHColor, 0.025) : null;
 
+    final double? effectiveHeight =
+        borderColor != null && (size?.height ?? 0) > 2
+            ? (size?.height ?? 0) - 2
+            : size?.height;
+
+    final double? effectiveWidth = borderColor != null && (size?.width ?? 0) > 2
+        ? (size?.width ?? 0) - 2
+        : size?.width;
+
     return Material(
       color: Colors.transparent,
       child: Ink(
@@ -178,13 +187,14 @@ class CustomGOEButton extends StatelessWidget {
           customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius ?? 16),
           ),
-          onTap: onPressed, // Disable onTap if disabled
+          onTap: onPressed,
+          // Disable onTap if disabled
           splashColor: splashColor,
           highlightColor: highlightColor,
           hoverColor: hoverColor,
           child: Container(
-            height: size?.height,
-            width: size?.width,
+            height: effectiveHeight,
+            width: effectiveWidth,
             alignment: Alignment.center,
             padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
             child: child,
