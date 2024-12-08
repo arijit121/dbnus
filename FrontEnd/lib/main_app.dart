@@ -104,12 +104,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      BackButtonInterceptor.add(myInterceptor);
       await FirebaseService().generateToken();
       await AppUpdater().startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
         RedirectEngine().redirectRoutes(redirectUrl: uri);
       });
-      BackButtonInterceptor.add(myInterceptor);
     });
 
     super.initState();
@@ -121,16 +121,23 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  bool _isExitAppDialogOpen = false;
+
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     if (CustomRoute().currentRoute() == RouteName.initialView) {
-      PopUpItems().cupertinoPopup(
-          cancelBtnPresses: () {},
-          okBtnPressed: () {
-            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          },
-          title: "Confirm Exit",
-          content: "Do you want to close the app?",
-          okBtnText: "Yes");
+      if (!_isExitAppDialogOpen) {
+        _isExitAppDialogOpen = true;
+        PopUpItems().cupertinoPopup(
+            cancelBtnPresses: () {
+              _isExitAppDialogOpen = false;
+            },
+            okBtnPressed: () {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            },
+            title: "Confirm Exit",
+            content: "Do you want to close the app?",
+            okBtnText: "Yes");
+      }
       return true;
     } else if (RouterManager.getInstance.router.canPop() == true) {
       return false;
