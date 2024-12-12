@@ -19,7 +19,7 @@ class FirebaseService {
     }
   }
 
-    Future<String?> getToken() async {
+  Future<String?> getToken() async {
     try {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       return fcmToken;
