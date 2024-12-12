@@ -74,7 +74,7 @@ dependencies:
   package_info_plus: ^8.1.1
 
   # File Handling
-  file_picker: ^8.1.4
+  file_picker: ^8.1.5
   image_picker: ^1.1.2
   flutter_image_compress: ^2.3.0
 
