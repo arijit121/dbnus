@@ -170,7 +170,20 @@ class AppConfig {
     } else {
       final info = NetworkInfo();
       var wifiIP = await info.getWifiIP();
-      return wifiIP;
+      ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
+      bool onlineStatus = await connectionStatus.checkConnection();
+      if (ValueHandler().isTextNotEmptyOrNull(wifiIP)) {
+        return wifiIP;
+      } else if (onlineStatus) {
+        ApiReturnModel? response = await apiRepo().callApi(
+            tag: 'WifiIpV4',
+            uri: 'https://api.ipify.org?format=json',
+            method: Method.get);
+        if (response?.responseString != null && response?.statusCode == 200) {
+          var v = json.decode(response?.responseString ?? "");
+          return v['ip'];
+        }
+      }
     }
     return null;
   }
@@ -188,7 +201,20 @@ class AppConfig {
     } else {
       final info = NetworkInfo();
       var wifiIPv6 = await info.getWifiIPv6();
-      return wifiIPv6;
+      ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
+      bool onlineStatus = await connectionStatus.checkConnection();
+      if (ValueHandler().isTextNotEmptyOrNull(wifiIPv6)) {
+        return wifiIPv6;
+      } else if (onlineStatus) {
+        ApiReturnModel? response = await apiRepo().callApi(
+            tag: 'WifiIpV6',
+            uri: 'https://api6.ipify.org?format=json',
+            method: Method.get);
+        if (response?.responseString != null && response?.statusCode == 200) {
+          var v = json.decode(response?.responseString ?? "");
+          return v['ip'];
+        }
+      }
     }
     return null;
   }
