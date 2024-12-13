@@ -159,61 +159,46 @@ class AppConfig {
 
   Future<String?> getWifiIpV4() async {
     if (kIsWeb) {
-      ApiReturnModel? response = await apiRepo().callApi(
-          tag: 'WifiIpV4',
-          uri: 'https://api.ipify.org?format=json',
-          method: Method.get);
-      if (response?.responseString != null && response?.statusCode == 200) {
-        var v = json.decode(response?.responseString ?? "");
-        return v['ip'];
-      }
+      return await _getIpFromInternet(
+          tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
     } else {
       final info = NetworkInfo();
       var wifiIP = await info.getWifiIP();
-      ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
-      bool onlineStatus = await connectionStatus.checkConnection();
       if (ValueHandler().isTextNotEmptyOrNull(wifiIP)) {
         return wifiIP;
-      } else if (onlineStatus) {
-        ApiReturnModel? response = await apiRepo().callApi(
-            tag: 'WifiIpV4',
-            uri: 'https://api.ipify.org?format=json',
-            method: Method.get);
-        if (response?.responseString != null && response?.statusCode == 200) {
-          var v = json.decode(response?.responseString ?? "");
-          return v['ip'];
-        }
+      } else {
+        return await _getIpFromInternet(
+            tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
       }
     }
-    return null;
   }
 
   Future<String?> getWifiIpV6() async {
     if (kIsWeb) {
-      ApiReturnModel? response = await apiRepo().callApi(
-          tag: 'WifiIpV6',
-          uri: 'https://api6.ipify.org?format=json',
-          method: Method.get);
-      if (response?.responseString != null && response?.statusCode == 200) {
-        var v = json.decode(response?.responseString ?? "");
-        return v['ip'];
-      }
+      return await _getIpFromInternet(
+          tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
     } else {
       final info = NetworkInfo();
       var wifiIPv6 = await info.getWifiIPv6();
-      ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
-      bool onlineStatus = await connectionStatus.checkConnection();
       if (ValueHandler().isTextNotEmptyOrNull(wifiIPv6)) {
         return wifiIPv6;
-      } else if (onlineStatus) {
-        ApiReturnModel? response = await apiRepo().callApi(
-            tag: 'WifiIpV6',
-            uri: 'https://api6.ipify.org?format=json',
-            method: Method.get);
-        if (response?.responseString != null && response?.statusCode == 200) {
-          var v = json.decode(response?.responseString ?? "");
-          return v['ip'];
-        }
+      } else {
+        return await _getIpFromInternet(
+            tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
+      }
+    }
+  }
+
+  Future<String?> _getIpFromInternet(
+      {required String tag, required String uri}) async {
+    ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
+    bool onlineStatus = await connectionStatus.checkConnection();
+    if (onlineStatus) {
+      ApiReturnModel? response =
+          await apiRepo().callApi(tag: tag, uri: uri, method: Method.get);
+      if (response?.responseString != null && response?.statusCode == 200) {
+        var v = json.decode(response?.responseString ?? "");
+        return v['ip'];
       }
     }
     return null;
