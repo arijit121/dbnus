@@ -58,14 +58,12 @@ class CustomContainer extends StatelessWidget {
 
 class PaginationPullRefreshWidget extends StatefulWidget {
   final Function? paginate;
-  final Function? reversePaginate;
   final Function? onRefresh;
   final Widget child;
 
   const PaginationPullRefreshWidget({
     super.key,
     this.paginate,
-    this.reversePaginate,
     this.onRefresh,
     required this.child,
   });
@@ -77,6 +75,8 @@ class PaginationPullRefreshWidget extends StatefulWidget {
 
 class _PaginationPullRefreshWidgetState
     extends State<PaginationPullRefreshWidget> {
+  double _previousScrollPosition = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollEndNotification>(
@@ -84,9 +84,11 @@ class _PaginationPullRefreshWidgetState
           /*AppLog.i("Pixels ${scrollInfo.metrics.pixels},"
               "MinScrollExtent ${scrollInfo.metrics.minScrollExtent},"
               "MaxScrollExtent ${scrollInfo.metrics.maxScrollExtent}");*/
+          final currentScrollPosition = scrollInfo.metrics.pixels;
 
           if (scrollInfo.metrics.pixels >=
-              (scrollInfo.metrics.maxScrollExtent / 2)) {
+                  (scrollInfo.metrics.maxScrollExtent / 2) &&
+              currentScrollPosition > _previousScrollPosition) {
             if (widget.paginate != null) {
               mounted
                   ? widget.paginate!()
@@ -96,18 +98,8 @@ class _PaginationPullRefreshWidgetState
                       }
                     });
             }
-          } else if (scrollInfo.metrics.pixels >=
-              (scrollInfo.metrics.minScrollExtent / 2)) {
-            if (widget.reversePaginate != null) {
-              mounted
-                  ? widget.reversePaginate!()
-                  : WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        widget.reversePaginate!();
-                      }
-                    });
-            }
           }
+          _previousScrollPosition = currentScrollPosition;
           return true;
         },
         child: RefreshIndicator(
