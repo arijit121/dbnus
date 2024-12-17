@@ -264,6 +264,7 @@ class CustomExpandableText extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final String? font;
+  final int maxLines;
 
   const CustomExpandableText(
     this.text, {
@@ -273,6 +274,7 @@ class CustomExpandableText extends StatelessWidget {
     this.fontWeight,
     this.textAlign,
     this.font,
+    this.maxLines = 2,
   });
 
   @override
@@ -288,7 +290,7 @@ class CustomExpandableText extends StatelessWidget {
       ),
       expandText: 'show more',
       collapseText: 'show less',
-      maxLines: 1,
+      maxLines: maxLines,
       linkColor: Colors.blue,
     );
   }
