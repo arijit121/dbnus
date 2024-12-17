@@ -43,8 +43,8 @@ android {
         release {
             debuggable = false
             signingConfig = signingConfigs.release
-            shrinkResources = true
-            minifyEnabled = true
+            shrinkResources = false
+            minifyEnabled = false
             applicationVariants.all { variant ->
                 variant.outputs.all {
                     outputFileName = "app-v$versionName($versionCode).apk"
@@ -60,5 +60,3 @@ android {
 flutter {
     source = "../.."
 }
-
-dependencies {}
