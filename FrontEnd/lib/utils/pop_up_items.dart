@@ -167,7 +167,7 @@ class PopUpItems {
             : null,
         actions: <Widget>[
           CustomGOEButton(
-            size: const Size(72, 36),
+            width: 72,
             radius: 8,
             backGroundColor: iconButtonColor ?? Colors.blueAccent,
             onPressed: () {
@@ -277,7 +277,7 @@ class _EmailPickerState extends State<EmailPicker> {
                           validator: Validator().emailValidator)),
                   10.ph,
                   CustomGOEButton(
-                      size: const Size(80, 35),
+                      width: 80,
                       radius: 10,
                       backGroundColor: Colors.blueAccent,
                       child: CustomText(TextUtils.ok,

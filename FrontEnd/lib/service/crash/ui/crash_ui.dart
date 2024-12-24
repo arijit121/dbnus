@@ -54,7 +54,7 @@ class CrashUi extends StatelessWidget {
                   child: CustomGOEButton(
                     backGroundColor: Colors.blue,
                     radius: 8,
-                    size: const Size(double.infinity, 60),
+                    width: double.infinity,
                     onPressed: () async {
                       await CrashUtils().setValue(value: false);
                       SystemNavigator.pop();

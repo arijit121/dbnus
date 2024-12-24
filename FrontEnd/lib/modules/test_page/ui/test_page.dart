@@ -152,7 +152,7 @@ class TestPage extends StatelessWidget {
                   child: const CustomText("Get Device Id")),
               20.ph,
               CustomGOEButton(
-                  size: const Size(200, 36),
+                 width: 200,
                   onPressed: () async {
                     kIsWeb
                         ? context.goNamed(RouteName.leaderBoard)
@@ -165,7 +165,7 @@ class TestPage extends StatelessWidget {
                   child: const CustomText("Navigate to leaderBoard")),
               20.ph,
               CustomGOEButton(
-                  size: const Size(200, 36),
+                  width: 200,
                   onPressed: () async {
                     CustomFile? customFile =
                         await CustomFilePicker().customFilePicker();
@@ -334,7 +334,7 @@ class TestPage extends StatelessWidget {
               ),
               20.ph,
               CustomGOEButton(
-                  size: const Size(160, 36),
+                 width: 160,
                   onPressed: () async {
                     PopUpItems().customMsgDialog(
                         title: "Success",

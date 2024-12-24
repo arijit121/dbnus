@@ -76,7 +76,7 @@ class _UiTempState extends State<UiTemp> {
             child: const CustomText("Change Url")),
         20.ph,
         CustomGOEButton(
-            size: const Size(160, 36),
+        width: 160,
             onPressed: () async {
               CustomFilePicker().customFilePicker();
             },
@@ -90,7 +90,7 @@ class _UiTempState extends State<UiTemp> {
             valueListenable: boolNotifier,
             builder: (context, value, child) {
               return CustomGOEButton(
-                  size: const Size(160, 36),
+                  width: 160,
                   onPressed: () {
                     boolNotifier.value = !boolNotifier.value;
                     if (_pinController.text.isNotEmpty) {
@@ -111,7 +111,7 @@ class _UiTempState extends State<UiTemp> {
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: CustomGOEButton(
-                          size: const Size(160, 36),
+                          width: 160,
                           onPressed: () {
                             if (_pinController.text.isNotEmpty) {
                               _pinController.clear();
@@ -189,7 +189,7 @@ class _UiTempState extends State<UiTemp> {
             }),
         20.ph,
         CustomGOEButton(
-            size: const Size(160, 36),
+            width: 160,
             onPressed: () async {
               PopUpItems().customMsgDialog(
                   title: "Success",
@@ -250,7 +250,7 @@ class _UiTempState extends State<UiTemp> {
             }),
         20.ph,
         CustomGOEButton(
-            size: const Size(200, 36),
+            width: 200,
             onPressed: () async {
               CustomRoute().clearAndNavigate(RouteName.leaderBoard);
             },
@@ -261,7 +261,7 @@ class _UiTempState extends State<UiTemp> {
             child: const CustomText("Clear And Navigate to leaderBoard")),
         20.ph,
         CustomGOEButton(
-            size: const Size(200, 36),
+            width: 200,
             onPressed: () async {
               kIsWeb
                   ? context.goNamed(RouteName.games)

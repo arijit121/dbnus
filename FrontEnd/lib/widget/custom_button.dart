@@ -123,18 +123,21 @@ class CustomGOEButton extends StatelessWidget {
       this.borderColor,
       this.backGroundColor,
       this.radius,
-      this.size = const Size(88, 36),
+      this.width = 88,
+      this.height = 36,
       this.gradient,
-      this.padding});
+      this.padding,
+      this.boxShadow});
 
   final void Function()? onPressed;
   final Widget child;
   final Color? borderColor;
   final Color? backGroundColor;
-  final double? radius;
-  final Size? size;
+  final double? radius, width, height;
+
   final Gradient? gradient;
   final EdgeInsetsGeometry? padding;
+  final List<BoxShadow>? boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -162,13 +165,10 @@ class CustomGOEButton extends StatelessWidget {
         sHlHColor != null ? ColorExe.darken(sHlHColor, 0.025) : null;
 
     final double? effectiveHeight =
-        borderColor != null && (size?.height ?? 0) > 2
-            ? (size?.height ?? 0) - 2
-            : size?.height;
+        borderColor != null && (height ?? 0) > 2 ? (height ?? 0) - 2 : height;
 
-    final double? effectiveWidth = borderColor != null && (size?.width ?? 0) > 2
-        ? (size?.width ?? 0) - 2
-        : size?.width;
+    final double? effectiveWidth =
+        borderColor != null && (width ?? 0) > 2 ? (width ?? 0) - 2 : width;
 
     return Material(
       color: Colors.transparent,
@@ -197,6 +197,7 @@ class CustomGOEButton extends StatelessWidget {
             width: effectiveWidth,
             alignment: Alignment.center,
             padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(boxShadow: boxShadow),
             child: child,
           ),
         ),

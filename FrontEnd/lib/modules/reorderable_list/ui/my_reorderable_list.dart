@@ -29,7 +29,7 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
       children: [
         12.ph,
         CustomGOEButton(
-            size: const Size(200, 36),
+            width: 200,
             onPressed: () async {
               context.read<LocalCartBloc>().add(AddServiceToCart(
                       serviceModel: CartServiceModel(
@@ -44,7 +44,7 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
             child: const CustomText("Add to cart")),
         12.ph,
         CustomGOEButton(
-            size: const Size(200, 36),
+      width: 200,
             onPressed: () async {
               kIsWeb
                   ? context.goNamed(RouteName.order)
