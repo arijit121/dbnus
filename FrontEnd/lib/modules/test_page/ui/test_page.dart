@@ -12,6 +12,7 @@ import '../../../const/color_const.dart';
 import '../../../data/model/forward_geocoding.dart';
 import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
+import '../../../flavors.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
 import '../../../utils/pop_up_items.dart';
@@ -31,6 +32,18 @@ class TestPage extends StatelessWidget {
           child: ListView(
             primary: false,
             children: [
+              20.ph,
+              CustomTextEnum(
+                F.title,
+                styleType: CustomTextStyleType.body2,
+                color: ColorConst.primaryDark,
+              ),
+              20.ph,
+              CustomTextEnum(
+                F.name,
+                styleType: CustomTextStyleType.body2,
+                color: ColorConst.primaryDark,
+              ),
               20.ph,
               CustomIconButton(icon: const Icon(Icons.abc), onPressed: () {}),
               20.ph,
@@ -152,7 +165,7 @@ class TestPage extends StatelessWidget {
                   child: const CustomText("Get Device Id")),
               20.ph,
               CustomGOEButton(
-                 width: 200,
+                  width: 200,
                   onPressed: () async {
                     kIsWeb
                         ? context.goNamed(RouteName.leaderBoard)
@@ -334,7 +347,7 @@ class TestPage extends StatelessWidget {
               ),
               20.ph,
               CustomGOEButton(
-                 width: 160,
+                  width: 160,
                   onPressed: () async {
                     PopUpItems().customMsgDialog(
                         title: "Success",
