@@ -87,11 +87,13 @@
     </array>
     <key>com.apple.security.network.client</key>
     <true/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
-	<key>UIFileSharingEnabled</key>
-	<true/>
-	<key>FirebaseAppDelegateProxyEnabled</key>
+    <key>LSSupportsOpeningDocumentsInPlace</key>
+    <true/>
+    <key>UIFileSharingEnabled</key>
+    <true/>
+    <key>FirebaseAppDelegateProxyEnabled</key>
     <false/>
-</dict>
+    <key>UIApplicationSupportsIndirectInputEvents</key>
+    <true/>
+  </dict>
 </plist>
