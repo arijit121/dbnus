@@ -1,0 +1,36 @@
+app:
+  android:
+    flavorDimensions: "flavor-type"
+
+flavors:
+  prod:
+    app:
+      name: "Dbnus"
+    android:
+      applicationId: "com.dbnus.app"
+    ios:
+      bundleId: "com.dbnus.app"
+    macos:
+      bundleId: "com.dbnus.app"
+
+  stg:
+    app:
+      name: "Stg Dbnus"
+    android:
+      applicationId: "com.dbnus.app.stg"
+    ios:
+      bundleId: "com.dbnus.app.stg"
+    macos:
+      bundleId: "com.dbnus.app.stg" 
+      
+  dev:
+    app:
+      name: "Dev Dbnus"
+    android:
+      applicationId: "com.dbnus.app.dev"
+    ios:
+      bundleId: "com.dbnus.app.dev"
+    macos:
+      bundleId: "com.dbnus.app.dev"
+
+ide: idea
