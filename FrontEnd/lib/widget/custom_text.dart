@@ -48,6 +48,7 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final Color? backGroundColor;
   final String? font;
+  final TextOverflow? overflow;
 
   const CustomText(
     this.text, {
@@ -61,6 +62,7 @@ class CustomText extends StatelessWidget {
     this.textAlign,
     this.backGroundColor,
     this.font,
+    this.overflow,
   });
 
   @override
@@ -69,6 +71,7 @@ class CustomText extends StatelessWidget {
       text,
       maxLines: maxLines,
       textAlign: textAlign,
+      overflow: overflow,
       style: customizeTextStyle(
           font: font,
           fontWeight: fontWeight,
