@@ -13,7 +13,9 @@ import 'open_service.dart';
 
 class DownloadHandler {
   final String _group = 'bunchOfFiles';
-  Future<void> download({required String url, bool? inGroup}) async {
+
+  Future<void> download(
+      {required String url, String? fileName, bool? inGroup}) async {
     try {
       if (kIsWeb) {
         await JsProvider().downloadFile(url: url, name: url.split("/").last);
@@ -24,22 +26,23 @@ class DownloadHandler {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
           await FileDownloader().enqueue(DownloadTask(
-              filename: '${DateTime.now()}_${url.split("/").last}',
+              filename: '${DateTime.now()}_${fileName ?? url.split("/").last}',
               url: url,
               directory: await downloadPath(),
               updates: Updates.statusAndProgress,
-              retries: 7, // request status and progress updates
+              retries: 7,
+              // request status and progress updates
               group: _group));
           // Use .download to start a download and wait for it to complete
         } else {
           // Start download, and wait for result. Show progress and status changes
           // while downloading
           final result = await FileDownloader().download(DownloadTask(
-            filename: '${DateTime.now()}_${url.split("/").last}',
+            filename: '${DateTime.now()}_${fileName ?? url.split("/").last}',
             url: url,
             directory: await downloadPath(),
-            updates: Updates
-                .statusAndProgress, // request status and progress updates
+            updates: Updates.statusAndProgress,
+            // request status and progress updates
             retries: 5,
           ));
           // Act on the result

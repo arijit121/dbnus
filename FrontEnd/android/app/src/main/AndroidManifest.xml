@@ -117,7 +117,7 @@
                 android:value="false" />
             <meta-data
                 android:name="flutter_deeplinking_enabled"
-                android:value="true" />
+                android:value="false" />
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
