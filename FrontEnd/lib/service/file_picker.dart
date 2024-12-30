@@ -154,15 +154,9 @@ class CustomFilePicker {
 
   Future<CustomFile?> galleryPicker() async {
     try {
-      if (!kIsWeb) {
-        final androidInfo = (!kIsWeb && Platform.isAndroid)
-            ? await DeviceInfoPlugin().androidInfo
-            : null;
+      if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
-            permission:
-                (androidInfo?.version.sdkInt ?? 0) <= 32 && Platform.isAndroid
-                    ? Permission.storage
-                    : Permission.photos,
+            permission:Permission.photos,
             name: 'Gallery');
         if (!permissionStatus.isGranted) {
           return null;
