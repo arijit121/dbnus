@@ -156,8 +156,7 @@ class CustomFilePicker {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
-            permission:Permission.photos,
-            name: 'Gallery');
+            permission: Permission.photos, name: 'Gallery');
         if (!permissionStatus.isGranted) {
           return null;
         }
