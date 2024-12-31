@@ -1,5 +1,5 @@
 import 'package:in_app_review/in_app_review.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -53,7 +53,7 @@ class OpenService {
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
     await Permission.accessMediaLocation.request();
-    await OpenFilex.open(filePath);
+    await OpenFile.open(filePath);
   }
 
   Future<ShareResultStatus> share({required String text}) async {
