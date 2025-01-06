@@ -15,10 +15,18 @@ class DownloadHandler {
   final String _group = 'bunchOfFiles';
 
   Future<void> download(
-      {required String url, String? fileName, bool? inGroup}) async {
+      {required String url,
+      String? fileName,
+      bool? inGroup,
+      Map<String, String>? headers,
+      Map<String, String>? urlQueryParameters}) async {
     try {
       if (kIsWeb) {
-        await JsProvider().downloadFile(url: url, name: url.split("/").last);
+        Uri uri = urlQueryParameters?.isNotEmpty == true
+            ? Uri.parse(url).replace(queryParameters: urlQueryParameters)
+            : Uri.parse(url);
+        await JsProvider().downloadFile(
+            url: uri.toString(), name: url.split("/").last, headers: headers);
       } else {
         PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
 
@@ -32,7 +40,9 @@ class DownloadHandler {
               updates: Updates.statusAndProgress,
               retries: 7,
               // request status and progress updates
-              group: _group));
+              group: _group,
+              headers: headers,
+              urlQueryParameters: urlQueryParameters));
           // Use .download to start a download and wait for it to complete
         } else {
           // Start download, and wait for result. Show progress and status changes
@@ -44,6 +54,8 @@ class DownloadHandler {
             updates: Updates.statusAndProgress,
             // request status and progress updates
             retries: 5,
+            headers: headers,
+            urlQueryParameters: urlQueryParameters,
           ));
           // Act on the result
           switch (result.status) {

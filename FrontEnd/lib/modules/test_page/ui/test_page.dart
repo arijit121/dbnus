@@ -116,13 +116,29 @@ class TestPage extends StatelessWidget {
                   onPressed: () {
                     DownloadHandler().download(
                         url:
-                            "https://storage.googleapis.com/approachcharts/test/5MB-test.ZIP");
+                            "http://65.0.139.63:5001/api/admin/invoices/676f20131e1add0f4b4b2a58/pdf",
+                        headers: {
+                          "Authentication":
+                              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3N2FkM2Y3ZWQxZmQxZDA2YjgyMTliYiIsImlhdCI6MTczNjEwMjkwM30.RtRG7Sr6sPjCJX26Otmd9SWWfzF67_8ZzUIiblbJRZ8",
+                          "App-Type": "A",
+                          "App-Version": "1.0.0",
+                          "Content-Type": "application/json",
+                          "Device-Id": "7f9bfffbb6adeb27",
+                          "Device-Density-Type": "xhdpi",
+                          "Device-Name": "V2217A",
+                          "Network-Info": "wifi",
+                          "Device-Width": "431.30434782608694",
+                          "Device-Os-Info": "9",
+                          "Device-Height": "834.7826086956521",
+                          "Device-Density": "560",
+                          "App-Version-Code": "1"
+                        });
                   },
                   gradient: const LinearGradient(colors: [
                     ColorConst.red,
                     Colors.blue,
                   ]),
-                  child: const CustomText("5MB-test")),
+                  child: const CustomText("download with header")),
               20.ph,
               CustomGOEButton(
                   onPressed: () async {
