@@ -937,6 +937,8 @@ class TextUtils {
   static String noInternetErrorMessage =
       'No Internet Connection. Please check your network settings and try again.';
 
+  static String footer_msg_web = "";
+
   // ignore: non_constant_identifier_names
   static List<String> relation_list({bool? isMyself}) => isMyself == true
       ? [

@@ -1,7 +1,9 @@
 import 'package:dbnus/extension/spacing.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:universal_html/html.dart' as html;
 
 import '../const/assects_const.dart';
 import '../const/color_const.dart';
@@ -33,7 +35,7 @@ class RouterManager {
 
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
-    observers: <NavigatorObserver>[observer],
+    observers: <NavigatorObserver>[observer, if (kIsWeb) SeoObserver()],
     redirectLimit: 30,
     routes: <RouteBase>[
       GoRoute(
@@ -257,5 +259,64 @@ class RouterManager {
         ),
       ),
     );
+  }
+}
+
+class SeoObserver extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    _updateCanonicalLink();
+    if (route.settings.name == RouteName.initialView) {
+      _homeHooterSeo();
+    } else {
+      _removeFooterSeoContainer();
+    }
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+    _updateCanonicalLink();
+    if (previousRoute?.settings.name == RouteName.initialView) {
+      _homeHooterSeo();
+    } else {
+      _removeFooterSeoContainer();
+    }
+  }
+
+  void _updateCanonicalLink() {
+    _setCanonicalLink(html.window.location.href);
+  }
+
+  void _setCanonicalLink(String url) {
+    final head = html.document.head;
+    final existingLink = head?.querySelector('link[rel="canonical"]');
+
+    if (existingLink != null) {
+      existingLink.attributes['href'] = url;
+    } else {
+      final canonicalLink = html.Element.tag('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      canonicalLink.setAttribute('href', url);
+      head?.append(canonicalLink);
+    }
+  }
+
+  void _homeHooterSeo() {
+    final document = html.document;
+    final seoContainer = html.DivElement()..className = 'footerSeoCon';
+    seoContainer.setInnerHtml(TextUtils.footer_msg_web,
+        validator: html.NodeValidatorBuilder.common());
+    if (document.querySelector('.footerSeoCon') == null) {
+      document.body?.append(seoContainer);
+    }
+  }
+
+  void _removeFooterSeoContainer() {
+    final element = html.document.querySelector('.footerSeoCon');
+    if (element != null) {
+      element.remove();
+    }
   }
 }

@@ -54,30 +54,35 @@ Future<void> main() async {
     }
   });
 
-  if (!kDebugMode) {
-    CrashUtils().setValue(value: false);
-    FlutterError.onError = (errorDetails) {
-      if (errorDetails.library?.contains("widgets library") == true) {
-        AppLog.e("${errorDetails.exception}",
-            tag: "Serious Error", stackTrace: errorDetails.stack);
+  CrashUtils().setValue(value: false);
+  FlutterError.onError = (errorDetails) {
+    if (errorDetails.library?.contains("widgets library") == true) {
+      AppLog.e("${errorDetails.exception}",
+          tag: "Serious Error", stackTrace: errorDetails.stack);
+      if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-        CrashUtils().navigateToCrashPage({
-          "error": "${errorDetails.exception}",
-          "stack": "${errorDetails.stack}",
-        });
-      } else {
-        AppLog.e("${errorDetails.exception}",
-            tag: "Error", stackTrace: errorDetails.stack);
+      }
+      CrashUtils().navigateToCrashPage({
+        "error": "${errorDetails.exception}",
+        "stack": "${errorDetails.stack}",
+      });
+    } else {
+      AppLog.e("${errorDetails.exception}",
+          tag: "Error", stackTrace: errorDetails.stack);
+      if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       }
-    };
+    }
+  };
 
-    PlatformDispatcher.instance.onError = (error, stack) {
+  PlatformDispatcher.instance.onError = (error, stack) {
+    if (!kDebugMode) {
       FirebaseCrashlytics.instance.recordError(error, stack);
-      AppLog.e("$error", stackTrace: stack, tag: "Error");
-      return true;
-    };
-  }
+    }
+    AppLog.e("$error", stackTrace: stack, tag: "Error");
+    return true;
+  };
+
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
   await FirebaseService().getInitialMessage();
