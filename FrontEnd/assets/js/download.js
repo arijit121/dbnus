@@ -1,32 +1,25 @@
-function download(url, fileName) {
-  // Use the Fetch API to get the file as a blob
-  fetch(url)
-      .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.blob();  // Convert response to a Blob
-      })
-      .then(blob => {
-          const downloadUrl = window.URL.createObjectURL(blob);  // Create a URL for the blob
-
-          // Create an anchor element and set its attributes
-          const link = document.createElement('a');
-          link.href = downloadUrl;
-          link.download = fileName;
-
-          // Append the link to the document body (required for Firefox)
-          document.body.appendChild(link);
-
-          // Trigger the download
-          link.click();
-
-          // Clean up: remove the link and revoke the object URL
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(downloadUrl);
-      })
-      .catch(error => {
-          console.error('Error downloading file:', error);
-      });
+function download(url, name, headers = {}) {
+    axios({
+        url: url,
+        method: 'GET',
+        responseType: 'blob', // This ensures the response is treated as binary data
+        headers: headers, // Custom headers are passed here
+    })
+    .then((response) => {
+        // Create a Blob URL for the downloaded data
+        const blobUrl = window.URL.createObjectURL(response.data);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.setAttribute('download', name); // Set the file name
+        document.body.appendChild(link);
+        link.click(); // Trigger the download
+        document.body.removeChild(link); // Clean up the DOM
+        window.URL.revokeObjectURL(blobUrl); // Free up memory
+    })
+    .catch((error) => {
+        console.error("Download failed:", error);
+        if (error.response) {
+            console.error("Server response:", error.response);
+        }
+    });
 }
-
