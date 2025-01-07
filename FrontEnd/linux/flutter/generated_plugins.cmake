@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_udid
   flutter_volume_controller
   gtk
+  open_file_linux
   url_launcher_linux
 )
 

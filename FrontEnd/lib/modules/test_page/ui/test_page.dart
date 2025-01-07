@@ -79,7 +79,7 @@ class TestPage extends StatelessWidget {
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler().download(
-                        url:
+                        downloadUrl:
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
                   },
                   gradient: const LinearGradient(colors: [
@@ -91,7 +91,7 @@ class TestPage extends StatelessWidget {
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler().download(
-                        url:
+                        downloadUrl:
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
                   },
                   gradient: const LinearGradient(colors: [
@@ -103,7 +103,7 @@ class TestPage extends StatelessWidget {
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler().download(
-                        url:
+                        downloadUrl:
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
                   },
                   gradient: const LinearGradient(colors: [
@@ -115,7 +115,7 @@ class TestPage extends StatelessWidget {
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler().download(
-                        url:
+                        downloadUrl:
                             "http://65.0.139.63:5001/api/admin/invoices/676f20131e1add0f4b4b2a58/pdf",
                         headers: {
                           "Authentication":

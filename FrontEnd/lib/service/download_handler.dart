@@ -10,12 +10,14 @@ import '../extension/logger_extension.dart';
 import '../utils/pop_up_items.dart';
 import 'JsService/provider/js_provider.dart';
 import 'open_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:universal_html/html.dart' as html;
 
 class DownloadHandler {
   final String _group = 'bunchOfFiles';
 
   Future<void> download(
-      {required String url,
+      {required String downloadUrl,
       String? fileName,
       bool? inGroup,
       Map<String, String>? headers,
@@ -23,10 +25,32 @@ class DownloadHandler {
     try {
       if (kIsWeb) {
         Uri uri = urlQueryParameters?.isNotEmpty == true
-            ? Uri.parse(url).replace(queryParameters: urlQueryParameters)
-            : Uri.parse(url);
-        await JsProvider().downloadFile(
-            url: uri.toString(), name: url.split("/").last, headers: headers);
+            ? Uri.parse(downloadUrl)
+                .replace(queryParameters: urlQueryParameters)
+            : Uri.parse(downloadUrl);
+        // await JsProvider().downloadFile(
+        //     url: uri.toString(), name:fileName?? url.split("/").last, headers: headers);
+        String downloadPath = fileName ?? downloadUrl.split("/").last;
+        final response = await http.get(uri, headers: headers);
+
+        if (response.statusCode == 200) {
+          // Convert the response body into a blob and trigger download
+          final blob = html.Blob([response.bodyBytes],
+              'application/${downloadPath.split(".").last}');
+          final url = html.Url.createObjectUrlFromBlob(blob);
+
+          // Create an anchor element to download the file
+          final anchor = html.AnchorElement(href: url)
+            ..target = 'blank'
+            ..download = downloadPath
+            ..click();
+
+          // Revoke the object URL to free memory
+          html.Url.revokeObjectUrl(url);
+        } else {
+          throw Exception(
+              'Failed to download file. HTTP ${response.statusCode}');
+        }
       } else {
         PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
 
@@ -34,8 +58,9 @@ class DownloadHandler {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
           await FileDownloader().enqueue(DownloadTask(
-              filename: '${DateTime.now()}_${fileName ?? url.split("/").last}',
-              url: url,
+              filename:
+                  '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
+              url: downloadUrl,
               directory: await downloadPath(),
               updates: Updates.statusAndProgress,
               retries: 7,
@@ -48,8 +73,9 @@ class DownloadHandler {
           // Start download, and wait for result. Show progress and status changes
           // while downloading
           final result = await FileDownloader().download(DownloadTask(
-            filename: '${DateTime.now()}_${fileName ?? url.split("/").last}',
-            url: url,
+            filename:
+                '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
+            url: downloadUrl,
             directory: await downloadPath(),
             updates: Updates.statusAndProgress,
             // request status and progress updates

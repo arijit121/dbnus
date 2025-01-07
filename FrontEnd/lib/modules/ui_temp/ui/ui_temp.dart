@@ -43,7 +43,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             onPressed: () {
               DownloadHandler().download(
-                  url:
+                  downloadUrl:
                       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
             gradient: const LinearGradient(colors: [
@@ -76,7 +76,7 @@ class _UiTempState extends State<UiTemp> {
             child: const CustomText("Change Url")),
         20.ph,
         CustomGOEButton(
-        width: 160,
+            width: 160,
             onPressed: () async {
               CustomFilePicker().customFilePicker();
             },
