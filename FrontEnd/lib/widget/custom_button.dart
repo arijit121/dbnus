@@ -17,7 +17,7 @@ class CustomTextButton extends StatelessWidget {
       required this.child,
       required this.onPressed,
       this.color,
-      this.padding});
+      this.padding = const EdgeInsets.symmetric(horizontal: 4.0)});
 
   final Widget child;
   final void Function()? onPressed;
@@ -29,7 +29,7 @@ class CustomTextButton extends StatelessWidget {
     return TextButton(
         style: TextButton.styleFrom(
           foregroundColor: color,
-          padding: padding ?? const EdgeInsets.symmetric(horizontal: 4.0),
+          padding: padding,
         ),
         onPressed: onPressed,
         child: child);
@@ -56,7 +56,7 @@ class CustomIconButton extends StatelessWidget {
       this.backgroundColor,
       this.iconSize,
       required this.onPressed,
-      this.padding});
+      this.padding = const EdgeInsets.all(4.0)});
 
   final Widget icon;
   final Color? color, backgroundColor;
@@ -78,7 +78,7 @@ class CustomIconButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(50),
             color: backgroundColor,
           ),
-          padding: padding ?? const EdgeInsets.all(4.0),
+          padding: padding,
           child: IconTheme.merge(
             data: IconThemeData(
               size: iconSize,
@@ -126,7 +126,7 @@ class CustomGOEButton extends StatelessWidget {
       this.width = 88,
       this.height = 36,
       this.gradient,
-      this.padding,
+      this.padding = const EdgeInsets.symmetric(horizontal: 16),
       this.boxShadow});
 
   final void Function()? onPressed;
@@ -196,7 +196,7 @@ class CustomGOEButton extends StatelessWidget {
             height: effectiveHeight,
             width: effectiveWidth,
             alignment: Alignment.center,
-            padding: padding ?? const EdgeInsets.symmetric(horizontal: 16),
+            padding: padding,
             decoration: BoxDecoration(boxShadow: boxShadow),
             child: child,
           ),
