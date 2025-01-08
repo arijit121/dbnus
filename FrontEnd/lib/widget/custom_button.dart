@@ -267,6 +267,7 @@ class CustomRadioButton<T> extends StatelessWidget {
       value: value,
       groupValue: groupValue,
       onChanged: onChanged,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: const VisualDensity(
           horizontal: VisualDensity.minimumDensity,
           vertical: VisualDensity.minimumDensity),
