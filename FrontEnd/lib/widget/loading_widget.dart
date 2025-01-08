@@ -4,9 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../const/color_const.dart';
 import '../service/context_service.dart';
 
-//ignore: must_be_immutable
 class LoadingWidget extends StatelessWidget {
-  LoadingWidget({
+  const LoadingWidget({
     super.key,
     this.height = 300,
     this.width = 300,
@@ -14,10 +13,10 @@ class LoadingWidget extends StatelessWidget {
     this.child,
   });
 
-  double width;
-  double height;
-  Color? backgroundColor;
-  Widget? child;
+  final double width;
+  final double height;
+  final Color? backgroundColor;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +30,8 @@ class LoadingWidget extends StatelessWidget {
               return DecoratedBox(
                 decoration: BoxDecoration(
                     color: index.isEven
-                        ?ColorConst.baseHexColor
-                        :ColorConst.baseHexColor
-                            .withOpacity(0.2),
+                        ? ColorConst.baseHexColor
+                        : ColorConst.baseHexColor.withOpacity(0.2),
                     borderRadius: const BorderRadius.all(Radius.circular(50))),
               );
             },
@@ -52,9 +50,8 @@ void showLoading() {
           return DecoratedBox(
             decoration: BoxDecoration(
                 color: index.isEven
-                    ?ColorConst.baseHexColor
-                    :ColorConst.baseHexColor
-                        .withOpacity(0.2),
+                    ? ColorConst.baseHexColor
+                    : ColorConst.baseHexColor.withOpacity(0.2),
                 borderRadius: const BorderRadius.all(Radius.circular(50))),
           );
         },

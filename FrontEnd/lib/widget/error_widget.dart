@@ -5,19 +5,18 @@ import '../const/color_const.dart';
 import '../widget/custom_text.dart';
 import 'custom_image.dart';
 
-//ignore: must_be_immutable
 class CustomErrorWidget extends StatelessWidget {
-  CustomErrorWidget(
+  const CustomErrorWidget(
       {super.key,
       this.height = 300,
       this.width = 300,
       this.backgroundColor = Colors.transparent,
       this.errorMsg});
 
-  double width;
-  double height;
-  Color? backgroundColor;
-  String? errorMsg;
+  final double width;
+  final double height;
+  final Color? backgroundColor;
+  final String? errorMsg;
 
   @override
   Widget build(BuildContext context) {
