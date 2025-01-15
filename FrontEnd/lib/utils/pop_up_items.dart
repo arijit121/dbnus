@@ -112,18 +112,22 @@ class PopUpItems {
   }
 
   Future<void> customMsgDialog(
-      {String? title, String? content, DialogType? type}) async {
+      {String? title,
+      String? content,
+      DialogType? type,
+      CrossAxisAlignment contentCrossAxisAlignment =
+          CrossAxisAlignment.center}) async {
     IconData? icon;
     Color? iconButtonColor;
     if (type != null) {
       switch (type) {
         case DialogType.success:
           icon = Icons.check_circle;
-          iconButtonColor = ColorConst.green;
+          iconButtonColor = Colors.green;
           break;
         case DialogType.error:
           icon = Icons.error;
-          iconButtonColor = ColorConst.red;
+          iconButtonColor = Colors.red;
           break;
         case DialogType.warning:
           icon = Icons.warning;
@@ -150,6 +154,7 @@ class PopUpItems {
         content: content != null || icon != null
             ? Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: contentCrossAxisAlignment,
                 children: [
                   if (icon != null)
                     Icon(icon, color: iconButtonColor, size: 60.0),
