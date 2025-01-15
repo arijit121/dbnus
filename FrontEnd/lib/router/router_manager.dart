@@ -36,7 +36,6 @@ class RouterManager {
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
     observers: <NavigatorObserver>[observer, if (kIsWeb) SeoObserver()],
-    redirectLimit: 30,
     routes: <RouteBase>[
       GoRoute(
         name: RouteName.initialView,
