@@ -90,7 +90,7 @@ class CustomText extends StatelessWidget {
 }
 
 class CustomRichText extends StatelessWidget {
-  final List<TextSpan> textSpanList;
+  final List<InlineSpan> textSpanList;
   final TextAlign textAlign;
   final TextOverflow overflow;
   final int? maxLines;
@@ -116,7 +116,7 @@ class CustomRichText extends StatelessWidget {
   }
 }
 
-TextSpan CustomTextSpan(
+WidgetSpan CustomTextSpan(
         {required String text,
         FontWeight? fontWeight,
         double? size,
@@ -125,9 +125,13 @@ TextSpan CustomTextSpan(
         Color? decorationColor,
         double? height,
         Color? backgroundColor,
-        String? font}) =>
-    TextSpan(
-        text: text,
+        String? font,
+        PlaceholderAlignment alignment = PlaceholderAlignment.baseline}) =>
+    WidgetSpan(
+      alignment: alignment,
+      baseline: TextBaseline.alphabetic,
+      child: Text(
+        text,
         style: customizeTextStyle(
             font: font,
             fontWeight: fontWeight,
@@ -136,9 +140,11 @@ TextSpan CustomTextSpan(
             decoration: decoration,
             decorationColor: decorationColor,
             height: height,
-            backgroundColor: backgroundColor));
+            backgroundColor: backgroundColor),
+      ),
+    );
 
-TextSpan CustomTextSpanEnum(
+WidgetSpan CustomTextSpanEnum(
         {required String text,
         required CustomTextStyleType styleType,
         Color? color,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../const/assects_const.dart';
 import 'custom_image.dart';
 
-
 const _shimmerGradient = LinearGradient(
   colors: [
     Color(0xFFEBEBF4),
@@ -204,8 +203,12 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     }
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
+    RenderBox? box = context.findRenderObject() as RenderBox?;
+    if (box == null) {
+      return const SizedBox();
+    }
     final offsetWithinShimmer = shimmer.getDescendantOffset(
-      descendant: context.findRenderObject() as RenderBox,
+      descendant: box,
     );
 
     return ShaderMask(
@@ -240,7 +243,7 @@ class CircleListItem extends StatelessWidget {
           color: Colors.black,
           shape: BoxShape.circle,
         ),
-        child:  ClipOval(
+        child: ClipOval(
           child: CustomAssetImageView(
             path: AssetsConst.dbnusNoImageLogo,
             fit: BoxFit.cover,
@@ -280,7 +283,7 @@ class CardListItem extends StatelessWidget {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child:  CustomAssetImageView(
+          child: CustomAssetImageView(
             path: AssetsConst.dbnusNoImageLogo,
             fit: BoxFit.cover,
           ),
