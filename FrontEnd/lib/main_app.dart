@@ -19,7 +19,7 @@ import 'router/custom_router/custom_route.dart';
 import 'router/router_manager.dart';
 import 'router/router_name.dart';
 import 'service/app_updater.dart';
-import 'service/crash/utils/crashUtils.dart';
+import 'service/crash/utils/crash_utils.dart';
 import 'service/download_handler.dart';
 import 'service/firebase_service.dart';
 import 'service/notification_handler.dart';
