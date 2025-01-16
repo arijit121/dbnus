@@ -105,6 +105,13 @@ class NetworkImg extends StatelessWidget {
           height: height,
           child: HtmlElementView(viewType: url),
         ),
+        Material(
+          color: Colors.transparent,
+          child: SizedBox(
+            width: width,
+            height: height,
+          ),
+        ),
       ],
     );
   }

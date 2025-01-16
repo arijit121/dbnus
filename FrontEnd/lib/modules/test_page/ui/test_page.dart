@@ -208,12 +208,18 @@ class TestPage extends StatelessWidget {
               20.ph,
               Row(
                 children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
+                  InkWell(
+                    onTap: () {
+                      PopUpItems()
+                          .toastMessage("On Tap", ColorConst.baseHexColor);
+                    },
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl,
+                      radius: 8,
+                      height: 100,
+                      width: 120,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   CustomNetWorkImageView(
                     url: ApiUrlConst.testImgUrl,
