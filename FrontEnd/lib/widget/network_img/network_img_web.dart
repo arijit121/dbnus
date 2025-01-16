@@ -92,6 +92,7 @@ class NetworkImg extends StatelessWidget {
     });
 
     return Stack(
+      alignment: AlignmentDirectional.center,
       children: [
         errorWidget ??
             Image.asset(
