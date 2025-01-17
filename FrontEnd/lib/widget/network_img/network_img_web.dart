@@ -30,7 +30,7 @@ class NetworkImg extends StatefulWidget {
 }
 
 class _NetworkImgState extends State<NetworkImg> {
-  bool errorFound = false;
+  ValueNotifier<bool> errorFound = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +89,7 @@ class _NetworkImgState extends State<NetworkImg> {
 
         // Handle image loading errors
         imageElement.onError.listen((_) {
-          setState(() {
-            errorFound = true;
-          });
+          errorFound.value = true;
           web.window.localStorage.removeItem(localStorageKey);
         });
 
@@ -106,29 +104,35 @@ class _NetworkImgState extends State<NetworkImg> {
       }
     });
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        errorFound
-            ? widget.errorWidget ??
-                Image.asset(
-                  AssetsConst.dbnusNoImageLogo,
-                  width: widget.width,
-                  height: widget.height,
-                )
-            : SizedBox(
+    return ValueListenableBuilder<bool>(
+      valueListenable: errorFound,
+      builder: (BuildContext context, bool shouldScroll, _) {
+        return Stack(
+          alignment: AlignmentDirectional.center,
+          children: [
+            if (errorFound.value)
+              widget.errorWidget ??
+                  Image.asset(
+                    AssetsConst.dbnusNoImageLogo,
+                    width: widget.width,
+                    height: widget.height,
+                  )
+            else
+              SizedBox(
                 width: widget.width ?? 120,
                 height: widget.height ?? 120,
                 child: HtmlElementView(viewType: widget.url),
               ),
-        Material(
-          color: Colors.transparent,
-          child: SizedBox(
-            width: widget.width ?? 120,
-            height: widget.height ?? 120,
-          ),
-        ),
-      ],
+            Material(
+              color: Colors.transparent,
+              child: SizedBox(
+                width: widget.width ?? 120,
+                height: widget.height ?? 120,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
