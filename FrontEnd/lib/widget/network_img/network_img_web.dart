@@ -91,29 +91,32 @@ class NetworkImg extends StatelessWidget {
       }
     });
 
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        errorWidget ??
-            Image.asset(
-              AssetsConst.dbnusNoImageLogo,
-              width: width != 0.0 ? width : null,
-              height: height != 0.0 ? height : null,
-              color: ColorConst.blueGrey,
-            ),
-        SizedBox(
-          width: width,
-          height: height,
-          child: HtmlElementView(viewType: url),
-        ),
-        Material(
-          color: Colors.transparent,
-          child: SizedBox(
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          errorWidget ??
+              Image.asset(
+                AssetsConst.dbnusNoImageLogo,
+                width: width != 0.0 ? width : null,
+                height: height != 0.0 ? height : null,
+                color: ColorConst.blueGrey,
+              ),
+          SizedBox(
             width: width,
             height: height,
+            child: HtmlElementView(viewType: url),
           ),
-        ),
-      ],
+          Material(
+            color: Colors.transparent,
+            child: SizedBox(
+              width: width ?? double.infinity,
+              height: height ?? double.infinity,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
