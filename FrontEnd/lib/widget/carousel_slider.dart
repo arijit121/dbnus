@@ -162,6 +162,7 @@ class _CarouselSliderState extends State<CarouselSlider> {
             url: widget.imageList.elementAt(pageIndex),
             fit: widget.fit,
             width: double.infinity,
+            height: widget.height - ((widget.imageList.length > 1) ? 12 : 0),
           ),
         ),
       ),
