@@ -8,7 +8,7 @@ import '../../const/assects_const.dart';
 import '../../const/color_const.dart';
 import '../../extension/logger_extension.dart';
 
-class NetworkImg extends StatelessWidget {
+class NetworkImg extends StatefulWidget {
   const NetworkImg(
       {super.key,
       required this.url,
@@ -26,9 +26,16 @@ class NetworkImg extends StatelessWidget {
   final Widget? errorWidget;
 
   @override
+  State<NetworkImg> createState() => _NetworkImgState();
+}
+
+class _NetworkImgState extends State<NetworkImg> {
+  bool errorFound = false;
+
+  @override
   Widget build(BuildContext context) {
     final String localStorageKey =
-        'cached_image_$url'; // Unique key for caching
+        'cached_image_${widget.url}'; // Unique key for caching
 
     // Check if image is already cached
     final cachedImage = web.window.localStorage[localStorageKey];
@@ -38,19 +45,19 @@ class NetworkImg extends StatelessWidget {
 
     // Register HTML image element for web
     web_ui.platformViewRegistry.registerViewFactory(
-      url,
+      widget.url,
       (int viewId) {
         final imageElement = web.HTMLImageElement()
-          ..src = url
+          ..src = widget.url
           ..style.width = '100%'
           ..style.height = '100%'
-          ..style.objectFit = _getObjectFit(fit)
+          ..style.objectFit = _getObjectFit(widget.fit)
           // ..crossOrigin = 'anonymous' // Set CORS attribute
           ..draggable = false; // Disable dragging
 
         // Apply CSS color filter if color is provided
-        if (color != null) {
-          final hsvColor = HSVColor.fromColor(color!);
+        if (widget.color != null) {
+          final hsvColor = HSVColor.fromColor(widget.color!);
           final hue = hsvColor.hue;
           final saturation = hsvColor.saturation * 100;
           final brightness = hsvColor.value * 100;
@@ -80,6 +87,14 @@ class NetworkImg extends StatelessWidget {
           }
         });
 
+        // Handle image loading errors
+        imageElement.onError.listen((_) {
+          setState(() {
+            errorFound = true;
+          });
+          web.window.localStorage.removeItem(localStorageKey);
+        });
+
         return imageElement;
       },
     );
@@ -91,41 +106,38 @@ class NetworkImg extends StatelessWidget {
       }
     });
 
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          errorWidget ??
-              Image.asset(
-                AssetsConst.dbnusNoImageLogo,
-                width: width != 0.0 ? width : null,
-                height: height != 0.0 ? height : null,
-                color: ColorConst.blueGrey,
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        errorFound
+            ? widget.errorWidget ??
+                Image.asset(
+                  AssetsConst.dbnusNoImageLogo,
+                  width: widget.width,
+                  height: widget.height,
+                )
+            : SizedBox(
+                width: widget.width ?? 120,
+                height: widget.height ?? 120,
+                child: HtmlElementView(viewType: widget.url),
               ),
-          SizedBox(
-            width: width,
-            height: height,
-            child: HtmlElementView(viewType: url),
+        Material(
+          color: Colors.transparent,
+          child: SizedBox(
+            width: widget.width ?? 120,
+            height: widget.height ?? 120,
           ),
-          Material(
-            color: Colors.transparent,
-            child: SizedBox(
-              width: width ?? double.infinity,
-              height: height ?? double.infinity,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildImageFromCache(String base64Image) {
     return Image.memory(
       base64Decode(base64Image),
-      width: width,
-      height: height,
-      fit: fit,
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit,
       frameBuilder: (BuildContext context, Widget child, int? frame,
           bool? wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded == true) {
@@ -137,18 +149,18 @@ class NetworkImg extends StatelessWidget {
                 ? child
                 : Container(
                     color: ColorConst.baseHexColor.withOpacity(0.3),
-                    height: height,
-                    width: width,
+                    height: widget.height,
+                    width: widget.width,
                   ),
           );
         }
       },
       errorBuilder: (_, __, ___) {
-        return errorWidget ??
+        return widget.errorWidget ??
             Image.asset(
               AssetsConst.dbnusNoImageLogo,
-              width: width != 0.0 ? width : null,
-              height: height != 0.0 ? height : null,
+              width: widget.width,
+              height: widget.height,
             );
       },
     );
