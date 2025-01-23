@@ -16,8 +16,8 @@ dependencies:
 
   # State Management
   equatable: ^2.0.7
-  flutter_bloc: ^8.1.6
-  bloc: ^8.1.4
+  flutter_bloc: ^9.0.0
+  bloc: ^9.0.0
 
   # Network
   http: ^1.2.2
@@ -38,7 +38,7 @@ dependencies:
 
   # Utility Functions
   uuid: ^4.5.1
-  intl: ^0.19.0
+  intl: ^0.20.1
   xml2json: ^6.2.5
   encrypt: ^5.0.3
   web: ^1.1.0
@@ -67,11 +67,11 @@ dependencies:
   geolocator: ^13.0.2
 
   # Device Information
-  flutter_udid: ^3.0.0
+  flutter_udid: ^4.0.0
   # custom_platform_device_id: ^1.0.8
   device_info_plus: ^11.2.0
   universal_io: ^2.2.2
-  package_info_plus: ^8.1.2
+  package_info_plus: 8.1.2
 
   # File Handling
   file_picker: ^8.1.6
