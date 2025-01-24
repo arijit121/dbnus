@@ -52,13 +52,19 @@ class NetworkImg extends StatelessWidget {
         );
       },
       imageBuilder: (context, imageProvider) {
-        return Image(
-          image: imageProvider,
+        return _NetworkImg(
+          url: url,
           width: width,
           height: height,
           fit: fit,
           color: color,
+          errorWidget: errorWidget,
         );
+        // Image.asset(
+        //   AssetsConst.dbnusNoImageLogo,
+        //   width: width,
+        //   height: height,
+        // );
       },
     );
   }
