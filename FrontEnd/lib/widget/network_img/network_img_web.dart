@@ -4,6 +4,7 @@ import 'dart:ui_web' as web_ui;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:web/web.dart' as web;
+import 'package:web/web.dart';
 
 import '../../const/assects_const.dart';
 import '../../const/color_const.dart';
@@ -50,21 +51,20 @@ class NetworkImg extends StatelessWidget {
           color: color,
           errorWidget: errorWidget,
         );
-      },
-      imageBuilder: (context, imageProvider) {
-        return _NetworkImg(
-          url: url,
-          width: width,
-          height: height,
-          fit: fit,
-          color: color,
-          errorWidget: errorWidget,
-        );
         // Image.asset(
         //   AssetsConst.dbnusNoImageLogo,
         //   width: width,
         //   height: height,
         // );
+      },
+      imageBuilder: (context, imageProvider) {
+        return Image(
+          image: imageProvider,
+          width: width,
+          height: height,
+          fit: fit,
+          color: color,
+        );
       },
     );
   }
@@ -72,8 +72,7 @@ class NetworkImg extends StatelessWidget {
 
 class _NetworkImg extends StatefulWidget {
   const _NetworkImg(
-      {super.key,
-      required this.url,
+      {required this.url,
       this.height,
       this.width,
       this.fit,
@@ -111,8 +110,11 @@ class _NetworkImgState extends State<_NetworkImg> {
       (int viewId) {
         final imageElement = web.HTMLImageElement()
           ..src = widget.url
-          ..style.width = '100%'
-          ..style.height = '100%'
+          ..style.width = widget.width != null ? '${widget.width}px' : 'auto'
+          ..style.height = widget.height != null ? '${widget.height}px' : 'auto'
+          ..style.marginLeft = 'auto'
+          ..style.marginRight = 'auto'
+          ..style.display = 'block'
           ..style.objectFit = _getObjectFit(widget.fit)
           // ..crossOrigin = 'anonymous' // Set CORS attribute
           ..draggable = false; // Disable dragging
@@ -181,17 +183,10 @@ class _NetworkImgState extends State<_NetworkImg> {
                   )
             else
               SizedBox(
-                width: widget.width ?? 120,
-                height: widget.height ?? 120,
+                width: widget.width,
+                height: widget.height,
                 child: HtmlElementView(viewType: widget.url),
               ),
-            Material(
-              color: Colors.transparent,
-              child: SizedBox(
-                width: widget.width ?? 120,
-                height: widget.height ?? 120,
-              ),
-            ),
           ],
         );
       },
@@ -242,15 +237,15 @@ class _NetworkImgState extends State<_NetworkImg> {
       case BoxFit.fill:
         return 'fill';
       case BoxFit.fitWidth:
-        return 'scale-down';
+        return 'fit-width';
       case BoxFit.fitHeight:
-        return 'scale-down';
+        return 'fit-height';
       case BoxFit.none:
         return 'none';
       case BoxFit.scaleDown:
         return 'scale-down';
       default:
-        return '';
+        return 'contain'; // Default value in case fit is null
     }
   }
 }

@@ -217,13 +217,13 @@ class TestPage extends StatelessWidget {
                     child: CustomNetWorkImageView(
                       url: ApiUrlConst.testImgUrl,
                       radius: 8,
-                      height: 100,
+                      height: 200,
                       width: 120,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl + "lfmbldmfbl",
                     radius: 8,
                     height: 100,
                     width: 120,
