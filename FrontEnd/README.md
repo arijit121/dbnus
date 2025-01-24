@@ -3,13 +3,34 @@
 Dbnus App
 `<img src="https://docs.flutter.dev/assets/images/flutter-logo-sharing.png"/>`
 
+```
 flutter build web -t lib/main_web.dart --web-renderer html --no-tree-shake-icons
-
 flutter build apk -t lib/main_app.dart --no-tree-shake-icons
-
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome
+flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="
+--disable-web-security"
+```
+Manual Installation on Windows
+Download the FVM Executable
 
-flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="--disable-web-security"
+Visit the [FVM GitHub Releases page](https://github.com/leoafarias/fvm/releases).
+Download the latest .zip file for Windows under Assets.
+Extract the FVM Executable
+
+Extract the downloaded .zip file to a directory of your choice (e.g., C:\fvm).
+Add FVM to the PATH
+
+Open the Start Menu and search for "Environment Variables."
+Click Edit the system environment variables.
+In the System Properties window, click Environment Variables.
+Under System variables, locate the Path variable and click Edit.
+Click New and add the path where you extracted the FVM executable (e.g., C:\fvm).
+Click OK to close all windows.
+Verify Installation
+
+Open a new Command Prompt or PowerShell.
+Run:
+```fvm --version```
 
 https://www.figma.com/file/LSOW045UzL7VZtymWvrbzP/Sales-Dashboard-Design-(Community)?type=design&node-id=804-24216&mode=design&t=Nz3iax801ZaHTguw-0
 
