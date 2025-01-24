@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui_web' as web_ui;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:web/web.dart' as web;
 
@@ -8,7 +9,7 @@ import '../../const/assects_const.dart';
 import '../../const/color_const.dart';
 import '../../extension/logger_extension.dart';
 
-class NetworkImg extends StatefulWidget {
+class NetworkImg extends StatelessWidget {
   const NetworkImg(
       {super.key,
       required this.url,
@@ -26,10 +27,65 @@ class NetworkImg extends StatefulWidget {
   final Widget? errorWidget;
 
   @override
-  State<NetworkImg> createState() => _NetworkImgState();
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: width != 0.0 ? width : null,
+      height: height != 0.0 ? height : null,
+      fit: fit,
+      color: color,
+      progressIndicatorBuilder: (context, url, downloadProgress) {
+        return Container(
+          width: width,
+          height: height,
+          color: Colors.grey.shade50,
+        );
+      },
+      errorWidget: (_, __, ___) {
+        return _NetworkImg(
+          url: url,
+          width: width,
+          height: height,
+          fit: fit,
+          color: color,
+          errorWidget: errorWidget,
+        );
+      },
+      imageBuilder: (context, imageProvider) {
+        return Image(
+          image: imageProvider,
+          width: width,
+          height: height,
+          fit: fit,
+          color: color,
+        );
+      },
+    );
+  }
 }
 
-class _NetworkImgState extends State<NetworkImg> {
+class _NetworkImg extends StatefulWidget {
+  const _NetworkImg(
+      {super.key,
+      required this.url,
+      this.height,
+      this.width,
+      this.fit,
+      this.color,
+      this.errorWidget});
+
+  final String url;
+  final double? height;
+  final double? width;
+  final BoxFit? fit;
+  final Color? color;
+  final Widget? errorWidget;
+
+  @override
+  State<_NetworkImg> createState() => _NetworkImgState();
+}
+
+class _NetworkImgState extends State<_NetworkImg> {
   ValueNotifier<bool> errorFound = ValueNotifier<bool>(false);
 
   @override
