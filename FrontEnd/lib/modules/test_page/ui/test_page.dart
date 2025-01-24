@@ -173,6 +173,7 @@ class TestPage extends StatelessWidget {
                   onPressed: () async {
                     String? deviceId = await AppConfig().getDeviceId();
                     AppLog.i(deviceId);
+                    PopUpItems().toastMessage(deviceId ?? "", Colors.green);
                   },
                   gradient: const LinearGradient(colors: [
                     ColorConst.red,

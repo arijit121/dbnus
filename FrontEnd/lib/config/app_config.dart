@@ -86,26 +86,7 @@ class AppConfig {
       String? deviceId;
 
       deviceId = await FlutterUdid.udid;
-      // var deviceInfo = DeviceInfoPlugin();
-      // if (Platform.isIOS) {
-      //   // import 'dart:io'
-      //   var iosDeviceInfo = await deviceInfo.iosInfo;
-      //   deviceId = iosDeviceInfo.identifierForVendor; // unique ID
-      // } else if (Platform.isAndroid) {
-      //   var androidDeviceInfo = await deviceInfo.androidInfo;
-      //   deviceId = androidDeviceInfo.id; // unique ID
-      // } else if (Platform.isWindows) {
-      //   var windowsDeviceInfo = await deviceInfo.windowsInfo;
-      //   deviceId = windowsDeviceInfo.deviceId; // unique ID
-      // } else if (Platform.isMacOS) {
-      //   var macOsDeviceInfo = await deviceInfo.macOsInfo;
-      //   deviceId = macOsDeviceInfo.systemGUID; // unique ID
-      // } else if (Platform.isLinux) {
-      //   var linuxDeviceInfo = await deviceInfo.linuxInfo;
-      //   deviceId = linuxDeviceInfo.machineId; // unique ID
-      // }
 
-      // deviceId = await PlatformDeviceId.getDeviceId;
       return deviceId;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);

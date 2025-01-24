@@ -15,113 +15,113 @@ dependencies:
     sdk: flutter
 
   # State Management
-  equatable: ^2.0.7
-  flutter_bloc: ^8.1.6
-  bloc: ^8.1.4
+  equatable: 2.0.7
+  flutter_bloc: 9.0.0
+  bloc: 9.0.0
 
   # Network
-  http: ^1.2.2
-  socket_io_client: ^3.0.2
-  connectivity_plus: ^6.1.1
-  network_info_plus: ^6.1.2
+  http: 1.3.0
+  socket_io_client: 3.0.2
+  connectivity_plus: 6.1.2
+  network_info_plus: 6.1.3
 
   # Route Manager
-  go_router: ^14.6.2
-  app_links: ^6.3.3
+  go_router: 14.6.3
+  app_links: 6.3.3
 
   #Firebase
-  firebase_core: ^3.8.1
-  firebase_messaging: ^15.1.6
-  firebase_analytics: ^11.3.6
-  firebase_crashlytics: ^4.2.0
-  firebase_performance: ^0.10.0+11
+  firebase_core: 3.10.1
+  firebase_messaging: 15.2.1
+  firebase_analytics: 11.4.1
+  firebase_crashlytics: 4.3.1
+  firebase_performance: 0.10.1+1
 
   # Utility Functions
-  uuid: ^4.5.1
-  intl: ^0.19.0
-  xml2json: ^6.2.5
-  encrypt: ^5.0.3
-  web: ^1.1.0
-  permission_handler: ^11.3.1
-  camera: ^0.11.0+2
-  universal_html: ^2.2.4
-  crypto: ^3.0.6
+  uuid: 4.5.1
+  intl: 0.20.1
+  xml2json: 6.2.6
+  encrypt: 5.0.3
+  web: 1.1.0
+  permission_handler: 11.3.1
+  camera: 0.11.1
+  universal_html: 2.2.4
+  crypto: 3.0.6
 
   # Features
-  in_app_review: ^2.0.10
-  flutter_exit_app: ^1.1.4
-  share_plus: ^10.1.3
-  open_file: ^3.5.10
-  flutter_local_notifications: ^18.0.1
-  url_launcher: ^6.3.1
-  back_button_interceptor: ^8.0.0
+  in_app_review: 2.0.10
+  flutter_exit_app: 1.1.4
+  share_plus: 10.1.4
+  open_file: 3.5.10
+  flutter_local_notifications: 18.0.1
+  url_launcher: 6.3.1
+  back_button_interceptor: 8.0.3
 
   # Storage
-  shared_preferences: ^2.3.4
-  #  localstore: ^1.3.5
-  hive: ^2.2.3
-  path_provider: ^2.1.5
+  shared_preferences: 2.3.5
+  #  localstore: 1.3.5
+  hive: 2.2.3
+  path_provider: 2.1.5
 
   # Location
-  geocoding: ^3.0.0
-  geolocator: ^13.0.2
+  geocoding: 3.0.0
+  geolocator: 13.0.2
 
   # Device Information
-  flutter_udid: ^3.0.0
-  # custom_platform_device_id: ^1.0.8
-  device_info_plus: ^11.2.0
-  universal_io: ^2.2.2
-  package_info_plus: ^8.1.2
+  flutter_udid: 4.0.0
+  # custom_platform_device_id: 1.0.8
+  device_info_plus: 11.2.1
+  universal_io: 2.2.2
+  package_info_plus: 8.1.2
 
   # File Handling
-  file_picker: ^8.1.6
-  image_picker: ^1.1.2
-  flutter_image_compress: ^2.3.0
+  file_picker: 8.1.7
+  image_picker: 1.1.2
+  flutter_image_compress: 2.4.0
 
   # Ui & Animations
-  shimmer: ^3.0.0
-  animated_text_kit: ^4.2.2
-  pin_code_fields: ^8.0.1
-  syncfusion_flutter_charts: ^28.1.33
-  flutter_spinkit: ^5.2.1
-  flutter_svg: ^2.0.16
-  flutter_staggered_grid_view: ^0.7.0
-  expandable_text: ^2.3.0
-  google_fonts: ^6.2.1
-  flutter_widget_from_html_core: ^0.15.2
-  # dyte_uikit: ^0.7.0
-  flutter_inappwebview: ^6.1.5
-  cupertino_icons: ^1.0.8
-  cached_network_image: ^3.4.1
-  flame: ^1.22.0
-  flame_forge2d: ^0.18.2+3
-  flame_svg: ^1.11.3
+  shimmer: 3.0.0
+  animated_text_kit: 4.2.2
+  pin_code_fields: 8.0.1
+  syncfusion_flutter_charts: 28.1.41
+  flutter_spinkit: 5.2.1
+  flutter_svg: 2.0.17
+  flutter_staggered_grid_view: 0.7.0
+  expandable_text: 2.3.0
+  google_fonts: 6.2.1
+  flutter_widget_from_html_core: 0.15.2
+  # dyte_uikit: 0.7.0
+  flutter_inappwebview: 6.1.5
+  cupertino_icons: 1.0.8
+  cached_network_image: 3.4.1
+  flame: 1.23.0
+  flame_forge2d: 0.18.2+4
+  flame_svg: 1.11.4
 
   # Payment
-  # paytm_allinonesdk: ^1.2.6
-  razorpay_flutter: ^1.3.7
-  flutter_razorpay_web: ^0.0.3
+  # paytm_allinonesdk: 1.2.6
+  razorpay_flutter: 1.3.7
+  flutter_razorpay_web: 0.0.3
 
   # Download
-  # flutter_downloader: ^1.11.6
-  background_downloader: ^8.8.1
+  # flutter_downloader: 1.11.6
+  background_downloader: 8.9.3
 
   #update:
-  in_app_update: ^4.2.3
-  upgrader: ^11.3.1
+  in_app_update: 4.2.3
+  upgrader: 11.3.1
 
   # Media Players
-  audioplayers: ^6.1.0
-  flutter_volume_controller: ^1.3.3
-  video_player: ^2.9.2
-  flame_audio: ^2.10.6
+  audioplayers: 6.1.0
+  flutter_volume_controller: 1.3.3
+  video_player: 2.9.2
+  flame_audio: 2.10.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
-  flutter_flavorizr: ^2.2.3
+  flutter_lints: 5.0.0
+  flutter_flavorizr: 2.2.3
 
 flutter:
 

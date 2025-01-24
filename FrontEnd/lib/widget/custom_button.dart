@@ -243,25 +243,26 @@ class CustomCheckbox extends StatelessWidget {
 class CustomRadioButton<T> extends StatelessWidget {
   const CustomRadioButton(
       {super.key,
-      required this.value,
-      required this.groupValue,
-      required this.onChanged,
-      this.activeColor});
+        required this.value,
+        required this.groupValue,
+        required this.onChanged,
+        this.activeColor,
+        this.inActiveColor});
 
   final T value;
   final T? groupValue;
   final void Function(T?)? onChanged;
-  final Color? activeColor;
+  final Color? activeColor, inActiveColor;
 
   @override
   Widget build(BuildContext context) {
     return Radio<T>(
       fillColor: WidgetStateProperty.resolveWith(
-        (states) {
+            (states) {
           if (states.contains(WidgetState.selected)) {
             return activeColor ?? Colors.blue;
           }
-          return ColorConst.grey;
+          return inActiveColor ?? ColorConst.grey;
         },
       ),
       value: value,
