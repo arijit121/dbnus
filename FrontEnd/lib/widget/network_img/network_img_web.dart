@@ -104,63 +104,6 @@ class _NetworkImgState extends State<_NetworkImg> {
       return _buildImageFromCache(cachedImage);
     }
 
-    // Register HTML image element for web
-    web_ui.platformViewRegistry.registerViewFactory(
-      widget.url,
-      (int viewId) {
-        final imageElement = web.HTMLImageElement()
-          ..src = widget.url
-          ..style.width = widget.width != null ? '${widget.width}px' : 'auto'
-          ..style.height = widget.height != null ? '${widget.height}px' : 'auto'
-          ..style.marginLeft = 'auto'
-          ..style.marginRight = 'auto'
-          ..style.display = 'block'
-          ..style.objectFit = _getObjectFit(widget.fit)
-          // ..crossOrigin = 'anonymous' // Set CORS attribute
-          ..draggable = false; // Disable dragging
-
-        // Apply CSS color filter if color is provided
-        if (widget.color != null) {
-          final hsvColor = HSVColor.fromColor(widget.color!);
-          final hue = hsvColor.hue;
-          final saturation = hsvColor.saturation * 100;
-          final brightness = hsvColor.value * 100;
-
-          imageElement.style.filter =
-              'sepia(1) hue-rotate(${hue}deg) saturate($saturation%) brightness($brightness%)';
-        }
-
-        imageElement.onLoad.listen((_) {
-          try {
-            // Convert the image to a base64 string and store it
-            final canvas = web.HTMLCanvasElement();
-            final context = canvas.context2D;
-            canvas.width = imageElement.width;
-            canvas.height = imageElement.height;
-            context.drawImage(imageElement, 0, 0);
-            final base64Image = canvas
-                .toDataUrl('image/png')
-                .split(',')[1]; // Get base64 string
-            web.window.localStorage[localStorageKey] =
-                base64Image; // Cache the image
-          } catch (e, stacktrace) {
-            AppLog.e(e.toString(),
-                error: e,
-                stackTrace: stacktrace,
-                tag: "Failed to export canvas");
-          }
-        });
-
-        // Handle image loading errors
-        imageElement.onError.listen((_) {
-          errorFound.value = true;
-          web.window.localStorage.removeItem(localStorageKey);
-        });
-
-        return imageElement;
-      },
-    );
-
     // Add event listener to clear cache on session destruction
     web.document.onVisibilityChange.listen((event) {
       if (web.document.visibilityState == 'hidden') {
@@ -185,7 +128,66 @@ class _NetworkImgState extends State<_NetworkImg> {
               SizedBox(
                 width: widget.width,
                 height: widget.height,
-                child: HtmlElementView(viewType: widget.url),
+                child: HtmlElementView.fromTagName(
+                  tagName: 'img',
+                  onElementCreated: (Object element) {
+                    try {
+                      final imageElement = element as web.HTMLImageElement;
+                      imageElement.src = widget.url;
+                      imageElement.style.width =
+                          widget.width != null ? '${widget.width}px' : 'auto';
+                      imageElement.style.height =
+                          widget.height != null ? '${widget.height}px' : 'auto';
+                      imageElement.style.marginLeft = 'auto';
+                      imageElement.style.marginRight = 'auto';
+                      imageElement.style.display = 'block';
+                      imageElement.style.objectFit = _getObjectFit(widget.fit);
+                      // ..crossOrigin = 'anonymous' // Set CORS attribute
+                      imageElement.draggable = false;
+
+                      // Apply CSS color filter if color is provided
+                      if (widget.color != null) {
+                        final hsvColor = HSVColor.fromColor(widget.color!);
+                        final hue = hsvColor.hue;
+                        final saturation = hsvColor.saturation * 100;
+                        final brightness = hsvColor.value * 100;
+
+                        imageElement.style.filter =
+                            'sepia(1) hue-rotate(${hue}deg) saturate($saturation%) brightness($brightness%)';
+                      }
+
+                      imageElement.onLoad.listen((_) {
+                        try {
+                          // Convert the image to a base64 string and store it
+                          final canvas = web.HTMLCanvasElement();
+                          final context = canvas.context2D;
+                          canvas.width = imageElement.width;
+                          canvas.height = imageElement.height;
+                          context.drawImage(imageElement, 0, 0);
+                          final base64Image = canvas
+                              .toDataUrl('image/png')
+                              .split(',')[1]; // Get base64 string
+                          web.window.localStorage[localStorageKey] =
+                              base64Image; // Cache the image
+                        } catch (e, stacktrace) {
+                          AppLog.e(e.toString(),
+                              error: e,
+                              stackTrace: stacktrace,
+                              tag: "Failed to export canvas");
+                        }
+                      });
+
+                      // Handle image loading errors
+                      imageElement.onError.listen((_) {
+                        errorFound.value = true;
+                        web.window.localStorage.removeItem(localStorageKey);
+                      });
+                    } catch (e, s) {
+                      AppLog.e(e.toString(),
+                          error: e, stackTrace: s, tag: "Failed to load image");
+                    }
+                  },
+                ),
               ),
           ],
         );

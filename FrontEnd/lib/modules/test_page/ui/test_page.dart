@@ -219,7 +219,7 @@ class TestPage extends StatelessWidget {
                       radius: 8,
                       height: 200,
                       width: 120,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fitHeight,
                     ),
                   ),
                   CustomNetWorkImageView(
