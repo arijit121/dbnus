@@ -148,9 +148,14 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           imageElement.style.marginLeft = 'auto';
                           imageElement.style.marginRight = 'auto';
                           imageElement.style.display = 'block';
+                          imageElement.style.position =
+                              'absolute'; // Add for centering
+                          imageElement.style.top = '50%'; // Add for centering
+                          imageElement.style.left = '50%'; // Add for centering
+                          imageElement.style.transform =
+                              'translate(-50%, -50%)'; // Add for centering
                           imageElement.style.objectFit =
                               _getObjectFit(widget.fit);
-                          // ..crossOrigin = 'anonymous' // Set CORS attribute
                           imageElement.draggable = false;
 
                           // Apply CSS color filter if color is provided

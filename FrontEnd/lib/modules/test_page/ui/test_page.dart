@@ -937,8 +937,8 @@ class TestPage extends StatelessWidget {
                         "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
                     radius: 8,
                     height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
+                    //  width: 120,
+                    fit: BoxFit.fitHeight,
                   ),
                   InkWell(
                     onTap: () {
@@ -949,9 +949,9 @@ class TestPage extends StatelessWidget {
                       url:
                           "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
                       radius: 8,
-                      height: 100,
-                      // width: 120,
-                      fit: BoxFit.fitHeight,
+                      // height: 100,
+                      width: 120,
+                      fit: BoxFit.fitWidth,
                       color: ColorConst.primaryDark,
                     ),
                   ),
