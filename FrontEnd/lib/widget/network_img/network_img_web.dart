@@ -3,6 +3,7 @@ import 'dart:ui_web' as web_ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
 import 'package:web/web.dart';
 
@@ -36,10 +37,14 @@ class NetworkImg extends StatelessWidget {
       fit: fit,
       color: color,
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return Container(
-          width: width,
-          height: height,
-          color: Colors.grey.shade50,
+        return Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            width: width,
+            height: height,
+            color: Colors.white, // Shimmer background color
+          ),
         );
       },
       errorWidget: (_, __, ___) {
@@ -114,18 +119,14 @@ class _NetworkImgState extends State<_NetworkImg> {
     return ValueListenableBuilder<bool>(
       valueListenable: errorFound,
       builder: (BuildContext context, bool shouldScroll, _) {
-        return Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            if (errorFound.value)
-              widget.errorWidget ??
-                  Image.asset(
-                    AssetsConst.dbnusNoImageLogo,
-                    width: widget.width,
-                    height: widget.height,
-                  )
-            else
-              SizedBox(
+        return errorFound.value
+            ? widget.errorWidget ??
+                Image.asset(
+                  AssetsConst.dbnusNoImageLogo,
+                  width: widget.width,
+                  height: widget.height,
+                )
+            : SizedBox(
                 width: widget.width,
                 height: widget.height,
                 child: HtmlElementView.fromTagName(
@@ -188,9 +189,7 @@ class _NetworkImgState extends State<_NetworkImg> {
                     }
                   },
                 ),
-              ),
-          ],
-        );
+              );
       },
     );
   }

@@ -941,7 +941,8 @@ class TestPage extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url:
+                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
                     radius: 8,
                     height: 100,
                     width: 120,
@@ -956,7 +957,7 @@ class TestPage extends StatelessWidget {
                 autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
                   return index == 4
-                      ? "https://picsum.photos/512/800.jpg"
+                      ? "https://picsum.photos/1080/512.jpg"
                       : ApiUrlConst.testImgUrl;
                 }),
                 onTap: (index) {

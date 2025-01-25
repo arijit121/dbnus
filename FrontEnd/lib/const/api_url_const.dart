@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../flavors.dart';
 
 class ApiUrlConst {
@@ -12,5 +14,6 @@ class ApiUrlConst {
   static String books = "${baseUrl}books/v1/volumes";
   static String hostUrl = "https://www.google.com";
 
-  static String testImgUrl = "https://picsum.photos/512/512.jpg";
+  static String testImgUrl =
+      "https://picsum.photos/${Random().nextInt(2160) + 512}/${Random().nextInt(2160) + 512}.jpg";
 }
