@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui_web' as web_ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +47,7 @@ class NetworkImg extends StatelessWidget {
         );
       },
       errorWidget: (_, __, ___) {
-        return _NetworkImg(
+        return _CorsNetworkImg(
           url: url,
           width: width,
           height: height,
@@ -75,14 +74,16 @@ class NetworkImg extends StatelessWidget {
   }
 }
 
-class _NetworkImg extends StatefulWidget {
-  const _NetworkImg(
+class _CorsNetworkImg extends StatefulWidget {
+  const _CorsNetworkImg(
       {required this.url,
       this.height,
       this.width,
       this.fit,
       this.color,
-      this.errorWidget});
+      this.errorWidget})
+      : assert(height != null || width != null,
+            'Height or Width must be provided for CorsNetworkImg');
 
   final String url;
   final double? height;
@@ -92,10 +93,10 @@ class _NetworkImg extends StatefulWidget {
   final Widget? errorWidget;
 
   @override
-  State<_NetworkImg> createState() => _NetworkImgState();
+  State<_CorsNetworkImg> createState() => _CorsNetworkImgState();
 }
 
-class _NetworkImgState extends State<_NetworkImg> {
+class _CorsNetworkImgState extends State<_CorsNetworkImg> {
   ValueNotifier<bool> errorFound = ValueNotifier<bool>(false);
 
   @override
@@ -127,67 +128,82 @@ class _NetworkImgState extends State<_NetworkImg> {
                   height: widget.height,
                 )
             : SizedBox(
-                width: widget.width,
-                height: widget.height,
-                child: HtmlElementView.fromTagName(
-                  tagName: 'img',
-                  onElementCreated: (Object element) {
-                    try {
-                      final imageElement = element as web.HTMLImageElement;
-                      imageElement.src = widget.url;
-                      imageElement.style.width =
-                          widget.width != null ? '${widget.width}px' : 'auto';
-                      imageElement.style.height =
-                          widget.height != null ? '${widget.height}px' : 'auto';
-                      imageElement.style.marginLeft = 'auto';
-                      imageElement.style.marginRight = 'auto';
-                      imageElement.style.display = 'block';
-                      imageElement.style.objectFit = _getObjectFit(widget.fit);
-                      // ..crossOrigin = 'anonymous' // Set CORS attribute
-                      imageElement.draggable = false;
-
-                      // Apply CSS color filter if color is provided
-                      if (widget.color != null) {
-                        final hsvColor = HSVColor.fromColor(widget.color!);
-                        final hue = hsvColor.hue;
-                        final saturation = hsvColor.saturation * 100;
-                        final brightness = hsvColor.value * 100;
-
-                        imageElement.style.filter =
-                            'sepia(1) hue-rotate(${hue}deg) saturate($saturation%) brightness($brightness%)';
-                      }
-
-                      imageElement.onLoad.listen((_) {
+                width: widget.width ?? widget.height,
+                height: widget.height ?? widget.width,
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    HtmlElementView.fromTagName(
+                      tagName: 'img',
+                      onElementCreated: (Object element) {
                         try {
-                          // Convert the image to a base64 string and store it
-                          final canvas = web.HTMLCanvasElement();
-                          final context = canvas.context2D;
-                          canvas.width = imageElement.width;
-                          canvas.height = imageElement.height;
-                          context.drawImage(imageElement, 0, 0);
-                          final base64Image = canvas
-                              .toDataUrl('image/png')
-                              .split(',')[1]; // Get base64 string
-                          web.window.localStorage[localStorageKey] =
-                              base64Image; // Cache the image
-                        } catch (e, stacktrace) {
+                          final imageElement = element as web.HTMLImageElement;
+                          imageElement.src = widget.url;
+                          imageElement.style.width = widget.width != null
+                              ? '${widget.width}px'
+                              : 'auto';
+                          imageElement.style.height = widget.height != null
+                              ? '${widget.height}px'
+                              : 'auto';
+                          imageElement.style.marginLeft = 'auto';
+                          imageElement.style.marginRight = 'auto';
+                          imageElement.style.display = 'block';
+                          imageElement.style.objectFit =
+                              _getObjectFit(widget.fit);
+                          // ..crossOrigin = 'anonymous' // Set CORS attribute
+                          imageElement.draggable = false;
+
+                          // Apply CSS color filter if color is provided
+                          if (widget.color != null) {
+                            final hsvColor = HSVColor.fromColor(widget.color!);
+                            final hue = hsvColor.hue;
+                            final saturation = hsvColor.saturation * 100;
+                            final brightness = hsvColor.value * 100;
+
+                            imageElement.style.filter =
+                                'sepia(1) hue-rotate(${hue}deg) saturate($saturation%) brightness($brightness%)';
+                          }
+
+                          imageElement.onLoad.listen((_) {
+                            try {
+                              // Convert the image to a base64 string and store it
+                              final canvas = web.HTMLCanvasElement();
+                              final context = canvas.context2D;
+                              canvas.width = imageElement.width;
+                              canvas.height = imageElement.height;
+                              context.drawImage(imageElement, 0, 0);
+                              final base64Image = canvas
+                                  .toDataUrl('image/png')
+                                  .split(',')[1]; // Get base64 string
+                              web.window.localStorage[localStorageKey] =
+                                  base64Image; // Cache the image
+                            } catch (e, stacktrace) {
+                              AppLog.e(e.toString(),
+                                  error: e,
+                                  stackTrace: stacktrace,
+                                  tag: "Failed to export canvas");
+                            }
+                          });
+
+                          // Handle image loading errors
+                          imageElement.onError.listen((_) {
+                            errorFound.value = true;
+                            web.window.localStorage.removeItem(localStorageKey);
+                          });
+                        } catch (e, s) {
                           AppLog.e(e.toString(),
                               error: e,
-                              stackTrace: stacktrace,
-                              tag: "Failed to export canvas");
+                              stackTrace: s,
+                              tag: "Failed to load image");
                         }
-                      });
-
-                      // Handle image loading errors
-                      imageElement.onError.listen((_) {
-                        errorFound.value = true;
-                        web.window.localStorage.removeItem(localStorageKey);
-                      });
-                    } catch (e, s) {
-                      AppLog.e(e.toString(),
-                          error: e, stackTrace: s, tag: "Failed to load image");
-                    }
-                  },
+                      },
+                    ),
+                    Positioned.fill(
+                      child: Material(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ],
                 ),
               );
       },
