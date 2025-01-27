@@ -50,8 +50,10 @@ class NetworkImg extends StatelessWidget {
         return LayoutBuilder(builder: (context, BoxConstraints constraints) {
           return _CorsNetworkImg(
             url: url,
-            width: width ?? constraints.maxWidth,
-            height: height ?? constraints.maxHeight,
+            width: width ??
+                (constraints.maxWidth != 0 ? constraints.maxWidth : null),
+            height: height ??
+                (constraints.maxHeight != 0 ? constraints.maxHeight : null),
             fit: fit,
             color: color,
             errorWidget: errorWidget,
@@ -83,7 +85,9 @@ class _CorsNetworkImg extends StatefulWidget {
       this.width,
       this.fit,
       this.color,
-      this.errorWidget});
+      this.errorWidget})
+      : assert(height != null || width != null,
+            'Height or Width must be provided for CorsNetworkImg');
 
   final String url;
   final double? height;
