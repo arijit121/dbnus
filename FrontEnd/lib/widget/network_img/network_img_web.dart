@@ -47,14 +47,16 @@ class NetworkImg extends StatelessWidget {
         );
       },
       errorWidget: (_, __, ___) {
-        return _CorsNetworkImg(
-          url: url,
-          width: width,
-          height: height,
-          fit: fit,
-          color: color,
-          errorWidget: errorWidget,
-        );
+        return LayoutBuilder(builder: (context, BoxConstraints constraints) {
+          return _CorsNetworkImg(
+            url: url,
+            width: width ?? constraints.maxWidth,
+            height: height ?? constraints.maxHeight,
+            fit: fit,
+            color: color,
+            errorWidget: errorWidget,
+          );
+        });
         // Image.asset(
         //   AssetsConst.dbnusNoImageLogo,
         //   width: width,
@@ -81,9 +83,7 @@ class _CorsNetworkImg extends StatefulWidget {
       this.width,
       this.fit,
       this.color,
-      this.errorWidget})
-      : assert(height != null || width != null,
-            'Height or Width must be provided for CorsNetworkImg');
+      this.errorWidget});
 
   final String url;
   final double? height;
