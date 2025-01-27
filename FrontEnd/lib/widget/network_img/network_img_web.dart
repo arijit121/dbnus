@@ -203,7 +203,7 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                         }
                       },
                     ),
-                    Positioned.fill(
+                    const Positioned.fill(
                       child: Material(
                         color: Colors.transparent,
                       ),
