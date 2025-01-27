@@ -48,12 +48,19 @@ class NetworkImg extends StatelessWidget {
       },
       errorWidget: (_, __, ___) {
         return LayoutBuilder(builder: (context, BoxConstraints constraints) {
+          double calculatedWidth = width ??
+              (constraints.minWidth != 0
+                  ? constraints.minWidth
+                  : constraints.maxWidth);
+          double calculatedHeight = height ??
+              (constraints.minHeight != 0
+                  ? constraints.minHeight
+                  : constraints.maxHeight);
           return _CorsNetworkImg(
+            key: Key("$constraints"),
             url: url,
-            width: width ??
-                (constraints.maxWidth != 0 ? constraints.maxWidth : null),
-            height: height ??
-                (constraints.maxHeight != 0 ? constraints.maxHeight : null),
+            width: calculatedWidth != 0 ? calculatedWidth : null,
+            height: calculatedHeight != 0 ? calculatedHeight : null,
             fit: fit,
             color: color,
             errorWidget: errorWidget,
@@ -80,7 +87,8 @@ class NetworkImg extends StatelessWidget {
 
 class _CorsNetworkImg extends StatefulWidget {
   const _CorsNetworkImg(
-      {required this.url,
+      {super.key,
+      required this.url,
       this.height,
       this.width,
       this.fit,
@@ -263,9 +271,9 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
       case BoxFit.fill:
         return 'fill';
       case BoxFit.fitWidth:
-        return 'fit-width';
+        return 'scale-down';
       case BoxFit.fitHeight:
-        return 'fit-height';
+        return 'scale-down';
       case BoxFit.none:
         return 'none';
       case BoxFit.scaleDown:
