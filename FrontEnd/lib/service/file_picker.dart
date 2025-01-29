@@ -53,21 +53,30 @@ class CustomFilePicker {
               durationSeconds: 4);
         } else if (platformFile.extension == 'jpg' ||
             platformFile.extension == 'jpeg') {
-          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
-            name: platformFile.name,
-            path: kIsWeb ? null : platformFile.path,
-            bytes: platformFile.bytes,
-          ));
-          if (compressFile != null) {
+          if (sizeInMb > _maxFileSize) {
+            CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              name: platformFile.name,
+              path: kIsWeb ? null : platformFile.path,
+              bytes: platformFile.bytes,
+            ));
+            if (compressFile != null) {
+              return CustomFile(
+                name: compressFile.name,
+                path: kIsWeb ? null : compressFile.path,
+                bytes: kIsWeb ? compressFile.bytes : null,
+              );
+            }
+          } else {
             return CustomFile(
-              name: compressFile.name,
-              path: kIsWeb ? null : compressFile.path,
-              bytes: kIsWeb ? compressFile.bytes : null,
+              name: platformFile.name,
+              path: kIsWeb ? null : platformFile.path,
+              bytes: kIsWeb ? platformFile.bytes : null,
             );
           }
         } else if (sizeInMb > _maxFileSize) {
           PopUpItems().toastMessage(
-              "Can't upload file more than 5 mb.", ColorConst.red,
+              "File limit exceeded. Please try again by uploading a file of size 5 MB or less.",
+              Colors.red,
               durationSeconds: 4);
         } else {
           CustomFile customFile = CustomFile(
@@ -132,17 +141,26 @@ class CustomFilePicker {
 
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.camera);
-
+      int sizeInBytes = (await image?.length()) ?? 0;
+      double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
-        CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
-            bytes: await image.readAsBytes(),
-            name: image.name,
-            path: image.path));
-        if (compressFile != null) {
+        if (sizeInMb > _maxFileSize) {
+          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              bytes: await image.readAsBytes(),
+              name: image.name,
+              path: image.path));
+          if (compressFile != null) {
+            return CustomFile(
+              name: compressFile.name,
+              path: kIsWeb ? null : compressFile.path,
+              bytes: kIsWeb ? compressFile.bytes : null,
+            );
+          }
+        } else {
           return CustomFile(
-            name: compressFile.name,
-            path: kIsWeb ? null : compressFile.path,
-            bytes: kIsWeb ? compressFile.bytes : null,
+            name: image.name,
+            path: kIsWeb ? null : image.path,
+            bytes: kIsWeb ? await image.readAsBytes() : null,
           );
         }
       }
@@ -164,17 +182,26 @@ class CustomFilePicker {
 
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
+      int sizeInBytes = (await image?.length()) ?? 0;
+      double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
-        CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
-            bytes: await image.readAsBytes(),
-            name: image.name,
-            path: image.path));
-        if (compressFile != null) {
+        if (sizeInMb > _maxFileSize) {
+          CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              bytes: await image.readAsBytes(),
+              name: image.name,
+              path: image.path));
+          if (compressFile != null) {
+            return CustomFile(
+              name: compressFile.name,
+              path: kIsWeb ? null : compressFile.path,
+              bytes: kIsWeb ? compressFile.bytes : null,
+            );
+          }
+        } else {
           return CustomFile(
-            name: compressFile.name,
-            path: kIsWeb ? null : compressFile.path,
-            bytes: kIsWeb ? compressFile.bytes : null,
+            name: image.name,
+            path: kIsWeb ? null : image.path,
+            bytes: kIsWeb ? await image.readAsBytes() : null,
           );
         }
       }
@@ -330,19 +357,21 @@ class CustomFilePicker {
       int width;
       int height;
 
+      int maxHeightWidth = 1600;
+
       if (image.width > image.height) {
-        width = 800;
-        height = (image.height / image.width * 800).round();
+        width = maxHeightWidth;
+        height = (image.height / image.width * maxHeightWidth).round();
       } else {
-        height = 800;
-        width = (image.width / image.height * 800).round();
+        height = maxHeightWidth;
+        width = (image.width / image.height * maxHeightWidth).round();
       }
 
       Uint8List compressedJpegBytes =
           await FlutterImageCompress.compressWithList(file.bytes!,
               minWidth: width,
               minHeight: height,
-              quality: 95,
+              quality: 100,
               format: CompressFormat.jpeg);
       String? extension = file.name?.split(".").last;
       String? name = file.name?.split(".$extension").first;
