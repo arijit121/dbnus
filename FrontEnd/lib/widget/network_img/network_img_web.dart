@@ -9,6 +9,8 @@ import 'package:web/web.dart';
 import '../../const/assects_const.dart';
 import '../../const/color_const.dart';
 import '../../extension/logger_extension.dart';
+import '../../service/value_handler.dart';
+import 'dart:js' show allowInterop;
 
 class NetworkImg extends StatelessWidget {
   const NetworkImg(
@@ -115,26 +117,10 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
 
   @override
   Widget build(BuildContext context) {
-    final String localStorageKey =
-        'cached_image_${widget.url}'; // Unique key for caching
-
-    // Check if image is already cached
-    final cachedImage = web.window.localStorage[localStorageKey];
-    if (cachedImage != null) {
-      return _buildImageFromCache(cachedImage);
-    }
-
-    // Add event listener to clear cache on session destruction
-    web.document.onVisibilityChange.listen((event) {
-      if (web.document.visibilityState == 'hidden') {
-        web.window.localStorage.removeItem(localStorageKey);
-      }
-    });
-
     return ValueListenableBuilder<bool>(
       valueListenable: errorFound,
-      builder: (BuildContext context, bool shouldScroll, _) {
-        return errorFound.value
+      builder: (BuildContext context, bool value, _) {
+        return value || !ValueHandler().isTextNotEmptyOrNull(widget.url)
             ? widget.errorWidget ??
                 Image.asset(
                   AssetsConst.dbnusNoImageLogo,
@@ -171,6 +157,11 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           imageElement.style.objectFit =
                               _getObjectFit(widget.fit);
                           imageElement.draggable = false;
+                          imageElement.onerror = allowInterop((Event event) {
+                            errorFound.value = true;
+
+                            AppLog.e(widget.url, tag: "Failed to load image");
+                          }) as OnErrorEventHandler;
 
                           // Apply CSS color filter if color is provided
                           if (widget.color != null) {
@@ -182,38 +173,11 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                             imageElement.style.filter =
                                 'sepia(1) hue-rotate(${hue}deg) saturate($saturation%) brightness($brightness%)';
                           }
-
-                          imageElement.onLoad.listen((_) {
-                            try {
-                              // Convert the image to a base64 string and store it
-                              final canvas = web.HTMLCanvasElement();
-                              final context = canvas.context2D;
-                              canvas.width = imageElement.width;
-                              canvas.height = imageElement.height;
-                              context.drawImage(imageElement, 0, 0);
-                              final base64Image = canvas
-                                  .toDataUrl('image/png')
-                                  .split(',')[1]; // Get base64 string
-                              web.window.localStorage[localStorageKey] =
-                                  base64Image; // Cache the image
-                            } catch (e, stacktrace) {
-                              AppLog.e(e.toString(),
-                                  error: e,
-                                  stackTrace: stacktrace,
-                                  tag: "Failed to export canvas");
-                            }
-                          });
-
-                          // Handle image loading errors
-                          imageElement.onError.listen((_) {
-                            errorFound.value = true;
-                            web.window.localStorage.removeItem(localStorageKey);
-                          });
                         } catch (e, s) {
                           AppLog.e(e.toString(),
                               error: e,
                               stackTrace: s,
-                              tag: "Failed to load image");
+                              tag: "HtmlElementView error");
                         }
                       },
                     ),
@@ -225,40 +189,6 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                   ],
                 ),
               );
-      },
-    );
-  }
-
-  Widget _buildImageFromCache(String base64Image) {
-    return Image.memory(
-      base64Decode(base64Image),
-      width: widget.width,
-      height: widget.height,
-      fit: widget.fit,
-      frameBuilder: (BuildContext context, Widget child, int? frame,
-          bool? wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded == true) {
-          return child;
-        } else {
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: frame != null
-                ? child
-                : Container(
-                    color: ColorConst.baseHexColor.withOpacity(0.3),
-                    height: widget.height,
-                    width: widget.width,
-                  ),
-          );
-        }
-      },
-      errorBuilder: (_, __, ___) {
-        return widget.errorWidget ??
-            Image.asset(
-              AssetsConst.dbnusNoImageLogo,
-              width: widget.width,
-              height: widget.height,
-            );
       },
     );
   }
