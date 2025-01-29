@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -53,11 +52,15 @@ class NetworkImg extends StatelessWidget {
           double calculatedWidth = width ??
               (constraints.minWidth != 0
                   ? constraints.minWidth
-                  : constraints.maxWidth);
+                  : constraints.maxWidth != double.infinity
+                      ? constraints.maxWidth
+                      : 0);
           double calculatedHeight = height ??
               (constraints.minHeight != 0
                   ? constraints.minHeight
-                  : constraints.maxHeight);
+                  : constraints.maxHeight != double.infinity
+                      ? constraints.maxHeight
+                      : 0);
           return _CorsNetworkImg(
             key: Key("$constraints"),
             url: url,
