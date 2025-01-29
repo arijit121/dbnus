@@ -12,14 +12,15 @@ class NetworkImg extends StatelessWidget {
       this.width,
       this.fit,
       this.color,
-      this.errorWidget});
+      this.errorWidget,
+      this.loadingWidget});
 
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
   final Color? color;
-  final Widget? errorWidget;
+  final Widget? loadingWidget, errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +31,16 @@ class NetworkImg extends StatelessWidget {
       fit: fit,
       color: color,
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            width: width,
-            height: height,
-            color: Colors.white, // Shimmer background color
-          ),
-        );
+        return loadingWidget ??
+            Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                width: width,
+                height: height,
+                color: Colors.white, // Shimmer background color
+              ),
+            );
       },
       errorWidget: (_, __, ___) {
         return errorWidget ??

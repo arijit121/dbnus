@@ -14,6 +14,7 @@ class CustomNetWorkImageView extends StatelessWidget {
     this.fit = BoxFit.contain, // Default BoxFit value
     this.radius,
     this.color,
+    this.loadingWidget,
     this.errorWidget,
   });
 
@@ -23,7 +24,7 @@ class CustomNetWorkImageView extends StatelessWidget {
   final BoxFit fit;
   final double? radius;
   final Color? color;
-  final Widget? errorWidget;
+  final Widget? loadingWidget, errorWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,7 @@ class CustomNetWorkImageView extends StatelessWidget {
         fit: fit,
         color: color,
         errorWidget: errorWidget,
+        loadingWidget: loadingWidget,
       ),
     );
   }
