@@ -6,6 +6,7 @@ Dbnus App
 ```
 flutter build web -t lib/main_web.dart --web-renderer html --no-tree-shake-icons
 flutter build apk -t lib/main_app.dart --no-tree-shake-icons
+flutter build apk --flavor prod -t lib/main_prod.dart
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="
 --disable-web-security"
