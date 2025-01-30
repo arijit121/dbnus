@@ -243,11 +243,11 @@ class CustomCheckbox extends StatelessWidget {
 class CustomRadioButton<T> extends StatelessWidget {
   const CustomRadioButton(
       {super.key,
-        required this.value,
-        required this.groupValue,
-        required this.onChanged,
-        this.activeColor,
-        this.inActiveColor});
+      required this.value,
+      required this.groupValue,
+      required this.onChanged,
+      this.activeColor,
+      this.inActiveColor});
 
   final T value;
   final T? groupValue;
@@ -258,7 +258,7 @@ class CustomRadioButton<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Radio<T>(
       fillColor: WidgetStateProperty.resolveWith(
-            (states) {
+        (states) {
           if (states.contains(WidgetState.selected)) {
             return activeColor ?? Colors.blue;
           }
@@ -272,6 +272,71 @@ class CustomRadioButton<T> extends StatelessWidget {
       visualDensity: const VisualDensity(
           horizontal: VisualDensity.minimumDensity,
           vertical: VisualDensity.minimumDensity),
+    );
+  }
+}
+
+class CustomToggleSwitchButton extends StatelessWidget {
+  const CustomToggleSwitchButton({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.selectedIcon,
+    this.defaultIcon,
+    this.selectedTrackColor,
+    this.defaultTrackColor = Colors.transparent,
+    this.selectedThumbColor,
+    this.defaultThumbColor,
+  });
+
+  final bool? value;
+  final void Function(bool)? onChanged;
+  final Icon? selectedIcon, defaultIcon;
+  final Color? selectedTrackColor,
+      defaultTrackColor,
+      selectedThumbColor,
+      defaultThumbColor;
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetStateProperty<Icon?>? thumbIcon = WidgetStateProperty<Icon?>.fromMap(
+      <WidgetStatesConstraint, Icon?>{
+        WidgetState.selected: selectedIcon,
+        WidgetState.any: defaultIcon ?? selectedIcon,
+      },
+    );
+
+    WidgetStateProperty<Color?> trackColor =
+        WidgetStateProperty<Color?>.fromMap(
+      <WidgetStatesConstraint, Color?>{
+        WidgetState.selected: selectedTrackColor,
+        WidgetState.any: defaultTrackColor,
+      },
+    );
+
+    WidgetStateProperty<Color?> overlayColor =
+        WidgetStateProperty<Color?>.fromMap(
+      <WidgetState, Color?>{
+        WidgetState.selected: selectedThumbColor?.withOpacity(0.54),
+        WidgetState.disabled: Colors.grey.shade400,
+      },
+    );
+
+    WidgetStateProperty<Color?> thumbColor =
+        WidgetStateProperty<Color?>.fromMap(
+      <WidgetState, Color?>{
+        WidgetState.selected: selectedThumbColor,
+        WidgetState.disabled: defaultThumbColor ?? selectedThumbColor,
+      },
+    );
+
+    return Switch(
+      thumbIcon: thumbIcon,
+      value: value == true,
+      overlayColor: overlayColor,
+      trackColor: trackColor,
+      thumbColor: thumbColor,
+      onChanged: onChanged,
     );
   }
 }
