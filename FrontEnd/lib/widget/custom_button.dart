@@ -287,6 +287,8 @@ class CustomToggleSwitchButton extends StatelessWidget {
     this.defaultTrackColor = Colors.transparent,
     this.selectedThumbColor,
     this.defaultThumbColor,
+    this.selectedBorderColor,
+    this.defaultBorderColor,
   });
 
   final bool? value;
@@ -295,19 +297,21 @@ class CustomToggleSwitchButton extends StatelessWidget {
   final Color? selectedTrackColor,
       defaultTrackColor,
       selectedThumbColor,
-      defaultThumbColor;
+      defaultThumbColor,
+      selectedBorderColor,
+      defaultBorderColor;
 
   @override
   Widget build(BuildContext context) {
     WidgetStateProperty<Icon?>? thumbIcon = WidgetStateProperty<Icon?>.fromMap(
       <WidgetStatesConstraint, Icon?>{
-        WidgetState.selected: selectedIcon,
-        WidgetState.any: defaultIcon ?? selectedIcon,
+        WidgetState.selected: selectedIcon ?? defaultIcon,
+        WidgetState.any: defaultIcon,
       },
     );
 
     WidgetStateProperty<Color?> trackColor =
-        WidgetStateProperty<Color?>.fromMap(
+    WidgetStateProperty<Color?>.fromMap(
       <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedTrackColor,
         WidgetState.any: defaultTrackColor,
@@ -315,18 +319,26 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     WidgetStateProperty<Color?> overlayColor =
-        WidgetStateProperty<Color?>.fromMap(
-      <WidgetState, Color?>{
+    WidgetStateProperty<Color?>.fromMap(
+      <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedThumbColor?.withOpacity(0.54),
-        WidgetState.disabled: Colors.grey.shade400,
+        WidgetState.any: Colors.grey.shade400,
       },
     );
 
     WidgetStateProperty<Color?> thumbColor =
-        WidgetStateProperty<Color?>.fromMap(
-      <WidgetState, Color?>{
-        WidgetState.selected: selectedThumbColor,
-        WidgetState.disabled: defaultThumbColor ?? selectedThumbColor,
+    WidgetStateProperty<Color?>.fromMap(
+      <WidgetStatesConstraint, Color?>{
+        WidgetState.selected: selectedThumbColor ?? defaultThumbColor,
+        WidgetState.any: defaultThumbColor,
+      },
+    );
+
+    WidgetStateProperty<Color?> trackOutlineColor =
+    WidgetStateProperty<Color?>.fromMap(
+      <WidgetStatesConstraint, Color?>{
+        WidgetState.selected: selectedBorderColor,
+        WidgetState.any: defaultBorderColor,
       },
     );
 
@@ -336,6 +348,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
       overlayColor: overlayColor,
       trackColor: trackColor,
       thumbColor: thumbColor,
+      trackOutlineColor: trackOutlineColor,
       onChanged: onChanged,
     );
   }
