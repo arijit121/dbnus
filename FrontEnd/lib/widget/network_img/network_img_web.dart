@@ -118,10 +118,18 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
   web.HTMLImageElement? _imageElement;
 
   @override
+  void deactivate() {
+    if (_imageElement != null) {
+      _imageElement!.onerror = null;
+    }
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
     if (_imageElement != null) {
-      _imageElement!.remove(); // Removes the element from the DOM
-      _imageElement = null; // Ensure it's no longer referenced
+      _imageElement!.remove(); // Remove the element from the DOM
+      _imageElement = null;
     }
     super.dispose();
   }
