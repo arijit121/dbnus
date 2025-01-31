@@ -115,6 +115,16 @@ class _CorsNetworkImg extends StatefulWidget {
 
 class _CorsNetworkImgState extends State<_CorsNetworkImg> {
   ValueNotifier<bool> errorFound = ValueNotifier<bool>(false);
+  web.HTMLImageElement? _imageElement;
+
+  @override
+  void dispose() {
+    if (_imageElement != null) {
+      _imageElement!.remove(); // Removes the element from the DOM
+      _imageElement = null; // Ensure it's no longer referenced
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +149,7 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                       onElementCreated: (Object element) {
                         try {
                           final imageElement = element as web.HTMLImageElement;
+                          _imageElement = imageElement;
                           imageElement.src = widget.url;
                           imageElement.style.width = widget.width != null
                               ? '${widget.width}px'
