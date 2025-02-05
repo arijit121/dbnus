@@ -60,9 +60,7 @@ class AppUpdater {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final newVersion = NewVersionPlus(
         iOSId: packageInfo.packageName,
-        androidId: packageInfo.packageName,
-        androidPlayStoreCountry: "es_ES",
-        iOSAppStoreCountry: "in",
+        iOSAppStoreCountry: "us",
         androidHtmlReleaseNotes: true);
     final response = await newVersion.getVersionStatus();
 
