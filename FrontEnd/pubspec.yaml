@@ -71,7 +71,7 @@ dependencies:
   # custom_platform_device_id: 1.0.8
   device_info_plus: 11.2.1
   universal_io: 2.2.2
-  package_info_plus: 8.1.2
+  package_info_plus: 8.1.3
 
   # File Handling
   file_picker: 8.1.7
@@ -108,7 +108,7 @@ dependencies:
 
   #update:
   in_app_update: 4.2.3
-  upgrader: 11.3.1
+  new_version_plus: ^0.1.0
 
   # Media Players
   audioplayers: 6.1.0

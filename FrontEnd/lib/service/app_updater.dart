@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:in_app_update/in_app_update.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:upgrader/upgrader.dart';
 
 import '../const/color_const.dart';
 import '../extension/logger_extension.dart';
@@ -58,12 +58,17 @@ class AppUpdater {
 
   Future<void> _checkAndUpdateIos({bool? isForceUpdate}) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    final iTunes = ITunesSearchAPI();
-    final response = await (iTunes.lookupByBundleId(packageInfo.packageName));
+    final newVersion = NewVersionPlus(
+        iOSId: packageInfo.packageName,
+        androidId: packageInfo.packageName,
+        androidPlayStoreCountry: "es_ES",
+        iOSAppStoreCountry: "in",
+        androidHtmlReleaseNotes: true);
+    final response = await newVersion.getVersionStatus();
 
     if (response != null) {
-      String? storeVersion = iTunes.version(response);
-      String? appStoreListingURL = iTunes.trackViewUrl(response);
+      String? storeVersion = response.storeVersion;
+      String? appStoreListingURL = response.appStoreLink;
       String localVersion = packageInfo.version;
       BuildContext context = CurrentContext().context;
       if (_canUpdate(
@@ -71,39 +76,45 @@ class AppUpdater {
           context.mounted) {
         String? result = await showDialog<String>(
           context: context,
-          builder: (BuildContext context) => CupertinoAlertDialog(
-            title: CustomText(TextUtils.update_app,
-                color: ColorConst.primaryDark,
-                size: 16,
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.bold),
-            content: Column(
-              children: [
-                CustomText(
-                  TextUtils.update_msg
-                      .replaceAll("{{appName}}", packageInfo.appName)
-                      .replaceAll(
-                          "{{currentAppStoreVersion}}", storeVersion ?? "")
-                      .replaceAll("{{currentInstalledVersion}}", localVersion),
+          builder: (BuildContext context) => CupertinoTheme(
+            data: const CupertinoThemeData(brightness: Brightness.light),
+            child: CupertinoAlertDialog(
+              title: CustomText(TextUtils.update_app,
                   color: ColorConst.primaryDark,
-                  size: 12,
-                ),
+                  size: 16,
+                  textAlign: TextAlign.center,
+                  fontWeight: FontWeight.bold),
+              content: Column(
+                children: [
+                  CustomText(
+                    TextUtils.update_msg
+                        .replaceAll("{{appName}}", packageInfo.appName)
+                        .replaceAll(
+                            "{{currentAppStoreVersion}}", storeVersion ?? "")
+                        .replaceAll(
+                            "{{currentInstalledVersion}}", localVersion),
+                    color: ColorConst.primaryDark,
+                    size: 12,
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                CustomTextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: CustomText(
+                        isForceUpdate == true ? "Cancel" : "Ignore",
+                        color: Colors.blue,
+                        size: 13)),
+                CustomTextButton(
+                    onPressed: () {
+                      Navigator.pop(context, "Y");
+                    },
+                    child: const CustomText("Update Now",
+                        color: Colors.blue, size: 13)),
               ],
             ),
-            actions: <Widget>[
-              CustomTextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: CustomText(isForceUpdate == true ? "Cancel" : "Ignore",
-                      color: Colors.blue, size: 13)),
-              CustomTextButton(
-                  onPressed: () {
-                    Navigator.pop(context, "Y");
-                  },
-                  child: const CustomText("Update Now",
-                      color: Colors.blue, size: 13)),
-            ],
           ),
         );
         if (result == "Y") {
