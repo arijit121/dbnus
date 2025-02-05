@@ -59,9 +59,7 @@ class AppUpdater {
   Future<void> _checkAndUpdateIos({bool? isForceUpdate}) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final newVersion = NewVersionPlus(
-        iOSId: packageInfo.packageName,
-        iOSAppStoreCountry: "us",
-        androidHtmlReleaseNotes: true);
+        iOSId: packageInfo.packageName, iOSAppStoreCountry: "us");
     final response = await newVersion.getVersionStatus();
 
     if (response != null) {
