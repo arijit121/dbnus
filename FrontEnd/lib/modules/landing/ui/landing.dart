@@ -22,24 +22,13 @@ class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _narrowUiBody({required LandingState state}) =>
-      state.pageIndex.value != null
-          ? LandingUtils.listNavigation.elementAt(state.pageIndex.value!).ui ??
-              Container()
-          : Container();
+      state.page.value ?? Container();
 
-  Widget _mediumUiBody({required LandingState state}) => Flexible(
-      child: state.pageIndex.value != null
-          ? LandingUtils.listNavigation.elementAt(state.pageIndex.value!).ui ??
-              Container()
-          : Container());
+  Widget _mediumUiBody({required LandingState state}) =>
+      Flexible(child: state.page.value ?? Container());
 
   Widget _largeUiBody({required LandingState state}) => Flexible(
-        child: state.pageIndex.value != null
-            ? LandingUtils.listNavigation
-                    .elementAt(state.pageIndex.value!)
-                    .ui ??
-                Container()
-            : Container(),
+        child: state.page.value ?? Container(),
       );
 
   void _onChooseIndex(

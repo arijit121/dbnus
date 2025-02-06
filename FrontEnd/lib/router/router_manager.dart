@@ -1,12 +1,9 @@
-import 'package:dbnus/extension/spacing.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:universal_html/html.dart' as html;
 
-import '../const/assects_const.dart';
-import '../const/color_const.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
@@ -14,10 +11,7 @@ import '../modules/order_details/ui/order_details.dart'
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../utils/text_utils.dart';
-import '../widget/custom_button.dart';
-import '../widget/custom_image.dart';
-import '../widget/custom_text.dart';
-import 'custom_router/custom_route.dart';
+import '../widget/error_route_widget.dart';
 import 'router_name.dart';
 
 class RouterManager {
@@ -115,7 +109,7 @@ class RouterManager {
               orderId: state.pathParameters["order_id"] ?? "",
             );
           } else {
-            return errorRoute();
+            return ErrorRouteWidget();
           }
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -146,7 +140,7 @@ class RouterManager {
               errorDetails: state.extra as Map<String, dynamic>,
             );
           } else {
-            return errorRoute();
+            return ErrorRouteWidget();
           }
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -165,7 +159,7 @@ class RouterManager {
       //         bookingNo: state.pathParameters["booking_no"] ?? "",
       //       );
       //     } else {
-      //       return errorRoute();
+      //       return ErrorRouteWidget();
       //     }
       //   },
       // ),
@@ -196,69 +190,15 @@ class RouterManager {
       //         isPayment: queryParameters["isPayment"] == "true",
       //       );
       //     } else {
-      //       return errorRoute();
+      //       return ErrorRouteWidget();
       //     }
       //   },
       // ),
     ],
-    errorBuilder: (context, state) => errorRoute(),
+    errorBuilder: (context, state) => ErrorRouteWidget(),
   );
 
-  static Scaffold errorRoute() {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: CustomText(TextUtils.notFound,
-            color: ColorConst.primaryDark, size: 20),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomAssetImageView(
-                path: AssetsConst.pageNotFound,
-                height: 200,
-                width: 200,
-              ),
-              8.ph,
-              CustomText(
-                'Oops! Something went wrong...',
-                color: ColorConst.primaryDark,
-                size: 20,
-              ),
-              8.ph,
-              CustomText(
-                '404',
-                color: ColorConst.primaryDark,
-                size: 50,
-              ),
-              8.ph,
-              CustomText(
-                'Page Not Found',
-                color: ColorConst.primaryDark,
-                size: 20,
-              ),
-              12.ph,
-              CustomGOEButton(
-                radius: 6,
-                backGroundColor: Colors.blueAccent,
-                onPressed: () {
-                  CustomRoute().clearAndNavigate(RouteName.initialView);
-                },
-                child: const CustomText(
-                  "Back to Home",
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 }
 
 class SeoObserver extends NavigatorObserver {

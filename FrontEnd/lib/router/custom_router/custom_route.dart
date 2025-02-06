@@ -7,6 +7,7 @@ import '../../extension/logger_extension.dart';
 import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart';
 import '../../service/context_service.dart';
 import '../../service/crash/ui/crash_ui.dart';
+import '../../widget/error_route_widget.dart';
 import '../router_manager.dart';
 import '../router_name.dart';
 import 'web/custom_router_web.dart';
@@ -65,7 +66,7 @@ class CustomRoute {
           if (arguments is RazorpayMerchantDetails) {
             return RayzorPay(razorpayMerchantDetails: arguments);
           } else {
-            return RouterManager.errorRoute();
+            return ErrorRouteWidget();
           }
         });
       case RouteName.error:
@@ -73,12 +74,12 @@ class CustomRoute {
           if (arguments is Map<String, dynamic>) {
             return CrashUi(errorDetails: arguments);
           } else {
-            return RouterManager.errorRoute();
+            return ErrorRouteWidget();
           }
         });
       default:
         return MaterialPageRoute(builder: (_) {
-          return RouterManager.errorRoute();
+          return ErrorRouteWidget();
         });
     }
   }

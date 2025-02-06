@@ -1,23 +1,26 @@
 part of 'landing_bloc.dart';
 
-//ignore: must_be_immutable
 class LandingState extends Equatable {
-  DynamicBlocData<LandingBannerResponse> bannerData;
-  DynamicBlocData<int> pageIndex;
+  final DynamicBlocData<LandingBannerResponse> bannerData;
+  final DynamicBlocData<int> pageIndex;
+  final DynamicBlocData<Widget> page;
 
-  LandingState({
+  const LandingState({
     required this.bannerData,
     required this.pageIndex,
+    required this.page,
   });
 
   LandingState copyWith(
       {DynamicBlocData<LandingBannerResponse>? bannerData,
-      DynamicBlocData<int>? pageIndex}) {
+      DynamicBlocData<int>? pageIndex,
+      DynamicBlocData<Widget>? page}) {
     return LandingState(
         bannerData: bannerData ?? this.bannerData,
-        pageIndex: pageIndex ?? this.pageIndex);
+        pageIndex: pageIndex ?? this.pageIndex,
+        page: page ?? this.page);
   }
 
   @override
-  List<Object> get props => [bannerData.status, pageIndex.status];
+  List<Object> get props => [bannerData.status, pageIndex.status, page.status];
 }
