@@ -6,12 +6,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'const/theme_const.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
+import 'service/Localization/bloc/localization_bloc.dart';
+import 'service/Localization/utils/localization_utils.dart';
 import 'service/crash/utils/crash_utils.dart';
 import 'service/firebase_service.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
@@ -83,22 +87,38 @@ class _MyWebAppState extends State<MyWebApp> {
           create: (BuildContext context) =>
               LocalCartBloc()..add(InItLocalCartEvent()),
         ),
-      ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: TextUtils.appTitle,
-        scrollBehavior: const MaterialScrollBehavior().copyWith(
-          dragDevices: {
-            PointerDeviceKind.mouse,
-            PointerDeviceKind.touch,
-            PointerDeviceKind.stylus,
-            PointerDeviceKind.unknown
-          },
+        BlocProvider(
+          create: (BuildContext context) =>
+              LocalizationBloc()..add(InitLocalization()),
         ),
-        themeMode: ThemeMode.system,
-        theme: ThemeConst.theme,
-        darkTheme: ThemeConst.darkTheme,
-        routerConfig: RouterManager.getInstance.router,
+      ],
+      child: BlocBuilder<LocalizationBloc, LocalizationState>(
+        builder: (context, localizationState) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            locale: localizationState.locale.value,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationUtils.supportedLocales,
+            title: TextUtils.appTitle,
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown
+              },
+            ),
+            themeMode: ThemeMode.system,
+            theme: ThemeConst.theme,
+            darkTheme: ThemeConst.darkTheme,
+            routerConfig: RouterManager.getInstance.router,
+          );
+        },
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dbnus/data/model/custom_file.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
@@ -13,6 +15,8 @@ import '../../../data/model/forward_geocoding.dart';
 import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../flavors.dart';
+import '../../../service/Localization/utils/localization_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
 import '../../../utils/pop_up_items.dart';
@@ -21,8 +25,15 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 
-class TestPage extends StatelessWidget {
+class TestPage extends StatefulWidget {
   const TestPage({super.key});
+
+  @override
+  State<TestPage> createState() => _TestPageState();
+}
+
+class _TestPageState extends State<TestPage> {
+  ValueNotifier<int> counter = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +58,38 @@ class TestPage extends StatelessWidget {
               20.ph,
               CustomIconButton(icon: const Icon(Icons.abc), onPressed: () {}),
               20.ph,
+              ValueListenableBuilder(
+                valueListenable: counter,
+                builder: (BuildContext context, int value, Widget? child) {
+                  return CustomTextButton(
+                    onPressed: () {
+                      counter.value = counter.value + 1;
+                    },
+                    child: CustomText(
+                      "$value",
+                      color: ColorConst.primaryDark,
+                    ),
+                  );
+                },
+              ),
+              20.ph,
               CustomGOEButton(
-                child: const CustomText("text"),
+                child: CustomText(AppLocalizations.of(context)!.helloWorld),
                 onPressed: () {},
               ),
+              20.ph,
+              CustomGOEButton(
+                  onPressed: () {
+                    LocalizationUtils().changeLanguage(
+                        locale: LocalizationUtils.supportedLocales[Random()
+                            .nextInt(
+                                LocalizationUtils.supportedLocales.length)]);
+                  },
+                  gradient: const LinearGradient(colors: [
+                    ColorConst.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("Change language")),
               20.ph,
               CustomGOEButton(
                   onPressed: () {

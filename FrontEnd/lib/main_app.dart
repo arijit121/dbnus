@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'const/theme_const.dart';
 import 'extension/logger_extension.dart';
@@ -17,6 +19,8 @@ import 'firebase_options.dart';
 import 'router/custom_router/custom_route.dart';
 import 'router/router_manager.dart';
 import 'router/router_name.dart';
+import 'service/Localization/bloc/localization_bloc.dart';
+import 'service/Localization/utils/localization_utils.dart';
 import 'service/app_updater.dart';
 import 'service/crash/utils/crash_utils.dart';
 import 'service/download_handler.dart';
@@ -159,14 +163,30 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) =>
               LocalCartBloc()..add(InItLocalCartEvent()),
         ),
+        BlocProvider(
+          create: (BuildContext context) =>
+              LocalizationBloc()..add(InitLocalization()),
+        ),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: TextUtils.appTitle,
-        themeMode: ThemeMode.system,
-        theme: ThemeConst.theme,
-        darkTheme: ThemeConst.darkTheme,
-        routerConfig: RouterManager.getInstance.router,
+      child: BlocBuilder<LocalizationBloc, LocalizationState>(
+        builder: (context, localizationState) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            locale: localizationState.locale.value,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationUtils.supportedLocales,
+            title: TextUtils.appTitle,
+            themeMode: ThemeMode.system,
+            theme: ThemeConst.theme,
+            darkTheme: ThemeConst.darkTheme,
+            routerConfig: RouterManager.getInstance.router,
+          );
+        },
       ),
     );
   }

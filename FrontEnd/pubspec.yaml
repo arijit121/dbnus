@@ -54,6 +54,8 @@ dependencies:
   flutter_local_notifications: 18.0.1
   url_launcher: 6.3.1
   back_button_interceptor: 8.0.3
+  flutter_localizations:
+    sdk: flutter
 
   # Storage
   shared_preferences: 2.3.5
@@ -125,6 +127,8 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  generate: true
 
   assets:
     - assets/design/
