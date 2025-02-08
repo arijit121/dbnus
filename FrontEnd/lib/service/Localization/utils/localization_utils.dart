@@ -3,14 +3,12 @@ import 'package:dbnus/service/value_handler.dart';
 import 'package:dbnus/storage/local_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../enum/language_enum.dart';
 import '../bloc/localization_bloc.dart';
 
 class LocalizationUtils {
-  static const List<Locale> supportedLocales = [
-    Locale('en'), // English
-    Locale('es'), // Spanish
-  ];
+  static List<Locale> supportedLocales =
+      LanguageEnum.values.map((language) => language.locale).toList();
 
   Future<void> store({required Locale local}) async {
     await LocalPreferences().setString(
