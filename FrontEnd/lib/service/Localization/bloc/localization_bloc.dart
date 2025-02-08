@@ -19,6 +19,8 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
         if (local != null) {
           emit(state.copyWith(locale: DynamicBlocData.init(value: local)));
           emit(state.copyWith(locale: DynamicBlocData.success(value: local)));
+        } else if (state.locale.value != null) {
+          await LocalizationUtils().store(local: state.locale.value!);
         }
       } else if (event is ChangeLanguage) {
         emit(state.copyWith(locale: DynamicBlocData.loading()));
