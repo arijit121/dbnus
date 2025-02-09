@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dbnus/data/model/custom_file.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
+import 'package:dbnus/service/Localization/extension/localization_ext.dart';
 import 'package:dbnus/service/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,14 +17,15 @@ import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../flavors.dart';
 import '../../../service/Localization/utils/localization_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
 import '../../../utils/pop_up_items.dart';
+import '../../../utils/text_utils.dart';
 import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -74,7 +76,8 @@ class _TestPageState extends State<TestPage> {
               ),
               20.ph,
               CustomGOEButton(
-                child: CustomText(AppLocalizations.of(context)!.helloWorld),
+                child: CustomText(
+                    context.l10n?.hello_world ?? TextUtils.hello_world),
                 onPressed: () {},
               ),
               20.ph,
