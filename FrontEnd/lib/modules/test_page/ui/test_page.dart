@@ -25,7 +25,6 @@ import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
