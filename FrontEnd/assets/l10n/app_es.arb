@@ -1,3 +1,75 @@
 {
-    "hello_world": "¡Hola Mundo!"
+  "hello_world": "¡Hola Mundo!",
+  "profile": "Perfil",
+  "edit_profile": "Editar Perfil",
+  "completed_topics": "Temas Completados",
+  "completed_lessons": "Lecciones Completadas",
+  "completed_quiz": "Cuestionario Completado",
+  "completed_games": "Juegos Completados",
+  "change_language": "Cambiar Idioma",
+  "logout": "Cerrar Sesión",
+  "logout_confirmation": "¿Estás seguro de que quieres cerrar sesión?",
+  "serial_number": "N°",
+  "title": "Título",
+  "completed_at": "Completado En",
+  "name": "Nombre",
+  "email": "Correo Electrónico",
+  "phone_number": "Número de Teléfono",
+  "submit": "Enviar",
+  "cancel": "Cancelar",
+  "ok": "OK",
+  "cannot_be_blank": "{field} no puede estar vacío.",
+  "@cannot_be_blank": {
+    "description": "Mensaje de error cuando un campo obligatorio está vacío",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Nombre"
+      }
+    }
+  },
+
+  "length_greater_than": "{field} debe tener al menos {minLength} caracteres.",
+  "@length_greater_than": {
+    "description": "Mensaje de error para el requisito de longitud mínima",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Usuario"
+      },
+      "minLength": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "enter_valid_msg": "Ingresa un {field} válido.",
+  "@enter_valid_msg": {
+    "description": "Mensaje de error genérico para entrada inválida",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Correo Electrónico"
+      }
+    }
+  },
+
+  "enter_valid_date": "Ingresa una fecha válida",
+  "date_cannot_be_blank": "La fecha no puede estar vacía",
+  "email_validator": "Ingresa un correo electrónico válido.",
+  "phone_validation": "Ingresa un número de móvil válido (10 dígitos).",
+
+  "enter_value": "Ingresa {value}.",
+  "@enter_value": {
+    "description": "Mensaje genérico para solicitar al usuario que ingrese un valor",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Nombre"
+      }
+    }
+  },
+
+  "otp": "Otp"
 }
