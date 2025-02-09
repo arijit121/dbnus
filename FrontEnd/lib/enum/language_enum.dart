@@ -4,7 +4,7 @@ import '../extension/logger_extension.dart';
 
 enum LanguageEnum {
   english('1', "English", Locale("en")),
-  malay('3', "Malay", Locale("ms"));
+  spanish('2', "Spanish", Locale("es"));
 
   final String value, name;
   final Locale locale;
