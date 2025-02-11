@@ -42,14 +42,15 @@ class ValueHandler {
     return null;
   }
 
-  bool? boolify(var value) {
-    if (value is int) {
-      return value == 1;
-    } else if (value.toString().toLowerCase() == "true" ||
-        value.toString().toLowerCase() == "false") {
-      return value.toString().toLowerCase() == "true";
-    }
+  bool? boolify(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value == 1;
+    if (value == null) return null;
 
+    String str = value.toString().toLowerCase().trim();
+    if (isTextNotEmptyOrNull(str)) {
+      return (str == "true" || str == "1");
+    }
     return null;
   }
 
