@@ -38,7 +38,7 @@ dependencies:
 
   # Utility Functions
   uuid: 4.5.1
-  intl: 0.20.1
+  intl: any
   xml2json: 6.2.6
   encrypt: 5.0.3
   web: 1.1.0
@@ -49,12 +49,13 @@ dependencies:
 
   # Features
   in_app_review: 2.0.10
-  flutter_exit_app: 1.1.4
   share_plus: 10.1.4
   open_file: 3.5.10
   flutter_local_notifications: 18.0.1
   url_launcher: 6.3.1
   back_button_interceptor: 8.0.3
+  flutter_localizations:
+    sdk: flutter
 
   # Storage
   shared_preferences: 2.3.5
@@ -126,6 +127,8 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  generate: true
 
   assets:
     - assets/design/

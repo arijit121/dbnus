@@ -1,186 +1,211 @@
+import 'package:dbnus/service/Localization/extension/localization_ext.dart';
 import 'package:intl/intl.dart';
 
 import '../extension/logger_extension.dart';
 import '../utils/text_utils.dart';
+import '../service/context_service.dart';
 
 class Validator {
-  String? textValidatorAlphanumericWithSpacialCharacters(
+  String? textValidatorAlphanumericWithSpecialCharacters(
       {String? value, required String msg}) {
+    final context = CurrentContext().context;
     String p = r'^[ A-Za-z0-9-,\.(@/-_)&]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
     if (value == null || value.isEmpty) {
-      return "$msg ${TextUtils.cannot_be_blank}";
+      return context.l10n?.cannot_be_blank(msg) ??
+          "$msg ${TextUtils.cannot_be_blank}";
     } else if (value.trim().isEmpty) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else if (value.length < 3) {
-      return "$msg ${TextUtils.length_grater_than}";
+      return context.l10n?.length_greater_than(msg, 3) ??
+          "$msg ${TextUtils.length_grater_than}";
     } else if (!validate) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else {
       return null;
     }
   }
 
   String? textValidatorAlphanumeric({String? value, required String msg}) {
+    final context = CurrentContext().context;
     String p = r'^[ A-Za-z0-9]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
-    if (value == null || value.isEmpty) {
-      return "$msg ${TextUtils.cannot_be_blank}";
-    } else if (value[0] == " ") {
-      return "$msg ${TextUtils.cannot_be_blank}";
+    if (value == null || value.isEmpty || value[0] == " ") {
+      return context.l10n?.cannot_be_blank(msg) ??
+          "$msg ${TextUtils.cannot_be_blank}";
     } else if (value.length < 3) {
-      return "$msg ${TextUtils.length_grater_than}";
+      return context.l10n?.length_greater_than(msg, 3) ??
+          "$msg ${TextUtils.length_grater_than}";
     } else if (!validate) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else {
       return null;
     }
   }
 
   String? onlyNameValidator({String? value, required String msg}) {
+    final context = CurrentContext().context;
     String p = r'^[ A-Za-z.]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
     if (value == null || value.isEmpty) {
-      return "$msg ${TextUtils.cannot_be_blank}";
+      return context.l10n?.cannot_be_blank(msg) ??
+          "$msg ${TextUtils.cannot_be_blank}";
     } else if (value.trim().isEmpty) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else if (value.length < 3) {
-      return "$msg ${TextUtils.length_grater_than}";
+      return context.l10n?.length_greater_than(msg, 3) ??
+          "$msg ${TextUtils.length_grater_than}";
     } else if (!validate) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else {
       return null;
     }
   }
 
   String? onlyTextValidator({String? value, required String msg}) {
+    final context = CurrentContext().context;
     String p = r'^[ A-Za-z]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
     if (value == null || value.isEmpty) {
-      return "$msg ${TextUtils.cannot_be_blank}";
+      return context.l10n?.cannot_be_blank(msg) ??
+          "$msg ${TextUtils.cannot_be_blank}";
     } else if (value.trim().isEmpty) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else if (value.length < 3) {
-      return "$msg ${TextUtils.length_grater_than}";
+      return context.l10n?.length_greater_than(msg, 3) ??
+          "$msg ${TextUtils.length_grater_than}";
     } else if (!validate) {
-      return "${TextUtils.enter_valid_msg} $msg .";
+      return context.l10n?.enter_valid_msg(msg) ??
+          "${TextUtils.enter_valid_msg} $msg .";
     } else {
       return null;
     }
   }
 
   String? pinCodeValidator(String? value) {
+    final context = CurrentContext().context;
     String p = r'^[1-9][0-9]{5}$';
     RegExp regExp = RegExp(p);
-
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
     if (value == null || value.isEmpty) {
-      return "${TextUtils.pinCode} ${TextUtils.cannot_be_blank}";
+      return context.l10n?.cannot_be_blank(TextUtils.pinCode) ??
+          "${TextUtils.pinCode} ${TextUtils.cannot_be_blank}";
     } else if (value[0] == " ") {
-      return "${TextUtils.enter_valid_msg} ${TextUtils.pinCode} .";
+      return context.l10n?.enter_valid_msg(TextUtils.pinCode) ??
+          "${TextUtils.enter_valid_msg} ${TextUtils.pinCode} .";
     } else if (value.length != 6 || !validate) {
-      return "${TextUtils.enter_valid_msg} ${TextUtils.pinCode} .";
+      return context.l10n?.enter_valid_msg(TextUtils.pinCode) ??
+          "${TextUtils.enter_valid_msg} ${TextUtils.pinCode} .";
     } else {
       return null;
     }
   }
 
   String? dobValidator({String? value}) {
+    final context = CurrentContext().context;
     try {
       if (value == null || value.isEmpty) {
-        return TextUtils.dateCannotBlank;
+        return context.l10n?.date_cannot_be_blank ?? TextUtils.dateCannotBlank;
       } else if (value.length < 10) {
-        return TextUtils.enterValidDate;
+        return context.l10n?.enter_valid_date ?? TextUtils.enterValidDate;
       } else if (value.length == 10) {
         var date = DateTime.parse(value);
         if (DateFormat("yyyy-MM-dd").format(date) != value ||
             date.difference(DateTime.now()).inDays > 0) {
-          return TextUtils.dateCannotBlank;
+          return context.l10n?.date_cannot_be_blank ??
+              TextUtils.dateCannotBlank;
         }
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
-
     return null;
   }
 
   String? emailValidator(String? value) {
+    final context = CurrentContext().context;
     String p =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        r'^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value?.trim() ?? "");
     if (!validate) {
-      return TextUtils.emailValidator;
+      return context.l10n?.email_validator ?? TextUtils.emailValidator;
     } else {
       return null;
     }
   }
 
   String? phoneNumberValidator(String? value) {
+    final context = CurrentContext().context;
     String p = r'^[0-9]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
-    // return regExp.hasMatch(em);
 
     if (value == null || value.isEmpty) {
-      return TextUtils.phoneValidation;
+      return context.l10n?.phone_validation ?? TextUtils.phoneValidation;
     } else if (value[0] == " " || !validate) {
-      return TextUtils.phoneValidation;
+      return context.l10n?.phone_validation ?? TextUtils.phoneValidation;
     } else if (int.parse(value[0]) < 5) {
-      return TextUtils.phoneValidation;
+      return context.l10n?.phone_validation ?? TextUtils.phoneValidation;
     } else if (value.length != 10) {
-      return TextUtils.phoneValidation;
+      return context.l10n?.phone_validation ?? TextUtils.phoneValidation;
     } else {
       return null;
     }
   }
 
   String? otpValidator(String? value) {
+    final context = CurrentContext().context;
     String p = r'^[0-9]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
 
     if (value == null || value.isEmpty) {
-      return "Enter ${TextUtils.otp}";
+      return context.l10n?.enter_value(context.l10n?.otp ?? "") ??
+          "Enter ${TextUtils.otp}";
     } else if (value.length != 5 || !validate) {
-      return "Enter Valid ${TextUtils.otp}";
+      return context.l10n?.enter_valid_msg(context.l10n?.otp ?? "") ??
+          "Enter Valid ${TextUtils.otp}";
     } else {
       return null;
     }
   }
 
-  String? numValidator(
-      {required String? value,
-      required int length,
-      required String msg,
-      bool? checkZero,
-      bool? equalLength}) {
+  String? numValidator({
+    required String? value,
+    required int length,
+    required String msg,
+    bool? checkZero,
+    bool? equalLength,
+  }) {
+    final context = CurrentContext().context;
     String p = r'^[0-9]*$';
     RegExp regExp = RegExp(p);
     bool validate = regExp.hasMatch(value ?? "");
+
     if (value == null || value.isEmpty) {
-      return "Enter $msg .";
+      return context.l10n?.enter_value(msg) ?? "Enter $msg .";
     } else if (checkZero == true && num.parse(value ?? "0") < 1) {
-      return "Enter $msg .";
+      return context.l10n?.enter_value(msg) ?? "Enter $msg .";
     } else if ((equalLength == true && value.length != length) || !validate) {
-      return "Enter Valid $msg .";
+      return context.l10n?.enter_valid_msg(msg) ?? "Enter Valid $msg .";
     } else if (value.length > length || !validate) {
-      return "Enter Valid $msg .";
+      return context.l10n?.enter_valid_msg(msg) ?? "Enter Valid $msg .";
     } else {
       return null;
     }

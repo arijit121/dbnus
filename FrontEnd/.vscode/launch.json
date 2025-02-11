@@ -21,10 +21,11 @@
             "program": "lib/main_web.dart"
         },
         {
-            "name": "FrontEnd/App",
+            "name": "FrontEnd/App (stg)",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_app.dart"
+            "program": "lib/main_app.dart",
+            "args": ["--flavor", "stg", "--target", "lib/main_stg.dart" ]
         },
         {
             "name": "FrontEnd/Web (release mode)",

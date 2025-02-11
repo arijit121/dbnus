@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -116,7 +115,7 @@ class AppUpdater {
         if (result == "Y") {
           OpenService().openUrl(uri: Uri.parse(appStoreListingURL ?? ""));
         } else if (isForceUpdate == true) {
-          FlutterExitApp.exitApp(iosForceExit: false);
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       }
     }

@@ -1,0 +1,75 @@
+{
+  "hello_world": "Hello World!",
+  "profile": "Profile",
+  "edit_profile": "Edit Profile",
+  "completed_topics": "Completed Topics",
+  "completed_lessons": "Completed Lessons",
+  "completed_quiz": "Completed Quiz",
+  "completed_games": "Completed Games",
+  "change_language": "Change Language",
+  "logout": "Logout",
+  "logout_confirmation": "Are you sure you want to logout?",
+  "serial_number": "Sl No",
+  "title": "Title",
+  "completed_at": "Completed At",
+  "name": "Name",
+  "email": "Email",
+  "phone_number": "Phone Number",
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "cannot_be_blank": "{field} can't be blank.",
+  "@cannot_be_blank": {
+    "description": "Error message when a required field is left blank",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Name"
+      }
+    }
+  },
+
+  "length_greater_than": "{field} should be greater than or equal to {minLength} characters.",
+  "@length_greater_than": {
+    "description": "Error message for minimum length requirement",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Username"
+      },
+      "minLength": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+
+  "enter_valid_msg": "Enter a valid {field}.",
+  "@enter_valid_msg": {
+    "description": "Generic error message for invalid input",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Email"
+      }
+    }
+  },
+
+  "enter_valid_date": "Enter a Valid date",
+  "date_cannot_be_blank": "Date cannot be blank",
+  "email_validator": "Enter valid Email.",
+  "phone_validation": "Enter a valid mobile no (10 digits)",
+
+  "enter_value": "Enter {value}.",
+  "@enter_value": {
+    "description": "Generic message to prompt the user to enter a value",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "Name"
+      }
+    }
+  },
+
+  "otp": "Otp"
+}
