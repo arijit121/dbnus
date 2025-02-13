@@ -25,7 +25,11 @@
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="main.dart.js" as="script">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" media="print" onload="this.onload=null;this.removeAttribute('media');">
+    <link rel="preload" href="canvaskit/canvaskit.wasm" as="fetch" type="application/wasm">
+
+    <!-- Preconnect for Faster External Requests -->
+    <link rel="preconnect" href="https://www.gstatic.com">
 
     <!--script-->
     <!--Lightweight version of the jQuery library, used to simplify HTML manipulation, event handling, and animations in web development, with reduced file size for faster loading.-->
@@ -39,7 +43,7 @@
 
 <body>
     <script>
-        { { flutter_service_worker_version } }
+        {{flutter_service_worker_version}}
     </script>
     <div id="web-initial-loader" class="container">
         <section class="content" id="desktopContent">
