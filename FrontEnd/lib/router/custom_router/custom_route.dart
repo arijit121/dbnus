@@ -13,8 +13,13 @@ import '../router_name.dart';
 import 'web/custom_router_web.dart';
 
 class CustomRoute {
-  /// Manual back always return [1] as value in [App].
-  void back() {
+  /// Manually navigating back always returns `[1]` as the default value in `[App]`,
+  /// ensuring a consistent behavior across the application.
+  /// If a `result` is provided, it will be used instead of `[1]` on non-web platforms.
+  void back([dynamic result]) {
+    assert(!kIsWeb || result == null,
+        'Passing a result is not allowed on the web.');
+
     if (kIsWeb) {
       bool canBack = CustomRouterWeb().canBack();
       canBack
@@ -22,7 +27,7 @@ class CustomRoute {
           : clearAndNavigate(RouteName.initialView);
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop(1);
+        RouterManager.getInstance.router.pop(result ?? 1);
       } else {
         clearAndNavigate(RouteName.initialView);
       }
@@ -105,12 +110,23 @@ class CustomRoute {
     return null;
   }
 
-  void goto({required String routeName}) {
-    BuildContext context = CurrentContext().context;
+  Future<void> navigateNamed(
+    String name, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) async {
+    GoRouter router = RouterManager.getInstance.router;
     if (kIsWeb) {
-      context.goNamed(routeName);
+      router.goNamed(name,
+          pathParameters: pathParameters,
+          queryParameters: queryParameters,
+          extra: extra);
     } else {
-      context.pushNamed(routeName);
+      await router.pushNamed(name,
+          pathParameters: pathParameters,
+          queryParameters: queryParameters,
+          extra: extra);
     }
   }
 }
