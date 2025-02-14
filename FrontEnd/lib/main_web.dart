@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'const/theme_const.dart';
 import 'extension/logger_extension.dart';
@@ -15,6 +14,7 @@ import 'firebase_options.dart';
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart';
 import 'service/Localization/bloc/localization_bloc.dart';
+import 'service/Localization/l10n/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
 import 'service/crash/utils/crash_utils.dart';
 import 'service/firebase_service.dart';
