@@ -25,7 +25,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="main.dart.js" as="script">
-    <link rel="stylesheet" href="styles.css" media="print" onload="this.onload=null;this.removeAttribute('media');">
+    <link rel="stylesheet" href="style/styles.css" media="print" onload="this.onload=null;this.removeAttribute('media');">
     <link rel="preload" href="canvaskit/canvaskit.wasm" as="fetch" type="application/wasm">
 
     <!-- Preconnect for Faster External Requests -->
@@ -45,39 +45,8 @@
     <script>
         {{flutter_service_worker_version}}
     </script>
-    <div id="web-initial-loader" class="container">
-        <section class="content" id="desktopContent">
-            <div class="row">
-                <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: calc(100vh - 20px);"></div>
-                <div class="size-box" style="--custom-width: 10px;"></div>
-                <div class="column">
-                    <div class="skeleton-loader" style="--custom-width: calc(100vw - 200px); --custom-height: 80px;">
-                    </div>
-                    <div class="size-box" style="--custom-height: 10px;"></div>
-                    <div class="skeleton-loader" style="--custom-width: 100px; --custom-height: 100px;"></div>
-                    <div class="size-box" style="--custom-height: 10px;"></div>
-                    <div class="skeleton-loader" style="--custom-width: 100px; --custom-height: 100px;"></div>
-                </div>
-
-            </div>
-        </section>
-
-        <section class="content" id="mobileContent">
-            <div class="column">
-                <div class="skeleton-loader" style="--custom-height: 80px;"></div>
-                <div class="size-box" style="--custom-height: 20px;"></div>
-                <div class="row">
-                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
-                    <div class="size-box" style="--custom-width: 10px;"></div>
-                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
-                    <div class="size-box" style="--custom-width: 10px;"></div>
-                    <div class="skeleton-loader" style="--custom-width: 200px; --custom-height: 200px;"></div>
-                </div>
-                <div class="size-box" style="--custom-height: 40px;"></div>
-                <div class="skeleton-loader" style="--custom-height: 200px;"></div>
-            </div>
-        </section>
-    </div>
+    <div id="web-initial-loader" style="display: none;"></div>
+    <script src="js/loader.js"></script>
     <script src="flutter_bootstrap.js" async>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
