@@ -1,7 +1,7 @@
 import 'package:dbnus/extension/logger_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as web;
 
 import '../../../service/context_service.dart';
 import '../../router_manager.dart';
@@ -38,11 +38,11 @@ class CustomRouterWeb {
           .toString();
     }
 
-    html.window.open(url, "_self");
+    web.window.open(url, "_self");
   }
 
   void reDirect(String url) {
-    html.window.location.href = url;
+    web.window.location.href = url;
   }
 
   /// Pop and remove the state from stack
@@ -58,21 +58,21 @@ class CustomRouterWeb {
   ///
   ///
   void back() {
-    html.window.history.go(-1);
+    web.window.history.go(-1);
   }
 
   /// Number of Html Back
   ///
   ///
   void numBack(int index) {
-    html.window.history.go(-index);
+    web.window.history.go(-index);
   }
 
   /// Html SecBack
   ///
   ///
   void secBack() {
-    html.window.history.go(-2);
+    web.window.history.go(-2);
   }
 
   bool canBack() {
@@ -86,13 +86,13 @@ class CustomRouterWeb {
 
   int historyIndex() {
     int index = 0;
-    try {
-      index = html.window.history.state["serialCount"];
-    } catch (e, s) {
-      AppLog.e(e, stackTrace: s);
-    }
+    // try {
+    //   index = web.window.history.state["serialCount"];
+    // } catch (e, s) {
+    //   AppLog.e(e, stackTrace: s);
+    // }
     if (index == 0) {
-      index = html.window.history.length - 2;
+      index = web.window.history.length - 2;
       if (index <= 0) {
         index = 1;
       }

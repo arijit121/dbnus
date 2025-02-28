@@ -105,4 +105,8 @@ class JsProvider {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
+
+  String getUserAgent() {
+    return jsHelper.getUserAgent();
+  }
 }

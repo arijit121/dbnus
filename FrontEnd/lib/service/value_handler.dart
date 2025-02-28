@@ -4,7 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:universal_html/parsing.dart';
+// import 'package:universal_html/parsing.dart';
 
 import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
@@ -209,10 +209,11 @@ class ValueHandler {
   }
 
   String parseHtmlToText(String htmlString) {
+    return "";
     // Create a document from the HTML string
-    final document = parseHtmlDocument(htmlString);
+    // final document = parseHtmlDocument(htmlString);
     // Extract all text content
-    return document.body?.text ?? ''; // Extracts all text content from the body
+    // return document.body?.text ?? ''; // Extracts all text content from the body
   }
 
   /// *

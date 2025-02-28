@@ -1,8 +1,7 @@
 // THIS FILE WILL PREVENT COMPILE TIME ERRORS,
 // WHICH OCCURS BECAUSE OF PLATFORM DEPENDENT IMPORTS...
 
-export '../helper/js_helper_web.dart' // By default
-    if (dart.library.js) 'js_helper_web.dart'
+export '../helper/js_helper_web.dart'
     if (dart.library.io) 'js_helper_mobile.dart';
 
 /// The compiler will then say something like this:

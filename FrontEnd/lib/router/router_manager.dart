@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:universal_html/html.dart' as html;
+// import 'package:universal_html/html.dart' as html;
 
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
@@ -10,6 +10,7 @@ import '../modules/order_details/ui/order_details.dart'
     deferred as order_details;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
+import '../service/seo_handler.dart';
 import '../utils/text_utils.dart';
 import '../widget/error_route_widget.dart';
 import 'router_name.dart';
@@ -197,65 +198,28 @@ class RouterManager {
     ],
     errorBuilder: (context, state) => ErrorRouteWidget(),
   );
-
-
 }
 
 class SeoObserver extends NavigatorObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
-    _updateCanonicalLink();
+    SeoHandler().setCanonicalLink();
     if (route.settings.name == RouteName.initialView) {
-      _homeHooterSeo();
+      SeoHandler().homeHooterSeo();
     } else {
-      _removeFooterSeoContainer();
+      SeoHandler().removeFooterSeoContainer();
     }
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
-    _updateCanonicalLink();
+    SeoHandler().setCanonicalLink();
     if (previousRoute?.settings.name == RouteName.initialView) {
-      _homeHooterSeo();
+      SeoHandler().homeHooterSeo();
     } else {
-      _removeFooterSeoContainer();
-    }
-  }
-
-  void _updateCanonicalLink() {
-    _setCanonicalLink(html.window.location.href);
-  }
-
-  void _setCanonicalLink(String url) {
-    final head = html.document.head;
-    final existingLink = head?.querySelector('link[rel="canonical"]');
-
-    if (existingLink != null) {
-      existingLink.attributes['href'] = url;
-    } else {
-      final canonicalLink = html.Element.tag('link');
-      canonicalLink.setAttribute('rel', 'canonical');
-      canonicalLink.setAttribute('href', url);
-      head?.append(canonicalLink);
-    }
-  }
-
-  void _homeHooterSeo() {
-    final document = html.document;
-    final seoContainer = html.DivElement()..className = 'footerSeoCon';
-    seoContainer.setInnerHtml(TextUtils.footer_msg_web,
-        validator: html.NodeValidatorBuilder.common());
-    if (document.querySelector('.footerSeoCon') == null) {
-      document.body?.append(seoContainer);
-    }
-  }
-
-  void _removeFooterSeoContainer() {
-    final element = html.document.querySelector('.footerSeoCon');
-    if (element != null) {
-      element.remove();
+      SeoHandler().removeFooterSeoContainer();
     }
   }
 }

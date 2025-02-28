@@ -5,9 +5,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:universal_html/html.dart' as html;
 
 import '../data/api_client/imp/api_repo_imp.dart';
 import '../data/api_client/repo/api_repo.dart';
@@ -49,7 +47,7 @@ class AppConfig {
   }
 
   String getUserAgent() {
-    return html.window.navigator.userAgent;
+    return JsProvider().getUserAgent();
   }
 
   String? getAppType() {
@@ -139,35 +137,13 @@ class AppConfig {
   }
 
   Future<String?> getWifiIpV4() async {
-    if (kIsWeb) {
-      return await _getIpFromInternet(
-          tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
-    } else {
-      final info = NetworkInfo();
-      var wifiIP = await info.getWifiIP();
-      if (ValueHandler().isTextNotEmptyOrNull(wifiIP)) {
-        return wifiIP;
-      } else {
-        return await _getIpFromInternet(
-            tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
-      }
-    }
+    return await _getIpFromInternet(
+        tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
   }
 
   Future<String?> getWifiIpV6() async {
-    if (kIsWeb) {
-      return await _getIpFromInternet(
-          tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
-    } else {
-      final info = NetworkInfo();
-      var wifiIPv6 = await info.getWifiIPv6();
-      if (ValueHandler().isTextNotEmptyOrNull(wifiIPv6)) {
-        return wifiIPv6;
-      } else {
-        return await _getIpFromInternet(
-            tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
-      }
-    }
+    return await _getIpFromInternet(
+        tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
   }
 
   Future<String?> _getIpFromInternet(

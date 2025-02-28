@@ -57,4 +57,8 @@ class JSHelper {
       bool usePromise = false}) async {
     return null;
   }
+
+  String getUserAgent() {
+    return "";
+  }
 }

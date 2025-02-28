@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:html' as html;
 import 'dart:js' as js;
 import 'dart:js_util' as js_util;
-
+import 'package:web/web.dart' as web;
 import 'package:flutter/foundation.dart';
 
 class JSHelper {
@@ -178,5 +178,9 @@ class JSHelper {
           'Unexpected error in ${jsPath == null || !(jsPath?.isNotEmpty == true) ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
     }
     return null;
+  }
+
+  String getUserAgent() {
+    return web.window.navigator.userAgent;
   }
 }
