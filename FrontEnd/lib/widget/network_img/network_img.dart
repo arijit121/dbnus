@@ -1,5 +1,5 @@
 export 'network_img_app.dart' // By default
-    if (dart.library.js) 'network_img_web.dart'
+    if (dart.library.js_interop) 'network_img_web.dart'
     if (dart.library.io) 'network_img_app.dart';
 
 /// The compiler will then say something like this:
