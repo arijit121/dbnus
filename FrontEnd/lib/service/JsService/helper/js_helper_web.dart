@@ -1,6 +1,6 @@
 // import '../library/js_library.dart';
 import 'dart:async';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'dart:js' as js;
 import 'dart:js_util' as js_util;
 import 'package:web/web.dart' as web;

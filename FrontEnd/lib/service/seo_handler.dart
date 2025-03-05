@@ -1,5 +1,3 @@
-import 'package:web/web.dart' as web;
-
 import '../utils/text_utils.dart';
 import 'package:universal_html/html.dart' as html;
 
