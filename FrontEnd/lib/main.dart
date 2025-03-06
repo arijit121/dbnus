@@ -1,11 +1,14 @@
-// THIS FILE WILL PREVENT COMPILE TIME ERRORS,
-// WHICH OCCURS BECAUSE OF PLATFORM DEPENDENT IMPORTS...
+import 'package:flutter/foundation.dart';
 
-export 'main_web.dart'
-    if (dart.library.io) 'main_app.dart'
-    if (dart.library.js_interop) 'main_web.dart';
+import 'main_app.dart' deferred as main_app;
+import 'main_web.dart' deferred as main_web;
 
-/// The compiler will then say something like this:
-/// Let’s export 'main_app.dart' By default,
-/// but if the "dart.library.js" is available, export 'main_web.dart'.
-/// But hey, if "dart.library.io" is available, export 'main_app.dart'!
+Future<void> main() async {
+    if (kIsWeb) {
+        await main_web.loadLibrary();
+        await main_web.main();
+    } else {
+        await main_app.loadLibrary();
+        await main_app.main();
+    }
+}
