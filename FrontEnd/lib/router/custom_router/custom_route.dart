@@ -16,7 +16,7 @@ class CustomRoute {
   /// Manually navigating back always returns `[1]` as the default value in `[App]`,
   /// ensuring a consistent behavior across the application.
   /// If a `result` is provided, it will be used instead of `[1]` on non-web platforms.
-  void back([dynamic result]) {
+  void back<T extends Object?>([T? result]) {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
 
