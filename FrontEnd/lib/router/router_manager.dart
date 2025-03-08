@@ -7,12 +7,12 @@ import 'package:go_router/go_router.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
-    deferred as order_details;
+deferred as order_details;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../service/seo_handler.dart';
 import '../utils/text_utils.dart';
-import '../widget/error_route_widget.dart';
+import '../widget/error_route_widget.dart' deferred as error_route_widget;
 import 'router_name.dart';
 
 class RouterManager {
@@ -26,7 +26,7 @@ class RouterManager {
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  FirebaseAnalyticsObserver(analytics: analytics);
 
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
@@ -51,7 +51,7 @@ class RouterManager {
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
             index: LandingUtils.listNavigation.indexWhere(
-                (element) => element.action == RouteName.leaderBoard),
+                    (element) => element.action == RouteName.leaderBoard),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -110,7 +110,7 @@ class RouterManager {
               orderId: state.pathParameters["order_id"] ?? "",
             );
           } else {
-            return ErrorRouteWidget();
+            return error_route_widget.ErrorRouteWidget();
           }
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -141,7 +141,7 @@ class RouterManager {
               errorDetails: state.extra as Map<String, dynamic>,
             );
           } else {
-            return ErrorRouteWidget();
+            return error_route_widget.ErrorRouteWidget();
           }
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -196,7 +196,11 @@ class RouterManager {
       //   },
       // ),
     ],
-    errorBuilder: (context, state) => ErrorRouteWidget(),
+    errorBuilder: (context, state) => error_route_widget.ErrorRouteWidget(),
+    redirect: (BuildContext context, GoRouterState state) async {
+      await error_route_widget.loadLibrary();
+      return null;
+    },
   );
 }
 
