@@ -4,9 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/model/razorpay_merchant_details.dart';
 import '../../extension/logger_extension.dart';
-import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart';
+import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
+deferred as rayzorpay;
+import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../service/context_service.dart';
-import '../../service/crash/ui/crash_ui.dart';
 import '../../widget/error_route_widget.dart';
 import '../router_manager.dart';
 import '../router_name.dart';
@@ -64,34 +65,37 @@ class CustomRoute {
     }
   }
 
-  MaterialPageRoute _getRoute({required String name, dynamic arguments}) {
+  Future<MaterialPageRoute> _getRoute(
+      {required String name, dynamic arguments}) async {
     switch (name) {
       case RouteName.rayzorpay:
+        await rayzorpay.loadLibrary();
         return MaterialPageRoute(builder: (_) {
           if (arguments is RazorpayMerchantDetails) {
-            return RayzorPay(razorpayMerchantDetails: arguments);
+            return rayzorpay.RayzorPay(razorpayMerchantDetails: arguments);
           } else {
             return ErrorRouteWidget();
           }
         });
+
       case RouteName.error:
+        await crash_ui.loadLibrary();
         return MaterialPageRoute(builder: (_) {
           if (arguments is Map<String, dynamic>) {
-            return CrashUi(errorDetails: arguments);
+            return crash_ui.CrashUi(errorDetails: arguments);
           } else {
             return ErrorRouteWidget();
           }
         });
+
       default:
-        return MaterialPageRoute(builder: (_) {
-          return ErrorRouteWidget();
-        });
+        return MaterialPageRoute(builder: (_) => ErrorRouteWidget());
     }
   }
 
-  Future pushNamed({required String name, dynamic arguments}) {
-    return Navigator.push(
-        CurrentContext().context, _getRoute(name: name, arguments: arguments));
+  Future<void> pushNamed({required String name, dynamic arguments}) async {
+    final route = await _getRoute(name: name, arguments: arguments);
+    await Navigator.push(CurrentContext().context, route);
   }
 
   String? currentRoute() {
@@ -101,7 +105,7 @@ class CustomRoute {
       final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
           ? lastMatch.matches
           : RouterManager
-              .getInstance.router.routerDelegate.currentConfiguration;
+          .getInstance.router.routerDelegate.currentConfiguration;
       final String location = matchList.uri.toString();
       return location;
     } catch (e, stacktrace) {
@@ -110,8 +114,7 @@ class CustomRoute {
     return null;
   }
 
-  Future<void> navigateNamed(
-    String name, {
+  Future<void> navigateNamed(String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
