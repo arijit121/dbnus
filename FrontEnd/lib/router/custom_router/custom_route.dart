@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../data/model/razorpay_merchant_details.dart';
 import '../../extension/logger_extension.dart';
 import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
-deferred as rayzorpay;
+    deferred as rayzorpay;
 import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../service/context_service.dart';
-import '../../widget/error_route_widget.dart';
+import '../../widget/error_route_widget.dart' deferred as error_route_widget;
 import '../router_manager.dart';
 import '../router_name.dart';
 import 'web/custom_router_web.dart';
@@ -67,6 +67,7 @@ class CustomRoute {
 
   Future<MaterialPageRoute> _getRoute(
       {required String name, dynamic arguments}) async {
+    await error_route_widget.loadLibrary();
     switch (name) {
       case RouteName.rayzorpay:
         await rayzorpay.loadLibrary();
@@ -74,7 +75,7 @@ class CustomRoute {
           if (arguments is RazorpayMerchantDetails) {
             return rayzorpay.RayzorPay(razorpayMerchantDetails: arguments);
           } else {
-            return ErrorRouteWidget();
+            return error_route_widget.ErrorRouteWidget();
           }
         });
 
@@ -84,12 +85,13 @@ class CustomRoute {
           if (arguments is Map<String, dynamic>) {
             return crash_ui.CrashUi(errorDetails: arguments);
           } else {
-            return ErrorRouteWidget();
+            return error_route_widget.ErrorRouteWidget();
           }
         });
 
       default:
-        return MaterialPageRoute(builder: (_) => ErrorRouteWidget());
+        return MaterialPageRoute(
+            builder: (_) => error_route_widget.ErrorRouteWidget());
     }
   }
 
@@ -105,7 +107,7 @@ class CustomRoute {
       final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
           ? lastMatch.matches
           : RouterManager
-          .getInstance.router.routerDelegate.currentConfiguration;
+              .getInstance.router.routerDelegate.currentConfiguration;
       final String location = matchList.uri.toString();
       return location;
     } catch (e, stacktrace) {
@@ -114,7 +116,8 @@ class CustomRoute {
     return null;
   }
 
-  Future<void> navigateNamed(String name, {
+  Future<void> navigateNamed(
+    String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
