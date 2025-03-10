@@ -67,10 +67,10 @@ class CustomRoute {
 
   Future<MaterialPageRoute> _getRoute(
       {required String name, dynamic arguments}) async {
-    await error_route_widget.loadLibrary();
     switch (name) {
       case RouteName.rayzorpay:
-        await rayzorpay.loadLibrary();
+        await Future.wait(
+            [rayzorpay.loadLibrary(), error_route_widget.loadLibrary()]);
         return MaterialPageRoute(builder: (_) {
           if (arguments is RazorpayMerchantDetails) {
             return rayzorpay.RayzorPay(razorpayMerchantDetails: arguments);
@@ -80,7 +80,8 @@ class CustomRoute {
         });
 
       case RouteName.error:
-        await crash_ui.loadLibrary();
+        await Future.wait(
+            [crash_ui.loadLibrary(), error_route_widget.loadLibrary()]);
         return MaterialPageRoute(builder: (_) {
           if (arguments is Map<String, dynamic>) {
             return crash_ui.CrashUi(errorDetails: arguments);
@@ -90,12 +91,13 @@ class CustomRoute {
         });
 
       default:
+        await error_route_widget.loadLibrary();
         return MaterialPageRoute(
             builder: (_) => error_route_widget.ErrorRouteWidget());
     }
   }
 
-  Future<void> pushNamed({required String name, dynamic arguments}) async {
+  Future pushNamed({required String name, dynamic arguments}) async {
     final route = await _getRoute(name: name, arguments: arguments);
     await Navigator.push(CurrentContext().context, route);
   }
