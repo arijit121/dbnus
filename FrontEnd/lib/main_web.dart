@@ -16,7 +16,7 @@ import 'router/url_strategy/url_strategy.dart';
 import 'service/Localization/bloc/localization_bloc.dart';
 import 'service/Localization/l10n/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
-import 'service/crash/utils/crash_utils.dart' deferred as crash_utils;
+import 'service/crash/utils/crash_utils.dart';
 import 'service/firebase_service.dart';
 import 'storage/localCart/bloc/local_cart_bloc.dart';
 import 'utils/text_utils.dart';
@@ -33,11 +33,10 @@ Future<void> main() async {
   await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // CrashUtils().setValue(value: false);
+  CrashUtils().setValue(value: false);
   FlutterError.onError = (errorDetails) async {
     if (errorDetails.library?.contains("widgets library") == true) {
-      await crash_utils.loadLibrary();
-      crash_utils.CrashUtils().navigateToCrashPage({
+      CrashUtils().navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
