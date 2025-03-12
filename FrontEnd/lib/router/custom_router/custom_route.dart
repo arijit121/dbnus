@@ -99,7 +99,7 @@ class CustomRoute {
 
   Future pushNamed({required String name, dynamic arguments}) async {
     final route = await _getRoute(name: name, arguments: arguments);
-    await Navigator.push(CurrentContext().context, route);
+    return await Navigator.push(CurrentContext().context, route);
   }
 
   String? currentRoute() {
