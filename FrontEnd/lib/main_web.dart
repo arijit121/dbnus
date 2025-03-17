@@ -16,8 +16,8 @@ import 'router/url_strategy/url_strategy.dart';
 import 'service/Localization/bloc/localization_bloc.dart';
 import 'service/Localization/l10n/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
-import 'service/crash/utils/crash_utils.dart';
-import 'service/firebase_service.dart';
+import 'service/crash/utils/crash_utils.dart' deferred as crash_utils;
+import 'service/firebase_service.dart' deferred as firebase_service;
 import 'storage/localCart/bloc/local_cart_bloc.dart';
 import 'utils/text_utils.dart';
 
@@ -33,10 +33,12 @@ Future<void> main() async {
   await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  CrashUtils().setValue(value: false);
+  await crash_utils.loadLibrary();
+  crash_utils.CrashUtils().setValue(value: false);
   FlutterError.onError = (errorDetails) async {
     if (errorDetails.library?.contains("widgets library") == true) {
-      CrashUtils().navigateToCrashPage({
+      await crash_utils.loadLibrary();
+      crash_utils.CrashUtils().navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
@@ -54,7 +56,6 @@ Future<void> main() async {
   };
 
   FirebaseMessaging.instance.setAutoInitEnabled(false);
-  await FirebaseService().setAnalyticsCollectionEnabled();
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
@@ -73,9 +74,10 @@ class _MyWebAppState extends State<MyWebApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await FirebaseService().generateToken();
+      await firebase_service.loadLibrary();
+      await firebase_service.FirebaseService().setAnalyticsCollectionEnabled();
+      await firebase_service.FirebaseService().generateToken();
     });
-
     super.initState();
   }
 
