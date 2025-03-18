@@ -1,5 +1,5 @@
-import 'package:in_app_review/in_app_review.dart';
-import 'package:open_file/open_file.dart';
+import 'package:in_app_review/in_app_review.dart' deferred as in_app_review;
+import 'package:open_file/open_file.dart' deferred as open_file;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,7 +31,7 @@ class OpenService {
   Future<void> openUrl(
       {required Uri uri, LaunchMode mode = LaunchMode.platformDefault}) async {
     try {
-      AppLog.i("$uri", tag: "OpenUrl");
+      AppLog.i("OpenUrl==> $uri");
       await launchUrl(uri, mode: mode);
     } catch (e) {
       AppLog.e('Could not launch $uri', error: e);
@@ -40,7 +40,8 @@ class OpenService {
 
   Future<void> requestReview() async {
     try {
-      final InAppReview inAppReview = InAppReview.instance;
+      await in_app_review.loadLibrary();
+      final inAppReview = in_app_review.InAppReview.instance;
       if (await inAppReview.isAvailable()) {
         await inAppReview.requestReview();
       }
@@ -50,10 +51,11 @@ class OpenService {
   }
 
   Future<void> openFile(String filePath) async {
+    await open_file.loadLibrary();
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
     await Permission.accessMediaLocation.request();
-    await OpenFile.open(filePath);
+    await open_file.OpenFile.open(filePath);
   }
 
   Future<ShareResultStatus> share({required String text}) async {

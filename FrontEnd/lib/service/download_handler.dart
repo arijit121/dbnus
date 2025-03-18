@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import '../config/app_config.dart';
 import '../extension/logger_extension.dart';
 import '../utils/pop_up_items.dart';
-import 'JsService/provider/js_provider.dart';
 import 'open_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:universal_html/html.dart' as html;
