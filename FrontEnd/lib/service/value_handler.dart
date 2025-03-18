@@ -1,24 +1,51 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:crypto/crypto.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:crypto/crypto.dart' deferred as crypto;
+import 'package:encrypt/encrypt.dart' deferred as encrypt;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
 import '../service/context_service.dart';
 
 class ValueHandler {
-  String? stringify(var value) {
-    if (value == null || value.toString().toLowerCase() == "null") {
-      return null;
-    } else {
-      return "$value";
+  int generateTimestamp() {
+    final now = DateTime.now();
+    return now.millisecondsSinceEpoch;
+  }
+
+  DateTime? dateTimeFromTimestamp({required int? timestamp}) {
+    if (ValueHandler().isNonZeroNumericValue(timestamp)) {
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp! * 1000);
+      return date;
     }
+    return null;
+  }
+
+  String? stringify(var value) {
+    try {
+      if (value == null || value.toString().toLowerCase() == "null") {
+        return null;
+      } else {
+        return "$value";
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 
   int? intify(var value) {
     try {
-      return numify(value.toString().replaceAll(" ", ""))?.toInt();
+      if (value == null ||
+          value.toString().toLowerCase() == "null" ||
+          value.toString().trim().isEmpty) {
+        return null;
+      } else {
+        return num.parse("$value").toInt();
+      }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -32,7 +59,7 @@ class ValueHandler {
           value.toString().trim().isEmpty) {
         return null;
       } else {
-        return num.parse(value.toString().replaceAll(" ", ""));
+        return num.parse("$value");
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -52,16 +79,9 @@ class ValueHandler {
     return null;
   }
 
-  String? dateTimeFormatter({required DateTime? dateTime, String? newPattern}) {
-    try {
-      if (dateTime != null) {
-        String date = DateFormat(newPattern ?? "yyyy-MM-dd").format(dateTime);
-        return date;
-      }
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-    }
-    return null;
+  String dateTimeFormatter({required DateTime dateTime, String? newPattern}) {
+    String date = DateFormat(newPattern ?? "yyyy-MM-dd").format(dateTime);
+    return date;
   }
 
   /// Fri, 12 may 2023
@@ -78,7 +98,57 @@ class ValueHandler {
     return null;
   }
 
-  Duration dateTimeCompare({String? dateTime, DateTime? compareWithDate}) {
+  ///  12 may 2023
+  String? dateTimeEEEDMMMYYYY2({String? dateTime}) {
+    try {
+      if (dateTime?.isNotEmpty == true) {
+        String date =
+            DateFormat("dd MMM yyyy").format(DateTime.parse(dateTime!));
+        return date;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  /// 9th Sept, 2021
+  String? dateTimeDthMMMYYYY({String? dateTime}) {
+    try {
+      if (dateTime?.isNotEmpty == true) {
+        DateTime tempDateTime = DateTime.parse(dateTime!);
+        String date = DateFormat("MMMM, yyyy").format(tempDateTime);
+        return "${tempDateTime.day}${_getDayOfMonthSuffix(tempDateTime.day)} $date";
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  String _getDayOfMonthSuffix(int dayNum) {
+    if (!(dayNum >= 1 && dayNum <= 31)) {
+      throw Exception('Invalid day of month');
+    }
+
+    if (dayNum >= 11 && dayNum <= 13) {
+      return 'th';
+    }
+
+    switch (dayNum % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  Duration dateTimeCompare(
+      {required String? dateTime, DateTime? compareWithDate}) {
     try {
       if (dateTime?.isNotEmpty == true) {
         DateTime date = DateTime.parse(dateTime!);
@@ -117,11 +187,12 @@ class ValueHandler {
     return null;
   }
 
-  String skey = "GenuSK#08#@93@*(-**GenuSK@9.#@92@";
+  String skey = "SSSK#08#@93@*(-**SSSK@9.#@92@";
 
-  String? customEncryption({required String value}) {
+  Future<String?> customEncryption({required String value}) async {
     try {
       String encodedKey = base64Url.encode(utf8.encode(skey)).substring(0, 32);
+      await encrypt.loadLibrary();
       final key = encrypt.Key.fromUtf8(encodedKey);
       final iv = encrypt.IV.fromUtf8(skey.substring(0, 16));
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -133,9 +204,10 @@ class ValueHandler {
     return null;
   }
 
-  String? customDecryption({required String encodedValue}) {
+  Future<String?> customDecryption({required String encodedValue}) async {
     try {
       String encodedKey = base64Url.encode(utf8.encode(skey)).substring(0, 32);
+      await encrypt.loadLibrary();
       final key = encrypt.Key.fromUtf8(encodedKey);
       final iv = encrypt.IV.fromUtf8(skey.substring(0, 16));
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
@@ -161,23 +233,35 @@ class ValueHandler {
   }
 
   bool isTextNotEmptyOrNull(dynamic src) {
-    String value = src.toString().replaceAll(" ", "");
-    var result = src != null &&
-        value.toString().isNotEmpty &&
-        value != "null" &&
-        value != "Null" &&
-        value != "";
-    return result;
+    var value = src != null &&
+        src.toString().isNotEmpty &&
+        src != "null" &&
+        src != "Null" &&
+        src != "NULL" &&
+        src != "";
+    return value;
   }
 
-  bool isNonZeroNumericValue(dynamic src) {
-    try {
-      String value = src.toString();
-      if (isTextNotEmptyOrNull(value)) {
-        return num.parse(value) > 0;
+  setNullTextToZero(src) {
+    return isTextNotEmptyOrNull(src) ? src : 0;
+  }
+
+  String setNullTextToBlank(final String input) {
+    return !isTextNotEmptyOrNull(input) ? "" : input;
+  }
+
+  String? setNullBlankTextToNullAbleString(final String? input) {
+    return !isTextNotEmptyOrNull(input) ? null : input;
+  }
+
+  bool isNonZeroNumericValue(dynamic txt) {
+    String? res = stringify(txt);
+    if (isTextNotEmptyOrNull(res)) {
+      try {
+        return num.parse(res!) > 0;
+      } catch (e) {
+        return false;
       }
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return false;
   }
@@ -187,18 +271,62 @@ class ValueHandler {
     return double.parse(temp);
   }
 
+  String stringToBase64({required String value}) {
+    return base64Encode(utf8.encode(value));
+  }
+
+  String base64ToString({required String encoded}) {
+    return utf8.decode(base64Decode(encoded));
+  }
+
   String uriEncodeForm({required Map<String, dynamic> body}) {
     List parts = [];
     body.forEach((key, value) {
-      parts.add('${Uri.encodeQueryComponent(key)}='
-          '${Uri.encodeQueryComponent(value ?? "")}');
+      parts.add('$key=${value ?? ""}');
     });
     String formData = parts.join('&');
     return formData;
   }
 
-  String? setNullBlankTextToNullAbleString(final String? input) {
-    return !isTextNotEmptyOrNull(input) ? null : input;
+  Future<Map<String, String>> httpPost(
+      {required String accessToken,
+      required String postXml,
+      String? tag}) async {
+    /*OLD API XML Call*/
+    await Future.wait([crypto.loadLibrary(), app_config.loadLibrary()]);
+    AppLog.i(postXml, tag: "${tag ?? ""} PostXml");
+    AppLog.i(accessToken, tag: "${tag ?? ""} AccessToken");
+
+    String base64Xml = encryptXmlRequest(postXml);
+    var rng = Random();
+    int randomHash = rng.nextInt(90000000) + 10000000;
+
+    Map<String, String> postParams = {};
+    postParams["content"] = base64Xml;
+    postParams["accessKey"] =
+        ((await app_config.AppConfig().getDeviceId()) ?? "");
+    postParams["HTTP_SIGNATURE"] =
+            '${crypto.Hmac(crypto.md5, utf8.encode(accessToken)).convert(utf8.encode("$postXml$randomHash"))}'
+        // hmacDigest("$postXml$randomHash", accessToken, crypto.md5)
+        ;
+    postParams["HTTP_RANDOM_HASH"] = randomHash.toString();
+    /*to manage static access token 13-06-2018*/
+    postParams["VersionCode"] =
+        await app_config.AppConfig().getAppVersionCode();
+
+    return postParams;
+  }
+
+  String encryptXmlRequest(String input) {
+    if (input.isEmpty) return "";
+    try {
+      String urlEncodedData = Uri.encodeComponent(input);
+      List<int> data = utf8.encode(urlEncodedData);
+      return base64Encode(data);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return "";
+    }
   }
 
   bool isHtml(String text) {
@@ -207,7 +335,7 @@ class ValueHandler {
   }
 
   String parseHtmlToText(String htmlString) {
-      return htmlString.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+    return htmlString.replaceAll(RegExp(r'<[^>]*>'), '').trim();
   }
 
   /// *
@@ -216,15 +344,15 @@ class ValueHandler {
   ///  msg, key , algo
   ///  return different types of hmac encryption in md5
   ///  Link: http://www.supermind.org/blog/1102/generating-hmac-md5-sha1-sha256-etc-in-java
-  String hmacDigest(String msg, String keyString, Hash algo) {
-    var key = utf8.encode(keyString);
-    var bytes = utf8.encode(msg);
-
-    var hmacSha256 = Hmac(algo, key);
-    var digest = hmacSha256.convert(bytes);
-
-    return '$digest';
-  }
+  // String hmacDigest(String msg, String keyString, Hash algo) {
+  //   var key = utf8.encode(keyString);
+  //   var bytes = utf8.encode(msg);
+  //
+  //   var hmacSha256 = Hmac(algo, key);
+  //   var digest = hmacSha256.convert(bytes);
+  //
+  //   return '$digest';
+  // }
 
   String frontCapitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }
