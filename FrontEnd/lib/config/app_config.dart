@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart'
-    deferred as device_info_plus;
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
 import 'package:geolocator/geolocator.dart';
@@ -120,13 +119,11 @@ class AppConfig {
     if (kIsWeb) {
       return null;
     } else if (Platform.isAndroid) {
-      await device_info_plus.loadLibrary();
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final deviceInfo = DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.model;
     } else {
-      await device_info_plus.loadLibrary();
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final deviceInfo = DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
       return iosInfo.utsname.machine;
@@ -137,13 +134,11 @@ class AppConfig {
     if (kIsWeb) {
       return null;
     } else if (Platform.isAndroid) {
-      await device_info_plus.loadLibrary();
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final deviceInfo = DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.version.release;
     } else {
-      await device_info_plus.loadLibrary();
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final deviceInfo = DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
       return iosInfo.systemVersion;
