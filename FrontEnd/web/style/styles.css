@@ -51,3 +51,24 @@
         display: none; /* Hide mobile content on desktop */
     }
 }
+
+#web-initial-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -9999; /* Keep it lower the document but under flutter-view */
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#web-initial-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

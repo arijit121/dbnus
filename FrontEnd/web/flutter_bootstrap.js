@@ -25,7 +25,7 @@ _flutter.loader.load({
         await appRunner.runApp();
 
         // Add a delay using the addDelay function.
-        await addDelay(5000);
+        await addDelay(10000);
 
         if (web_initial_loader) {
             web_initial_loader.remove();
