@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import '../data/model/user_model.dart';
 import '../extension/logger_extension.dart';
-import 'local_preferences.dart';
+import 'local_preferences.dart' deferred as local_preferences;
 
 class UserPreference {
   Future<bool?> isLogin() async {
     try {
-      String? userVal = await LocalPreferences()
-          .getString(key: LocalPreferences.userDetailsKey);
+      await local_preferences.loadLibrary();
+      String? userVal = await local_preferences.LocalPreferences()
+          .getString(key: local_preferences.LocalPreferences.userDetailsKey);
       if (userVal != null) {
         Map<String, dynamic> userJson = json.decode(userVal);
         UserModel userModel = UserModel.fromJson(userJson);
@@ -22,8 +23,9 @@ class UserPreference {
 
   Future<UserModel?> getData() async {
     try {
-      String? userVal = await LocalPreferences()
-          .getString(key: LocalPreferences.userDetailsKey);
+      await local_preferences.loadLibrary();
+      String? userVal = await local_preferences.LocalPreferences()
+          .getString(key: local_preferences.LocalPreferences.userDetailsKey);
       if (userVal != null) {
         Map<String, dynamic> userJson = json.decode(userVal);
         UserModel userModel = UserModel.fromJson(userJson);
@@ -37,8 +39,9 @@ class UserPreference {
 
   Future<void> saveData({required UserModel userModel}) async {
     try {
-      await LocalPreferences().setString(
-          key: LocalPreferences.userDetailsKey,
+      await local_preferences.loadLibrary();
+      await local_preferences.LocalPreferences().setString(
+          key: local_preferences.LocalPreferences.userDetailsKey,
           value: json.encode(userModel.toJson()));
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -46,7 +49,8 @@ class UserPreference {
   }
 
   Future<bool> clearData() async {
-    return await LocalPreferences()
-        .clearKey(key: LocalPreferences.userDetailsKey);
+    await local_preferences.loadLibrary();
+    return await local_preferences.LocalPreferences()
+        .clearKey(key: local_preferences.LocalPreferences.userDetailsKey);
   }
 }

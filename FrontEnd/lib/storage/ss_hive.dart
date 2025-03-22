@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' deferred as path_provider;
 
-import '../service/value_handler.dart';
-import 'local_preferences.dart';
+import '../service/value_handler.dart' deferred as value_handler;
+import 'local_preferences.dart' deferred as local_preferences;
 
 ///How to use Hive Collection:-<br />
 ///<br />
@@ -39,8 +39,14 @@ class SsHive {
   ///BoxCollection collection = [await SsHive.getHiveCollection()];<br />
   static Future<BoxCollection> getHiveCollection() async {
     List<int> key = await _getKey();
-    String storePath =
-        kIsWeb ? "./" : "${(await getApplicationDocumentsDirectory()).path}/hive_box";
+    String storePath;
+    if (kIsWeb) {
+      storePath = "./";
+    } else {
+      await path_provider.loadLibrary();
+      storePath =
+          "${(await path_provider.getApplicationDocumentsDirectory()).path}/hive_box";
+    }
     BoxCollection collection = await BoxCollection.open(
       _collectionName,
       _boxNames,
@@ -51,15 +57,19 @@ class SsHive {
   }
 
   static Future<List<int>> _getKey() async {
-    String? encryptionKey = await LocalPreferences()
-        .getString(key: LocalPreferences.hiveEncryptionKey);
-    if (ValueHandler().isTextNotEmptyOrNull(encryptionKey)) {
+    await Future.wait(
+        [local_preferences.loadLibrary(), value_handler.loadLibrary()]);
+    final localPreferences = local_preferences.LocalPreferences();
+    String? encryptionKey = await localPreferences.getString(
+        key: local_preferences.LocalPreferences.hiveEncryptionKey);
+    if (value_handler.ValueHandler().isTextNotEmptyOrNull(encryptionKey)) {
       var key = base64Url.decode(encryptionKey ?? "");
       return key;
     } else {
       var key = Hive.generateSecureKey();
-      await LocalPreferences().setString(
-          key: LocalPreferences.hiveEncryptionKey, value: base64UrlEncode(key));
+      await localPreferences.setString(
+          key: local_preferences.LocalPreferences.hiveEncryptionKey,
+          value: base64UrlEncode(key));
       return key;
     }
   }

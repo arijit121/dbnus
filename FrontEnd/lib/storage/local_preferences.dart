@@ -1,4 +1,5 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart'
+    deferred as shared_preferences;
 
 import '../extension/logger_extension.dart';
 
@@ -13,7 +14,8 @@ class LocalPreferences {
 
   Future<void> setBool({required String key, required bool value}) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await shared_preferences.loadLibrary();
+      final prefs = await shared_preferences.SharedPreferences.getInstance();
       await prefs.setBool(key, value);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -22,7 +24,8 @@ class LocalPreferences {
 
   Future<bool?> getBool({required String key}) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await shared_preferences.loadLibrary();
+      final prefs = await shared_preferences.SharedPreferences.getInstance();
       return prefs.getBool(key);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -32,7 +35,8 @@ class LocalPreferences {
 
   Future<void> setString({required String key, required String value}) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await shared_preferences.loadLibrary();
+      final prefs = await shared_preferences.SharedPreferences.getInstance();
       await prefs.setString(key, value);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -41,7 +45,8 @@ class LocalPreferences {
 
   Future<String?> getString({required String key}) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await shared_preferences.loadLibrary();
+      final prefs = await shared_preferences.SharedPreferences.getInstance();
       return prefs.getString(key);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -50,7 +55,8 @@ class LocalPreferences {
   }
 
   Future<bool> clearKey({required String key}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await shared_preferences.loadLibrary();
+    final prefs = await shared_preferences.SharedPreferences.getInstance();
     return await prefs.remove(key);
   }
 }
