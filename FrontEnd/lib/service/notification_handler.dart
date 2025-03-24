@@ -197,13 +197,13 @@ class NotificationHandler {
         FcmNotificationModel.fromJson(massagePayload);
 
     if (Platform.isAndroid && fcmNotificationModel.title != null) {
-      showNotificationAndroid(fcmNotificationModel);
+      _showNotificationAndroid(fcmNotificationModel);
     } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-      showNotificationIos(fcmNotificationModel);
+      _showNotificationIos(fcmNotificationModel);
     }
   }
 
-  Future<void> showNotificationIos(
+  Future<void> _showNotificationIos(
       FcmNotificationModel fcmNotificationModel) async {
     final String? bigPicturePath =
         ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
@@ -255,7 +255,7 @@ class NotificationHandler {
     return r;
   }
 
-  Future<void> showNotificationAndroid(
+  Future<void> _showNotificationAndroid(
       FcmNotificationModel fcmNotificationModel) async {
     final ByteArrayAndroidBitmap? bigPicture =
         ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
