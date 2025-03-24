@@ -1,8 +1,8 @@
 // import '../library/js_library.dart';
 import 'dart:async';
-import 'package:universal_html/html.dart' as html;
-import 'dart:js' as js;
-import 'dart:js_util' as js_util;
+import 'package:universal_html/html.dart' deferred as html;
+import 'dart:js' deferred as js;
+import 'dart:js_util' deferred as js_util;
 import 'package:web/web.dart' as web;
 import 'package:flutter/foundation.dart';
 
@@ -103,6 +103,8 @@ class JSHelper {
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
     try {
+      await Future.wait(
+          [html.loadLibrary(), js.loadLibrary(), js_util.loadLibrary()]);
       if ((jsPath == null || jsPath.isEmpty) &&
           (jsFunctionName == null || jsFunctionName.isEmpty)) {
         throw Exception(

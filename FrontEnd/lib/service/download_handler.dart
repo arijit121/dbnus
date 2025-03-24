@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' deferred as path_provider;
 
-import '../config/app_config.dart';
+import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
-import '../utils/pop_up_items.dart';
-import 'open_service.dart';
+import '../utils/pop_up_items.dart' deferred as pop_up_items;
+import 'open_service.dart' deferred as open_service;
 import 'package:http/http.dart' as http;
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_html/html.dart' deferred as html;
 
 class DownloadHandler {
   final String _group = 'bunchOfFiles';
@@ -33,6 +33,7 @@ class DownloadHandler {
         final response = await http.get(uri, headers: headers);
 
         if (response.statusCode == 200) {
+          await html.loadLibrary();
           // Convert the response body into a blob and trigger download
           final blob = html.Blob([response.bodyBytes],
               'application/${downloadPath.split(".").last}');
@@ -51,7 +52,9 @@ class DownloadHandler {
               'Failed to download file. HTTP ${response.statusCode}');
         }
       } else {
-        PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
+        await pop_up_items.loadLibrary();
+        pop_up_items.PopUpItems()
+            .toastMessage("Downloading ...", Colors.blueAccent);
 
         if (inGroup == true) {
           // Use .download to start a download and wait for it to complete
@@ -87,7 +90,8 @@ class DownloadHandler {
             case TaskStatus.complete:
               String filePath = await result.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
-              await OpenService().openFile(filePath);
+              await open_service.loadLibrary();
+              await open_service.OpenService().openFile(filePath);
               AppLog.i('Success!');
 
             case TaskStatus.canceled:
@@ -107,6 +111,7 @@ class DownloadHandler {
   }
 
   Future<void> config() async {
+    await app_config.loadLibrary();
     FileDownloader()
         .registerCallbacks(taskNotificationTapCallback:
             (Task task, NotificationType notificationType) async {
@@ -114,7 +119,8 @@ class DownloadHandler {
               'Tapped notification $notificationType for taskId ${task.taskId}');
           String filePath = await task.filePath();
           AppLog.i(filePath, tag: "FilePath");
-          await OpenService().openFile(filePath);
+          await open_service.loadLibrary();
+          await open_service.OpenService().openFile(filePath);
         })
         .configureNotificationForGroup(FileDownloader.defaultGroup,
             // For the main download button
@@ -137,7 +143,7 @@ class DownloadHandler {
               const TaskNotification('Error', '{numFailed}/{numTotal} failed'),
           progressBar: false,
           groupNotificationId:
-              '${await AppConfig().getAppPackageName()}_background_download',
+              '${await app_config.AppConfig().getAppPackageName()}_background_download',
         )
         .configureNotification(
             // for the 'Download & Open' dog picture
@@ -162,7 +168,8 @@ class DownloadHandler {
               AppLog.i('Task ${update.task.taskId} success!');
               String filePath = await update.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
-              await OpenService().openFile(filePath);
+              await open_service.loadLibrary();
+              await open_service.OpenService().openFile(filePath);
             case TaskStatus.canceled:
               AppLog.i('Download was canceled');
 
@@ -180,9 +187,11 @@ class DownloadHandler {
 
   Future<String> downloadPath() async {
     try {
+      await path_provider.loadLibrary();
       String directoryPath;
       if (Platform.isIOS) {
-        directoryPath = (await getApplicationDocumentsDirectory()).path;
+        directoryPath =
+            (await path_provider.getApplicationDocumentsDirectory()).path;
       } else {
         directoryPath = "/storage/emulated/0/Download";
 

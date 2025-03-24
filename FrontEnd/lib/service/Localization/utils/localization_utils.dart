@@ -1,6 +1,7 @@
 import 'package:dbnus/service/context_service.dart';
-import 'package:dbnus/service/value_handler.dart';
-import 'package:dbnus/storage/local_preferences.dart';
+import 'package:dbnus/service/value_handler.dart' deferred as value_handler;
+import 'package:dbnus/storage/local_preferences.dart'
+    deferred as local_preferences;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../enum/language_enum.dart';
@@ -11,14 +12,18 @@ class LocalizationUtils {
       LanguageEnum.values.map((language) => language.locale).toList();
 
   Future<void> store({required Locale local}) async {
-    await LocalPreferences().setString(
-        key: LocalPreferences.localizationKey, value: local.toLanguageTag());
+    await local_preferences.loadLibrary();
+    await local_preferences.LocalPreferences().setString(
+        key: local_preferences.LocalPreferences.localizationKey,
+        value: local.toLanguageTag());
   }
 
   Future<Locale?> getFromStore() async {
-    String? value = await LocalPreferences()
-        .getString(key: LocalPreferences.localizationKey);
-    if (ValueHandler().isTextNotEmptyOrNull(value)) {
+    await Future.wait(
+        [local_preferences.loadLibrary(), value_handler.loadLibrary()]);
+    String? value = await local_preferences.LocalPreferences()
+        .getString(key: local_preferences.LocalPreferences.localizationKey);
+    if (value_handler.ValueHandler().isTextNotEmptyOrNull(value)) {
       String tag = value!;
       List<String> parts = tag.split("-");
 

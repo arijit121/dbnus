@@ -1,8 +1,9 @@
 import '../utils/text_utils.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:universal_html/html.dart' deferred as html;
 
 class SeoHandler {
-  void setCanonicalLink() {
+  Future<void> setCanonicalLink() async {
+    await html.loadLibrary();
     String url = html.window.location.href;
     final head = html.document.head;
     final existingLink = head?.querySelector('link[rel="canonical"]');
@@ -17,7 +18,8 @@ class SeoHandler {
     }
   }
 
-  void homeHooterSeo() {
+  Future<void> homeHooterSeo() async {
+    await html.loadLibrary();
     final document = html.document;
     final seoContainer = html.DivElement()..className = 'footerSeoCon';
     seoContainer.setInnerHtml(TextUtils.footer_msg_web,
@@ -27,7 +29,8 @@ class SeoHandler {
     }
   }
 
-  void removeFooterSeoContainer() {
+  Future<void> removeFooterSeoContainer() async {
+    await html.loadLibrary();
     final element = html.document.querySelector('.footerSeoCon');
     if (element != null) {
       element.remove();
