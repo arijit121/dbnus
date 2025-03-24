@@ -4,9 +4,15 @@ class FcmNotificationModel {
   String? bigText;
   String? imageUrl;
   String? actionURL;
+  String? sound;
 
   FcmNotificationModel(
-      {this.title, this.message, this.bigText, this.imageUrl, this.actionURL});
+      {this.title,
+        this.message,
+        this.bigText,
+        this.imageUrl,
+        this.actionURL,
+        this.sound});
 
   FcmNotificationModel.fromJson(Map<String, dynamic> json) {
     title = json['Title'];
@@ -14,6 +20,7 @@ class FcmNotificationModel {
     bigText = json['BigText'];
     imageUrl = json['ImageUrl'];
     actionURL = json['ActionURL'];
+    sound = json['Sound'];
   }
 
   Map<String, dynamic> toJson() {
@@ -23,6 +30,7 @@ class FcmNotificationModel {
     data['BigText'] = bigText;
     data['ImageUrl'] = imageUrl;
     data['ActionURL'] = actionURL;
+    data['Sound'] = sound;
     return data;
   }
 }

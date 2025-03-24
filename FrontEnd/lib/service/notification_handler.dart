@@ -190,7 +190,8 @@ class NotificationHandler {
       'Message': message.data['message'],
       'BigText': message.data['body'],
       'ImageUrl': message.data['image'],
-      'ActionURL': message.data['ActionURL']
+      'ActionURL': message.data['ActionURL'],
+      'Sound': message.data['Sound'],
     };
 
     FcmNotificationModel fcmNotificationModel =
@@ -223,7 +224,13 @@ class NotificationHandler {
                     DarwinNotificationAttachment(bigPicturePath,
                         hideThumbnail: false)
                   ]
-                : null);
+                : null,
+            sound:
+                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
+                    ? "${fcmNotificationModel.sound ?? ""}.aiff"
+                    : null,
+            presentSound: ValueHandler()
+                .isTextNotEmptyOrNull(fcmNotificationModel.sound));
     final NotificationDetails notificationDetailsImage = NotificationDetails(
       iOS: darwinNotificationDetailsImage,
     );
@@ -289,7 +296,14 @@ class NotificationHandler {
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channel.id, channel.name,
             channelDescription: channel.description,
-            styleInformation: styleInformation);
+            styleInformation: styleInformation,
+            playSound:
+                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
+            sound:
+                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
+                    ? RawResourceAndroidNotificationSound(
+                        fcmNotificationModel.sound!)
+                    : null);
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
