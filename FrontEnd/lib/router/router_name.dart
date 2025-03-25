@@ -9,5 +9,5 @@ class RouteName {
   static const String error = "/error";
   static const String rayzorPay = "/rayzorpay";
   static const String webViewPaymentGateway = "/web_view_payment_gateway";
-  static const String paymentStatus = "/payment_return";
+  static const String webViewPaymentStatus = "/payment_return";
 }

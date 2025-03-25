@@ -135,8 +135,8 @@ class RouterManager {
         },
       ),
       GoRoute(
-        name: RouteName.paymentStatus,
-        path: "${RouteName.paymentStatus}/:pg_type",
+        name: RouteName.webViewPaymentStatus,
+        path: "${RouteName.webViewPaymentStatus}/:pg_type",
         builder: (BuildContext context, GoRouterState state) {
           if (kIsWeb) {
             return web_view_payment_gateway_status
