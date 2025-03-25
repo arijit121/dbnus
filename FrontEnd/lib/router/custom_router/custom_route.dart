@@ -71,7 +71,7 @@ class CustomRoute {
   Future<MaterialPageRoute> _getRoute(
       {required String name, dynamic arguments}) async {
     switch (name) {
-      case RouteName.rayzorpay:
+      case RouteName.rayzorPay:
         await Future.wait(
             [rayzorpay.loadLibrary(), error_route_widget.loadLibrary()]);
         return MaterialPageRoute(builder: (_) {
@@ -81,7 +81,7 @@ class CustomRoute {
             return error_route_widget.ErrorRouteWidget();
           }
         });
-      case RouteName.web_view_payment_gateway:
+      case RouteName.webViewPaymentGateway:
         await Future.wait([
           web_view_payment_gateway.loadLibrary(),
           error_route_widget.loadLibrary()
