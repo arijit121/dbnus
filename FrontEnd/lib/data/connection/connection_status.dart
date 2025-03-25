@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart'
+    deferred as connectivity_plus;
 import 'package:flutter/foundation.dart';
 
 ///ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
@@ -32,13 +33,14 @@ class ConnectionStatus {
       StreamController.broadcast();
 
   //flutter_connectivity
-  final Connectivity _connectivity = Connectivity();
+  // final _connectivity = connectivity_plus.Connectivity();
 
   //Hook into flutter_connectivity's Stream to listen for changes
   //And check the connection status out of the gate
-  void initialize() {
-    _connectivity.onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
+  Future<void> initialize() async {
+    await connectivity_plus.loadLibrary();
+    final connectivity = connectivity_plus.Connectivity();
+    connectivity.onConnectivityChanged.listen((result) {
       _connectionChange();
     });
     checkConnection();
@@ -86,8 +88,9 @@ class ConnectionStatus {
   }
 
   Future<String> getNetworkInfo() async {
-    List<ConnectivityResult> connectivityResult =
-        await _connectivity.checkConnectivity();
+    await connectivity_plus.loadLibrary();
+    final connectivity = connectivity_plus.Connectivity();
+    final connectivityResult = await connectivity.checkConnectivity();
     return connectivityResult.first.name;
   }
 }
