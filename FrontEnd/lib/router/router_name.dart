@@ -8,4 +8,6 @@ class RouteName {
   static const String settings = "/settings";
   static const String error = "/error";
   static const String rayzorpay = "/rayzorpay";
+  static const String web_view_payment_gateway = "/web_view_payment_gateway";
+  static const String paymentStatus = "/payment_return";
 }

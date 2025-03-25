@@ -6,6 +6,9 @@ import '../../data/model/razorpay_merchant_details.dart';
 import '../../extension/logger_extension.dart';
 import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
     deferred as rayzorpay;
+import '../../modules/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
+import '../../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway.dart'
+    deferred as web_view_payment_gateway;
 import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../service/context_service.dart';
 import '../../widget/error_route_widget.dart' deferred as error_route_widget;
@@ -78,7 +81,19 @@ class CustomRoute {
             return error_route_widget.ErrorRouteWidget();
           }
         });
-
+      case RouteName.web_view_payment_gateway:
+        await Future.wait([
+          web_view_payment_gateway.loadLibrary(),
+          error_route_widget.loadLibrary()
+        ]);
+        return MaterialPageRoute(builder: (_) {
+          if (arguments is WebViewPaymentGatewayModel) {
+            return web_view_payment_gateway.WebViewPaymentGateway(
+                webViewPaymentGatewayModel: arguments);
+          } else {
+            return error_route_widget.ErrorRouteWidget();
+          }
+        });
       case RouteName.error:
         await Future.wait(
             [crash_ui.loadLibrary(), error_route_widget.loadLibrary()]);

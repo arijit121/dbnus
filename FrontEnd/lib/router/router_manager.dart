@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
-deferred as order_details;
+    deferred as order_details;
+import '../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway_status.dart'
+    deferred as web_view_payment_gateway_status;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../service/seo_handler.dart';
@@ -26,7 +28,7 @@ class RouterManager {
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   static FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
@@ -51,7 +53,7 @@ class RouterManager {
         builder: (BuildContext context, GoRouterState state) {
           return landing.LandingUi(
             index: LandingUtils.listNavigation.indexWhere(
-                    (element) => element.action == RouteName.leaderBoard),
+                (element) => element.action == RouteName.leaderBoard),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -129,6 +131,22 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await settings.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.paymentStatus,
+        path: "${RouteName.paymentStatus}/:pg_type",
+        builder: (BuildContext context, GoRouterState state) {
+          if (kIsWeb) {
+            return web_view_payment_gateway_status
+                .WebViewPaymentGatewayStatus();
+          } else {
+            return error_route_widget.ErrorRouteWidget();
+          }
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await web_view_payment_gateway_status.loadLibrary();
           return null;
         },
       ),
