@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:camera/camera.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:camera/camera.dart' deferred as camera;
+import 'package:file_picker/file_picker.dart' deferred as file_picker;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart'
+    deferred as flutter_image_compress;
+import 'package:image_picker/image_picker.dart' deferred as image_picker;
+import 'package:path_provider/path_provider.dart' deferred as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 
 import '../const/color_const.dart';
@@ -20,7 +20,7 @@ import '../service/context_service.dart';
 import '../utils/pop_up_items.dart';
 import '../widget/custom_text.dart';
 import '../widget/loading_widget.dart';
-import 'JsService/provider/js_provider.dart';
+import 'JsService/provider/js_provider.dart' deferred as js_provider;
 
 class CustomFilePicker {
   final int _maxFileSize = 5;
@@ -36,19 +36,20 @@ class CustomFilePicker {
           return null;
         }
       }
+      await file_picker.loadLibrary();
 
-      List<String> _allowedExtensions =
+      List<String> allowedExtensionsFinal =
           allowedExtensions ?? ['jpeg', 'jpg', 'pdf'];
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: _allowedExtensions,
+      final result = await file_picker.FilePicker.platform.pickFiles(
+        type: file_picker.FileType.custom,
+        allowedExtensions: allowedExtensionsFinal,
       );
 
       if (result != null) {
-        PlatformFile platformFile = result.files.single;
+        final platformFile = result.files.single;
         int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
-        if (!_allowedExtensions.contains(platformFile.extension)) {
+        if (!allowedExtensionsFinal.contains(platformFile.extension)) {
           PopUpItems().toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
         } else if (platformFile.extension == 'jpg' ||
@@ -105,17 +106,17 @@ class CustomFilePicker {
           return null;
         }
       }
-
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
+      await file_picker.loadLibrary();
+      final result = await file_picker.FilePicker.platform.pickFiles(
+          type: file_picker.FileType.custom,
           allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
           allowMultiple: true);
 
       if (result != null) {
-        List<PlatformFile> platformFiles = result.files;
+        final platformFiles = result.files;
 
         return List.generate(platformFiles.length, (index) {
-          PlatformFile platformFile = platformFiles.elementAt(index);
+          final platformFile = platformFiles.elementAt(index);
           return CustomFile(
             name: platformFile.name,
             path: kIsWeb ? null : platformFile.path,
@@ -138,9 +139,10 @@ class CustomFilePicker {
       if (!permissionStatus.isGranted) {
         return null;
       }
-
-      final ImagePicker picker = ImagePicker();
-      XFile? image = await picker.pickImage(source: ImageSource.camera);
+      await image_picker.loadLibrary();
+      final picker = image_picker.ImagePicker();
+      final image =
+          await picker.pickImage(source: image_picker.ImageSource.camera);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -179,9 +181,10 @@ class CustomFilePicker {
           return null;
         }
       }
-
-      final ImagePicker picker = ImagePicker();
-      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      await image_picker.loadLibrary();
+      final picker = image_picker.ImagePicker();
+      final image =
+          await picker.pickImage(source: image_picker.ImageSource.gallery);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -215,11 +218,12 @@ class CustomFilePicker {
     int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
-      List<CameraDescription> cameraDescription = [];
+      await camera.loadLibrary();
+      List cameraDescription = [];
       if (noCamera != true) {
         try {
-          cameraDescription = await availableCameras();
-        } on CameraException catch (e) {
+          cameraDescription = await camera.availableCameras();
+        } catch (e) {
           AppLog.i(e);
         }
       }
@@ -348,7 +352,13 @@ class CustomFilePicker {
     showLoading();
     CustomFile? customFile;
     try {
-      await JsProvider().loadJs(
+      await Future.wait([
+        js_provider.loadLibrary(),
+        flutter_image_compress.loadLibrary(),
+        path_provider.loadLibrary(),
+      ]);
+
+      await js_provider.JsProvider().loadJs(
           jsPath: "https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js");
       file.bytes ??= await File(file.path!).readAsBytes();
       ui.Image image = await decodeImageFromList(file.bytes!);
@@ -368,18 +378,20 @@ class CustomFilePicker {
       }
 
       Uint8List compressedJpegBytes =
-          await FlutterImageCompress.compressWithList(file.bytes!,
+          await flutter_image_compress.FlutterImageCompress.compressWithList(
+              file.bytes!,
               minWidth: width,
               minHeight: height,
               quality: 100,
-              format: CompressFormat.jpeg);
+              format: flutter_image_compress.CompressFormat.jpeg);
       String? extension = file.name?.split(".").last;
       String? name = file.name?.split(".$extension").first;
       name = "${name ?? ""}_compressed.jpg";
       if (kIsWeb) {
         customFile = CustomFile(bytes: compressedJpegBytes, name: name);
       } else {
-        final Directory tempDir = await getApplicationCacheDirectory();
+        final Directory tempDir =
+            await path_provider.getApplicationCacheDirectory();
         // Ensure the directory exists, if not create it
         if (!await tempDir.exists()) {
           await tempDir.create(recursive: true);

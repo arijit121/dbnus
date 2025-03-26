@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart' deferred as http_parser;
+import 'package:mime/mime.dart' deferred as mime;
 
 import '../../../extension/logger_extension.dart';
 import '../../model/api_return_model.dart';
@@ -32,8 +31,8 @@ class ApiRepoImp extends ApiRepo {
       Uri url = stringQueryParameters.isNotEmpty
           ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
           : Uri.parse(uri);
-      Request request = http.Request(method.value, url);
-      MultipartRequest requestFormData =
+      http.Request request = http.Request(method.value, url);
+      http.MultipartRequest requestFormData =
           http.MultipartRequest(method.value, url);
       AppLog.i(tag: "$tag Method", method.value, time: DateTime.now());
       AppLog.i(tag: "$tag Url", "$url", time: DateTime.now());
@@ -63,6 +62,7 @@ class ApiRepoImp extends ApiRepo {
           requestFormData.fields.addAll(body.value?.fields ?? {});
         }
         if (body.value?.customMultipartFiles?.isNotEmpty == true) {
+          await Future.wait([http_parser.loadLibrary(), mime.loadLibrary()]);
           body.value?.customMultipartFiles?.forEach((element) async {
             if (kIsWeb) {
               Uint8List byte = element.bytes ?? Uint8List(0);
@@ -70,8 +70,8 @@ class ApiRepoImp extends ApiRepo {
                 element.field ?? "",
                 byte,
                 filename: element.name,
-                contentType: MediaType.parse(
-                  lookupMimeType(element.name ?? "",
+                contentType: http_parser.MediaType.parse(
+                  mime.lookupMimeType(element.name ?? "",
                           headerBytes: element.bytes) ??
                       "",
                 ),
@@ -80,8 +80,8 @@ class ApiRepoImp extends ApiRepo {
               requestFormData.files.add(await http.MultipartFile.fromPath(
                 element.field ?? "",
                 element.path ?? "",
-                contentType: MediaType.parse(
-                  lookupMimeType(element.name ?? "",
+                contentType: http_parser.MediaType.parse(
+                  mime.lookupMimeType(element.name ?? "",
                           headerBytes: element.bytes) ??
                       "",
                 ),

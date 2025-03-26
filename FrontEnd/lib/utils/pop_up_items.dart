@@ -189,12 +189,11 @@ class PopUpItems {
 // Enum for dialog types
 enum DialogType { success, error, warning, info }
 
-//ignore: must_be_immutable
 class ToastMassage extends StatelessWidget {
-  ToastMassage({super.key, required this.message, required this.color});
+  const ToastMassage({super.key, required this.message, required this.color});
 
-  String message;
-  Color color;
+  final String message;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
