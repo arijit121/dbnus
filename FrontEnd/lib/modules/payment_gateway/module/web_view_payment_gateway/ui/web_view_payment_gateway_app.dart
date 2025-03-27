@@ -43,7 +43,6 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
   @override
   void dispose() {
     _timer?.cancel();
-    _controller?.dispose();
     super.dispose();
   }
 
