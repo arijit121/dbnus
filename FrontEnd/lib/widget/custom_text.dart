@@ -126,7 +126,7 @@ InlineSpan CustomTextSpan(
         double? height,
         Color? backgroundColor,
         String? font,
-        PlaceholderAlignment alignment = PlaceholderAlignment.baseline,
+        PlaceholderAlignment? alignment,
         bool? isTextSpan}) =>
     isTextSpan == true
         ? TextSpan(
@@ -142,7 +142,7 @@ InlineSpan CustomTextSpan(
                 backgroundColor: backgroundColor),
           )
         : WidgetSpan(
-            alignment: alignment,
+            alignment: alignment ?? PlaceholderAlignment.baseline,
             baseline: TextBaseline.alphabetic,
             child: Text(
               text,
