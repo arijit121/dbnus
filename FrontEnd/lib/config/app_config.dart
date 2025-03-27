@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart'
+    deferred as device_info_plus;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
 import 'package:geolocator/geolocator.dart';
@@ -117,13 +118,18 @@ class AppConfig {
 
   Future<String?> getDeviceName() async {
     if (kIsWeb) {
-      return null;
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final webInfo = await deviceInfo.webBrowserInfo;
+      return '${webInfo.browserName.name} - ${webInfo.platform}';
     } else if (Platform.isAndroid) {
-      final deviceInfo = DeviceInfoPlugin();
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.model;
     } else {
-      final deviceInfo = DeviceInfoPlugin();
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
       return iosInfo.utsname.machine;
@@ -132,13 +138,18 @@ class AppConfig {
 
   Future<String?> getDeviceOsInfo() async {
     if (kIsWeb) {
-      return null;
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
+      final webInfo = await deviceInfo.webBrowserInfo;
+      return '${webInfo.platform} ${webInfo.userAgent}';
     } else if (Platform.isAndroid) {
-      final deviceInfo = DeviceInfoPlugin();
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.version.release;
     } else {
-      final deviceInfo = DeviceInfoPlugin();
+      await device_info_plus.loadLibrary();
+      final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
       return iosInfo.systemVersion;

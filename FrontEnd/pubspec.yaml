@@ -70,7 +70,7 @@ dependencies:
   # Device Information
   flutter_udid: 4.0.0
   # custom_platform_device_id: 1.0.8
-  device_info_plus: ^11.3.0
+  device_info_plus: 10.1.2
   universal_io: 2.2.2
   package_info_plus: ^8.3.0
 
