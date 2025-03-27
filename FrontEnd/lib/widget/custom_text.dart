@@ -116,47 +116,54 @@ class CustomRichText extends StatelessWidget {
   }
 }
 
-InlineSpan CustomTextSpan(
-        {required String text,
-        FontWeight? fontWeight,
-        double? size,
-        Color? color,
-        TextDecoration? decoration,
-        Color? decorationColor,
-        double? height,
-        Color? backgroundColor,
-        String? font,
-        PlaceholderAlignment? alignment,
-        bool? isTextSpan}) =>
-    isTextSpan == true
-        ? TextSpan(
-            text: text,
+InlineSpan CustomTextSpan({
+  required String text,
+  FontWeight? fontWeight,
+  double? size,
+  Color? color,
+  TextDecoration? decoration,
+  Color? decorationColor,
+  double? height,
+  Color? backgroundColor,
+  String? font,
+  PlaceholderAlignment? alignment,
+  bool? isTextSpan,
+}) {
+  assert(!(isTextSpan == true && alignment != null),
+      'alignment is not available in TextSpan');
+
+  return isTextSpan == true
+      ? TextSpan(
+          text: text,
+          style: customizeTextStyle(
+            font: font,
+            fontWeight: fontWeight,
+            fontSize: size,
+            fontColor: color,
+            decoration: decoration,
+            decorationColor: decorationColor,
+            height: height,
+            backgroundColor: backgroundColor,
+          ),
+        )
+      : WidgetSpan(
+          alignment: alignment ?? PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
+          child: Text(
+            text,
             style: customizeTextStyle(
-                font: font,
-                fontWeight: fontWeight,
-                fontSize: size,
-                fontColor: color,
-                decoration: decoration,
-                decorationColor: decorationColor,
-                height: height,
-                backgroundColor: backgroundColor),
-          )
-        : WidgetSpan(
-            alignment: alignment ?? PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: Text(
-              text,
-              style: customizeTextStyle(
-                  font: font,
-                  fontWeight: fontWeight,
-                  fontSize: size,
-                  fontColor: color,
-                  decoration: decoration,
-                  decorationColor: decorationColor,
-                  height: height,
-                  backgroundColor: backgroundColor),
+              font: font,
+              fontWeight: fontWeight,
+              fontSize: size,
+              fontColor: color,
+              decoration: decoration,
+              decorationColor: decorationColor,
+              height: height,
+              backgroundColor: backgroundColor,
             ),
-          );
+          ),
+        );
+}
 
 InlineSpan CustomTextSpanEnum(
         {required String text,
