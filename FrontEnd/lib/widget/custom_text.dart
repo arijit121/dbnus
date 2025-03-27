@@ -116,7 +116,7 @@ class CustomRichText extends StatelessWidget {
   }
 }
 
-WidgetSpan CustomTextSpan(
+InlineSpan CustomTextSpan(
         {required String text,
         FontWeight? fontWeight,
         double? size,
@@ -126,25 +126,39 @@ WidgetSpan CustomTextSpan(
         double? height,
         Color? backgroundColor,
         String? font,
-        PlaceholderAlignment alignment = PlaceholderAlignment.baseline}) =>
-    WidgetSpan(
-      alignment: alignment,
-      baseline: TextBaseline.alphabetic,
-      child: Text(
-        text,
-        style: customizeTextStyle(
-            font: font,
-            fontWeight: fontWeight,
-            fontSize: size,
-            fontColor: color,
-            decoration: decoration,
-            decorationColor: decorationColor,
-            height: height,
-            backgroundColor: backgroundColor),
-      ),
-    );
+        PlaceholderAlignment alignment = PlaceholderAlignment.baseline,
+        bool? isTextSpan}) =>
+    isTextSpan == true
+        ? TextSpan(
+            text: text,
+            style: customizeTextStyle(
+                font: font,
+                fontWeight: fontWeight,
+                fontSize: size,
+                fontColor: color,
+                decoration: decoration,
+                decorationColor: decorationColor,
+                height: height,
+                backgroundColor: backgroundColor),
+          )
+        : WidgetSpan(
+            alignment: alignment,
+            baseline: TextBaseline.alphabetic,
+            child: Text(
+              text,
+              style: customizeTextStyle(
+                  font: font,
+                  fontWeight: fontWeight,
+                  fontSize: size,
+                  fontColor: color,
+                  decoration: decoration,
+                  decorationColor: decorationColor,
+                  height: height,
+                  backgroundColor: backgroundColor),
+            ),
+          );
 
-WidgetSpan CustomTextSpanEnum(
+InlineSpan CustomTextSpanEnum(
         {required String text,
         required CustomTextStyleType styleType,
         Color? color,
@@ -152,7 +166,8 @@ WidgetSpan CustomTextSpanEnum(
         Color? decorationColor,
         double? height,
         Color? backgroundColor,
-        String? font}) =>
+        String? font,
+        bool? isTextSpan}) =>
     CustomTextSpan(
         text: text,
         fontWeight: styleType.fontWeight,
@@ -162,7 +177,8 @@ WidgetSpan CustomTextSpanEnum(
         decorationColor: decorationColor,
         height: height,
         backgroundColor: backgroundColor,
-        font: font);
+        font: font,
+        isTextSpan: isTextSpan);
 
 class CustomOnlyText extends StatelessWidget {
   final String data;
