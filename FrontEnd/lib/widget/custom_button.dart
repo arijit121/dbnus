@@ -174,35 +174,41 @@ class CustomGOEButton extends StatelessWidget {
     final double? effectiveWidth =
         borderColor != null && (width ?? 0) > 2 ? (width ?? 0) - 2 : width;
 
-    return Material(
-      color: Colors.transparent,
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient: effectiveGradient,
+    return Container(
+      decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 16),
-          color: effectiveGradient == null ? effectiveBackgroundColor : null,
-          border: effectiveBorderColor != null
-              ? Border.all(
-                  color: effectiveBorderColor,
-                )
-              : null,
-        ),
-        child: InkWell(
-          customBorder: RoundedRectangleBorder(
+          boxShadow: boxShadow),
+      child: Material(
+        color: Colors.transparent,
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: effectiveGradient,
             borderRadius: BorderRadius.circular(radius ?? 16),
+            color: effectiveGradient == null ? effectiveBackgroundColor : null,
+            border: effectiveBorderColor != null
+                ? Border.all(
+                    color: effectiveBorderColor,
+                  )
+                : null,
           ),
-          onTap: onPressed,
-          // Disable onTap if disabled
-          splashColor: splashColor,
-          highlightColor: highlightColor,
-          hoverColor: hoverColor,
-          child: Container(
-            height: effectiveHeight,
-            width: effectiveWidth,
-            alignment: Alignment.center,
-            padding: padding,
-            decoration: BoxDecoration(boxShadow: boxShadow),
-            child: child,
+          child: InkWell(
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius ?? 16),
+            ),
+            onTap: onPressed,
+            // Disable onTap if disabled
+            splashColor: splashColor,
+            highlightColor: highlightColor,
+            hoverColor: hoverColor,
+            child: Container(
+              height: effectiveHeight,
+              width: effectiveWidth,
+              alignment: Alignment.center,
+              padding: padding,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(radius ?? 16)),
+              child: child,
+            ),
           ),
         ),
       ),
@@ -311,7 +317,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     WidgetStateProperty<Color?> trackColor =
-    WidgetStateProperty<Color?>.fromMap(
+        WidgetStateProperty<Color?>.fromMap(
       <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedTrackColor,
         WidgetState.any: defaultTrackColor,
@@ -319,7 +325,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     WidgetStateProperty<Color?> overlayColor =
-    WidgetStateProperty<Color?>.fromMap(
+        WidgetStateProperty<Color?>.fromMap(
       <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedThumbColor?.withOpacity(0.54),
         WidgetState.any: Colors.grey.shade400,
@@ -327,7 +333,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     WidgetStateProperty<Color?> thumbColor =
-    WidgetStateProperty<Color?>.fromMap(
+        WidgetStateProperty<Color?>.fromMap(
       <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedThumbColor ?? defaultThumbColor,
         WidgetState.any: defaultThumbColor,
@@ -335,7 +341,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     WidgetStateProperty<Color?> trackOutlineColor =
-    WidgetStateProperty<Color?>.fromMap(
+        WidgetStateProperty<Color?>.fromMap(
       <WidgetStatesConstraint, Color?>{
         WidgetState.selected: selectedBorderColor,
         WidgetState.any: defaultBorderColor,

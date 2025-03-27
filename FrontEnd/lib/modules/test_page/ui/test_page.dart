@@ -81,6 +81,13 @@ class _TestPageState extends State<TestPage> {
               ),
               20.ph,
               CustomGOEButton(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.red,
+                      blurRadius: 4,
+                      offset: Offset(4, 8), // Shadow position
+                    ),
+                  ],
                   onPressed: () {
                     LocalizationUtils().changeLanguage(
                         locale: LocalizationUtils.supportedLocales[Random()
