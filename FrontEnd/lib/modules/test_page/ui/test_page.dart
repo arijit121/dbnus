@@ -82,11 +82,9 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   boxShadow: [
-                    BoxShadow(
-                      color: Colors.red,
-                      blurRadius: 4,
-                      offset: Offset(4, 8), // Shadow position
-                    ),
+                    BoxShadow(color: Colors.red, blurRadius: 1, spreadRadius: 0.5
+                        // offset: Offset(4, 8), // Shadow position
+                        ),
                   ],
                   onPressed: () {
                     LocalizationUtils().changeLanguage(
@@ -94,10 +92,12 @@ class _TestPageState extends State<TestPage> {
                             .nextInt(
                                 LocalizationUtils.supportedLocales.length)]);
                   },
-                  gradient: const LinearGradient(colors: [
-                    ColorConst.red,
-                    Colors.blue,
-                  ]),
+                  // gradient: const LinearGradient(colors: [
+                  //   ColorConst.red,
+                  //   Colors.blue,
+                  // ]),
+                  backGroundColor: Colors.white,
+                  borderColor: Colors.blue,
                   child: const CustomText("Change language")),
               20.ph,
               CustomGOEButton(

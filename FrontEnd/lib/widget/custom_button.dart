@@ -176,8 +176,14 @@ class CustomGOEButton extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 16),
-          boxShadow: boxShadow),
+        borderRadius: BorderRadius.circular(radius ?? 16),
+        boxShadow: boxShadow,
+        border: effectiveBorderColor != null
+            ? Border.all(
+                color: effectiveBorderColor,
+              )
+            : null,
+      ),
       child: Material(
         color: Colors.transparent,
         child: Ink(
@@ -185,11 +191,6 @@ class CustomGOEButton extends StatelessWidget {
             gradient: effectiveGradient,
             borderRadius: BorderRadius.circular(radius ?? 16),
             color: effectiveGradient == null ? effectiveBackgroundColor : null,
-            border: effectiveBorderColor != null
-                ? Border.all(
-                    color: effectiveBorderColor,
-                  )
-                : null,
           ),
           child: InkWell(
             customBorder: RoundedRectangleBorder(
