@@ -15,9 +15,9 @@ import 'redirect_engine.dart';
 import 'value_handler.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'shbl_app', // id
-    'shbl_fcm', // name
-    description: 'shbl app fcm notification', // description
+    'dbnus_app', // id
+    'dbnus_fcm', // name
+    description: 'dbnus app fcm notification', // description
     importance: Importance.high,
     ledColor: Colors.white);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -264,11 +264,18 @@ class NotificationHandler {
 
   Future<void> _showNotificationAndroid(
       FcmNotificationModel fcmNotificationModel) async {
-    final ByteArrayAndroidBitmap? bigPicture =
-        ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
-            ? ByteArrayAndroidBitmap(
-                await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!))
-            : null;
+    ByteArrayAndroidBitmap? bigPicture;
+    if (ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)) {
+      Uint8List? byte =
+          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!);
+      if (byte != null) {
+        bigPicture = ByteArrayAndroidBitmap(byte);
+      } else {
+        bigPicture = null;
+      }
+    } else {
+      bigPicture = null;
+    }
 
     StyleInformation? styleInformation = bigPicture != null
         ? BigPictureStyleInformation(bigPicture,
@@ -344,9 +351,14 @@ class NotificationHandler {
     });
   }
 
-  Future<Uint8List> _getByteArrayFromUrl(String url) async {
-    final http.Response response =
-        await http.get(Uri.parse(url)).timeout(const Duration(minutes: 5));
-    return response.bodyBytes;
+  Future<Uint8List?> _getByteArrayFromUrl(String url) async {
+    try {
+      final http.Response response =
+          await http.get(Uri.parse(url)).timeout(const Duration(minutes: 5));
+      return response.bodyBytes;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 }
