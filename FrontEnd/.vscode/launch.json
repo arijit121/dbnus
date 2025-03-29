@@ -2,44 +2,43 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "FrontEnd",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main.dart"
-        },
-        {
-            "name": "FrontEnd (profile mode)",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile",
-            "program": "lib/main.dart"
-        },
-        {
-            "name": "FrontEnd/Web",
-            "request": "launch",
-            "type": "dart",
-            "program": "lib/main_web.dart"
-        },
-        {
-            "name": "FrontEnd/App (stg)",
+            "name": "FrontEnd (dev)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_app.dart",
-            "args": ["--flavor", "stg", "--target", "lib/main_stg.dart" ]
+            "args": ["--flavor", "dev", "--target", "lib/main_dev.dart"]
         },
         {
-            "name": "FrontEnd/Web (release mode)",
+            "name": "FrontEnd (stg)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
-            "program": "lib/main_web.dart"
+            "program": "lib/main_app.dart",
+            "args": ["--flavor", "stg", "--target", "lib/main_stg.dart"]
         },
         {
-            "name": "FrontEnd/App (release mode)",
+            "name": "FrontEnd (prod)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release",
-            "program": "lib/main_app.dart"
+            "program": "lib/main_app.dart",
+            "args": ["--flavor", "prod", "--target", "lib/main_prod.dart"]
+        },
+        {
+            "name": "FrontEnd/Web (dev)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart"
+        },
+        {
+            "name": "FrontEnd/Web (stg)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_stg.dart"
+        },
+        {
+            "name": "FrontEnd/Web (prod)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_prod.dart"
         }
     ]
 }

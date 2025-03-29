@@ -16,10 +16,10 @@ import 'value_handler.dart';
 
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'dbnus_app', // id
-    'dbnus_fcm', // name
-    description: 'dbnus app fcm notification', // description
+    'dbnus_local_notification', // name
+    description: 'dbnus app local notification', // description
     importance: Importance.high,
-    ledColor: Colors.white);
+    ledColor: Colors.transparent);
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -54,7 +54,7 @@ class NotificationHandler {
         ?.createNotificationChannel(channel);
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher_monochrome');
 
     final List<DarwinNotificationCategory> darwinNotificationCategories =
         <DarwinNotificationCategory>[
@@ -310,34 +310,6 @@ class NotificationHandler {
         fcmNotificationModel.message ?? "",
         notificationDetails,
         payload: fcmNotificationModel.actionURL);
-  }
-
-  Future<void> showProgressNotification(
-      {required int progress,
-      required int progressId,
-      required String imagePath}) async {
-    await Future<void>.delayed(const Duration(seconds: 1), () async {
-      final AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails('progress channel', 'progress channel',
-              channelDescription: 'progress channel description',
-              channelShowBadge: false,
-              importance: Importance.max,
-              priority: Priority.high,
-              onlyAlertOnce: true,
-              showProgress: true,
-              maxProgress: 100,
-              progress: progress);
-
-      final DarwinNotificationDetails darwinNotificationDetails =
-          DarwinNotificationDetails(attachments: <DarwinNotificationAttachment>[
-        DarwinNotificationAttachment(imagePath, hideThumbnail: false)
-      ]);
-      final NotificationDetails notificationDetails = NotificationDetails(
-          android: androidNotificationDetails, iOS: darwinNotificationDetails);
-      await flutterLocalNotificationsPlugin.show(
-          progressId, 'Downloading .... ', '', notificationDetails,
-          payload: 'item x');
-    });
   }
 
   Future<Uint8List?> _getByteArrayFromUrl(String url) async {
