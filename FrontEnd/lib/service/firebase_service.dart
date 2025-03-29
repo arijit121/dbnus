@@ -1,7 +1,10 @@
+import 'package:dbnus/service/notification_handler.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart'
     deferred as firebase_messaging;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../data/model/custom_notification_model.dart';
 import '../extension/logger_extension.dart';
 import 'redirect_engine.dart' deferred as redirect_engine;
 
@@ -70,5 +73,20 @@ class FirebaseService {
     await analytics.setAnalyticsCollectionEnabled(true);
     FirebaseAnalyticsObserver(analytics: analytics);
     await analytics.setConsent(analyticsStorageConsentGranted: true);
+  }
+
+  void showNotification(RemoteMessage message) {
+    var massagePayload = {
+      'Title': message.data['title'],
+      'Message': message.data['message'],
+      'BigText': message.data['body'],
+      'ImageUrl': message.data['image'],
+      'ActionURL': message.data['ActionURL'],
+      'Sound': message.data['Sound'],
+    };
+
+    CustomNotificationModel customNotificationModel =
+        CustomNotificationModel.fromJson(massagePayload);
+    NotificationHandler().showFlutterNotification(customNotificationModel);
   }
 }

@@ -34,7 +34,7 @@ import 'utils/text_utils.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  NotificationHandler().showFlutterNotification(message);
+  FirebaseService().showNotification(message);
   AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
@@ -46,7 +46,7 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    NotificationHandler().showFlutterNotification(message);
+    FirebaseService().showNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {

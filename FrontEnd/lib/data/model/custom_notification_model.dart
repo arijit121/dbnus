@@ -1,4 +1,4 @@
-class FcmNotificationModel {
+class CustomNotificationModel {
   String? title;
   String? message;
   String? bigText;
@@ -6,15 +6,15 @@ class FcmNotificationModel {
   String? actionURL;
   String? sound;
 
-  FcmNotificationModel(
+  CustomNotificationModel(
       {this.title,
-        this.message,
-        this.bigText,
-        this.imageUrl,
-        this.actionURL,
-        this.sound});
+      this.message,
+      this.bigText,
+      this.imageUrl,
+      this.actionURL,
+      this.sound});
 
-  FcmNotificationModel.fromJson(Map<String, dynamic> json) {
+  CustomNotificationModel.fromJson(Map<String, dynamic> json) {
     title = json['Title'];
     message = json['Message'];
     bigText = json['BigText'];

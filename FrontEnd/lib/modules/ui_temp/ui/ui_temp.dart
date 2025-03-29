@@ -1,3 +1,4 @@
+import 'package:dbnus/data/model/custom_notification_model.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../const/api_url_const.dart';
 import '../../../const/color_const.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../router/custom_router/custom_route.dart';
@@ -12,6 +14,7 @@ import '../../../router/router_name.dart';
 import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/file_picker.dart';
+import '../../../service/notification_handler.dart';
 import '../../../service/open_service.dart';
 import '../../../utils/pop_up_items.dart';
 import '../../../widget/custom_button.dart';
@@ -51,6 +54,26 @@ class _UiTempState extends State<UiTemp> {
               Colors.blue,
             ]),
             child: const CustomText("Download")),
+        20.ph,
+        CustomGOEButton(
+            onPressed: () {
+              NotificationHandler().showFlutterNotification(
+                CustomNotificationModel(
+                  title: "Silent Notification4",
+                  message: "test",
+                  bigText:
+                      "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
+                  imageUrl: ApiUrlConst.testImgUrl,
+                  // actionURL: "http://localhost:6906/leader_board",
+                  sound: "slow_spring_board",
+                ),
+              );
+            },
+            gradient: const LinearGradient(colors: [
+              ColorConst.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Show notification")),
         20.ph,
         CustomGOEButton(
             onPressed: () async {

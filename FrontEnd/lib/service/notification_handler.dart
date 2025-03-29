@@ -10,7 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-import '../data/model/fcm_notification_model.dart';
+import '../data/model/custom_notification_model.dart';
 import 'redirect_engine.dart';
 import 'value_handler.dart';
 
@@ -184,19 +184,8 @@ class NotificationHandler {
     }
   }
 
-  Future<void> showFlutterNotification(RemoteMessage message) async {
-    var massagePayload = {
-      'Title': message.data['title'],
-      'Message': message.data['message'],
-      'BigText': message.data['body'],
-      'ImageUrl': message.data['image'],
-      'ActionURL': message.data['ActionURL'],
-      'Sound': message.data['Sound'],
-    };
-
-    FcmNotificationModel fcmNotificationModel =
-        FcmNotificationModel.fromJson(massagePayload);
-
+  Future<void> showFlutterNotification(
+      CustomNotificationModel fcmNotificationModel) async {
     if (Platform.isAndroid && fcmNotificationModel.title != null) {
       _showNotificationAndroid(fcmNotificationModel);
     } else if (Platform.isIOS && fcmNotificationModel.title != null) {
@@ -205,7 +194,7 @@ class NotificationHandler {
   }
 
   Future<void> _showNotificationIos(
-      FcmNotificationModel fcmNotificationModel) async {
+      CustomNotificationModel fcmNotificationModel) async {
     final String? bigPicturePath =
         ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
             ? await _downloadAndSaveFile(
@@ -263,7 +252,7 @@ class NotificationHandler {
   }
 
   Future<void> _showNotificationAndroid(
-      FcmNotificationModel fcmNotificationModel) async {
+      CustomNotificationModel fcmNotificationModel) async {
     ByteArrayAndroidBitmap? bigPicture;
     if (ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)) {
       Uint8List? byte =
