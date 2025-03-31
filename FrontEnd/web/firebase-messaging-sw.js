@@ -50,25 +50,22 @@ if (messaging) {
 // File: firebase-messaging-sw.js
 // Handling Notification click
 self.addEventListener('notificationclick', (event) => {
-  event.notification.close(); // CLosing the notification when clicked
-  console.log('Notification click: ', event.data);
-  const urlToOpen = event?.notification?.data?.url || window.location.origin;
-  // Open the URL in the default browser.
+  event.notification.close(); // Closing the notification when clicked
+
+  console.log('Notification click:', event.notification.data);
+
+  const urlToOpen = event.notification.data?.url || '/';
+
   event.waitUntil(
-    clients.matchAll({
-      type: 'window',
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      for (const client of windowClients) {
+        if (client.url.includes(urlToOpen) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
     })
-      .then((windowClients) => {
-        // Check if there is already a window/tab open with the target URL
-        for (const client of windowClients) {
-          if (client.url === urlToOpen && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        // If not, open a new window/tab with the target URL
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen);
-        }
-      })
   );
 });

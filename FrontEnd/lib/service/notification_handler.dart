@@ -184,17 +184,21 @@ class NotificationHandler {
     }
   }
 
-  Future<void> showFlutterNotification(
+  /// Return notification Id
+  Future<int?> showFlutterNotification(
       CustomNotificationModel fcmNotificationModel) async {
     if (Platform.isAndroid && fcmNotificationModel.title != null) {
-      _showNotificationAndroid(fcmNotificationModel);
+      return await _showNotificationAndroid(fcmNotificationModel);
     } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-      _showNotificationIos(fcmNotificationModel);
+      return await _showNotificationIos(fcmNotificationModel);
     }
+    return null;
   }
 
-  Future<void> _showNotificationIos(
-      CustomNotificationModel fcmNotificationModel) async {
+  /// Return notification Id
+  Future<int> _showNotificationIos(CustomNotificationModel fcmNotificationModel,
+      {int? notificationId}) async {
+    int tempNotificationId = notificationId ?? getId();
     final String? bigPicturePath =
         ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
             ? await _downloadAndSaveFile(
@@ -218,19 +222,23 @@ class NotificationHandler {
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
                     ? "${fcmNotificationModel.sound ?? ""}.aiff"
                     : null,
-            presentSound: ValueHandler()
-                .isTextNotEmptyOrNull(fcmNotificationModel.sound));
+            presentSound: !ValueHandler()
+                    .isTextNotEmptyOrNull(notificationId) &&
+                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
+            presentAlert: !ValueHandler().isTextNotEmptyOrNull(notificationId),
+            presentBadge: !ValueHandler().isTextNotEmptyOrNull(notificationId));
     final NotificationDetails notificationDetailsImage = NotificationDetails(
       iOS: darwinNotificationDetailsImage,
     );
 
     await flutterLocalNotificationsPlugin.show(
-        getId(),
+        tempNotificationId,
         fcmNotificationModel.title ?? "",
         ValueHandler().parseHtmlToText(
             fcmNotificationModel.bigText ?? fcmNotificationModel.message ?? ""),
         notificationDetailsImage,
         payload: fcmNotificationModel.actionURL);
+    return tempNotificationId;
   }
 
   Future<String> _downloadAndSaveFile(String url, String fileName) async {
@@ -251,8 +259,11 @@ class NotificationHandler {
     return r;
   }
 
-  Future<void> _showNotificationAndroid(
-      CustomNotificationModel fcmNotificationModel) async {
+  /// Return notification Id
+  Future<int> _showNotificationAndroid(
+      CustomNotificationModel fcmNotificationModel,
+      {int? notificationId}) async {
+    int tempNotificationId = notificationId ?? getId();
     ByteArrayAndroidBitmap? bigPicture;
     if (ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)) {
       Uint8List? byte =
@@ -293,23 +304,31 @@ class NotificationHandler {
         AndroidNotificationDetails(channel.id, channel.name,
             channelDescription: channel.description,
             styleInformation: styleInformation,
-            playSound:
+            playSound: !ValueHandler().isTextNotEmptyOrNull(notificationId) &&
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
             sound:
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
                     ? RawResourceAndroidNotificationSound(
                         fcmNotificationModel.sound!)
-                    : null);
+                    : null,
+            importance: ValueHandler().isTextNotEmptyOrNull(notificationId)
+                ? Importance.low
+                : Importance.high,
+            priority: ValueHandler().isTextNotEmptyOrNull(notificationId)
+                ? Priority.low
+                : Priority.high,
+            silent: ValueHandler().isTextNotEmptyOrNull(notificationId));
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
     await flutterLocalNotificationsPlugin.show(
-        getId(),
+        tempNotificationId,
         fcmNotificationModel.title ?? "",
         fcmNotificationModel.message ?? "",
         notificationDetails,
         payload: fcmNotificationModel.actionURL);
+    return tempNotificationId;
   }
 
   Future<Uint8List?> _getByteArrayFromUrl(String url) async {
