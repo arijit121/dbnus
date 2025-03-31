@@ -87,6 +87,7 @@ class FirebaseService {
 
     CustomNotificationModel customNotificationModel =
         CustomNotificationModel.fromJson(massagePayload);
-    NotificationHandler().showFlutterNotification(customNotificationModel);
+    NotificationHandler()
+        .showUpdateFlutterNotification(customNotificationModel);
   }
 }

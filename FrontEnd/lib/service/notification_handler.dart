@@ -185,20 +185,26 @@ class NotificationHandler {
   }
 
   /// Return notification Id
-  Future<int?> showFlutterNotification(
-      CustomNotificationModel fcmNotificationModel) async {
+  Future<int?> showUpdateFlutterNotification(
+      CustomNotificationModel fcmNotificationModel,
+      {int? notificationId}) async {
     if (Platform.isAndroid && fcmNotificationModel.title != null) {
-      return await _showNotificationAndroid(fcmNotificationModel);
+      return await _showUpdateNotificationAndroid(fcmNotificationModel,
+          notificationId: notificationId);
     } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-      return await _showNotificationIos(fcmNotificationModel);
+      return await _showUpdateNotificationIos(fcmNotificationModel,
+          notificationId: notificationId);
     }
     return null;
   }
 
   /// Return notification Id
-  Future<int> _showNotificationIos(CustomNotificationModel fcmNotificationModel,
+  Future<int> _showUpdateNotificationIos(
+      CustomNotificationModel fcmNotificationModel,
       {int? notificationId}) async {
     int tempNotificationId = notificationId ?? getId();
+    bool isNotificationActive = (notificationId != null) &&
+        (await _isNotificationActive(notificationId));
     final String? bigPicturePath =
         ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
             ? await _downloadAndSaveFile(
@@ -225,8 +231,8 @@ class NotificationHandler {
             presentSound: !ValueHandler()
                     .isTextNotEmptyOrNull(notificationId) &&
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
-            presentAlert: !ValueHandler().isTextNotEmptyOrNull(notificationId),
-            presentBadge: !ValueHandler().isTextNotEmptyOrNull(notificationId));
+            presentAlert: !isNotificationActive,
+            presentBadge: !isNotificationActive);
     final NotificationDetails notificationDetailsImage = NotificationDetails(
       iOS: darwinNotificationDetailsImage,
     );
@@ -252,7 +258,7 @@ class NotificationHandler {
   }
 
   int getId() {
-    int max = 5000;
+    int max = 2147483647;
     int min = 1000;
     Random rnd = Random();
     int r = min + rnd.nextInt(max - min);
@@ -260,10 +266,12 @@ class NotificationHandler {
   }
 
   /// Return notification Id
-  Future<int> _showNotificationAndroid(
+  Future<int> _showUpdateNotificationAndroid(
       CustomNotificationModel fcmNotificationModel,
       {int? notificationId}) async {
     int tempNotificationId = notificationId ?? getId();
+    bool isNotificationActive = (notificationId != null) &&
+        (await _isNotificationActive(notificationId));
     ByteArrayAndroidBitmap? bigPicture;
     if (ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)) {
       Uint8List? byte =
@@ -304,20 +312,16 @@ class NotificationHandler {
         AndroidNotificationDetails(channel.id, channel.name,
             channelDescription: channel.description,
             styleInformation: styleInformation,
-            playSound: !ValueHandler().isTextNotEmptyOrNull(notificationId) &&
+            playSound: !isNotificationActive &&
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
             sound:
                 ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
                     ? RawResourceAndroidNotificationSound(
                         fcmNotificationModel.sound!)
                     : null,
-            importance: ValueHandler().isTextNotEmptyOrNull(notificationId)
-                ? Importance.low
-                : Importance.high,
-            priority: ValueHandler().isTextNotEmptyOrNull(notificationId)
-                ? Priority.low
-                : Priority.high,
-            silent: ValueHandler().isTextNotEmptyOrNull(notificationId));
+            importance: isNotificationActive ? Importance.low : Importance.high,
+            priority: isNotificationActive ? Priority.low : Priority.high,
+            silent: isNotificationActive);
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
@@ -340,5 +344,19 @@ class NotificationHandler {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return null;
+  }
+
+  Future<bool> _isNotificationActive(int notificationId) async {
+    final List<ActiveNotification> activeNotifications =
+        await flutterLocalNotificationsPlugin.getActiveNotifications();
+
+    return activeNotifications.any((n) => n.id == notificationId);
+  }
+
+  Future<bool> _isNotificationPending(int notificationId) async {
+    final List<PendingNotificationRequest> pendingNotifications =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+
+    return pendingNotifications.any((n) => n.id == notificationId);
   }
 }

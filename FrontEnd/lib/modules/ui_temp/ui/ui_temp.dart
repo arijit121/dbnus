@@ -33,6 +33,7 @@ class _UiTempState extends State<UiTemp> {
   final TextEditingController _pinController = TextEditingController();
   final ValueNotifier<bool> boolNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<bool> clearPin = ValueNotifier<bool>(false);
+  int? notificationId;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +57,9 @@ class _UiTempState extends State<UiTemp> {
             child: const CustomText("Download")),
         20.ph,
         CustomGOEButton(
-            onPressed: () {
-              NotificationHandler().showFlutterNotification(
+            onPressed: () async {
+              notificationId =
+                  await NotificationHandler().showUpdateFlutterNotification(
                 CustomNotificationModel(
                   title: "Silent Notification4",
                   message: "test",
@@ -74,6 +76,27 @@ class _UiTempState extends State<UiTemp> {
               Colors.blue,
             ]),
             child: const CustomText("Show notification")),
+        20.ph,
+        CustomGOEButton(
+            onPressed: () {
+              NotificationHandler().showUpdateFlutterNotification(
+                CustomNotificationModel(
+                  title: "Silent Notification update",
+                  message: "test ${notificationId}",
+                  bigText:
+                      "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
+                  imageUrl: ApiUrlConst.testImgUrl,
+                  // actionURL: "http://localhost:6906/leader_board",
+                  sound: "slow_spring_board",
+                ),
+                notificationId: notificationId,
+              );
+            },
+            gradient: const LinearGradient(colors: [
+              ColorConst.red,
+              Colors.blue,
+            ]),
+            child: const CustomText("Update notification")),
         20.ph,
         CustomGOEButton(
             onPressed: () async {
