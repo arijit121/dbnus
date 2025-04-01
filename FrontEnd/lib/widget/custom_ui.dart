@@ -18,19 +18,18 @@ class CustomContainer extends StatelessWidget {
   final Gradient? gradient;
   final DecorationImage? image;
 
-  const CustomContainer(
-      {super.key,
-      this.height,
-      this.width,
-      this.borderRadius,
-      this.color,
-      required this.child,
-      this.padding,
-      this.margin,
-      this.borderColor,
-      this.boxShadow,
-      this.gradient,
-      this.image});
+  const CustomContainer({super.key,
+    this.height,
+    this.width,
+    this.borderRadius,
+    this.color,
+    required this.child,
+    this.padding,
+    this.margin,
+    this.borderColor,
+    this.boxShadow,
+    this.gradient,
+    this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +43,8 @@ class CustomContainer extends StatelessWidget {
         gradient: gradient,
         border: borderColor != null
             ? Border.all(
-                color: borderColor!,
-              )
+          color: borderColor!,
+        )
             : null,
         borderRadius: borderRadius,
         boxShadow: boxShadow,
@@ -79,38 +78,30 @@ class _PaginationPullRefreshWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<ScrollEndNotification>(
-        onNotification: (scrollInfo) {
-          /*AppLog.i("Pixels ${scrollInfo.metrics.pixels},"
-              "MinScrollExtent ${scrollInfo.metrics.minScrollExtent},"
-              "MaxScrollExtent ${scrollInfo.metrics.maxScrollExtent}");*/
-          final currentScrollPosition = scrollInfo.metrics.pixels;
-
-          if (scrollInfo.metrics.pixels >=
-                  (scrollInfo.metrics.maxScrollExtent / 2) &&
-              currentScrollPosition > _previousScrollPosition) {
-            if (widget.paginate != null) {
-              mounted
-                  ? widget.paginate!()
-                  : WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        widget.paginate!();
-                      }
-                    });
-            }
+    return RefreshIndicator(
+        color: ColorConst.baseHexColor,
+        backgroundColor: Colors.white,
+        onRefresh: () async {
+          if (widget.onRefresh != null) {
+            widget.onRefresh?.call();
           }
-          _previousScrollPosition = currentScrollPosition;
-          return true;
         },
-        child: RefreshIndicator(
-            color: ColorConst.baseHexColor,
-            backgroundColor: Colors.white,
-            onRefresh: () async {
-              if (widget.onRefresh != null) {
-                widget.onRefresh!();
-              }
-            },
-            child: widget.child));
+        child: NotificationListener<ScrollUpdateNotification>(
+          onNotification: (scrollInfo) {
+            final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
+            final currentScrollPosition = scrollInfo.metrics.pixels;
+
+            if (maxScrollExtent > 0 &&
+                currentScrollPosition >= (maxScrollExtent / 4) &&
+                currentScrollPosition > _previousScrollPosition) {
+              widget.paginate?.call();
+            }
+
+            _previousScrollPosition = currentScrollPosition;
+            return true;
+          },
+          child: widget.child,
+        ));
   }
 }
 
