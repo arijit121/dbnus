@@ -86,7 +86,7 @@ class _PaginationPullRefreshWidgetState
             widget.onRefresh?.call();
           }
         },
-        child: NotificationListener<ScrollNotification>(
+        child: NotificationListener<ScrollUpdateNotification>(
           onNotification: (scrollInfo) {
             final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
             final currentScrollPosition = scrollInfo.metrics.pixels;
