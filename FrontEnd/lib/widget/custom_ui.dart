@@ -18,18 +18,19 @@ class CustomContainer extends StatelessWidget {
   final Gradient? gradient;
   final DecorationImage? image;
 
-  const CustomContainer({super.key,
-    this.height,
-    this.width,
-    this.borderRadius,
-    this.color,
-    required this.child,
-    this.padding,
-    this.margin,
-    this.borderColor,
-    this.boxShadow,
-    this.gradient,
-    this.image});
+  const CustomContainer(
+      {super.key,
+      this.height,
+      this.width,
+      this.borderRadius,
+      this.color,
+      required this.child,
+      this.padding,
+      this.margin,
+      this.borderColor,
+      this.boxShadow,
+      this.gradient,
+      this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +44,8 @@ class CustomContainer extends StatelessWidget {
         gradient: gradient,
         border: borderColor != null
             ? Border.all(
-          color: borderColor!,
-        )
+                color: borderColor!,
+              )
             : null,
         borderRadius: borderRadius,
         boxShadow: boxShadow,
@@ -55,25 +56,24 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-class PaginationPullRefreshWidget extends StatefulWidget {
-  final Function? paginate;
-  final Function? onRefresh;
+class PagedScrollRefreshWidget extends StatefulWidget {
+  final Function? paginate, onRefresh, onScroll;
   final Widget child;
 
-  const PaginationPullRefreshWidget({
+  const PagedScrollRefreshWidget({
     super.key,
     this.paginate,
     this.onRefresh,
+    this.onScroll,
     required this.child,
   });
 
   @override
-  State<PaginationPullRefreshWidget> createState() =>
-      _PaginationPullRefreshWidgetState();
+  State<PagedScrollRefreshWidget> createState() =>
+      _PagedScrollRefreshWidgetState();
 }
 
-class _PaginationPullRefreshWidgetState
-    extends State<PaginationPullRefreshWidget> {
+class _PagedScrollRefreshWidgetState extends State<PagedScrollRefreshWidget> {
   double _previousScrollPosition = 0.0;
 
   @override
@@ -86,8 +86,9 @@ class _PaginationPullRefreshWidgetState
             widget.onRefresh?.call();
           }
         },
-        child: NotificationListener<ScrollUpdateNotification>(
+        child: NotificationListener<ScrollNotification>(
           onNotification: (scrollInfo) {
+            widget.onScroll?.call();
             final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
             final currentScrollPosition = scrollInfo.metrics.pixels;
 
