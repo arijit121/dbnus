@@ -186,13 +186,13 @@ class NotificationHandler {
 
   /// Return notification Id
   Future<int?> showUpdateFlutterNotification(
-      CustomNotificationModel fcmNotificationModel,
+      CustomNotificationModel notificationModel,
       {int? notificationId}) async {
-    if (Platform.isAndroid && fcmNotificationModel.title != null) {
-      return await _showUpdateNotificationAndroid(fcmNotificationModel,
+    if (Platform.isAndroid && notificationModel.title != null) {
+      return await _showUpdateNotificationAndroid(notificationModel,
           notificationId: notificationId);
-    } else if (Platform.isIOS && fcmNotificationModel.title != null) {
-      return await _showUpdateNotificationIos(fcmNotificationModel,
+    } else if (Platform.isIOS && notificationModel.title != null) {
+      return await _showUpdateNotificationIos(notificationModel,
           notificationId: notificationId);
     }
     return null;
@@ -200,37 +200,36 @@ class NotificationHandler {
 
   /// Return notification Id
   Future<int> _showUpdateNotificationIos(
-      CustomNotificationModel fcmNotificationModel,
+      CustomNotificationModel notificationModel,
       {int? notificationId}) async {
     int tempNotificationId = notificationId ?? getId();
     bool isNotificationActive = (notificationId != null) &&
         (await _isNotificationActive(notificationId));
     final String? bigPicturePath =
-        ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)
+        ValueHandler().isTextNotEmptyOrNull(notificationModel.imageUrl)
             ? await _downloadAndSaveFile(
-                fcmNotificationModel.imageUrl!, 'bigPicture.jpg')
+                notificationModel.imageUrl!, 'bigPicture.jpg')
             : null;
 
     final DarwinNotificationDetails darwinNotificationDetailsImage =
         DarwinNotificationDetails(
-            subtitle: ValueHandler()
-                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-                ? ValueHandler()
-                    .parseHtmlToText(fcmNotificationModel.message ?? "")
-                : null,
+            subtitle:
+                ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
+                    ? ValueHandler()
+                        .parseHtmlToText(notificationModel.message ?? "")
+                    : null,
             attachments: bigPicturePath != null
                 ? <DarwinNotificationAttachment>[
                     DarwinNotificationAttachment(bigPicturePath,
                         hideThumbnail: false)
                   ]
                 : null,
-            sound:
-                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
-                    ? "${fcmNotificationModel.sound ?? ""}.aiff"
-                    : null,
+            sound: ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)
+                ? "${notificationModel.sound ?? ""}.aiff"
+                : null,
             presentSound: !ValueHandler()
                     .isTextNotEmptyOrNull(notificationId) &&
-                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
+                ValueHandler().isTextNotEmptyOrNull(notificationModel.sound),
             presentAlert: !isNotificationActive,
             presentBadge: !isNotificationActive);
     final NotificationDetails notificationDetailsImage = NotificationDetails(
@@ -239,11 +238,11 @@ class NotificationHandler {
 
     await flutterLocalNotificationsPlugin.show(
         tempNotificationId,
-        fcmNotificationModel.title ?? "",
+        notificationModel.title ?? "",
         ValueHandler().parseHtmlToText(
-            fcmNotificationModel.bigText ?? fcmNotificationModel.message ?? ""),
+            notificationModel.bigText ?? notificationModel.message ?? ""),
         notificationDetailsImage,
-        payload: fcmNotificationModel.actionURL);
+        payload: notificationModel.actionURL);
     return tempNotificationId;
   }
 
@@ -267,15 +266,14 @@ class NotificationHandler {
 
   /// Return notification Id
   Future<int> _showUpdateNotificationAndroid(
-      CustomNotificationModel fcmNotificationModel,
+      CustomNotificationModel notificationModel,
       {int? notificationId}) async {
     int tempNotificationId = notificationId ?? getId();
     bool isNotificationActive = (notificationId != null) &&
         (await _isNotificationActive(notificationId));
     ByteArrayAndroidBitmap? bigPicture;
-    if (ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.imageUrl)) {
-      Uint8List? byte =
-          await _getByteArrayFromUrl(fcmNotificationModel.imageUrl!);
+    if (ValueHandler().isTextNotEmptyOrNull(notificationModel.imageUrl)) {
+      Uint8List? byte = await _getByteArrayFromUrl(notificationModel.imageUrl!);
       if (byte != null) {
         bigPicture = ByteArrayAndroidBitmap(byte);
       } else {
@@ -288,19 +286,19 @@ class NotificationHandler {
     StyleInformation? styleInformation = bigPicture != null
         ? BigPictureStyleInformation(bigPicture,
             // largeIcon: largeIcon,
-            contentTitle: fcmNotificationModel.title,
-            summaryText: ValueHandler()
-                    .isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-                ? fcmNotificationModel.bigText
-                : fcmNotificationModel.message,
+            contentTitle: notificationModel.title,
+            summaryText:
+                ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
+                    ? notificationModel.bigText
+                    : notificationModel.message,
             htmlFormatContentTitle: true,
             htmlFormatSummaryText: true,
             htmlFormatContent: true,
             htmlFormatTitle: true)
-        : ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.bigText)
-            ? BigTextStyleInformation(fcmNotificationModel.bigText ?? "",
-                contentTitle: fcmNotificationModel.title,
-                summaryText: fcmNotificationModel.message,
+        : ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
+            ? BigTextStyleInformation(notificationModel.bigText ?? "",
+                contentTitle: notificationModel.title,
+                summaryText: notificationModel.message,
                 htmlFormatTitle: true,
                 htmlFormatBigText: true,
                 htmlFormatContent: true,
@@ -308,17 +306,34 @@ class NotificationHandler {
                 htmlFormatSummaryText: true)
             : null;
 
+    AndroidNotificationChannel tempChannel = channel;
+    if (ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)) {
+      AndroidNotificationChannel dynamicChannel = AndroidNotificationChannel(
+        "${channel.id}_${notificationModel.sound}", // id
+        channel.name, // name
+        description: "${channel.description}_sound_${notificationModel.sound}",
+        // description
+        importance: Importance.high,
+        ledColor: Colors.transparent,
+        sound: RawResourceAndroidNotificationSound(notificationModel.sound!),
+        playSound: true,
+      );
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(dynamicChannel);
+      tempChannel = dynamicChannel;
+    }
+
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(channel.id, channel.name,
-            channelDescription: channel.description,
+        AndroidNotificationDetails(tempChannel.id, tempChannel.name,
+            channelDescription: tempChannel.description,
             styleInformation: styleInformation,
             playSound: !isNotificationActive &&
-                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound),
-            sound:
-                ValueHandler().isTextNotEmptyOrNull(fcmNotificationModel.sound)
-                    ? RawResourceAndroidNotificationSound(
-                        fcmNotificationModel.sound!)
-                    : null,
+                ValueHandler().isTextNotEmptyOrNull(notificationModel.sound),
+            sound: ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)
+                ? RawResourceAndroidNotificationSound(notificationModel.sound!)
+                : null,
             importance: isNotificationActive ? Importance.low : Importance.high,
             priority: isNotificationActive ? Priority.low : Priority.high,
             silent: isNotificationActive);
@@ -328,10 +343,10 @@ class NotificationHandler {
 
     await flutterLocalNotificationsPlugin.show(
         tempNotificationId,
-        fcmNotificationModel.title ?? "",
-        fcmNotificationModel.message ?? "",
+        notificationModel.title ?? "",
+        notificationModel.message ?? "",
         notificationDetails,
-        payload: fcmNotificationModel.actionURL);
+        payload: notificationModel.actionURL);
     return tempNotificationId;
   }
 
