@@ -112,11 +112,19 @@ class JSHelper {
       }
 
       if (jsPath != null && jsPath.isNotEmpty) {
-        String _jsFilePath = kReleaseMode &&
-                !jsPath.contains("https://") &&
-                !jsPath.contains("http://")
-            ? "assets/${jsPath ?? ""}"
-            : jsPath ?? "";
+        String _jsFilePath;
+        if (kReleaseMode &&
+            !jsPath.contains("https://") &&
+            !jsPath.contains("http://")) {
+          _jsFilePath = "assets/${jsPath ?? ""}";
+          final flutterAssetBase =
+              js_util.getProperty(html.window, 'flutterAssetBase');
+          if (flutterAssetBase is String) {
+            _jsFilePath = flutterAssetBase + _jsFilePath;
+          }
+        } else {
+          _jsFilePath = jsPath ?? "";
+        }
 
         // Check if the script is already loaded
         if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
