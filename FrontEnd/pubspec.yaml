@@ -97,6 +97,7 @@ dependencies:
   flame: ^1.25.0
   flame_forge2d: ^0.18.2+6
   flame_svg: ^1.11.6
+  gif_view: ^1.0.2
 
   # Payment
   # paytm_allinonesdk: 1.2.6

@@ -238,8 +238,9 @@ class CustomFilePicker {
           context: context,
           builder: (BuildContext context) {
             return Container(
-              height: 150,
-              padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+              height: 156,
+              padding:
+                  const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
