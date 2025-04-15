@@ -20,6 +20,7 @@ import '../service/value_handler.dart' deferred as value_handler;
 import '../storage/local_preferences.dart' deferred as local_preferences;
 
 import '../utils/screen_utils.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class AppConfig {
   Future<String> getAppVersion() async {
@@ -172,13 +173,19 @@ class AppConfig {
   }
 
   Future<String?> getWifiIpV4() async {
-    return await _getIpFromInternet(
-        tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
+    final info = NetworkInfo();
+    String? wifiIpV4 = await info.getWifiIP();
+    return wifiIpV4 ??
+        await _getIpFromInternet(
+            tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
   }
 
   Future<String?> getWifiIpV6() async {
-    return await _getIpFromInternet(
-        tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
+    final info = NetworkInfo();
+    String? wifiIpV6 = await info.getWifiIPv6();
+    return wifiIpV6 ??
+        await _getIpFromInternet(
+            tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
   }
 
   Future<String?> _getIpFromInternet(
