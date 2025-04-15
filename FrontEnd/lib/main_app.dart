@@ -93,6 +93,7 @@ Future<void> main() async {
   await NotificationHandler().requestPermissions();
   await NotificationHandler().initiateNotification();
   await DownloadHandler().config();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
