@@ -4,6 +4,9 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
+import 'package:device_info_plus/device_info_plus.dart'
+    deferred as device_info_plus;
+import 'package:permission_handler/permission_handler.dart';
 
 import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
@@ -60,16 +63,18 @@ class DownloadHandler {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
           await FileDownloader().enqueue(DownloadTask(
-              filename:
-                  '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
-              url: downloadUrl,
-              directory: await downloadPath(),
-              updates: Updates.statusAndProgress,
-              retries: 7,
-              // request status and progress updates
-              group: _group,
-              headers: headers,
-              urlQueryParameters: urlQueryParameters));
+            filename:
+                '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
+            url: downloadUrl,
+            directory: await downloadPath(),
+            updates: Updates.statusAndProgress,
+            retries: 7,
+            // request status and progress updates
+            group: _group,
+            headers: headers,
+            urlQueryParameters: urlQueryParameters,
+            baseDirectory: BaseDirectory.root,
+          ));
           // Use .download to start a download and wait for it to complete
         } else {
           // Start download, and wait for result. Show progress and status changes
@@ -84,6 +89,7 @@ class DownloadHandler {
             retries: 5,
             headers: headers,
             urlQueryParameters: urlQueryParameters,
+            baseDirectory: BaseDirectory.root,
           ));
           // Act on the result
           switch (result.status) {
@@ -192,7 +198,13 @@ class DownloadHandler {
       if (Platform.isIOS) {
         directoryPath =
             (await path_provider.getApplicationDocumentsDirectory()).path;
-      } else {
+      } else if (Platform.isAndroid) {
+        await device_info_plus.loadLibrary();
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        if (androidInfo.version.sdkInt >= 30) {
+          await _requestManageExternalStoragePermission();
+        }
         directoryPath = "/storage/emulated/0/Download";
 
         bool dirDownloadExists = await Directory(directoryPath).exists();
@@ -201,6 +213,9 @@ class DownloadHandler {
         } else {
           directoryPath = "/storage/emulated/0/Downloads";
         }
+      } else {
+        directoryPath =
+            (await path_provider.getDownloadsDirectory())?.path ?? "";
       }
       bool dirDownloadExists = await Directory(directoryPath).exists();
       if (!dirDownloadExists) {
@@ -211,5 +226,21 @@ class DownloadHandler {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return "";
+  }
+
+  Future<void> _requestManageExternalStoragePermission() async {
+    if (await Permission.manageExternalStorage.isGranted) return;
+    final status = await Permission.manageExternalStorage.request();
+    if (status.isPermanentlyDenied) {
+      await pop_up_items.loadLibrary();
+      await pop_up_items.PopUpItems().cupertinoPopup(
+        title: "File Permission Required",
+        content: "For download file.",
+        cancelBtnPresses: () {},
+        okBtnPressed: () async {
+          await openAppSettings();
+        },
+      );
+    }
   }
 }
