@@ -174,7 +174,12 @@ class AppConfig {
 
   Future<String?> getWifiIpV4() async {
     final info = NetworkInfo();
-    String? wifiIpV4 = await info.getWifiIP();
+    String? wifiIpV4;
+    try {
+      wifiIpV4 = await info.getWifiIPv6();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
     return wifiIpV4 ??
         await _getIpFromInternet(
             tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
@@ -182,7 +187,12 @@ class AppConfig {
 
   Future<String?> getWifiIpV6() async {
     final info = NetworkInfo();
-    String? wifiIpV6 = await info.getWifiIPv6();
+    String? wifiIpV6;
+    try {
+      wifiIpV6 = await info.getWifiIPv6();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
     return wifiIpV6 ??
         await _getIpFromInternet(
             tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
