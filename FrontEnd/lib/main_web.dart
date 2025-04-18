@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'const/theme_const.dart';
+import 'data/connection/bloc/connection_bloc.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/router_manager.dart';
@@ -92,6 +93,11 @@ class _MyWebAppState extends State<MyWebApp> {
         BlocProvider(
           create: (BuildContext context) =>
               LocalizationBloc()..add(InitLocalization()),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (BuildContext context) =>
+              ConnectionBloc()..add(InitConnection()),
         ),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(

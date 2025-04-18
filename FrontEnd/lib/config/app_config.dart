@@ -14,6 +14,8 @@ import '../data/connection/connection_status.dart'
     deferred as connection_status;
 
 // import '../data/model/api_return_model.dart';
+import '../data/connection/utils/connection_utils.dart'
+    deferred as connection_utils;
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart' deferred as js_provider;
 import '../service/value_handler.dart' deferred as value_handler;
@@ -173,29 +175,13 @@ class AppConfig {
   }
 
   Future<String?> getWifiIpV4() async {
-    final info = NetworkInfo();
-    String? wifiIpV4;
-    try {
-      wifiIpV4 = await info.getWifiIPv6();
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-    }
-    return wifiIpV4 ??
-        await _getIpFromInternet(
-            tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
+    await connection_utils.loadLibrary();
+    return await connection_utils.ConnectionUtils().getIpV4();
   }
 
   Future<String?> getWifiIpV6() async {
-    final info = NetworkInfo();
-    String? wifiIpV6;
-    try {
-      wifiIpV6 = await info.getWifiIPv6();
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-    }
-    return wifiIpV6 ??
-        await _getIpFromInternet(
-            tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
+    await connection_utils.loadLibrary();
+    return await connection_utils.ConnectionUtils().getIpV6();
   }
 
   Future<String?> _getIpFromInternet(
