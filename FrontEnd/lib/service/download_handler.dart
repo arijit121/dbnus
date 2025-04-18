@@ -58,7 +58,15 @@ class DownloadHandler {
         await pop_up_items.loadLibrary();
         pop_up_items.PopUpItems()
             .toastMessage("Downloading ...", Colors.blueAccent);
-
+        BaseDirectory baseDirectory = BaseDirectory.applicationDocuments;
+        if (Platform.isAndroid) {
+          await device_info_plus.loadLibrary();
+          final deviceInfo = device_info_plus.DeviceInfoPlugin();
+          final androidInfo = await deviceInfo.androidInfo;
+          if (androidInfo.version.sdkInt >= 30) {
+            baseDirectory = BaseDirectory.root;
+          }
+        }
         if (inGroup == true) {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
@@ -73,7 +81,7 @@ class DownloadHandler {
             group: _group,
             headers: headers,
             urlQueryParameters: urlQueryParameters,
-            baseDirectory: BaseDirectory.root,
+            baseDirectory: baseDirectory,
           ));
           // Use .download to start a download and wait for it to complete
         } else {
@@ -89,7 +97,7 @@ class DownloadHandler {
             retries: 5,
             headers: headers,
             urlQueryParameters: urlQueryParameters,
-            baseDirectory: BaseDirectory.root,
+            baseDirectory: baseDirectory,
           ));
           // Act on the result
           switch (result.status) {
@@ -202,7 +210,8 @@ class DownloadHandler {
         await device_info_plus.loadLibrary();
         final deviceInfo = device_info_plus.DeviceInfoPlugin();
         final androidInfo = await deviceInfo.androidInfo;
-        if (androidInfo.version.sdkInt >= 30) {
+        if (androidInfo.version.sdkInt >= 29 &&
+            androidInfo.version.sdkInt < 33) {
           await _requestManageExternalStoragePermission();
         }
         directoryPath = "/storage/emulated/0/Download";
@@ -229,8 +238,8 @@ class DownloadHandler {
   }
 
   Future<void> _requestManageExternalStoragePermission() async {
-    if (await Permission.manageExternalStorage.isGranted) return;
-    final status = await Permission.manageExternalStorage.request();
+    if (await Permission.storage.isGranted) return;
+    final status = await Permission.storage.request();
     if (status.isPermanentlyDenied) {
       await pop_up_items.loadLibrary();
       await pop_up_items.PopUpItems().cupertinoPopup(
