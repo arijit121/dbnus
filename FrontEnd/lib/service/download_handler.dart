@@ -4,8 +4,6 @@ import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
-import 'package:device_info_plus/device_info_plus.dart'
-    deferred as device_info_plus;
 import 'package:permission_handler/permission_handler.dart';
 
 import '../config/app_config.dart' deferred as app_config;
