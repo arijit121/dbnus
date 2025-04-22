@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart'
-    deferred as device_info_plus;
+import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
 import 'package:geolocator/geolocator.dart';
@@ -14,12 +13,15 @@ import '../data/connection/connection_status.dart'
     deferred as connection_status;
 
 // import '../data/model/api_return_model.dart';
+import '../data/connection/utils/connection_utils.dart'
+    deferred as connection_utils;
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart' deferred as js_provider;
 import '../service/value_handler.dart' deferred as value_handler;
 import '../storage/local_preferences.dart' deferred as local_preferences;
 
 import '../utils/screen_utils.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class AppConfig {
   Future<String> getAppVersion() async {
@@ -118,17 +120,14 @@ class AppConfig {
 
   Future<String?> getDeviceName() async {
     if (kIsWeb) {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final webInfo = await deviceInfo.webBrowserInfo;
       return '${webInfo.browserName.name} - ${webInfo.platform}';
     } else if (Platform.isAndroid) {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.model;
     } else {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
@@ -138,17 +137,14 @@ class AppConfig {
 
   Future<String?> getDeviceOsInfo() async {
     if (kIsWeb) {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final webInfo = await deviceInfo.webBrowserInfo;
       return '${webInfo.platform} ${webInfo.userAgent}';
     } else if (Platform.isAndroid) {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final androidInfo = await deviceInfo.androidInfo;
       return androidInfo.version.release;
     } else {
-      await device_info_plus.loadLibrary();
       final deviceInfo = device_info_plus.DeviceInfoPlugin();
       final iosInfo = await deviceInfo.iosInfo;
 
@@ -172,13 +168,13 @@ class AppConfig {
   }
 
   Future<String?> getWifiIpV4() async {
-    return await _getIpFromInternet(
-        tag: 'WifiIpV4', uri: 'https://api.ipify.org?format=json');
+    await connection_utils.loadLibrary();
+    return await connection_utils.ConnectionUtils().getIpV4();
   }
 
   Future<String?> getWifiIpV6() async {
-    return await _getIpFromInternet(
-        tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
+    await connection_utils.loadLibrary();
+    return await connection_utils.ConnectionUtils().getIpV6();
   }
 
   Future<String?> _getIpFromInternet(

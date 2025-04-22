@@ -19,7 +19,7 @@ _flutter.loader.load({
     },
     onEntrypointLoaded: async function (engineInitializer) {
 
-        const assetBase = "/";
+        const assetBase = window.location.origin + "/";
 
         let appRunner = await engineInitializer.initializeEngine({
             assetBase: assetBase,

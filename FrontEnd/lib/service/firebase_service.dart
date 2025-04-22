@@ -87,7 +87,20 @@ class FirebaseService {
 
     CustomNotificationModel customNotificationModel =
         CustomNotificationModel.fromJson(massagePayload);
-    NotificationHandler()
-        .showUpdateFlutterNotification(customNotificationModel);
+    NotificationHandler().showUpdateFlutterNotification(customNotificationModel,
+        notificationId: _extractUniqueIdAsInt(message.messageId ?? ""));
+  }
+
+  int? _extractUniqueIdAsInt(String input) {
+    final regex = RegExp(r'0:(\d+)%');
+    final match = regex.firstMatch(input);
+    if (match != null) {
+      final fullId = match.group(1)!;
+      final shortened = fullId.length > 9
+          ? fullId.substring(fullId.length - 9) // take last 9 digits
+          : fullId;
+      return int.tryParse(shortened);
+    }
+    return null;
   }
 }
