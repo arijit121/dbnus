@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:seo/seo.dart';
 
 import 'const/theme_const.dart';
 import 'data/connection/bloc/connection_bloc.dart';
@@ -172,26 +173,30 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           lazy: false,
           create: (BuildContext context) =>
-          ConnectionBloc()..add(InitConnection()),
+              ConnectionBloc()..add(InitConnection()),
         ),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
         builder: (context, localizationState) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            locale: localizationState.locale.value,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: LocalizationUtils.supportedLocales,
-            title: TextUtils.appTitle,
-            themeMode: ThemeMode.system,
-            theme: ThemeConst.theme,
-            darkTheme: ThemeConst.darkTheme,
-            routerConfig: RouterManager.getInstance.router,
+          return SeoController(
+            enabled: true,
+            tree: WidgetTree(context: context),
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              locale: localizationState.locale.value,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: LocalizationUtils.supportedLocales,
+              title: TextUtils.appTitle,
+              themeMode: ThemeMode.system,
+              theme: ThemeConst.theme,
+              darkTheme: ThemeConst.darkTheme,
+              routerConfig: RouterManager.getInstance.router,
+            ),
           );
         },
       ),
