@@ -82,7 +82,8 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   boxShadow: [
-                    BoxShadow(color: Colors.red, blurRadius: 1, spreadRadius: 0.5
+                    BoxShadow(
+                        color: Colors.red, blurRadius: 1, spreadRadius: 0.5
                         // offset: Offset(4, 8), // Shadow position
                         ),
                   ],

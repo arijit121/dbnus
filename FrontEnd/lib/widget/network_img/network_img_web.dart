@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:seo/seo.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
 import 'package:web/web.dart';
@@ -18,9 +19,11 @@ class NetworkImg extends StatelessWidget {
       this.fit,
       this.color,
       this.errorWidget,
-      this.loadingWidget});
+      this.loadingWidget,
+      this.seoAlt});
 
   final String url;
+  final String? seoAlt;
   final double? height;
   final double? width;
   final BoxFit? fit;
@@ -78,12 +81,16 @@ class NetworkImg extends StatelessWidget {
         // );
       },
       imageBuilder: (context, imageProvider) {
-        return Image(
-          image: imageProvider,
-          width: width,
-          height: height,
-          fit: fit,
-          color: color,
+        return Seo.image(
+          src: url,
+          alt: seoAlt ?? "",
+          child: Image(
+            image: imageProvider,
+            width: width,
+            height: height,
+            fit: fit,
+            color: color,
+          ),
         );
       },
     );

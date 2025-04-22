@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 import '../../../extension/logger_extension.dart';
@@ -51,7 +52,7 @@ class ConnectionUtils {
     final info = NetworkInfo();
     String? wifiIpV4;
     try {
-      wifiIpV4 = await info.getWifiIP();
+      wifiIpV4 = kIsWeb ? null : await info.getWifiIP();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -64,7 +65,7 @@ class ConnectionUtils {
     final info = NetworkInfo();
     String? wifiIpV6;
     try {
-      wifiIpV6 = await info.getWifiIPv6();
+      wifiIpV6 = kIsWeb ? null : await info.getWifiIPv6();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

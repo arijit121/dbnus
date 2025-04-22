@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:seo/seo.dart';
 
 import '../service/open_service.dart';
 import '../service/value_handler.dart';
@@ -49,6 +50,7 @@ class CustomText extends StatelessWidget {
   final Color? backGroundColor;
   final String? font;
   final TextOverflow? overflow;
+  final TextTagStyle seoTag;
 
   const CustomText(
     this.text, {
@@ -63,28 +65,33 @@ class CustomText extends StatelessWidget {
     this.backGroundColor,
     this.font,
     this.overflow,
+    this.seoTag = TextTagStyle.p,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      maxLines: maxLines,
-      textAlign: textAlign,
-      overflow: overflow,
-      style: customizeTextStyle(
-          font: font,
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-          height: lineGapNeeded == true
-              ? 1.8
-              : kIsWeb
-                  ? 1.2
-                  : 0.0,
-          decoration: decoration,
-          backgroundColor: backGroundColor,
-          decorationColor: color),
+    return Seo.text(
+      text: text,
+      style: seoTag,
+      child: Text(
+        text,
+        maxLines: maxLines,
+        textAlign: textAlign,
+        overflow: overflow,
+        style: customizeTextStyle(
+            font: font,
+            fontWeight: fontWeight,
+            fontSize: size,
+            fontColor: color,
+            height: lineGapNeeded == true
+                ? 1.8
+                : kIsWeb
+                    ? 1.2
+                    : 0.0,
+            decoration: decoration,
+            backgroundColor: backGroundColor,
+            decorationColor: color),
+      ),
     );
   }
 }
@@ -128,9 +135,10 @@ InlineSpan CustomTextSpan({
   String? font,
   PlaceholderAlignment? alignment,
   bool? isTextSpan,
+  TextTagStyle? seoTag,
 }) {
-  assert(!(isTextSpan == true && alignment != null),
-      'alignment is not available in TextSpan');
+  assert(!(isTextSpan == true && alignment != null && seoTag != null),
+      'alignment and seoTag are not available in TextSpan');
 
   return isTextSpan == true
       ? TextSpan(
@@ -149,17 +157,21 @@ InlineSpan CustomTextSpan({
       : WidgetSpan(
           alignment: alignment ?? PlaceholderAlignment.baseline,
           baseline: TextBaseline.alphabetic,
-          child: Text(
-            text,
-            style: customizeTextStyle(
-              font: font,
-              fontWeight: fontWeight,
-              fontSize: size,
-              fontColor: color,
-              decoration: decoration,
-              decorationColor: decorationColor,
-              height: height,
-              backgroundColor: backgroundColor,
+          child: Seo.text(
+            text: text,
+            style: seoTag ?? TextTagStyle.p,
+            child: Text(
+              text,
+              style: customizeTextStyle(
+                font: font,
+                fontWeight: fontWeight,
+                fontSize: size,
+                fontColor: color,
+                decoration: decoration,
+                decorationColor: decorationColor,
+                height: height,
+                backgroundColor: backgroundColor,
+              ),
             ),
           ),
         );
@@ -266,25 +278,28 @@ class CustomHtmlText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HtmlWidget(
-      html,
-      textStyle: customizeTextStyle(
-          font: font,
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-          height: lineGapNeeded == true
-              ? 1.8
-              : kIsWeb
-                  ? 1.2
-                  : 0.0,
-          decoration: decoration,
-          backgroundColor: backGroundColor,
-          decorationColor: color),
-      onTapUrl: (url) async {
-        await OpenService().openUrl(uri: Uri.parse(url));
-        return true;
-      },
+    return Seo.html(
+      html: html,
+      child: HtmlWidget(
+        html,
+        textStyle: customizeTextStyle(
+            font: font,
+            fontWeight: fontWeight,
+            fontSize: size,
+            fontColor: color,
+            height: lineGapNeeded == true
+                ? 1.8
+                : kIsWeb
+                    ? 1.2
+                    : 0.0,
+            decoration: decoration,
+            backgroundColor: backGroundColor,
+            decorationColor: color),
+        onTapUrl: (url) async {
+          await OpenService().openUrl(uri: Uri.parse(url));
+          return true;
+        },
+      ),
     );
   }
 }
@@ -297,6 +312,7 @@ class CustomExpandableText extends StatelessWidget {
   final TextAlign? textAlign;
   final String? font;
   final int maxLines;
+  final TextTagStyle seoTag;
 
   const CustomExpandableText(
     this.text, {
@@ -307,23 +323,28 @@ class CustomExpandableText extends StatelessWidget {
     this.textAlign,
     this.font,
     this.maxLines = 2,
+    this.seoTag = TextTagStyle.p,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ExpandableText(
-      text,
-      textAlign: textAlign,
-      style: customizeTextStyle(
-        font: font,
-        fontWeight: fontWeight,
-        fontSize: size,
-        fontColor: color,
+    return Seo.text(
+      text: text,
+      style: seoTag,
+      child: ExpandableText(
+        text,
+        textAlign: textAlign,
+        style: customizeTextStyle(
+          font: font,
+          fontWeight: fontWeight,
+          fontSize: size,
+          fontColor: color,
+        ),
+        expandText: 'show more',
+        collapseText: 'show less',
+        maxLines: maxLines,
+        linkColor: Colors.blue,
       ),
-      expandText: 'show more',
-      collapseText: 'show less',
-      maxLines: maxLines,
-      linkColor: Colors.blue,
     );
   }
 }
@@ -401,6 +422,9 @@ class CustomTextEnum extends StatelessWidget {
   /// Custom text font.
   final String? font;
 
+  /// Seo Text tag.
+  final TextTagStyle seoTag;
+
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
   const CustomTextEnum(
     this.text, {
@@ -412,6 +436,7 @@ class CustomTextEnum extends StatelessWidget {
     this.decoration,
     this.backGroundColor,
     this.font,
+    this.seoTag = TextTagStyle.p,
     super.key,
   });
 
@@ -419,6 +444,7 @@ class CustomTextEnum extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomText(
       text,
+      seoTag: seoTag,
       color: color,
       size: styleType.fontSize,
       fontWeight: styleType.fontWeight,
