@@ -51,7 +51,7 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final int? maxLines;
   final TextDecoration? decoration;
-  final bool lineGapNeeded;
+  final double? height;
   final TextAlign? textAlign;
   final Color? backGroundColor;
   final Color? decorationColor;
@@ -69,7 +69,7 @@ class CustomText extends StatelessWidget {
     this.maxLines,
     this.decoration,
     this.decorationColor,
-    this.lineGapNeeded = false,
+    this.height,
     this.textAlign,
     this.backGroundColor,
     this.font,
@@ -94,11 +94,7 @@ class CustomText extends StatelessWidget {
             fontSize: size,
             fontStyle: fontStyle,
             fontColor: color,
-            height: lineGapNeeded == true
-                ? 1.8
-                : kIsWeb
-                    ? 1.2
-                    : 0.0,
+            height: height ?? (kIsWeb ? 1.2 : 0.0),
             decoration: decoration,
             backgroundColor: backGroundColor,
             decorationColor: decorationColor ?? color),
@@ -168,22 +164,17 @@ InlineSpan CustomTextSpan({
       : WidgetSpan(
           alignment: alignment ?? PlaceholderAlignment.baseline,
           baseline: TextBaseline.alphabetic,
-          child: Seo.text(
-            text: text,
-            style: seoTag ?? TextTagStyle.p,
-            child: Text(
-              text,
-              style: customizeTextStyle(
-                font: font,
-                fontWeight: fontWeight,
-                fontSize: size,
-                fontColor: color,
-                decoration: decoration,
-                decorationColor: decorationColor,
-                height: height,
-                backgroundColor: backgroundColor,
-              ),
-            ),
+          child: CustomText(
+            text,
+            seoTag: seoTag ?? TextTagStyle.p,
+            font: font,
+            fontWeight: fontWeight,
+            size: size,
+            color: color,
+            decoration: decoration,
+            decorationColor: decorationColor,
+            height: height,
+            backGroundColor: backgroundColor,
           ),
         );
 }
@@ -465,7 +456,7 @@ class CustomTextEnum extends StatelessWidget {
       fontWeight: styleType.fontWeight,
       maxLines: maxLines,
       decoration: decoration,
-      lineGapNeeded: lineGapNeeded,
+      height: lineGapNeeded ? 1.8 : null,
       textAlign: textAlign,
       backGroundColor: backGroundColor,
       font: font,
