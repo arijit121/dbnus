@@ -72,6 +72,7 @@ class NetworkImg extends StatelessWidget {
             fit: fit,
             color: color,
             errorWidget: errorWidget,
+            alt: seoAlt,
           );
         });
         // Image.asset(
@@ -105,7 +106,8 @@ class _CorsNetworkImg extends StatefulWidget {
       this.width,
       this.fit,
       this.color,
-      this.errorWidget})
+      this.errorWidget,
+      this.alt})
       : assert(height != null || width != null,
             'Height or Width must be provided for CorsNetworkImg');
 
@@ -115,6 +117,7 @@ class _CorsNetworkImg extends StatefulWidget {
   final BoxFit? fit;
   final Color? color;
   final Widget? errorWidget;
+  final String? alt;
 
   @override
   State<_CorsNetworkImg> createState() => _CorsNetworkImgState();
@@ -166,6 +169,7 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           final imageElement = element as web.HTMLImageElement;
                           _imageElement = imageElement;
                           imageElement.src = widget.url;
+                          imageElement.alt = widget.alt ?? "";
                           imageElement.style.width = widget.width != null
                               ? '${widget.width}px'
                               : 'auto';
