@@ -16,9 +16,11 @@ TextStyle customizeTextStyle(
     Color? decorationColor,
     double? height,
     Color? backgroundColor,
-    String? font}) {
+    String? font,
+    FontStyle? fontStyle}) {
   return ValueHandler().isTextNotEmptyOrNull(font)
-      ? GoogleFonts.getFont(font!,
+      ? GoogleFonts.getFont(
+          font!,
           decoration: decoration,
           fontWeight: fontWeight,
           wordSpacing: 0,
@@ -26,7 +28,9 @@ TextStyle customizeTextStyle(
           fontSize: fontSize,
           decorationColor: decorationColor,
           height: height,
-          backgroundColor: backgroundColor)
+          backgroundColor: backgroundColor,
+          fontStyle: fontStyle,
+        )
       : GoogleFonts.inter(
           decoration: decoration,
           fontWeight: fontWeight,
@@ -35,7 +39,9 @@ TextStyle customizeTextStyle(
           fontSize: fontSize,
           decorationColor: decorationColor,
           height: height,
-          backgroundColor: backgroundColor);
+          backgroundColor: backgroundColor,
+          fontStyle: fontStyle,
+        );
 }
 
 class CustomText extends StatelessWidget {
@@ -51,6 +57,7 @@ class CustomText extends StatelessWidget {
   final String? font;
   final TextOverflow? overflow;
   final TextTagStyle seoTag;
+  final FontStyle? fontStyle;
 
   const CustomText(
     this.text, {
@@ -65,6 +72,7 @@ class CustomText extends StatelessWidget {
     this.backGroundColor,
     this.font,
     this.overflow,
+    this.fontStyle,
     this.seoTag = TextTagStyle.p,
   });
 
@@ -82,6 +90,7 @@ class CustomText extends StatelessWidget {
             font: font,
             fontWeight: fontWeight,
             fontSize: size,
+            fontStyle: fontStyle,
             fontColor: color,
             height: lineGapNeeded == true
                 ? 1.8
@@ -425,6 +434,9 @@ class CustomTextEnum extends StatelessWidget {
   /// Seo Text tag.
   final TextTagStyle seoTag;
 
+  /// FontStyle normal or italic.
+  final FontStyle? fontStyle;
+
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
   const CustomTextEnum(
     this.text, {
@@ -436,6 +448,7 @@ class CustomTextEnum extends StatelessWidget {
     this.decoration,
     this.backGroundColor,
     this.font,
+    this.fontStyle,
     this.seoTag = TextTagStyle.p,
     super.key,
   });
@@ -454,6 +467,7 @@ class CustomTextEnum extends StatelessWidget {
       textAlign: textAlign,
       backGroundColor: backGroundColor,
       font: font,
+      fontStyle: fontStyle,
     );
   }
 }
