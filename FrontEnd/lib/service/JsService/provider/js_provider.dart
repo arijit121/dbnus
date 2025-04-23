@@ -98,9 +98,9 @@ class JsProvider {
     }
   }
 
-  Future<void> loadJs({required String jsPath}) async {
+  Future<void> loadJs({required String jsPath, String? id}) async {
     try {
-      await jsHelper.loadJs(jsPath: jsPath);
+      await jsHelper.loadJs(jsPath: jsPath, id: id);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

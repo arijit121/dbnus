@@ -99,6 +99,7 @@ class JSHelper {
   ///
   Future<T?> loadJs<T>(
       {String? jsPath,
+      String? id,
       String? jsFunctionName,
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
@@ -133,6 +134,9 @@ class JSHelper {
             ..type = 'application/javascript'
             ..src = _jsFilePath;
 
+          if (ValueHandler().isTextNotEmptyOrNull(id)) {
+            script.id = id!;
+          }
           // Append the script to the document head
           html.document.head!.append(script);
 
