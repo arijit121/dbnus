@@ -5,6 +5,7 @@ import 'dart:js' deferred as js;
 import 'dart:js_util' deferred as js_util;
 import 'package:web/web.dart' as web;
 import 'package:flutter/foundation.dart';
+import '../../value_handler.dart';
 
 class JSHelper {
   // Future paytmLoadScript(

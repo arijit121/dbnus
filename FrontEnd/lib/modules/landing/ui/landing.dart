@@ -5,6 +5,7 @@ import '../../../extension/logger_extension.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/text_utils.dart';
 import '../../../widget/custom_button.dart';
+import '../../../widget/init_widget.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
 import '../widget/landing_widget.dart';
@@ -22,13 +23,13 @@ class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _narrowUiBody({required LandingState state}) =>
-      state.page.value ?? Container();
+      state.page.value ?? Center(child: InitWidget());
 
   Widget _mediumUiBody({required LandingState state}) =>
-      Flexible(child: state.page.value ?? Container());
+      Flexible(child: state.page.value ?? Center(child: InitWidget()));
 
   Widget _largeUiBody({required LandingState state}) => Flexible(
-        child: state.page.value ?? Container(),
+        child: state.page.value ?? Center(child: InitWidget()),
       );
 
   void _onChooseIndex(
