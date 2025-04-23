@@ -54,6 +54,7 @@ class CustomText extends StatelessWidget {
   final bool lineGapNeeded;
   final TextAlign? textAlign;
   final Color? backGroundColor;
+  final Color? decorationColor;
   final String? font;
   final TextOverflow? overflow;
   final TextTagStyle seoTag;
@@ -67,6 +68,7 @@ class CustomText extends StatelessWidget {
     this.fontWeight,
     this.maxLines,
     this.decoration,
+    this.decorationColor,
     this.lineGapNeeded = false,
     this.textAlign,
     this.backGroundColor,
@@ -99,7 +101,7 @@ class CustomText extends StatelessWidget {
                     : 0.0,
             decoration: decoration,
             backgroundColor: backGroundColor,
-            decorationColor: color),
+            decorationColor: decorationColor ?? color),
       ),
     );
   }
