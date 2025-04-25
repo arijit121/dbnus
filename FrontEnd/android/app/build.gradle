@@ -37,7 +37,7 @@ android {
 
     namespace = 'com.arj.dbnus'
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = '27.0.12077973'
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         coreLibraryDesugaringEnabled = true
@@ -88,5 +88,5 @@ flutter {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
