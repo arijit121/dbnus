@@ -16,7 +16,6 @@ class CustomNetWorkImageView extends StatelessWidget {
     this.color,
     this.loadingWidget,
     this.errorWidget,
-    this.seoAlt,
   });
 
   final String url;
@@ -26,7 +25,6 @@ class CustomNetWorkImageView extends StatelessWidget {
   final double? radius;
   final Color? color;
   final Widget? loadingWidget, errorWidget;
-  final String? seoAlt;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,6 @@ class CustomNetWorkImageView extends StatelessWidget {
         color: color,
         errorWidget: errorWidget,
         loadingWidget: loadingWidget,
-        seoAlt: seoAlt,
       ),
     );
   }

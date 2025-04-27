@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
 import 'package:web/web.dart';
-import 'package:universal_html/html.dart' deferred as html;
-
 import '../../const/assects_const.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
 import 'dart:js' show allowInterop;
 
-class NetworkImg extends StatefulWidget {
+class NetworkImg extends StatelessWidget {
   const NetworkImg(
       {super.key,
       required this.url,
@@ -19,11 +17,9 @@ class NetworkImg extends StatefulWidget {
       this.fit,
       this.color,
       this.errorWidget,
-      this.loadingWidget,
-      this.seoAlt});
+      this.loadingWidget});
 
   final String url;
-  final String? seoAlt;
   final double? height;
   final double? width;
   final BoxFit? fit;
@@ -31,60 +27,34 @@ class NetworkImg extends StatefulWidget {
   final Widget? loadingWidget, errorWidget;
 
   @override
-  State<NetworkImg> createState() => _NetworkImgState();
-}
-
-class _NetworkImgState extends State<NetworkImg> {
-  late final _htmlElement;
-
-  @override
-  void dispose() {
-    _removeSeoTagFromHtml();
-    super.dispose();
-  }
-
-  Future<void> _addSeoTagToHtml() async {
-    await html.loadLibrary();
-    _htmlElement = html.DivElement()
-      ..setInnerHtml(
-        '<img src="${widget.url}" alt="${widget.seoAlt}"/>',
-        validator: html.NodeValidatorBuilder.common(),
-      );
-  }
-
-  void _removeSeoTagFromHtml() {
-    _htmlElement?.remove();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: widget.url,
-      width: widget.width != 0.0 ? widget.width : null,
-      height: widget.height != 0.0 ? widget.height : null,
-      fit: widget.fit,
-      color: widget.color,
+      imageUrl: url,
+      width: width != 0.0 ? width : null,
+      height: height != 0.0 ? height : null,
+      fit: fit,
+      color: color,
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return widget.loadingWidget ??
+        return loadingWidget ??
             Shimmer.fromColors(
               baseColor: Colors.grey.shade300,
               highlightColor: Colors.grey.shade100,
               child: Container(
-                width: widget.width,
-                height: widget.height,
+                width: width,
+                height: height,
                 color: Colors.white, // Shimmer background color
               ),
             );
       },
       errorWidget: (_, __, ___) {
         return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-          double calculatedWidth = widget.width ??
+          double calculatedWidth = width ??
               (constraints.minWidth != 0
                   ? constraints.minWidth
                   : constraints.maxWidth != double.infinity
                       ? constraints.maxWidth
                       : 0);
-          double calculatedHeight = widget.height ??
+          double calculatedHeight = height ??
               (constraints.minHeight != 0
                   ? constraints.minHeight
                   : constraints.maxHeight != double.infinity
@@ -92,13 +62,12 @@ class _NetworkImgState extends State<NetworkImg> {
                       : 0);
           return _CorsNetworkImg(
             key: Key("$constraints"),
-            url: widget.url,
+            url: url,
             width: calculatedWidth != 0 ? calculatedWidth : null,
             height: calculatedHeight != 0 ? calculatedHeight : null,
-            fit: widget.fit,
-            color: widget.color,
-            errorWidget: widget.errorWidget,
-            alt: widget.seoAlt,
+            fit: fit,
+            color: color,
+            errorWidget: errorWidget,
           );
         });
         // Image.asset(
@@ -108,13 +77,12 @@ class _NetworkImgState extends State<NetworkImg> {
         // );
       },
       imageBuilder: (context, imageProvider) {
-        _addSeoTagToHtml();
         return Image(
           image: imageProvider,
-          width: widget.width,
-          height: widget.height,
-          fit: widget.fit,
-          color: widget.color,
+          width: width,
+          height: height,
+          fit: fit,
+          color: color,
         );
       },
     );
@@ -129,8 +97,7 @@ class _CorsNetworkImg extends StatefulWidget {
       this.width,
       this.fit,
       this.color,
-      this.errorWidget,
-      this.alt})
+      this.errorWidget})
       : assert(height != null || width != null,
             'Height or Width must be provided for CorsNetworkImg');
 
@@ -140,7 +107,6 @@ class _CorsNetworkImg extends StatefulWidget {
   final BoxFit? fit;
   final Color? color;
   final Widget? errorWidget;
-  final String? alt;
 
   @override
   State<_CorsNetworkImg> createState() => _CorsNetworkImgState();
@@ -192,7 +158,6 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           final imageElement = element as web.HTMLImageElement;
                           _imageElement = imageElement;
                           imageElement.src = widget.url;
-                          imageElement.alt = widget.alt ?? "";
                           imageElement.style.width = widget.width != null
                               ? '${widget.width}px'
                               : 'auto';

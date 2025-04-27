@@ -37,9 +37,14 @@ class RouterManager {
       GoRoute(
         name: RouteName.initialView,
         path: RouteName.initialView,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: 0,
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: 0,
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return slideTransition(
+            landing.LandingUi(index: 0),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -50,10 +55,18 @@ class RouterManager {
       GoRoute(
         name: RouteName.leaderBoard,
         path: RouteName.leaderBoard,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation.indexWhere(
-                (element) => element.action == RouteName.leaderBoard),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation.indexWhere(
+        //         (element) => element.action == RouteName.leaderBoard),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return slideTransition(
+            landing.LandingUi(
+              index: LandingUtils.listNavigation.indexWhere(
+                  (element) => element.action == RouteName.leaderBoard),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -64,10 +77,18 @@ class RouterManager {
       GoRoute(
         name: RouteName.order,
         path: RouteName.order,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.order),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.order),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return slideTransition(
+            landing.LandingUi(
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.order),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -78,10 +99,18 @@ class RouterManager {
       GoRoute(
         name: RouteName.games,
         path: RouteName.games,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.games),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.games),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return slideTransition(
+            landing.LandingUi(
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.games),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -92,10 +121,18 @@ class RouterManager {
       GoRoute(
         name: RouteName.massage,
         path: RouteName.massage,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.massage),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.massage),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return slideTransition(
+            landing.LandingUi(
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.games),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -220,6 +257,32 @@ class RouterManager {
       return null;
     },
   );
+
+  static CustomTransitionPage<void> slideTransition(Widget screen) {
+    return CustomTransitionPage<void>(
+      child: screen,
+      transitionDuration: const Duration(milliseconds: 800), // Adjust as needed
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (kIsWeb) {
+          return child; // No transition on web
+        }
+
+        const begin = Offset(1.0, 0.0); // Start offscreen (right)
+        const end = Offset(0.0, 0.0); // End at the center (screen)
+        final tween = Tween(begin: begin, end: end);
+        final curveTween =
+            CurveTween(curve: Curves.easeOutExpo); // Fast to slow
+
+        return SlideTransition(
+          position: tween.animate(CurvedAnimation(
+            parent: animation,
+            curve: curveTween.curve,
+          )),
+          child: child,
+        );
+      },
+    );
+  }
 }
 
 class SeoObserver extends NavigatorObserver {

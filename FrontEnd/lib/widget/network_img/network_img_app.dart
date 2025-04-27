@@ -13,11 +13,9 @@ class NetworkImg extends StatelessWidget {
       this.fit,
       this.color,
       this.errorWidget,
-      this.loadingWidget,
-      this.seoAlt});
+      this.loadingWidget});
 
   final String url;
-  final String? seoAlt;
   final double? height;
   final double? width;
   final BoxFit? fit;
