@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:seo/seo.dart';
 
 import 'const/theme_const.dart';
 import 'data/connection/bloc/connection_bloc.dart';
@@ -108,33 +107,29 @@ class _MyWebAppState extends State<MyWebApp> {
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
         builder: (context, localizationState) {
-          return SeoController(
-            enabled: true,
-            tree: WidgetTree(context: context),
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              locale: localizationState.locale.value,
-              localizationsDelegates: [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: LocalizationUtils.supportedLocales,
-              title: TextUtils.appTitle,
-              scrollBehavior: const MaterialScrollBehavior().copyWith(
-                dragDevices: {
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.stylus,
-                  PointerDeviceKind.unknown
-                },
-              ),
-              themeMode: ThemeMode.system,
-              theme: ThemeConst.theme,
-              darkTheme: ThemeConst.darkTheme,
-              routerConfig: RouterManager.getInstance.router,
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            locale: localizationState.locale.value,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationUtils.supportedLocales,
+            title: TextUtils.appTitle,
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.touch,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.unknown
+              },
             ),
+            themeMode: ThemeMode.system,
+            theme: ThemeConst.theme,
+            darkTheme: ThemeConst.darkTheme,
+            routerConfig: RouterManager.getInstance.router,
           );
         },
       ),

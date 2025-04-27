@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:seo/seo.dart';
 
 import 'const/theme_const.dart';
 import 'data/connection/bloc/connection_bloc.dart';
@@ -98,7 +97,7 @@ Future<void> main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
   SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
     runApp(const MyApp());
   });
@@ -164,39 +163,38 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (BuildContext context) =>
-              LocalCartBloc()..add(InItLocalCartEvent()),
+          LocalCartBloc()
+            ..add(InItLocalCartEvent()),
         ),
         BlocProvider(
           create: (BuildContext context) =>
-              LocalizationBloc()..add(InitLocalization()),
+          LocalizationBloc()
+            ..add(InitLocalization()),
         ),
         BlocProvider(
           lazy: false,
           create: (BuildContext context) =>
-              ConnectionBloc()..add(InitConnection()),
+          ConnectionBloc()
+            ..add(InitConnection()),
         ),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
         builder: (context, localizationState) {
-          return SeoController(
-            enabled: true,
-            tree: WidgetTree(context: context),
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              locale: localizationState.locale.value,
-              localizationsDelegates: [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: LocalizationUtils.supportedLocales,
-              title: TextUtils.appTitle,
-              themeMode: ThemeMode.system,
-              theme: ThemeConst.theme,
-              darkTheme: ThemeConst.darkTheme,
-              routerConfig: RouterManager.getInstance.router,
-            ),
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            locale: localizationState.locale.value,
+            localizationsDelegates: [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationUtils.supportedLocales,
+            title: TextUtils.appTitle,
+            themeMode: ThemeMode.system,
+            theme: ThemeConst.theme,
+            darkTheme: ThemeConst.darkTheme,
+            routerConfig: RouterManager.getInstance.router,
           );
         },
       ),

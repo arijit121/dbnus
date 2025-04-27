@@ -1,16 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:seo/seo.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
 import 'package:web/web.dart';
+import 'package:universal_html/html.dart' deferred as html;
 
 import '../../const/assects_const.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
 import 'dart:js' show allowInterop;
 
-class NetworkImg extends StatelessWidget {
+class NetworkImg extends StatefulWidget {
   const NetworkImg(
       {super.key,
       required this.url,
@@ -31,34 +31,60 @@ class NetworkImg extends StatelessWidget {
   final Widget? loadingWidget, errorWidget;
 
   @override
+  State<NetworkImg> createState() => _NetworkImgState();
+}
+
+class _NetworkImgState extends State<NetworkImg> {
+  late final _htmlElement;
+
+  @override
+  void dispose() {
+    _removeSeoTagFromHtml();
+    super.dispose();
+  }
+
+  Future<void> _addSeoTagToHtml() async {
+    await html.loadLibrary();
+    _htmlElement = html.DivElement()
+      ..setInnerHtml(
+        '<img src="${widget.url}" alt="${widget.seoAlt}"/>',
+        validator: html.NodeValidatorBuilder.common(),
+      );
+  }
+
+  void _removeSeoTagFromHtml() {
+    _htmlElement?.remove();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: url,
-      width: width != 0.0 ? width : null,
-      height: height != 0.0 ? height : null,
-      fit: fit,
-      color: color,
+      imageUrl: widget.url,
+      width: widget.width != 0.0 ? widget.width : null,
+      height: widget.height != 0.0 ? widget.height : null,
+      fit: widget.fit,
+      color: widget.color,
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return loadingWidget ??
+        return widget.loadingWidget ??
             Shimmer.fromColors(
               baseColor: Colors.grey.shade300,
               highlightColor: Colors.grey.shade100,
               child: Container(
-                width: width,
-                height: height,
+                width: widget.width,
+                height: widget.height,
                 color: Colors.white, // Shimmer background color
               ),
             );
       },
       errorWidget: (_, __, ___) {
         return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-          double calculatedWidth = width ??
+          double calculatedWidth = widget.width ??
               (constraints.minWidth != 0
                   ? constraints.minWidth
                   : constraints.maxWidth != double.infinity
                       ? constraints.maxWidth
                       : 0);
-          double calculatedHeight = height ??
+          double calculatedHeight = widget.height ??
               (constraints.minHeight != 0
                   ? constraints.minHeight
                   : constraints.maxHeight != double.infinity
@@ -66,13 +92,13 @@ class NetworkImg extends StatelessWidget {
                       : 0);
           return _CorsNetworkImg(
             key: Key("$constraints"),
-            url: url,
+            url: widget.url,
             width: calculatedWidth != 0 ? calculatedWidth : null,
             height: calculatedHeight != 0 ? calculatedHeight : null,
-            fit: fit,
-            color: color,
-            errorWidget: errorWidget,
-            alt: seoAlt,
+            fit: widget.fit,
+            color: widget.color,
+            errorWidget: widget.errorWidget,
+            alt: widget.seoAlt,
           );
         });
         // Image.asset(
@@ -82,16 +108,13 @@ class NetworkImg extends StatelessWidget {
         // );
       },
       imageBuilder: (context, imageProvider) {
-        return Seo.image(
-          src: url,
-          alt: seoAlt ?? "",
-          child: Image(
-            image: imageProvider,
-            width: width,
-            height: height,
-            fit: fit,
-            color: color,
-          ),
+        _addSeoTagToHtml();
+        return Image(
+          image: imageProvider,
+          width: widget.width,
+          height: widget.height,
+          fit: widget.fit,
+          color: widget.color,
         );
       },
     );

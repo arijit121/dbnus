@@ -1,9 +1,10 @@
+import 'package:dbnus/enum/seo_tag_enum.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:seo/seo.dart';
+import 'package:universal_html/html.dart' deferred as html;
 
 import '../service/open_service.dart';
 import '../service/value_handler.dart';
@@ -44,7 +45,7 @@ TextStyle customizeTextStyle(
         );
 }
 
-class CustomText extends StatelessWidget {
+class CustomText extends StatefulWidget {
   final String text;
   final Color? color;
   final double? size;
@@ -57,7 +58,7 @@ class CustomText extends StatelessWidget {
   final Color? decorationColor;
   final String? font;
   final TextOverflow? overflow;
-  final TextTagStyle seoTag;
+  final SeoTagEnum seoTag;
   final FontStyle? fontStyle;
 
   const CustomText(
@@ -75,30 +76,77 @@ class CustomText extends StatelessWidget {
     this.font,
     this.overflow,
     this.fontStyle,
-    this.seoTag = TextTagStyle.p,
+    this.seoTag = SeoTagEnum.p,
   });
 
   @override
+  State<CustomText> createState() => _CustomTextState();
+}
+
+class _CustomTextState extends State<CustomText> {
+  late final _htmlElement;
+
+  @override
+  void initState() {
+    super.initState();
+    _addSeoTagToHtml();
+  }
+
+  @override
+  void dispose() {
+    _removeSeoTagFromHtml();
+    super.dispose();
+  }
+
+  Future<void> _addSeoTagToHtml() async {
+    await html.loadLibrary();
+    switch (widget.seoTag) {
+      case SeoTagEnum.h1:
+        _htmlElement = html.HeadingElement.h1()..text = widget.text;
+        break;
+      case SeoTagEnum.h2:
+        _htmlElement = html.HeadingElement.h2()..text = widget.text;
+        break;
+      case SeoTagEnum.h3:
+        _htmlElement = html.HeadingElement.h3()..text = widget.text;
+        break;
+      case SeoTagEnum.h4:
+        _htmlElement = html.HeadingElement.h4()..text = widget.text;
+        break;
+      case SeoTagEnum.h5:
+        _htmlElement = html.HeadingElement.h5()..text = widget.text;
+        break;
+      case SeoTagEnum.h6:
+        _htmlElement = html.HeadingElement.h6()..text = widget.text;
+        break;
+      case SeoTagEnum.p:
+        _htmlElement = html.ParagraphElement()..text = widget.text;
+        break;
+    }
+    html.document.body?.append(_htmlElement!);
+  }
+
+  void _removeSeoTagFromHtml() {
+    _htmlElement?.remove(); // Remove the element from the DOM when disposed
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Seo.text(
-      text: text,
-      style: seoTag,
-      child: Text(
-        text,
-        maxLines: maxLines,
-        textAlign: textAlign,
-        overflow: overflow,
-        style: customizeTextStyle(
-            font: font,
-            fontWeight: fontWeight,
-            fontSize: size,
-            fontStyle: fontStyle,
-            fontColor: color,
-            height: height ?? (kIsWeb ? 1.2 : 0.0),
-            decoration: decoration,
-            backgroundColor: backGroundColor,
-            decorationColor: decorationColor ?? color),
-      ),
+    return Text(
+      widget.text,
+      maxLines: widget.maxLines,
+      textAlign: widget.textAlign,
+      overflow: widget.overflow,
+      style: customizeTextStyle(
+          font: widget.font,
+          fontWeight: widget.fontWeight,
+          fontSize: widget.size,
+          fontStyle: widget.fontStyle,
+          fontColor: widget.color,
+          height: widget.height ?? (kIsWeb ? 1.2 : 0.0),
+          decoration: widget.decoration,
+          backgroundColor: widget.backGroundColor,
+          decorationColor: widget.decorationColor ?? widget.color),
     );
   }
 }
@@ -142,7 +190,7 @@ InlineSpan CustomTextSpan({
   String? font,
   PlaceholderAlignment? alignment,
   bool? isTextSpan,
-  TextTagStyle? seoTag,
+  SeoTagEnum? seoTag,
 }) {
   assert(!(isTextSpan == true && alignment != null && seoTag != null),
       'alignment and seoTag are not available in TextSpan');
@@ -166,7 +214,7 @@ InlineSpan CustomTextSpan({
           baseline: TextBaseline.alphabetic,
           child: CustomText(
             text,
-            seoTag: seoTag ?? TextTagStyle.p,
+            seoTag: seoTag ?? SeoTagEnum.p,
             font: font,
             fontWeight: fontWeight,
             size: size,
@@ -254,7 +302,7 @@ class CustomOnlyText extends StatelessWidget {
   }
 }
 
-class CustomHtmlText extends StatelessWidget {
+class CustomHtmlText extends StatefulWidget {
   final String html;
   final Color? color;
   final double? size;
@@ -279,29 +327,58 @@ class CustomHtmlText extends StatelessWidget {
   });
 
   @override
+  State<CustomHtmlText> createState() => _CustomHtmlTextState();
+}
+
+class _CustomHtmlTextState extends State<CustomHtmlText> {
+  late final _htmlElement;
+
+  @override
+  void initState() {
+    _addSeoTagToHtml();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _removeSeoTagFromHtml();
+    super.dispose();
+  }
+
+  Future<void> _addSeoTagToHtml() async {
+    await html.loadLibrary();
+    _htmlElement = html.DivElement()
+      ..setInnerHtml(
+        widget.html,
+        validator: html.NodeValidatorBuilder.common(),
+      );
+  }
+
+  void _removeSeoTagFromHtml() {
+    _htmlElement?.remove();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Seo.html(
-      html: html,
-      child: HtmlWidget(
-        html,
-        textStyle: customizeTextStyle(
-            font: font,
-            fontWeight: fontWeight,
-            fontSize: size,
-            fontColor: color,
-            height: lineGapNeeded == true
-                ? 1.8
-                : kIsWeb
-                    ? 1.2
-                    : 0.0,
-            decoration: decoration,
-            backgroundColor: backGroundColor,
-            decorationColor: color),
-        onTapUrl: (url) async {
-          await OpenService().openUrl(uri: Uri.parse(url));
-          return true;
-        },
-      ),
+    return HtmlWidget(
+      widget.html,
+      textStyle: customizeTextStyle(
+          font: widget.font,
+          fontWeight: widget.fontWeight,
+          fontSize: widget.size,
+          fontColor: widget.color,
+          height: widget.lineGapNeeded == true
+              ? 1.8
+              : kIsWeb
+                  ? 1.2
+                  : 0.0,
+          decoration: widget.decoration,
+          backgroundColor: widget.backGroundColor,
+          decorationColor: widget.color),
+      onTapUrl: (url) async {
+        await OpenService().openUrl(uri: Uri.parse(url));
+        return true;
+      },
     );
   }
 }
@@ -314,7 +391,7 @@ class CustomExpandableText extends StatelessWidget {
   final TextAlign? textAlign;
   final String? font;
   final int maxLines;
-  final TextTagStyle seoTag;
+  final SeoTagEnum seoTag;
 
   const CustomExpandableText(
     this.text, {
@@ -325,28 +402,24 @@ class CustomExpandableText extends StatelessWidget {
     this.textAlign,
     this.font,
     this.maxLines = 2,
-    this.seoTag = TextTagStyle.p,
+    this.seoTag = SeoTagEnum.p,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Seo.text(
-      text: text,
-      style: seoTag,
-      child: ExpandableText(
-        text,
-        textAlign: textAlign,
-        style: customizeTextStyle(
-          font: font,
-          fontWeight: fontWeight,
-          fontSize: size,
-          fontColor: color,
-        ),
-        expandText: 'show more',
-        collapseText: 'show less',
-        maxLines: maxLines,
-        linkColor: Colors.blue,
+    return ExpandableText(
+      text,
+      textAlign: textAlign,
+      style: customizeTextStyle(
+        font: font,
+        fontWeight: fontWeight,
+        fontSize: size,
+        fontColor: color,
       ),
+      expandText: 'show more',
+      collapseText: 'show less',
+      maxLines: maxLines,
+      linkColor: Colors.blue,
     );
   }
 }
@@ -425,7 +498,7 @@ class CustomTextEnum extends StatelessWidget {
   final String? font;
 
   /// Seo Text tag.
-  final TextTagStyle seoTag;
+  final SeoTagEnum seoTag;
 
   /// FontStyle normal or italic.
   final FontStyle? fontStyle;
@@ -442,7 +515,7 @@ class CustomTextEnum extends StatelessWidget {
     this.backGroundColor,
     this.font,
     this.fontStyle,
-    this.seoTag = TextTagStyle.p,
+    this.seoTag = SeoTagEnum.p,
     super.key,
   });
 
