@@ -1,3 +1,5 @@
+import 'package:dbnus/service/JsService/provider/js_provider.dart'
+    deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:firebase_performance/firebase_performance.dart'
     deferred as firebase_performance;
@@ -83,6 +85,15 @@ class _MyWebAppState extends State<MyWebApp> {
       await firebase_service.loadLibrary();
       await firebase_service.FirebaseService().setAnalyticsCollectionEnabled();
       await firebase_service.FirebaseService().generateToken();
+      await js_provider.loadLibrary();
+      foundation.loadLibrary().then((_) async {
+        await js_provider.JsProvider().loadJs(
+            jsPath:
+                "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js");
+      });
+      await js_provider.JsProvider().loadJs(
+          jsPath:
+              "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
     });
     super.initState();
   }
