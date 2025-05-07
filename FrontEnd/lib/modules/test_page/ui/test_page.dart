@@ -19,6 +19,7 @@ import '../../../flavors.dart';
 import '../../../service/Localization/utils/localization_utils.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
+import '../../../service/open_service.dart';
 import '../../../utils/pop_up_items.dart';
 import '../../../utils/text_utils.dart';
 import '../../../widget/carousel_slider.dart';
@@ -148,6 +149,18 @@ class _TestPageState extends State<TestPage> {
                     Colors.blue,
                   ]),
                   child: const CustomText("GlucosePP")),
+              20.ph,
+              CustomGOEButton(
+                  onPressed: () {
+                    OpenService().openPdf(
+                        pdfUrl:
+                            "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
+                  },
+                  gradient: const LinearGradient(colors: [
+                    ColorConst.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("LipidProfile")),
               20.ph,
               CustomGOEButton(
                   onPressed: () {

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart' deferred as in_app_review;
 import 'package:open_file/open_file.dart' deferred as open_file;
 import 'package:permission_handler/permission_handler.dart';
@@ -5,6 +6,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../extension/logger_extension.dart';
+import '../widget/pdf_viewer_widget.dart' deferred as pdf_viewer_widget;
+import 'context_service.dart';
 
 class OpenService {
   void openWhatsApp({required String contactNo, String? message}) {
@@ -82,6 +85,19 @@ class OpenService {
         : "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
     await openUrl(
       uri: Uri.parse(url),
+    );
+  }
+
+  Future<void> openPdf({required String pdfUrl, String? title}) async {
+    await pdf_viewer_widget.loadLibrary();
+    Navigator.push(
+      CurrentContext().context,
+      MaterialPageRoute(
+        builder: (context) => pdf_viewer_widget.PdfViewerWidget(
+          pdfUrl: pdfUrl,
+          title: title,
+        ),
+      ),
     );
   }
 }
