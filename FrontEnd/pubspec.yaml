@@ -99,6 +99,8 @@ dependencies:
   flame_svg: ^1.11.6
   gif_view: ^1.0.2
   syncfusion_flutter_pdfviewer: ^29.1.41
+  icons_plus: ^5.0.0
+  feather_icons: ^1.2.0
 
   # Payment
   # paytm_allinonesdk: 1.2.6

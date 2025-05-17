@@ -1,6 +1,9 @@
+import 'package:dbnus/extension/spacing.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../const/color_const.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../utils/screen_utils.dart';
 import '../../../utils/text_utils.dart';
@@ -22,14 +25,53 @@ class LandingUi extends StatefulWidget {
 class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Widget _narrowUiBody({required LandingState state}) =>
-      state.page.value ?? Center(child: InitWidget());
+  Widget _uiBody({required LandingState state}) => Column(
+        children: [
+          Row(
+            children: [
+              CustomIconButton(
+                padding: EdgeInsets.all(16),
+                color: ColorConst.primaryDark,
+                iconSize: 24,
+                onPressed: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+                icon: Icon(FeatherIcons.menu),
+              ),
+            ],
+          ),
+          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+        ],
+      );
 
-  Widget _mediumUiBody({required LandingState state}) =>
-      Flexible(child: state.page.value ?? Center(child: InitWidget()));
-
-  Widget _largeUiBody({required LandingState state}) => Flexible(
-        child: state.page.value ?? Center(child: InitWidget()),
+  Widget _mediumUiBody({required LandingState state}) => Row(
+        children: [
+          DrawerNavigationRail(
+              selectedIndex: state.pageIndex.value,
+              chooseIndex: (int value) {
+                _onChooseIndex(
+                    index: value,
+                    context: context,
+                    selectedIndex: state.pageIndex.value);
+              }),
+          8.pw,
+          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+        ],
+      );
+  Widget _largeUiBody({required LandingState state}) => Row(
+        children: [
+          DrawerNavigationRail(
+              selectedIndex: state.pageIndex.value,
+              withTitle: true,
+              chooseIndex: (int value) {
+                _onChooseIndex(
+                    index: value,
+                    context: context,
+                    selectedIndex: state.pageIndex.value);
+              }),
+          8.pw,
+          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+        ],
       );
 
   void _onChooseIndex(
@@ -55,16 +97,6 @@ class _LandingUiState extends State<LandingUi> {
         child: BlocBuilder<LandingBloc, LandingState>(
           builder: (context, state) {
             return Scaffold(
-              appBar: widthState == WidthState.narrow
-                  ? AppBar(
-                      backgroundColor: Colors.white,
-                      leading: CustomIconButton(
-                          onPressed: () {
-                            _scaffoldKey.currentState?.openDrawer();
-                          },
-                          icon: const Icon(Icons.menu_rounded)),
-                    )
-                  : null,
               key: _scaffoldKey,
               drawer: widthState != WidthState.narrow
                   ? null
@@ -84,38 +116,13 @@ class _LandingUiState extends State<LandingUi> {
               body: SafeArea(
                   child: ResponsiveUI(
                 narrowUI: (BuildContext context) {
-                  return _narrowUiBody(state: state);
+                  return _uiBody(state: state);
                 },
                 mediumUI: (BuildContext context) {
-                  return Row(
-                    children: [
-                      DrawerNavigationRail(
-                          selectedIndex: state.pageIndex.value,
-                          chooseIndex: (int value) {
-                            _onChooseIndex(
-                                index: value,
-                                context: context,
-                                selectedIndex: state.pageIndex.value);
-                          }),
-                      _mediumUiBody(state: state),
-                    ],
-                  );
+                  return _mediumUiBody(state: state);
                 },
                 largeUI: (BuildContext context) {
-                  return Row(
-                    children: [
-                      DrawerNavigationRail(
-                          selectedIndex: state.pageIndex.value,
-                          withTitle: true,
-                          chooseIndex: (int value) {
-                            _onChooseIndex(
-                                index: value,
-                                context: context,
-                                selectedIndex: state.pageIndex.value);
-                          }),
-                      _largeUiBody(state: state),
-                    ],
-                  );
+                  return _largeUiBody(state: state);
                 },
               )),
             );
