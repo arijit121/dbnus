@@ -65,6 +65,7 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
           builder: (BuildContext context, bool value, child) {
             return value
                 ? SfPdfViewer.network(widget.pdfUrl,
+                    key: GlobalKey(),
                     maxZoomLevel: 10,
                     scrollDirection: PdfScrollDirection.horizontal)
                 : Center(
