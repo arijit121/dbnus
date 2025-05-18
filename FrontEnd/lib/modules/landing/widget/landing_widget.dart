@@ -27,7 +27,7 @@ class DrawerNavigationRail extends StatefulWidget {
 }
 
 class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
-  final ValueNotifier<bool> _tag = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _tag = ValueNotifier<bool>(true);
 
   @override
   Widget build(BuildContext context) {
