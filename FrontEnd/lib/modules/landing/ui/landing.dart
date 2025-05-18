@@ -40,7 +40,11 @@ class _LandingUiState extends State<LandingUi> {
               ),
             ],
           ),
-          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+          Flexible(
+              child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: state.page.value ?? Center(child: InitWidget()),
+          )),
         ],
       );
 
@@ -56,6 +60,7 @@ class _LandingUiState extends State<LandingUi> {
               }),
           8.pw,
           Flexible(child: state.page.value ?? Center(child: InitWidget())),
+          8.pw,
         ],
       );
   Widget _largeUiBody({required LandingState state}) => Row(
@@ -63,6 +68,7 @@ class _LandingUiState extends State<LandingUi> {
           DrawerNavigationRail(
               selectedIndex: state.pageIndex.value,
               withTitle: true,
+              expanded: true,
               chooseIndex: (int value) {
                 _onChooseIndex(
                     index: value,
@@ -71,6 +77,7 @@ class _LandingUiState extends State<LandingUi> {
               }),
           8.pw,
           Flexible(child: state.page.value ?? Center(child: InitWidget())),
+          8.pw,
         ],
       );
 

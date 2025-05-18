@@ -44,7 +44,7 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
             child: const CustomText("Add to cart")),
         12.ph,
         CustomGOEButton(
-      width: 200,
+            width: 200,
             onPressed: () async {
               kIsWeb
                   ? context.goNamed(RouteName.order)

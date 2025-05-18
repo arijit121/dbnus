@@ -15,10 +15,11 @@ class DrawerNavigationRail extends StatefulWidget {
       {super.key,
       required this.chooseIndex,
       this.withTitle,
+      this.expanded,
       this.selectedIndex});
 
   final void Function(int) chooseIndex;
-  final bool? withTitle;
+  final bool? withTitle, expanded;
   final int? selectedIndex;
 
   @override
@@ -35,7 +36,7 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
       child: ValueListenableBuilder(
           valueListenable: _tag,
           builder: (_, __, ___) {
-            return widget.withTitle == true && !_tag.value
+            return widget.expanded == true && !_tag.value
                 ? Column(
                     children: [
                       Padding(
@@ -71,7 +72,7 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (widget.withTitle == true)
+                          if (widget.expanded == true)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 20),
                               child: CustomIconButton(
