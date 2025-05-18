@@ -41,7 +41,11 @@ class _LandingUiState extends State<LandingUi> {
                     selectedIndex: state.pageIndex.value);
               }),
           8.pw,
-          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+          Flexible(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: state.page.value ?? Center(child: InitWidget()),
+          )),
           8.pw,
         ],
       );
@@ -58,7 +62,11 @@ class _LandingUiState extends State<LandingUi> {
                     selectedIndex: state.pageIndex.value);
               }),
           8.pw,
-          Flexible(child: state.page.value ?? Center(child: InitWidget())),
+          Flexible(
+              child: Padding(
+            padding: const EdgeInsets.only(top: 18),
+            child: state.page.value ?? Center(child: InitWidget()),
+          )),
           8.pw,
         ],
       );

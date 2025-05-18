@@ -27,7 +27,6 @@ class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        12.ph,
         CustomGOEButton(
             width: 200,
             onPressed: () async {
