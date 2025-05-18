@@ -25,27 +25,9 @@ class LandingUi extends StatefulWidget {
 class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Widget _uiBody({required LandingState state}) => Column(
-        children: [
-          Row(
-            children: [
-              CustomIconButton(
-                padding: EdgeInsets.all(16),
-                color: ColorConst.primaryDark,
-                iconSize: 24,
-                onPressed: () {
-                  _scaffoldKey.currentState?.openDrawer();
-                },
-                icon: Icon(FeatherIcons.menu),
-              ),
-            ],
-          ),
-          Flexible(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: state.page.value ?? Center(child: InitWidget()),
-          )),
-        ],
+  Widget _narrowUiBody({required LandingState state}) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: state.page.value ?? Center(child: InitWidget()),
       );
 
   Widget _mediumUiBody({required LandingState state}) => Row(
@@ -119,11 +101,26 @@ class _LandingUiState extends State<LandingUi> {
                                 selectedIndex: state.pageIndex.value);
                           }),
                     ),
+              appBar: widthState != WidthState.narrow
+                  ? null
+                  : AppBar(
+                      leading: CustomIconButton(
+                        padding: EdgeInsets.all(16),
+                        color: ColorConst.primaryDark,
+                        iconSize: 24,
+                        onPressed: () {
+                          _scaffoldKey.currentState?.openDrawer();
+                        },
+                        icon: Icon(FeatherIcons.menu),
+                      ),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                    ),
               backgroundColor: Colors.white,
               body: SafeArea(
                   child: ResponsiveUI(
                 narrowUI: (BuildContext context) {
-                  return _uiBody(state: state);
+                  return _narrowUiBody(state: state);
                 },
                 mediumUI: (BuildContext context) {
                   return _mediumUiBody(state: state);
