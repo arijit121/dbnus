@@ -1,9 +1,8 @@
 import '../utils/text_utils.dart';
-import 'package:universal_html/html.dart' deferred as html;
+import 'package:universal_html/html.dart' as html;
 
 class SeoHandler {
   Future<void> setCanonicalLink() async {
-    await html.loadLibrary();
     String url = html.window.location.href;
     final head = html.document.head;
     final existingLink = head?.querySelector('link[rel="canonical"]');
@@ -19,7 +18,6 @@ class SeoHandler {
   }
 
   Future<void> homeHooterSeo() async {
-    await html.loadLibrary();
     final document = html.document;
     final seoContainer = html.DivElement()..className = 'footerSeoCon';
     seoContainer.setInnerHtml(TextUtils.footer_msg_web,
@@ -30,10 +28,25 @@ class SeoHandler {
   }
 
   Future<void> removeFooterSeoContainer() async {
-    await html.loadLibrary();
     final element = html.document.querySelector('.footerSeoCon');
     if (element != null) {
       element.remove();
     }
+  }
+
+  void injectSeoNodes({String? id, required List<html.Node> children}) {
+    final resolvedContainerId = id ?? 'seo-node';
+
+    final div = html.document.getElementById(resolvedContainerId) ??
+        (html.DivElement()..id = resolvedContainerId);
+
+    for (final node in children) {
+      div.append(node);
+    }
+    html.document.body?.append(div);
+  }
+
+  void removeSeoNodes({String? id}) {
+    html.document.getElementById(id ?? 'seo-node')?.remove();
   }
 }

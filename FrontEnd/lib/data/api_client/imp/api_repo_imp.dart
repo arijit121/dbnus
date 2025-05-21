@@ -148,7 +148,14 @@ Duration timeout() => const Duration(minutes: 4);
 
 enum Method {
   get('GET'),
-  post('POST');
+  post('POST'),
+  put('PUT'),
+  patch('PATCH'),
+  delete('DELETE'),
+  head('HEAD'),
+  options('OPTIONS'),
+  trace('TRACE'),
+  connect('CONNECT');
 
   final String value;
 
