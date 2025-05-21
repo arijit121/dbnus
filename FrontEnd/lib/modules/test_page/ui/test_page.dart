@@ -45,7 +45,6 @@ class _TestPageState extends State<TestPage> {
           child: ListView(
             primary: false,
             children: [
-              20.ph,
               CustomTextEnum(
                 F.title,
                 styleType: CustomTextStyleType.body2,

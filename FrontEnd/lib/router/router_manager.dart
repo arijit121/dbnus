@@ -44,7 +44,7 @@ class RouterManager {
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return slideTransition(
-            landing.LandingUi(index: 0),
+            landing.LandingUi(key: Key("0"), index: 0),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -64,6 +64,8 @@ class RouterManager {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return slideTransition(
             landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.leaderBoard)}"),
               index: LandingUtils.listNavigation.indexWhere(
                   (element) => element.action == RouteName.leaderBoard),
             ),
@@ -86,6 +88,8 @@ class RouterManager {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return slideTransition(
             landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.order)}"),
               index: LandingUtils.listNavigation
                   .indexWhere((element) => element.action == RouteName.order),
             ),
@@ -108,6 +112,8 @@ class RouterManager {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return slideTransition(
             landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.games)}"),
               index: LandingUtils.listNavigation
                   .indexWhere((element) => element.action == RouteName.games),
             ),
@@ -130,8 +136,10 @@ class RouterManager {
         pageBuilder: (BuildContext context, GoRouterState state) {
           return slideTransition(
             landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.massage)}"),
               index: LandingUtils.listNavigation
-                  .indexWhere((element) => element.action == RouteName.games),
+                  .indexWhere((element) => element.action == RouteName.massage),
             ),
           );
         },

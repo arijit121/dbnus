@@ -1,93 +1,152 @@
 import 'package:dbnus/extension/spacing.dart';
+import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
 import '../../../const/color_const.dart';
+import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/custom_ui.dart';
 import '../model/navigation_model.dart';
 import '../utils/landing_utils.dart';
 
-class DrawerNavigationRail extends StatelessWidget {
+class DrawerNavigationRail extends StatefulWidget {
   const DrawerNavigationRail(
       {super.key,
       required this.chooseIndex,
       this.withTitle,
+      this.expanded,
       this.selectedIndex});
 
   final void Function(int) chooseIndex;
-  final bool? withTitle;
+  final bool? withTitle, expanded;
   final int? selectedIndex;
 
   @override
+  State<DrawerNavigationRail> createState() => _DrawerNavigationRailState();
+}
+
+class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
+  final ValueNotifier<bool> _tag = ValueNotifier<bool>(true);
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: withTitle == true
-          ? const EdgeInsets.symmetric(horizontal: 50, vertical: 20)
-          : const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(16.0)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: ColorConst.grey,
-            blurRadius: 4.0,
-            spreadRadius: 1.0,
-          ),
-        ],
-      ),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(LandingUtils.listNavigation.length, (index) {
-            NavigationModel navigationBarModel =
-                LandingUtils.listNavigation.elementAt(index);
-            return InkWell(
-              onTap: () {
-                chooseIndex(index);
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (index == selectedIndex)
-                    withTitle != true
-                        ? CustomContainer(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            height: 44,
-                            width: 44,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 6),
-                            color: ColorConst.baseHexColor,
-                            child: _DrawerNavigationRailWidget(
-                              showTitle: withTitle == true,
-                              color: Colors.white,
-                              navigationBarModel: navigationBarModel,
-                            ),
-                          )
-                        : CustomContainer(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            height: 44,
-                            width: 172,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 22, vertical: 6),
-                            color: ColorConst.baseHexColor,
-                            child: _DrawerNavigationRailWidget(
-                              showTitle: withTitle == true,
-                              color: Colors.white,
-                              navigationBarModel: navigationBarModel,
-                            ),
-                          )
-                  else
-                    _DrawerNavigationRailWidget(
-                      showTitle: withTitle == true,
-                      navigationBarModel: navigationBarModel,
+    return AnimatedSize(
+      duration: Duration(milliseconds: 120),
+      child: ValueListenableBuilder(
+          valueListenable: _tag,
+          builder: (_, __, ___) {
+            return widget.expanded == true && !_tag.value
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8.0, bottom: 8.0, left: 8),
+                        child: CustomIconButton(
+                          iconSize: 24,
+                          color: ColorConst.primaryDark,
+                          padding: EdgeInsets.all(8),
+                          icon: Icon(FeatherIcons.sidebar),
+                          onPressed: () {
+                            _tag.value = true;
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(16.0)),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: ColorConst.grey,
+                          blurRadius: 4.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
                     ),
-                  if (index != (LandingUtils.listNavigation.length - 1)) 30.ph,
-                ],
-              ),
-            );
-          })),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (widget.expanded == true)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: CustomIconButton(
+                                iconSize: 24,
+                                color: ColorConst.primaryDark,
+                                padding: EdgeInsets.zero,
+                                icon: Icon(FeatherIcons.sidebar),
+                                onPressed: () {
+                                  _tag.value = false;
+                                },
+                              ),
+                            ),
+                          ...List.generate(LandingUtils.listNavigation.length,
+                              (index) {
+                            NavigationModel navigationBarModel =
+                                LandingUtils.listNavigation.elementAt(index);
+                            return InkWell(
+                              onTap: () {
+                                widget.chooseIndex(index);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (index == widget.selectedIndex)
+                                    widget.withTitle != true
+                                        ? CustomContainer(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12)),
+                                            height: 44,
+                                            width: 44,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 6, vertical: 6),
+                                            color: ColorConst.baseHexColor,
+                                            child: _DrawerNavigationRailWidget(
+                                              showTitle:
+                                                  widget.withTitle == true,
+                                              color: Colors.white,
+                                              navigationBarModel:
+                                                  navigationBarModel,
+                                            ),
+                                          )
+                                        : CustomContainer(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12)),
+                                            height: 44,
+                                            width: 172,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 22, vertical: 6),
+                                            color: ColorConst.baseHexColor,
+                                            child: _DrawerNavigationRailWidget(
+                                              showTitle:
+                                                  widget.withTitle == true,
+                                              color: Colors.white,
+                                              navigationBarModel:
+                                                  navigationBarModel,
+                                            ),
+                                          )
+                                  else
+                                    _DrawerNavigationRailWidget(
+                                      showTitle: widget.withTitle == true,
+                                      navigationBarModel: navigationBarModel,
+                                    ),
+                                  if (index !=
+                                      (LandingUtils.listNavigation.length - 1))
+                                    30.ph,
+                                ],
+                              ),
+                            );
+                          }),
+                        ]),
+                  );
+          }),
     );
   }
 }
