@@ -183,6 +183,8 @@ class CustomGOEButton extends StatelessWidget {
                 color: effectiveBorderColor,
               )
             : null,
+        gradient: effectiveGradient,
+        color: effectiveGradient == null ? effectiveBackgroundColor : null,
       ),
       child: Material(
         color: Colors.transparent,
