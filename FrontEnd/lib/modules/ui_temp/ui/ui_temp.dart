@@ -57,6 +57,15 @@ class _UiTempState extends State<UiTemp> {
             child: const CustomText("Download")),
         20.ph,
         CustomGOEButton(
+            onPressed: () {
+              DownloadHandler().download(
+                  downloadUrl:
+                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+            },
+            backGroundColor: Colors.blue.shade300,
+            child: const CustomText("Download")),
+        20.ph,
+        CustomGOEButton(
             onPressed: () async {
               notificationId =
                   await NotificationHandler().showUpdateFlutterNotification(
