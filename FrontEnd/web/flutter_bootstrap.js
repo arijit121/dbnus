@@ -13,21 +13,27 @@ function addDelay(delay) {
 }
 
 var web_initial_loader = document.getElementById("web-initial-loader");
+
+const assetBase = window.location.origin + "/";
+
+const searchParams = new URLSearchParams(window.location.search);
+const renderer = searchParams.get('renderer');
+
 _flutter.loader.load({
+    config: {
+         renderer: renderer,
+         canvasKitBaseUrl:`${assetBase}canvaskit/`,
+    },
     serviceWorkerSettings: {
         serviceWorkerVersion: {{flutter_service_worker_version}},
     },
     onEntrypointLoaded: async function (engineInitializer) {
 
-        const assetBase = window.location.origin + "/";
-
-        let appRunner = await engineInitializer.initializeEngine({
-            assetBase: assetBase,
-          });
-
-        window.flutterAssetBase = assetBase;
+        let appRunner = await engineInitializer.initializeEngine({assetBase: assetBase});
 
         await appRunner.runApp();
+
+        window.flutterAssetBase = assetBase;
 
         // Add a delay using the addDelay function.
         await addDelay(10000);
