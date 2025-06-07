@@ -72,3 +72,10 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.gif-loader {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
