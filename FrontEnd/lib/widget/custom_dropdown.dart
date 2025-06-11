@@ -2,7 +2,12 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../const/color_const.dart';
+import '../extension/hex_color.dart';
+import '../service/value_handler.dart';
+import 'custom_button.dart';
+import 'custom_grid_view.dart';
 import 'custom_text.dart';
+import 'custom_ui.dart';
 
 class CustomDropDown<T> extends StatelessWidget {
   final T? selectedValue;
@@ -39,6 +44,265 @@ class CustomDropDown<T> extends StatelessWidget {
                     color: ColorConst.primaryDark, size: 13),
               )),
     );
+  }
+}
+
+class CustomMultiMenuAnchor<T> extends StatelessWidget {
+  final void Function(T?) onPressed;
+  final Widget icon;
+  final List<CustomDropDownModel<T>> items;
+  final List<CustomDropDownModel<T>>? selectedItems;
+  final double? iconSize;
+  final Color? color;
+  final String? nonSelectAbleTitle;
+
+  const CustomMultiMenuAnchor({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    required this.items,
+    this.selectedItems,
+    this.iconSize,
+    this.color,
+    this.nonSelectAbleTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuAnchor(
+      style: MenuStyle(
+        backgroundColor: WidgetStateProperty.all(
+            Colors.white), // Set background color to white
+      ),
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+        return IconButton(
+          iconSize: iconSize,
+          color: color,
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: icon,
+        );
+      },
+      menuChildren: List<MenuItemButton>.generate(
+        items.length,
+        (int index) {
+          bool isSelected = false;
+          if (selectedItems != null &&
+              selectedItems!
+                  .any((item) => item.value == items.elementAt(index).value)) {
+            isSelected = true;
+          }
+          return MenuItemButton(
+            onPressed: () {
+              onPressed(items.elementAt(index).value);
+            },
+            child: Row(
+              children: [
+                if (items.elementAt(index).value != null &&
+                    items.elementAt(index).title != nonSelectAbleTitle)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: CustomContainer(
+                      color: isSelected ? ColorConst.baseHexColor : null,
+                      height: 18,
+                      width: 18,
+                      borderRadius: BorderRadius.circular(4),
+                      borderColor: isSelected
+                          ? ColorConst.baseHexColor
+                          : ColorConst.grey,
+                      child: isSelected
+                          ? Center(
+                              child: Icon(Icons.check,
+                                  color: Colors.white, size: 16))
+                          : null,
+                    ),
+                  ),
+                CustomText(items.elementAt(index).title ?? "",
+                    color: ColorConst.primaryDark, size: 13),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CustomMultiSelectorBottomSheet<T> extends StatelessWidget {
+  final void Function(List<T>?) onPressed;
+  final Widget child, okButtonWidget;
+  final Widget? cancelButtonWidget;
+  final String? title;
+  final int? crossAxisCount;
+  final List<CustomDropDownModel<T>> items;
+  final List<CustomDropDownModel<T>>? selectedItems;
+
+  const CustomMultiSelectorBottomSheet({
+    super.key,
+    required this.onPressed,
+    required this.items,
+    this.selectedItems,
+    this.crossAxisCount,
+    required this.child,
+    required this.okButtonWidget,
+    this.cancelButtonWidget,
+    this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        List<T?>? v = await _showBottomSheet(context);
+        List<T> result = v
+                ?.where((element) => element != null)
+                .map((e) => e as T)
+                .toList() ??
+            [];
+        onPressed(result);
+      },
+      child: child,
+    );
+  }
+
+  Future<List<T?>?> _showBottomSheet(BuildContext context) async {
+    final selected = selectedItems?.map((e) => e.value).toSet() ?? <T>{};
+
+    final result = await showModalBottomSheet<List<T?>>(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (ValueHandler().isTextNotEmptyOrNull(title))
+                        Expanded(
+                          child: CustomText(title!,
+                              color: ColorConst.primaryDark,
+                              size: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      CustomIconButton(
+                          color: ColorConst.primaryDark,
+                          onPressed: () async {
+                            Navigator.pop(context,
+                                selectedItems?.map((e) => e.value).toList());
+                          },
+                          icon: const Icon(Icons.close))
+                    ],
+                  ),
+                ),
+                if (ValueHandler().isTextNotEmptyOrNull(title))
+                  Divider(color: ColorConst.lineGrey, height: 2),
+                Flexible(
+                  child: CustomGridView.count(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    shrinkWrap: true,
+                    crossAxisCount: crossAxisCount ?? 1,
+                    crossAxisSpacing: 8,
+                    itemCount: items.length,
+                    builder: (context, index) {
+                      final item = items.elementAt(index);
+                      final isSelected = selected.contains(item.value);
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (isSelected == true) {
+                              selected.remove(item.value);
+                            } else {
+                              selected.add(item.value);
+                            }
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(items.elementAt(index).title ?? "",
+                                color: ColorConst.primaryDark, size: 13),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: CustomContainer(
+                                color:
+                                    isSelected ? ColorConst.baseHexColor : null,
+                                height: 18,
+                                width: 18,
+                                borderRadius: BorderRadius.circular(4),
+                                borderColor: isSelected
+                                    ? ColorConst.baseHexColor
+                                    : ColorConst.grey,
+                                child: isSelected
+                                    ? Center(
+                                        child: Icon(Icons.check,
+                                            color: Colors.white, size: 16))
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return 8.ph;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (cancelButtonWidget != null)
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context,
+                                selectedItems?.map((e) => e.value).toList());
+                          },
+                          child: cancelButtonWidget,
+                        ),
+                      InkWell(
+                        onTap: () {
+                          final selectedModels = items
+                              .where((item) => selected.contains(item.value))
+                              .toList();
+                          Navigator.pop(context,
+                              selectedModels.map((e) => e.value).toList());
+                        },
+                        child: okButtonWidget,
+                      ),
+                    ],
+                  ),
+                ),
+                8.ph
+              ],
+            );
+          },
+        );
+      },
+    );
+    return result;
   }
 }
 
