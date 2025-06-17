@@ -1,40 +1,70 @@
 import '../data/model/app_type_version_param.dart';
 import '../data/model/headers.dart';
+import '../extension/logger_extension.dart';
 import 'app_config.dart' deferred as app_config;
 
 class ApiConfig {
-  Future<Map<String, String>> getHeaders(
-      {bool? isPinCodeRequired,
-      bool? onlyContentType,
-      bool? noToken,
-      ContentType? contentType = ContentType.json,
-      bool? withoutOldHeader}) async {
-    await Future.wait([
-      app_config.loadLibrary(),
-    ]);
-    Headers headers;
-    if (onlyContentType == true) {
-      headers = Headers(contentType: contentType?.value);
-    } else {
-      headers = Headers(
+  Future<Map<String, String>> getHeaders({
+    bool? isPinCodeRequired,
+    bool? onlyContentType,
+    bool? noToken,
+    ContentType? contentType = ContentType.json,
+    bool? withoutOldHeader,
+  }) async {
+    try {
+      await app_config.loadLibrary();
+
+      if (onlyContentType == true) {
+        return Headers(contentType: contentType?.value).toJson();
+      }
+
+      final appConfig = app_config.AppConfig();
+
+      // Get all necessary app and device information
+
+      final results = await Future.wait([
+        appConfig.getAppVersion(),
+        appConfig.getAppVersionCode(),
+        appConfig.getDeviceId(),
+        appConfig.getDeviceName(),
+        appConfig.getDeviceOsInfo(),
+        appConfig.getNetworkInfo(),
+        appConfig.getWifiIpV4(),
+        appConfig.getWifiIpV6(),
+      ]);
+
+      final appVersion = results[0] as String;
+      final appVersionCode = results[1] as String;
+      final deviceId = results[2] as String;
+      final deviceName = results[3] as String;
+      final deviceOsInfo = results[4] as String;
+      final networkInfo = results[5] as String;
+      final deviceIpV4 = results[6] as String;
+      final deviceIpV6 = results[7] as String;
+
+      final headers = Headers(
         contentType: contentType?.value,
-        appType: app_config.AppConfig().getAppType(),
-        appVersion: await app_config.AppConfig().getAppVersion(),
-        deviceId: await app_config.AppConfig().getDeviceId(),
-        deviceDensityType: "xhdpi",
-        deviceName: await app_config.AppConfig().getDeviceName(),
-        networkInfo: await app_config.AppConfig().getNetworkInfo(),
-        deviceWidth: app_config.AppConfig().getDeviceWidth(),
-        deviceOsInfo: await app_config.AppConfig().getDeviceOsInfo(),
-        deviceHeight: app_config.AppConfig().getDeviceHeight(),
+        appType: appConfig.getAppType(),
+        appVersion: appVersion,
+        appVersionCode: appVersionCode,
+        deviceId: deviceId,
+        deviceName: deviceName,
+        deviceOsInfo: deviceOsInfo,
+        deviceWidth: appConfig.getDeviceWidth(),
+        deviceHeight: appConfig.getDeviceHeight(),
         deviceDensity: "560",
-        appVersionCode: await app_config.AppConfig().getAppVersionCode(),
+        deviceDensityType: "xhdpi",
+        networkInfo: networkInfo,
         authorization: "Basic YWRtaW46MTIzNA==",
-        deviceIpV6: await app_config.AppConfig().getWifiIpV6(),
-        deviceIpV4: await app_config.AppConfig().getWifiIpV4(),
+        deviceIpV4: deviceIpV4,
+        deviceIpV6: deviceIpV6,
       );
+
+      return headers.toJson();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return {};
     }
-    return headers.toJson();
   }
 
   Future<Map<String, dynamic>> getParams({
