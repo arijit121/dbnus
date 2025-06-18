@@ -33,14 +33,14 @@ class ApiConfig {
         appConfig.getWifiIpV6(),
       ]);
 
-      final appVersion = results[0] as String;
-      final appVersionCode = results[1] as String;
-      final deviceId = results[2] as String;
-      final deviceName = results[3] as String;
-      final deviceOsInfo = results[4] as String;
-      final networkInfo = results[5] as String;
-      final deviceIpV4 = results[6] as String;
-      final deviceIpV6 = results[7] as String;
+      final appVersion = results[0];
+      final appVersionCode = results[1];
+      final deviceId = results[2];
+      final deviceName = results[3];
+      final deviceOsInfo = results[4];
+      final networkInfo = results[5];
+      final deviceIpV4 = results[6];
+      final deviceIpV6 = results[7];
 
       final headers = Headers(
         contentType: contentType?.value,

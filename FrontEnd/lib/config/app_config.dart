@@ -21,25 +21,39 @@ import '../service/value_handler.dart' deferred as value_handler;
 import '../storage/local_preferences.dart' deferred as local_preferences;
 
 import '../utils/screen_utils.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 
 class AppConfig {
-  Future<String> getAppVersion() async {
-    await package_info_plus.loadLibrary();
-    final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
-    return packageInfo.version;
+  Future<String?> getAppVersion() async {
+    try {
+      await package_info_plus.loadLibrary();
+      final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
+      return packageInfo.version;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
-  Future<String> getAppPackageName() async {
-    await package_info_plus.loadLibrary();
-    final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
-    return packageInfo.packageName;
+  Future<String?> getAppPackageName() async {
+    try {
+      await package_info_plus.loadLibrary();
+      final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
+      return packageInfo.packageName;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
-  Future<String> getAppVersionCode() async {
-    await package_info_plus.loadLibrary();
-    final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
-    return packageInfo.buildNumber;
+  Future<String?> getAppVersionCode() async {
+    try {
+      await package_info_plus.loadLibrary();
+      final packageInfo = await package_info_plus.PackageInfo.fromPlatform();
+      return packageInfo.buildNumber;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
   Future<String?> _getBrowserId() async {
@@ -58,7 +72,8 @@ class AppConfig {
             value: browserId ?? uuid.Uuid().v4());
         return browserId;
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       await uuid.loadLibrary();
       String id = uuid.Uuid().v4();
       await local_preferences.LocalPreferences().setString(
@@ -67,9 +82,14 @@ class AppConfig {
     }
   }
 
-  Future<String> getUserAgent() async {
-    await js_provider.loadLibrary();
-    return js_provider.JsProvider().getUserAgent();
+  Future<String?> getUserAgent() async {
+    try {
+      await js_provider.loadLibrary();
+      return js_provider.JsProvider().getUserAgent();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
   String? getAppType() {
@@ -114,88 +134,128 @@ class AppConfig {
       return deviceId;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
+  }
+
+  Future<String?> getDeviceName() async {
+    try {
+      if (kIsWeb) {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final webInfo = await deviceInfo.webBrowserInfo;
+        return '${webInfo.browserName.name} - ${webInfo.platform}';
+      } else if (Platform.isAndroid) {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.model;
+      } else {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final iosInfo = await deviceInfo.iosInfo;
+
+        return iosInfo.utsname.machine;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return null;
   }
 
-  Future<String?> getDeviceName() async {
-    if (kIsWeb) {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final webInfo = await deviceInfo.webBrowserInfo;
-      return '${webInfo.browserName.name} - ${webInfo.platform}';
-    } else if (Platform.isAndroid) {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.model;
-    } else {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final iosInfo = await deviceInfo.iosInfo;
-
-      return iosInfo.utsname.machine;
-    }
-  }
-
   Future<String?> getDeviceOsInfo() async {
-    if (kIsWeb) {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final webInfo = await deviceInfo.webBrowserInfo;
-      return '${webInfo.platform} ${webInfo.userAgent}';
-    } else if (Platform.isAndroid) {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.version.release;
-    } else {
-      final deviceInfo = device_info_plus.DeviceInfoPlugin();
-      final iosInfo = await deviceInfo.iosInfo;
+    try {
+      if (kIsWeb) {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final webInfo = await deviceInfo.webBrowserInfo;
+        return '${webInfo.platform} ${webInfo.userAgent}';
+      } else if (Platform.isAndroid) {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final androidInfo = await deviceInfo.androidInfo;
+        return androidInfo.version.release;
+      } else {
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        final iosInfo = await deviceInfo.iosInfo;
 
-      return iosInfo.systemVersion;
+        return iosInfo.systemVersion;
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  String? getDeviceWidth() {
+    try {
+      return ScreenUtils.aw().toString();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
     }
   }
 
-  String getDeviceWidth() {
-    return ScreenUtils.aw().toString();
+  String? getDeviceHeight() {
+    try {
+      return ScreenUtils.ah().toString();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
-  String getDeviceHeight() {
-    return ScreenUtils.ah().toString();
-  }
-
-  Future<String> getNetworkInfo() async {
-    await connection_status.loadLibrary();
-    final connectionStatus = connection_status.ConnectionStatus.getInstance;
-    String networkInfo = await connectionStatus.getNetworkInfo();
-    return networkInfo;
+  Future<String?> getNetworkInfo() async {
+    try {
+      await connection_status.loadLibrary();
+      final connectionStatus = connection_status.ConnectionStatus.getInstance;
+      String networkInfo = await connectionStatus.getNetworkInfo();
+      return networkInfo;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
   Future<String?> getWifiIpV4() async {
-    await connection_utils.loadLibrary();
-    return await connection_utils.ConnectionUtils().getIpV4();
+    try {
+      await connection_utils.loadLibrary();
+      return await connection_utils.ConnectionUtils().getIpV4();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
   Future<String?> getWifiIpV6() async {
-    await connection_utils.loadLibrary();
-    return await connection_utils.ConnectionUtils().getIpV6();
+    try {
+      await connection_utils.loadLibrary();
+      return await connection_utils.ConnectionUtils().getIpV6();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
   }
 
   Future<String?> _getIpFromInternet(
       {required String tag, required String uri}) async {
-    await Future.wait([
-      connection_status.loadLibrary(),
-      api_repo.loadLibrary(),
-      api_repo_imp.loadLibrary()
-    ]);
-    final connectionStatus = connection_status.ConnectionStatus.getInstance;
-    bool onlineStatus = await connectionStatus.checkConnection();
-    if (onlineStatus) {
-      final response = await api_repo
-          .apiRepo()
-          .callApi(tag: tag, uri: uri, method: api_repo_imp.Method.get);
-      if (response?.responseString != null && response?.statusCode == 200) {
-        var v = json.decode(response?.responseString ?? "");
-        return v['ip'];
+    try {
+      await Future.wait([
+        connection_status.loadLibrary(),
+        api_repo.loadLibrary(),
+        api_repo_imp.loadLibrary()
+      ]);
+      final connectionStatus = connection_status.ConnectionStatus.getInstance;
+      bool onlineStatus = await connectionStatus.checkConnection();
+      if (onlineStatus) {
+        final response = await api_repo
+            .apiRepo()
+            .callApi(tag: tag, uri: uri, method: api_repo_imp.Method.get);
+        if (response?.responseString != null && response?.statusCode == 200) {
+          var v = json.decode(response?.responseString ?? "");
+          return v['ip'];
+        }
       }
+      return null;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
     }
-    return null;
   }
 
   Future<Position?> getCurrentPosition({bool? handleDeniedForever}) async {
@@ -224,7 +284,7 @@ class AppConfig {
       return await Geolocator.getCurrentPosition();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-      return Future.error(e, stacktrace);
+      return null;
     }
   }
 }

@@ -312,7 +312,7 @@ class ValueHandler {
     postParams["HTTP_RANDOM_HASH"] = randomHash.toString();
     /*to manage static access token 13-06-2018*/
     postParams["VersionCode"] =
-        await app_config.AppConfig().getAppVersionCode();
+        await app_config.AppConfig().getAppVersionCode() ?? "";
 
     return postParams;
   }
