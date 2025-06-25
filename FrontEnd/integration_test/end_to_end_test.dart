@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'utils/integration_test_utils.dart';
 
 void main({Flavor appFlavor = Flavor.prod}) {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,8 @@ void main({Flavor appFlavor = Flavor.prod}) {
     await tester.pumpAndSettle();
 
     // Wait until the "account" text appears
-    await pumpUntilFound(tester, find.text("TextUtils.account"));
+    await IntegrationTestUtils.pumpUntilFound(
+        tester, find.text("TextUtils.account"));
     // expect(find.text('Page 2'), findsOneWidget);
     // expect(find.text('Page 2'), findsNothing);
 
@@ -36,7 +38,8 @@ void main({Flavor appFlavor = Flavor.prod}) {
     await tester.pumpAndSettle();
 
     // Is Login Page
-    if (isFound(tester, find.text(TextUtils.enter_your_mobile_number))) {
+    if (IntegrationTestUtils.isFound(
+        tester, find.text(TextUtils.enter_your_mobile_number))) {
       await tester.enterText(
           find.byKey(ValueKey('login_mobile_text_field')), '8000000040');
       await tester.pumpAndSettle();
@@ -58,17 +61,4 @@ void main({Flavor appFlavor = Flavor.prod}) {
     }
     expect(find.byKey(Key("RouteName.menu")), findsOneWidget);
   });
-}
-
-Future<void> pumpUntilFound(WidgetTester tester, Finder finder,
-    {Duration timeout = const Duration(seconds: 10)}) async {
-  final endTime = DateTime.now().add(timeout);
-  while (DateTime.now().isBefore(endTime)) {
-    await tester.pumpAndSettle();
-    if (finder.evaluate().isNotEmpty) return;
-  }
-}
-
-bool isFound(WidgetTester tester, Finder finder) {
-  return finder.evaluate().isNotEmpty;
 }
