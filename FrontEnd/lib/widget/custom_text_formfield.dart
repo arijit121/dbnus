@@ -213,7 +213,7 @@ class PinCodeFormField extends StatefulWidget {
   /// Whether the input fields are enabled.
   final bool enabled;
 
-  /// Whether the input fields are autoFocus.
+  /// Whether the input fields are [autoFocus] default false.
   final bool autoFocus;
 
   /// Whether the input characters should be obscured (e.g., for passwords or OTPs).
@@ -236,6 +236,9 @@ class PinCodeFormField extends StatefulWidget {
   /// ScrollPadding follows the same property as TextField's ScrollPadding, default to const EdgeInsets.all(20),
   final EdgeInsets scrollPadding;
 
+  /// Default [fieldWidth] is 46.
+  final double fieldWidth;
+
   const PinCodeFormField({
     super.key,
     this.length = 6,
@@ -250,6 +253,7 @@ class PinCodeFormField extends StatefulWidget {
     this.uniqueKey,
     this.autoFocus = false,
     this.scrollPadding = const EdgeInsets.all(20.0),
+    this.fieldWidth = 46,
   });
 
   @override
@@ -455,7 +459,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
                     : baseColor;
 
             return SizedBox(
-              width: 46,
+              width: widget.fieldWidth,
               child: TextField(
                 autofocus: index == 0 ? widget.autoFocus : false,
                 scrollPadding: widget.scrollPadding,
