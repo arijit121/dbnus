@@ -106,8 +106,8 @@ On Apple (iOS & macOS), set the content-available field to true.
 flutter clean
 flutter build apk --flavor dev -t lib/main_dev.dart
 flutter install --flavor dev
-adb shell pm grant com.shtpl.sastasundar android.permission.POST_NOTIFICATIONS
-adb shell pm grant com.shtpl.sastasundar android.permission.ACCESS_COARSE_LOCATION
-adb shell pm grant com.shtpl.sastasundar android.permission.ACCESS_FINE_LOCATION
+adb shell pm grant com.dbnus.app.dev android.permission.POST_NOTIFICATIONS
+adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_COARSE_LOCATION
+adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_FINE_LOCATION
 flutter test --flavor dev integration_test/end_to_end_test.dart
 
