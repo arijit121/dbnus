@@ -109,5 +109,5 @@ flutter install --flavor dev
 adb shell pm grant com.dbnus.app.dev android.permission.POST_NOTIFICATIONS
 adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_COARSE_LOCATION
 adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_FINE_LOCATION
-flutter test --flavor dev integration_test/end_to_end_test.dart
+flutter test --flavor dev integration_test/end_to_end_test_dev.dart
 
