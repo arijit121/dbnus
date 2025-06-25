@@ -213,6 +213,9 @@ class PinCodeFormField extends StatefulWidget {
   /// Whether the input fields are enabled.
   final bool enabled;
 
+  /// Whether the input fields are autoFocus.
+  final bool autoFocus;
+
   /// Whether the input characters should be obscured (e.g., for passwords or OTPs).
   final bool obscureText;
 
@@ -245,6 +248,7 @@ class PinCodeFormField extends StatefulWidget {
     this.keyboardType = TextInputType.number,
     this.inputFormatters,
     this.uniqueKey,
+    this.autoFocus = false,
     this.scrollPadding = const EdgeInsets.all(20.0),
   });
 
@@ -336,6 +340,12 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     for (int i = 0; i < widget.length; i++) {
       _fieldControllers[i].text = i < text.length ? text[i] : '';
     }
+    if (text.isEmpty) {
+      setState(() {
+        _hasCompleted = false;
+        _hasError = false;
+      });
+    }
   }
 
   void _onChanged(String value, int index) {
@@ -378,6 +388,13 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     });
   }
 
+  String _extractKeyName(Key? key) {
+    if (key is ValueKey<String>) {
+      return key.value;
+    }
+    return key?.toString() ?? 'pin_code_form_field';
+  }
+
   @override
   Widget build(BuildContext context) {
     final baseColor = ColorConst.lineGrey;
@@ -394,28 +411,33 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
           child: SizedBox(
             height: 0,
             width: 0,
-            child: TextField(
-              key: widget.uniqueKey,
-              scrollPadding: widget.scrollPadding,
-              autofocus: false,
-              enableInteractiveSelection: false,
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                if (value.length > widget.length) return;
+            child: Semantics(
+              label: _extractKeyName(widget.uniqueKey),
+              hidden: false,
+              child: TextField(
+                key: widget.uniqueKey,
+                scrollPadding: widget.scrollPadding,
+                autofocus: false,
+                enableInteractiveSelection: false,
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  if (value.length > widget.length) return;
 
-                for (int i = 0; i < widget.length; i++) {
-                  _fieldControllers[i].text = i < value.length ? value[i] : '';
-                }
+                  for (int i = 0; i < widget.length; i++) {
+                    _fieldControllers[i].text =
+                        i < value.length ? value[i] : '';
+                  }
 
-                _mainController.text = value;
-                if (value.length == widget.length) {
-                  widget.onCompleted?.call(value);
-                }
-                setState(() {
-                  _hasCompleted = value.length == widget.length;
-                  _hasError = false;
-                });
-              },
+                  _mainController.text = value;
+                  if (value.length == widget.length) {
+                    widget.onCompleted?.call(value);
+                  }
+                  setState(() {
+                    _hasCompleted = value.length == widget.length;
+                    _hasError = false;
+                  });
+                },
+              ),
             ),
           ),
         ),
@@ -435,6 +457,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             return SizedBox(
               width: 46,
               child: TextField(
+                autofocus: index == 0 ? widget.autoFocus : false,
                 scrollPadding: widget.scrollPadding,
                 enabled: widget.enabled,
                 controller: _fieldControllers[index],

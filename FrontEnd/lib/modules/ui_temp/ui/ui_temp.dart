@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+// import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../const/api_url_const.dart';
 import '../../../const/color_const.dart';
@@ -60,7 +60,7 @@ class _UiTempState extends State<UiTemp> {
             onPressed: () {
               DownloadHandler().download(
                   downloadUrl:
-                  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
             backGroundColor: Colors.blue.shade300,
             child: const CustomText("Download")),
@@ -193,7 +193,15 @@ class _UiTempState extends State<UiTemp> {
               return boolNotifier.value
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20),
-                      child: PinCodeTextField(
+                      child: PinCodeFormField(
+                        controller: _pinController,
+                        length: 5,
+                        autoFocus: true,
+                        onCompleted: (value) {
+                          AppLog.i(_pinController.text);
+                        },
+                      )
+                      /*PinCodeTextField(
                         textStyle: customizeTextStyle(
                             fontColor: ColorConst.primaryDark),
                         cursorColor: ColorConst.primaryDark,
@@ -229,7 +237,7 @@ class _UiTempState extends State<UiTemp> {
                         onCompleted: (value) {
                           AppLog.i(_pinController.text);
                         },
-                      )
+                      )*/
                       // PinCodeTextField(
                       //   length: 5,
                       //   appContext: context,
