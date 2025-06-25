@@ -36,8 +36,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logout => 'Cerrar Sesión';
 
   @override
-  String get logout_confirmation =>
-      '¿Estás seguro de que quieres cerrar sesión?';
+  String get logout_confirmation => '¿Estás seguro de que quieres cerrar sesión?';
 
   @override
   String get serial_number => 'N°';
@@ -91,8 +90,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get email_validator => 'Ingresa un correo electrónico válido.';
 
   @override
-  String get phone_validation =>
-      'Ingresa un número de móvil válido (10 dígitos).';
+  String get phone_validation => 'Ingresa un número de móvil válido (10 dígitos).';
 
   @override
   String enter_value(String value) {

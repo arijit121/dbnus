@@ -168,3 +168,298 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+
+/// A customizable pin code input widget with separate fields for each digit.
+///
+/// This widget displays a row of `TextField`s for entering a fixed-length pin code,
+/// typically used for OTP (One-Time Password) or verification codes.
+///
+/// It provides built-in support for:
+/// - Obscuring input characters
+/// - Pasting directly from the clipboard (if full code is pasted)
+/// - Styling based on states (active, error, completed)
+/// - Handling auto focus navigation
+/// - Notifying when input is complete
+/// - Testing via a hidden TextField (for `tester.enterText`)
+///
+/// Example usage:
+///
+/// ```dart
+/// final controller = TextEditingController();
+///
+/// PinCodeFormField(
+///   length: 6,
+///   controller: controller,
+///   onCompleted: (code) {
+///     print("Entered code: $code");
+///   },
+/// )
+/// ```
+class PinCodeFormField extends StatefulWidget {
+  /// Total number of digits to input. Default is 6.
+  final int length;
+
+  /// The shared controller to get/set the full pin code value.
+  ///
+  /// If not provided, an internal controller is created and managed.
+  final TextEditingController? controller;
+
+  /// Callback triggered when all fields are filled.
+  final void Function(String)? onCompleted;
+
+  /// Border radius for each digit box.
+  final BorderRadius borderRadius;
+
+  /// Whether the input fields are enabled.
+  final bool enabled;
+
+  /// Whether the input characters should be obscured (e.g., for passwords or OTPs).
+  final bool obscureText;
+
+  /// Character used to obscure text when [obscureText] is true.
+  final String obscuringCharacter;
+
+  /// Keyboard type for input. Defaults to `TextInputType.number`.
+  final TextInputType? keyboardType;
+
+  /// Optional input formatters for the digit fields.
+  ///
+  /// Defaults to allowing digits only.
+  final List<TextInputFormatter>? inputFormatters;
+
+  /// A unique key for internal testing purposes (used in hidden TextField).
+  final Key? uniqueKey;
+
+  const PinCodeFormField({
+    super.key,
+    this.length = 6,
+    this.controller,
+    this.onCompleted,
+    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+    this.enabled = true,
+    this.obscureText = false,
+    this.obscuringCharacter = '•',
+    this.keyboardType = TextInputType.number,
+    this.inputFormatters,
+    this.uniqueKey,
+  });
+
+  @override
+  State<PinCodeFormField> createState() => _PinCodeFormFieldState();
+}
+
+class _PinCodeFormFieldState extends State<PinCodeFormField> {
+  late final List<TextEditingController> _fieldControllers;
+  late final List<FocusNode> _focusNodes;
+  late final TextEditingController _mainController;
+
+  bool _hasError = false;
+  bool _hasCompleted = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fieldControllers =
+        List.generate(widget.length, (_) => TextEditingController());
+    _focusNodes = List.generate(widget.length, (_) => FocusNode());
+    _mainController = widget.controller ?? TextEditingController();
+
+    _mainController.addListener(_syncFromMainController);
+
+    // Listen for paste on first box
+    /*_focusNodes[0].addListener(() async {
+      if (_hasCompleted) return;
+      if (_focusNodes[0].hasFocus) {
+        final data = await Clipboard.getData('text/plain');
+        final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
+        if (pasted.length == widget.length) {
+          for (int i = 0; i < widget.length; i++) {
+            _fieldControllers[i].text = pasted[i];
+          }
+          _mainController.text = pasted;
+          setState(() {
+            _hasCompleted = true;
+            _hasError = false;
+          });
+          if (_fieldControllers.lastOrNull?.text.length == 1) {
+            widget.onCompleted?.call(pasted);
+          }
+        }
+      }
+    });*/
+    for (int i = 0; i < widget.length; i++) {
+      _focusNodes[i].addListener(() async {
+        if (_hasCompleted) return;
+        if (_focusNodes[i].hasFocus) {
+          final data = await Clipboard.getData('text/plain');
+          final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
+          if (pasted.length == widget.length) {
+            for (int j = 0; j < widget.length; j++) {
+              _fieldControllers[j].text = pasted[j];
+            }
+            _mainController.text = pasted;
+            setState(() {
+              _hasCompleted = true;
+              _hasError = false;
+            });
+            if (_fieldControllers.lastOrNull?.text.length == 1) {
+              widget.onCompleted?.call(pasted);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _mainController.removeListener(_syncFromMainController);
+    if (widget.controller == null) {
+      _mainController.dispose();
+    }
+    for (final controller in _fieldControllers) {
+      controller.dispose();
+    }
+    for (final focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
+  void _syncFromMainController() {
+    final text = _mainController.text;
+    for (int i = 0; i < widget.length; i++) {
+      _fieldControllers[i].text = i < text.length ? text[i] : '';
+    }
+  }
+
+  void _onChanged(String value, int index) {
+    if (value.length == 1 && index < widget.length - 1) {
+      _focusNodes[index + 1].requestFocus();
+    } else if (value.isEmpty && index > 0) {
+      _focusNodes[index - 1].requestFocus();
+    }
+
+    final pin = _fieldControllers.map((c) => c.text).join();
+    _mainController.text = pin;
+
+    if (pin.length == widget.length && !pin.contains('')) {
+      setState(() {
+        _hasCompleted = true;
+        _hasError = false;
+      });
+      widget.onCompleted?.call(pin);
+    }
+  }
+
+  /// Clears all digits and resets state
+  void clear() {
+    for (final controller in _fieldControllers) {
+      controller.clear();
+    }
+    _mainController.clear();
+    _focusNodes[0].requestFocus();
+    setState(() {
+      _hasCompleted = false;
+      _hasError = false;
+    });
+  }
+
+  /// Shows error style
+  void markError() {
+    setState(() {
+      _hasError = true;
+      _hasCompleted = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final baseColor = ColorConst.lineGrey;
+    final activeColor = ColorConst.lightBlue;
+    final errorColor = ColorConst.red;
+    final enabledColor = widget.enabled
+        ? ColorConst.primaryDark
+        : ColorConst.secondaryDark;
+
+    return Stack(
+      children: [
+        // Hidden TextField to support tester.enterText
+        Opacity(
+          opacity: 0,
+          child: SizedBox(
+            height: 0,
+            width: 0,
+            child: TextField(
+              key: widget.uniqueKey,
+              autofocus: false,
+              enableInteractiveSelection: false,
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                if (value.length > widget.length) return;
+
+                for (int i = 0; i < widget.length; i++) {
+                  _fieldControllers[i].text = i < value.length ? value[i] : '';
+                }
+
+                _mainController.text = value;
+                if (value.length == widget.length) {
+                  widget.onCompleted?.call(value);
+                }
+                setState(() {
+                  _hasCompleted = value.length == widget.length;
+                  _hasError = false;
+                });
+              },
+            ),
+          ),
+        ),
+
+        // Visible input fields
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 8,
+          children: List.generate(widget.length, (index) {
+            final isFilled = _fieldControllers[index].text.isNotEmpty;
+            final color = _hasError
+                ? errorColor
+                : _hasCompleted && isFilled
+                ? activeColor
+                : baseColor;
+
+            return SizedBox(
+              width: 46,
+              child: TextField(
+                enabled: widget.enabled,
+                controller: _fieldControllers[index],
+                focusNode: _focusNodes[index],
+                textAlign: TextAlign.center,
+                keyboardType: widget.keyboardType,
+                inputFormatters: widget.inputFormatters ??
+                    [FilteringTextInputFormatter.digitsOnly],
+                maxLength: 1,
+                obscureText: widget.obscureText,
+                obscuringCharacter: widget.obscuringCharacter,
+                style: customizeTextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 16,
+                  fontColor: enabledColor,
+                ),
+                decoration: InputDecoration(
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: color, width: 1),
+                    borderRadius: widget.borderRadius,
+                  ),
+                ),
+                onChanged: (value) => _onChanged(value, index),
+                autofillHints: const [AutofillHints.oneTimeCode],
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}
