@@ -230,6 +230,9 @@ class PinCodeFormField extends StatefulWidget {
   /// A unique key for internal testing purposes (used in hidden TextField).
   final Key? uniqueKey;
 
+  /// ScrollPadding follows the same property as TextField's ScrollPadding, default to const EdgeInsets.all(20),
+  final EdgeInsets scrollPadding;
+
   const PinCodeFormField({
     super.key,
     this.length = 6,
@@ -242,6 +245,7 @@ class PinCodeFormField extends StatefulWidget {
     this.keyboardType = TextInputType.number,
     this.inputFormatters,
     this.uniqueKey,
+    this.scrollPadding = const EdgeInsets.all(20.0),
   });
 
   @override
@@ -379,9 +383,8 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     final baseColor = ColorConst.lineGrey;
     final activeColor = ColorConst.lightBlue;
     final errorColor = ColorConst.red;
-    final enabledColor = widget.enabled
-        ? ColorConst.primaryDark
-        : ColorConst.secondaryDark;
+    final enabledColor =
+        widget.enabled ? ColorConst.primaryDark : ColorConst.secondaryDark;
 
     return Stack(
       children: [
@@ -393,6 +396,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             width: 0,
             child: TextField(
               key: widget.uniqueKey,
+              scrollPadding: widget.scrollPadding,
               autofocus: false,
               enableInteractiveSelection: false,
               keyboardType: TextInputType.number,
@@ -425,12 +429,13 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             final color = _hasError
                 ? errorColor
                 : _hasCompleted && isFilled
-                ? activeColor
-                : baseColor;
+                    ? activeColor
+                    : baseColor;
 
             return SizedBox(
               width: 46,
               child: TextField(
+                scrollPadding: widget.scrollPadding,
                 enabled: widget.enabled,
                 controller: _fieldControllers[index],
                 focusNode: _focusNodes[index],
