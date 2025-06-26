@@ -45,3 +45,6 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+/lib/service/Localization/l10n/app_localizations.dart
+/lib/service/Localization/l10n/app_localizations_en.dart
+/lib/service/Localization/l10n/app_localizations_es.dart
