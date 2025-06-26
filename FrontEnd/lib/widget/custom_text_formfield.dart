@@ -461,6 +461,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             return SizedBox(
               width: widget.fieldWidth,
               child: TextField(
+                key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
                 autofocus: index == 0 ? widget.autoFocus : false,
                 scrollPadding: widget.scrollPadding,
                 enabled: widget.enabled,
