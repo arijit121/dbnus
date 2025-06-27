@@ -490,6 +490,8 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
               width: widget.fieldWidth,
               child: TextField(
                 key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
+                cursorColor: ColorConst.primaryDark,
+                cursorErrorColor: ColorConst.primaryDark,
                 autofocus: index == 0 ? widget.autoFocus : false,
                 scrollPadding: widget.scrollPadding,
                 enabled: widget.enabled,
