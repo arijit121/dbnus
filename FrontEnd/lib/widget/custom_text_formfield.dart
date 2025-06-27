@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../const/color_const.dart';
+import '../extension/color_exe.dart';
 import '../widget/custom_text.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -208,7 +209,7 @@ class PinCodeFormField extends StatefulWidget {
   final void Function(String)? onCompleted;
 
   /// Border radius for each digit box.
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
 
   /// Whether the input fields are enabled.
   final bool enabled;
@@ -239,12 +240,18 @@ class PinCodeFormField extends StatefulWidget {
   /// Default [fieldWidth] is 46.
   final double fieldWidth;
 
+  /// Custom border for each digit field.
+  final InputBorder? border;
+
+  /// Whether to fill the background of the input fields.
+  final bool? filled;
+
   const PinCodeFormField({
     super.key,
     this.length = 6,
     this.controller,
     this.onCompleted,
-    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+    this.borderRadius,
     this.enabled = true,
     this.obscureText = false,
     this.obscuringCharacter = '•',
@@ -254,6 +261,8 @@ class PinCodeFormField extends StatefulWidget {
     this.autoFocus = false,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.fieldWidth = 46,
+    this.border,
+    this.filled,
   });
 
   @override
@@ -459,6 +468,24 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
                     ? activeColor
                     : baseColor;
 
+            InputBorder? border = widget.border;
+            if (border != InputBorder.none && border != null) {
+              if (border is OutlineInputBorder) {
+                border = border.copyWith(
+                  borderSide: BorderSide(color: color, width: 1),
+                  borderRadius: widget.borderRadius,
+                );
+              } else if (border is UnderlineInputBorder) {
+                border = border.copyWith(
+                    borderSide: BorderSide(color: color, width: 1),
+                    borderRadius: widget.borderRadius);
+              } else {
+                border = border.copyWith(
+                  borderSide: BorderSide(color: color, width: 1),
+                );
+              }
+            }
+
             return SizedBox(
               width: widget.fieldWidth,
               child: TextField(
@@ -482,10 +509,14 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
                 ),
                 decoration: InputDecoration(
                   counterText: '',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: color, width: 1),
-                    borderRadius: widget.borderRadius,
-                  ),
+                  filled: widget.filled,
+                  fillColor: ColorExe.lighten(baseColor),
+                  border: border != InputBorder.none
+                      ? border
+                      : OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius:
+                              widget.borderRadius ?? BorderRadius.zero),
                 ),
                 onChanged: (value) => _onChanged(value, index),
                 autofillHints: const [AutofillHints.oneTimeCode],
