@@ -362,7 +362,8 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     final pin = _fieldControllers.map((c) => c.text).join();
     _mainController.text = pin;
 
-    if (pin.length == widget.length && !pin.contains('')) {
+    pin.replaceAll(" ", "");
+    if (pin.length == widget.length) {
       setState(() {
         _hasCompleted = true;
         _hasError = false;
