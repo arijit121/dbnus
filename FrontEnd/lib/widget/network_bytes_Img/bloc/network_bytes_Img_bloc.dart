@@ -18,12 +18,12 @@ class NetworkBytesImgBloc
           Uint8List? bytes = await apiRepo()
               .urlToByte(url: event.url, timeOut: const Duration(minutes: 5));
           if (bytes == null) {
-            emit(NetworkBytesImgState(bytes: bytes, isLoaded: true));
+            emit(state.copyWith(bytes: bytes, isLoaded: true));
           } else {
-            emit(NetworkBytesImgState(isLoaded: false, isError: true));
+            emit(state.copyWith(isLoaded: false, isError: true));
           }
         } catch (e) {
-          emit(NetworkBytesImgState(isLoaded: false, isError: true));
+          emit(state.copyWith(isLoaded: false, isError: true));
         }
       }
     });
