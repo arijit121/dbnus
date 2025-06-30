@@ -1,11 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:dbnus/widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../const/color_const.dart';
+import '../data/api_client/repo/api_repo.dart';
 import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart' deferred as js_provider;
 import 'custom_button.dart';
 import 'custom_text.dart';
+import 'error_widget.dart';
 
 class PdfViewerWidget extends StatefulWidget {
   final String pdfUrl;
@@ -60,18 +64,30 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
           styleType: CustomTextStyleType.subHeading3,
         ),
       ),
-      body: ValueListenableBuilder<bool>(
-          valueListenable: loaded,
-          builder: (BuildContext context, bool value, child) {
-            return value
-                ? SfPdfViewer.network(widget.pdfUrl,
-                    key: GlobalKey(),
-                    maxZoomLevel: 10,
-                    scrollDirection: PdfScrollDirection.horizontal)
-                : Center(
-                    child: LoadingWidget(),
-                  );
-          }),
+      body: SafeArea(
+        child: ValueListenableBuilder<bool>(
+            valueListenable: loaded,
+            builder: (BuildContext context, bool value, child) {
+              return value
+                  ? FutureBuilder<Uint8List?>(
+                      future: apiRepo().urlToByte(url: widget.pdfUrl),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(child: LoadingWidget());
+                        } else if (snapshot.hasData && snapshot.data != null) {
+                          return SfPdfViewer.memory(snapshot.data!,
+                              key: GlobalKey(),
+                              maxZoomLevel: 10,
+                              scrollDirection: PdfScrollDirection.vertical);
+                        } else {
+                          return Center(child: CustomErrorWidget());
+                        }
+                      },
+                    )
+                  : Center(child: LoadingWidget());
+            }),
+      ),
     );
   }
 }

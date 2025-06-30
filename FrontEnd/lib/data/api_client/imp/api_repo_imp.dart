@@ -134,13 +134,29 @@ class ApiRepoImp extends ApiRepo {
   }
 
   @override
-  Future<Uint8List> urlToByte({required String url, Duration? timeOut}) async {
-    http.Response response = await http
-        .get(
-          Uri.parse(url),
-        )
-        .timeout(timeOut ?? timeout());
-    return response.bodyBytes;
+  Future<Uint8List?> urlToByte(
+      {required String url, Duration? timeOut, String? tag}) async {
+    try {
+      AppLog.i(tag: "$tag Url", url, time: DateTime.now());
+      DateTime requestTime = DateTime.now();
+      http.Response response = await http
+          .get(
+        Uri.parse(url),
+      )
+          .timeout(timeOut ?? timeout());
+      if (response.statusCode == 200) {
+        AppLog.i(
+            tag: "$tag Response time",
+            "${DateTime.now().difference(requestTime)} HH:MM:SS ",
+            time: DateTime.now());
+        return response.bodyBytes;
+      } else {
+        return null;
+      }
+    } on Exception catch (e) {
+      AppLog.e(e, time: DateTime.now());
+      return null;
+    }
   }
 }
 

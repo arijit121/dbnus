@@ -12,7 +12,8 @@ abstract class ApiRepo {
       Map<String, String>? headers,
       BodyData? bodyData});
 
-  Future<Uint8List> urlToByte({required String url, Duration? timeOut});
+  Future<Uint8List?> urlToByte(
+      {required String url, Duration? timeOut, String? tag});
 }
 
 ApiRepo apiRepo() => ApiRepoImp();
