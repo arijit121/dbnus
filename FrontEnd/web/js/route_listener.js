@@ -58,10 +58,10 @@ document.addEventListener("DOMContentLoaded", function () {
             loader.innerHTML = ""; // Clear previous content
         }
 
-        const seo-content = document.getElementById("web-seo-content");
-        if (seo-content) {
-            seo-content.style.display = "none";
-            seo-content.innerHTML = ""; // Clear previous content
+        const seoContent = document.getElementById("web-seo-content");
+        if (seoContent) {
+            seoContent.style.display = "none";
+            seoContent.innerHTML = ""; // Clear previous content
         }
 
         const path = window.location.pathname;
