@@ -27,6 +27,29 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error(`Fetch failed for ${file}:`, error));
     }
 
+    // Optional: set dynamic meta tags
+    function setMetaTags({ title, description, tag }) {
+        if (title) document.title = title;
+
+        let descTag = document.querySelector('meta[name="description"]');
+        if (!descTag) {
+            descTag = document.createElement('meta');
+            descTag.setAttribute('name', 'description');
+            document.head.appendChild(descTag);
+        }
+        descTag.setAttribute('content', description || '');
+
+        if (tag) {
+            let tagMeta = document.querySelector('meta[name="tags"]');
+            if (!tagMeta) {
+                tagMeta = document.createElement('meta');
+                tagMeta.setAttribute('name', 'tags');
+                document.head.appendChild(tagMeta);
+            }
+            tagMeta.setAttribute('content', tag);
+        }
+    }
+
     function handleRouteChange() {
         const path = window.location.pathname;
         console.log(`Route changed: ${path}`);
@@ -46,6 +69,11 @@ document.addEventListener("DOMContentLoaded", function () {
         //     let otcName = otcParts.join(" ");
         //     setData({ containerId: "web-loader", file: "design/otc.html", replaceData: { "otc-name": otcName } });
         //     setData({ containerId: "web-seo-content", file: "design/seo-content-otc.html", replaceData: { "otc-name": otcName } });
+        //     setMetaTags({
+        //                     title: `Buy ${otcName} Online at the Best Price | SastaSundar`,
+        //                     description: `Get ${otcName} online at discounted rates from SastaSundar. Learn about its benefits, ingredients, and usage.`,
+        //                     tag: otcName
+        //                  });
         // }
         else {
             setData({ containerId: "web-loader", file: "design/dynamic-loader.html" });
