@@ -79,3 +79,12 @@
     object-fit: contain;
     display: block;
   }
+
+#web-seo-content {
+  display: none;
+  overflow: hidden;
+  height: 0;
+  max-height: 0;
+  padding: 0;
+  margin: 0;
+}

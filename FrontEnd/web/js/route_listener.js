@@ -51,11 +51,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function handleRouteChange() {
+
+        const loader = document.getElementById("web-loader");
+        if (loader) {
+            loader.style.display = "none";
+            loader.innerHTML = ""; // Clear previous content
+        }
+
+        const seo-content = document.getElementById("web-seo-content");
+        if (seo-content) {
+            seo-content.style.display = "none";
+            seo-content.innerHTML = ""; // Clear previous content
+        }
+
         const path = window.location.pathname;
         console.log(`Route changed: ${path}`);
 
         if (path === "/" || path === "/index.html") {
             setData({ containerId: "web-loader", file: "design/default-loader.html" });
+            setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
             // setData({ containerId: "web-seo-content", file: "design/seo-content-default.html" });
         }
         // else if (path.startsWith("/path-parameter/")) {
