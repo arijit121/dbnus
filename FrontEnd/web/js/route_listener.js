@@ -60,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
-        //     setData({ containerId: "web-loader", file: "design/dynamic-loader.html", { "data": value });
-        //     setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html", { "data": value });
+        //     setData({ containerId: "web-loader", file: "design/dynamic-loader.html", replaceData: { "data": value } });
+        //     setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html", replaceData: { "data": value } });
         // }
         // else if (path.startsWith("/order-otc/")) {
         //     let otcParts = path.split("/").pop().split("-");
