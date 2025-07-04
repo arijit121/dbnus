@@ -12,7 +12,7 @@ function addDelay(delay) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-var web_initial_loader = document.getElementById("web-loader");
+var web_loader = document.getElementById("web-loader");
 
 const assetBase = window.location.origin + "/";
 
@@ -38,8 +38,8 @@ _flutter.loader.load({
         // Add a delay using the addDelay function.
         await addDelay(10000);
 
-        if (web_initial_loader) {
-            web_initial_loader.remove();
+        if (web_loader) {
+            web_loader.remove();
         }
     }
 });
