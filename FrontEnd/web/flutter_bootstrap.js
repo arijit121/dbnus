@@ -12,7 +12,7 @@ function addDelay(delay) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-var web_initial_loader = document.getElementById("web-initial-loader");
+var web_initial_loader = document.getElementById("web-loader");
 
 const assetBase = window.location.origin + "/";
 
