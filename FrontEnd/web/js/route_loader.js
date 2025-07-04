@@ -1,28 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const loader = document.getElementById("web-initial-loader");
+    // Generalized data setter for any container
+    function setData({ containerId, file, replaceData = {} }) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.warn(`Container with ID '${containerId}' not found.`);
+            return;
+        }
 
-    function setLoader(file, replaceData = {}) {
-        console.log(`Fetching loader: ${file}`, replaceData); // Debug log
+        console.log(`Fetching ${file} into #${containerId}`, replaceData);
+
         fetch(file)
             .then(response => {
                 if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                 return response.text();
             })
             .then(html => {
-                if (loader) {
-                    loader.innerHTML = html;
-                    loader.style.display = "block";
+                container.innerHTML = html;
+                container.style.display = "block";
 
-                    // Replace dynamic content
-                    for (let key in replaceData) {
-                        const element = loader.querySelector(`#${key}`);
-                        if (element) {
-                            element.textContent = replaceData[key];
-                        }
-                    }
+                // Replace dynamic content within that container
+                for (let key in replaceData) {
+                    const el = container.querySelector(`#${key}`);
+                    if (el) el.textContent = replaceData[key];
                 }
             })
-            .catch(error => console.error("Loader fetch failed:", error));
+            .catch(error => console.error(`Fetch failed for ${file}:`, error));
     }
 
     function handleRouteChange() {
@@ -30,20 +32,24 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(`Route changed: ${path}`);
 
         if (path === "/" || path === "/index.html") {
-            setLoader("design/default-loader.html");
+            setData({ containerId: "web-loader", file: "design/default-loader.html" });
+            // setData({ containerId: "web-seo-content", file: "design/seo-content-default.html" });
         }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
-        //     setLoader("design/dynamic-loader.html", { "data": value });
+        //     setData({ containerId: "web-loader", file: "design/dynamic-loader.html", { "data": value });
+        //     setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html", { "data": value });
         // }
         // else if (path.startsWith("/order-otc/")) {
         //     let otcParts = path.split("/").pop().split("-");
         //     let otcId = otcParts.pop();
         //     let otcName = otcParts.join(" ");
-        //     setLoader("design/otc.html", { "otc-name": otcName });
+        //     setData({ containerId: "web-loader", file: "design/otc.html", replaceData: { "otc-name": otcName } });
+        //     setData({ containerId: "web-seo-content", file: "design/seo-content-otc.html", replaceData: { "otc-name": otcName } });
         // }
         else {
-            setLoader("design/dynamic-loader.html");
+            setData({ containerId: "web-loader", file: "design/dynamic-loader.html" });
+            // setData({ containerId: "web-seo-content", file: "design/seo-content-dynamic.html" });
         }
     }
 
