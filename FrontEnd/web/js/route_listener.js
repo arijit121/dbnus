@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     const el = container.querySelector(`#${key}`);
                     if (el) el.textContent = replaceData[key];
                 }
+
+                if (containerId === "web-seo-content") {
+                    injectStructuredDataFromHTML(html);
+                    injectMetaTagsFromHTML(html);
+                }
             })
             .catch(error => console.error(`Fetch failed for ${file}:`, error));
     }
@@ -31,23 +36,58 @@ document.addEventListener("DOMContentLoaded", function () {
     function setMetaTags({ title, description, tag }) {
         if (title) document.title = title;
 
-        let descTag = document.querySelector('meta[name="description"]');
-        if (!descTag) {
-            descTag = document.createElement('meta');
-            descTag.setAttribute('name', 'description');
-            document.head.appendChild(descTag);
-        }
-        descTag.setAttribute('content', description || '');
+        setOrCreateMeta("description", description);
+        setOrCreateMeta("keywords", tag);
+    }
 
-        if (tag) {
-            let tagMeta = document.querySelector('meta[name="tags"]');
-            if (!tagMeta) {
-                tagMeta = document.createElement('meta');
-                tagMeta.setAttribute('name', 'tags');
-                document.head.appendChild(tagMeta);
-            }
-            tagMeta.setAttribute('content', tag);
+    function setOrCreateMeta(name, content) {
+        if (!name) return;
+        let meta = document.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+            meta = document.createElement("meta");
+            meta.setAttribute("name", name);
+            document.head.appendChild(meta);
         }
+        meta.setAttribute("content", content || "");
+    }
+
+    function injectStructuredDataFromHTML(html) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const ldJsonScript = doc.querySelector('script[type="application/ld+json"]');
+
+        if (ldJsonScript) {
+            try {
+                const json = JSON.parse(ldJsonScript.textContent);
+                setStructuredData(json);
+            } catch (err) {
+                console.error("Invalid JSON-LD format:", err);
+            }
+        }
+    }
+
+    function setStructuredData(json) {
+        // Always remove existing JSON-LD blocks
+        document.querySelectorAll('script[type="application/ld+json"]').forEach(s => s.remove());
+
+        // Check if the passed JSON is not empty
+        if (json && Object.keys(json).length > 0) {
+            const script = document.createElement("script");
+            script.type = "application/ld+json";
+            script.textContent = JSON.stringify(json);
+            document.head.appendChild(script);
+        } else {
+            console.log("Structured data cleared (empty object provided)");
+        }
+    }
+
+    function injectMetaTagsFromHTML(html) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+
+        const title = doc.querySelector("title")?.textContent || "";
+        const description = doc.querySelector('meta[name="description"]')?.content || "";
+        const keywords = doc.querySelector('meta[name="keywords"]')?.content || "";
+
+        setMetaTags({ title: title,description: description, tag: keywords });
     }
 
     function handleRouteChange() {
@@ -92,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
         else {
             setData({ containerId: "web-loader", file: "design/dynamic-loader.html" });
             // setData({ containerId: "web-seo-content", file: "design/seo-content-dynamic.html" });
+            // setStructuredData({});
         }
     }
 
