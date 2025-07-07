@@ -15,18 +15,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 return response.text();
             })
             .then(html => {
-                container.innerHTML = html;
-                container.style.display = "block";
+
+                if (containerId === "web-seo-content") {
+                    const doc = new DOMParser().parseFromString(html, "text/html");
+                    
+                    // Use <body>'s content for display
+                    container.innerHTML = doc.body.innerHTML;
+                    container.style.display = "block";
+                    
+                    injectStructuredDataFromHTML(html);
+                    injectMetaTagsFromHTML(html);
+                } else {
+                    container.innerHTML = html;
+                    container.style.display = "block";
+                }
 
                 // Replace dynamic content within that container
                 for (let key in replaceData) {
                     const el = container.querySelector(`#${key}`);
                     if (el) el.textContent = replaceData[key];
-                }
-
-                if (containerId === "web-seo-content") {
-                    injectStructuredDataFromHTML(html);
-                    injectMetaTagsFromHTML(html);
                 }
             })
             .catch(error => console.error(`Fetch failed for ${file}:`, error));
