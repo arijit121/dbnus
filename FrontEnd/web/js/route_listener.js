@@ -109,8 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (path === "/" || path === "/index.html") {
             setData({ containerId: "web-loader", file: "design/default-loader.html" });
-            setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
-            // setData({ containerId: "web-seo-content", file: "design/seo-content-default.html" });
+            // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
         }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
