@@ -1,73 +1,13 @@
-// import '../library/js_library.dart';
 import 'dart:async';
-import 'package:universal_html/html.dart' deferred as html;
 import 'dart:js' deferred as js;
 import 'dart:js_util' deferred as js_util;
+import 'dart:js_interop' as js_interop;
+import 'dart:js_interop_unsafe' as js_interop_unsafe;
 import 'package:web/web.dart' as web;
 import 'package:flutter/foundation.dart';
 import '../../value_handler.dart';
 
 class JSHelper {
-  // Future paytmLoadScript(
-  //   String txnToken,
-  //   String orderId,
-  //   String amount,
-  //   String mid,
-  // ) async {
-  //   return await js_util.promiseToFuture(onScriptLoad(
-  //     txnToken,
-  //     orderId,
-  //     amount,
-  //     mid,
-  //   ));
-  // }
-
-  // Future<void> downloadFile({required String url, required String name}) async {
-  //   await download(url, name);
-  // }
-
-  // Future<void> onCheckoutPhonePe() async {
-  //   await onCheckoutPhonePeClick();
-  // }
-
-  // Future getCurrentUrlElementByIdFun(String iframeId) async {
-  //   return await js_util.promiseToFuture(getCrtUrlElementByIdFun(iframeId));
-  // }
-
-  // String getPlatformFromJS() {
-  //   return js.context.callMethod('getPlatform');
-  // }
-
-  // String getBaseUrlFromJS() {
-  //   return js.context.callMethod('getBaseUrl');
-  // }
-
-  // Future<String> callJSPromise() async {
-  //   return await js_util
-  //       .promiseToFuture(jsPromiseFunction("I am back from JS"));
-  // }
-
-  // Future<String?> getDeviceId() async {
-  //   return await js_util.promiseToFuture(getDeviceIdFunction());
-  // }
-
-  // Future<String> callOpenTab() async {
-  //   return await js_util
-  //       .promiseToFuture(jsOpenTabFunction('https://google.com/'));
-  // }
-
-  // void reDirectToUrl(String reDirectUrl) {
-  //   reDirectToUrlFunction(reDirectUrl);
-  // }
-
-  // Future<void> setVolume(double volume) async {
-  //   await setVolumeFunction(volume);
-  // }
-
-  // void submitForm(actionUrl, String obj, String id) {
-  //   submitFormFunction(actionUrl, obj, id);
-  // }
-
   /// ```
   ///
   /// Loads a JavaScript file (if not already loaded) and processes a value using either a Promise-based or callback-based JavaScript function.
@@ -105,8 +45,7 @@ class JSHelper {
       List<Object?>? jsFunctionArgs,
       bool usePromise = false}) async {
     try {
-      await Future.wait(
-          [html.loadLibrary(), js.loadLibrary(), js_util.loadLibrary()]);
+      await Future.wait([js.loadLibrary(), js_util.loadLibrary()]);
       if ((jsPath == null || jsPath.isEmpty) &&
           (jsFunctionName == null || jsFunctionName.isEmpty)) {
         throw Exception(
@@ -120,7 +59,7 @@ class JSHelper {
             !jsPath.contains("http://")) {
           _jsFilePath = "assets/${jsPath ?? ""}";
           final flutterAssetBase =
-              js_util.getProperty(html.window, 'flutterAssetBase');
+              js_util.getProperty(web.window, 'flutterAssetBase');
           if (flutterAssetBase is String) {
             _jsFilePath = flutterAssetBase + _jsFilePath;
           }
@@ -129,9 +68,9 @@ class JSHelper {
         }
 
         // Check if the script is already loaded
-        if (html.document.querySelector('script[src="$_jsFilePath"]') == null) {
+        if (web.document.querySelector('script[src="$_jsFilePath"]') == null) {
           // Create a script element
-          final script = html.ScriptElement()
+          final script = web.HTMLScriptElement()
             ..type = 'application/javascript'
             ..src = _jsFilePath;
 
@@ -139,7 +78,7 @@ class JSHelper {
             script.id = id!;
           }
           // Append the script to the document head
-          html.document.head!.append(script);
+          web.document.head!.append(script);
 
           // Wait for the script to load or throw an error if it fails
           await script.onLoad.first.catchError((error) {
@@ -156,7 +95,7 @@ class JSHelper {
           try {
             // Call the JavaScript function and handle the Promise using `promiseToFuture`
             final promise = js_util.callMethod(
-                html.window, jsFunctionName, jsFunctionArgs ?? []);
+                web.window, jsFunctionName, jsFunctionArgs ?? []);
             if (promise == null) {
               return null; // Handle `null` result from JS function
             }
