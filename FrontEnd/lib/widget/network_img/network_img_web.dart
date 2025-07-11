@@ -6,7 +6,7 @@ import 'package:web/web.dart';
 import '../../const/assects_const.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
-import 'dart:js' show allowInterop;
+import 'dart:js_interop';
 
 class NetworkImg extends StatelessWidget {
   const NetworkImg(
@@ -176,11 +176,11 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           imageElement.style.objectFit =
                               _getObjectFit(widget.fit);
                           imageElement.draggable = false;
-                          imageElement.onerror = allowInterop((Event event) {
+                          imageElement.onerror = (JSAny? event) {
                             errorFound.value = true;
 
                             AppLog.e(widget.url, tag: "Failed to load image");
-                          }) as OnErrorEventHandler;
+                          }.toJS;
 
                           // Apply CSS color filter if color is provided
                           if (widget.color != null) {
