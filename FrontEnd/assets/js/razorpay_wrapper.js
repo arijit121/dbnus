@@ -23,8 +23,12 @@ function createRazorpayPayment(options) {
                     ondismiss: function() {
                         // Delay close slightly
                         setTimeout(() => {
-                            rzp.close();
-                        }, 100);
+                            try {
+                              forceCloseRazorpayModal();
+                            } catch (e) {
+                              console.warn('Unable to close Razorpay modal:', e);
+                            }
+                         }, 100);
                         // Payment cancelled
                         resolve({
                             error: 'Payment cancelled by user',
@@ -38,7 +42,11 @@ function createRazorpayPayment(options) {
             rzp.on('payment.failed', function (response) {
                 // Delay close slightly
                 setTimeout(() => {
-                    rzp.close();
+                    try {
+                      forceCloseRazorpayModal();
+                    } catch (e) {
+                      console.warn('Unable to close Razorpay modal:', e);
+                    }
                 }, 100);
                 resolve({
                     error: response.error.description || 'Payment failed',
@@ -54,4 +62,38 @@ function createRazorpayPayment(options) {
             reject(new Error('Failed to create Razorpay payment: ' + error.message));
         }
     });
+}
+
+function forceCloseRazorpayModal() {
+    try {
+        // Remove Razorpay containers
+        document.querySelectorAll(
+            '.razorpay-container, .razorpay-checkout-frame'
+        ).forEach(el => el.remove());
+
+        // Remove overlays
+        document.querySelectorAll(
+            '.razorpay-overlay, .razorpay-backdrop'
+        ).forEach(el => el.remove());
+
+        // Restore scroll
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'static';
+
+        // Remove Razorpay-specific classes
+        document.body.classList.remove('razorpay-blur');
+        document.documentElement.classList.remove('razorpay-blur');
+
+        // 🔥 Reset Razorpay internal state (dirty workaround)
+        if (window.Razorpay && Razorpay._instance) {
+            Razorpay._instance = null;
+        }
+        // Remove existing script
+        const existing = document.querySelector('script[src*="checkout.razorpay"]');
+        if (existing) existing.remove();
+
+        console.log('Razorpay modal force closed and state reset');
+    } catch (e) {
+        console.warn('Error in force close:', e);
+    }
 }
