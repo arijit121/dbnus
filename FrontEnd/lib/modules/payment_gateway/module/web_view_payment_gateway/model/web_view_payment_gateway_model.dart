@@ -5,7 +5,6 @@ class WebViewPaymentGatewayModel {
   String? payType;
   num? walletDeduction;
   String? failedRedirectLink;
-  Duration? timeOut;
 
   WebViewPaymentGatewayModel(
       {required this.paymentLink,
@@ -13,8 +12,7 @@ class WebViewPaymentGatewayModel {
       required this.transactionId,
       this.payType,
       this.walletDeduction,
-      this.failedRedirectLink,
-      this.timeOut});
+      this.failedRedirectLink});
 
   factory WebViewPaymentGatewayModel.fromJson(Map<String, dynamic> json) {
     return WebViewPaymentGatewayModel(
@@ -24,9 +22,6 @@ class WebViewPaymentGatewayModel {
       payType: json['payType'],
       walletDeduction: json['walletDeduction'],
       failedRedirectLink: json['failedRedirectLink'],
-      timeOut: json['timeOut'] != null
-          ? Duration(milliseconds: json['timeOut'])
-          : null,
     );
   }
 
@@ -38,7 +33,6 @@ class WebViewPaymentGatewayModel {
       'payType': payType,
       'walletDeduction': walletDeduction,
       'failedRedirectLink': failedRedirectLink,
-      'timeOut': timeOut?.inMilliseconds,
     };
   }
 }
