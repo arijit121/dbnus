@@ -13,9 +13,11 @@ import '../../../config/app_config.dart';
 import '../../../const/api_url_const.dart';
 import '../../../const/color_const.dart';
 import '../../../data/model/forward_geocoding.dart';
+import '../../../data/model/razorpay_merchant_details.dart';
 import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../flavors.dart';
+import '../../../router/custom_router/custom_route.dart';
 import '../../../service/Localization/utils/localization_utils.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
@@ -267,6 +269,19 @@ class _TestPageState extends State<TestPage> {
                     Colors.blue,
                   ]),
                   child: const CustomText("File Pick")),
+              20.ph,
+              CustomGOEButton(
+                  width: 200,
+                  onPressed: () async {
+                    CustomRoute().pushNamed(
+                        name: RouteName.rayzorPay,
+                        arguments: RazorpayMerchantDetails());
+                  },
+                  gradient: const LinearGradient(colors: [
+                    ColorConst.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("Razorpay")),
               20.ph,
               Row(
                 children: [

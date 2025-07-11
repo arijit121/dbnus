@@ -105,7 +105,7 @@ dependencies:
   # Payment
   # paytm_allinonesdk: 1.2.6
   razorpay_flutter: ^1.4.0
-  flutter_razorpay_web: 0.0.3
+  # flutter_razorpay_web: 0.0.3
 
   # Download
   # flutter_downloader: 1.11.6
