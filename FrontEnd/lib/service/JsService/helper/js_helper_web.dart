@@ -5,7 +5,7 @@ import '../library/js_library.dart';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 import 'package:web/web.dart' as web;
-// import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart';
 // import '../../value_handler.dart';
 
 class JSHelper {
@@ -144,9 +144,19 @@ class JSHelper {
   }) async {
     try {
       final jsArgs = jsFunctionArgs?.map((arg) => arg?.jsify()).toList().toJS;
+      String? _jsFilePath;
+      if (jsPath != null && jsPath.isNotEmpty) {
+        if (kReleaseMode &&
+            !jsPath.contains("https://") &&
+            !jsPath.contains("http://")) {
+          _jsFilePath = "assets/${jsPath ?? ""}";
+        } else {
+          _jsFilePath = jsPath ?? "";
+        }
+      }
 
       final options = LoadJsOptions(
-        jsPath: jsPath,
+        jsPath: _jsFilePath,
         id: id,
         jsFunctionName: jsFunctionName,
         jsFunctionArgs: jsArgs,

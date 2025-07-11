@@ -31,7 +31,7 @@ async function dynamicJsLoader({
             // Check if it's a relative path (not absolute URL)
             if (!jsPath.includes('https://') && !jsPath.includes('http://')) {
                 // For relative paths, you might want to adjust this based on your asset structure
-                jsFilePath = jsPath.startsWith('assets/') ? jsPath : `assets/${jsPath}`;
+                jsFilePath = jsPath;
                 
                 // If you have a base URL for assets, you can use it here
                 const assetBase = window.flutterAssetBase || '';
