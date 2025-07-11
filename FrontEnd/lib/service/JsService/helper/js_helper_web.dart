@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'dart:js' deferred as js;
-import 'dart:js_util' deferred as js_util;
-import 'dart:js_interop' as js_interop;
-import 'dart:js_interop_unsafe' as js_interop_unsafe;
+import '../library/js_library.dart';
+// import 'dart:js' deferred as js;
+// import 'dart:js_util' deferred as js_util;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 import 'package:web/web.dart' as web;
-import 'package:flutter/foundation.dart';
-import '../../value_handler.dart';
+// import 'package:flutter/foundation.dart';
+// import '../../value_handler.dart';
 
 class JSHelper {
   /// ```
@@ -38,7 +39,7 @@ class JSHelper {
   ///
   /// ```
   ///
-  Future<T?> loadJs<T>(
+  /* Future<T?> loadJs<T>(
       {String? jsPath,
       String? id,
       String? jsFunctionName,
@@ -132,6 +133,31 @@ class JSHelper {
           'Unexpected error in ${jsPath == null || !(jsPath?.isNotEmpty == true) ? "loadJs : Your pass jsPath null or blank please check the jsPath or import the js inside head of index.html." : ":"} $error');
     }
     return null;
+  }*/
+
+  Future<T?> loadJs<T>({
+    String? jsPath,
+    String? id,
+    String? jsFunctionName,
+    List<Object?>? jsFunctionArgs,
+    bool usePromise = false,
+  }) async {
+    try {
+      final jsArgs = jsFunctionArgs?.map((arg) => arg?.jsify()).toList().toJS;
+
+      final options = LoadJsOptions(
+        jsPath: jsPath,
+        id: id,
+        jsFunctionName: jsFunctionName,
+        jsFunctionArgs: jsArgs,
+        usePromise: usePromise,
+      );
+
+      final result = await dynamicJsLoader(options).toDart;
+      return result?.dartify() as T?;
+    } catch (e) {
+      throw Exception('Error calling loadJs: $e');
+    }
   }
 
   String getUserAgent() {
