@@ -9,9 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
 import '../utils/pop_up_items.dart' deferred as pop_up_items;
+import 'JsService/provider/js_provider.dart';
 import 'open_service.dart' deferred as open_service;
-import 'package:http/http.dart' as http;
-import 'package:universal_html/html.dart' deferred as html;
+// import 'package:http/http.dart' as http;
+// import 'package:universal_html/html.dart' deferred as html;
 
 class DownloadHandler {
   final String _group = 'bunchOfFiles';
@@ -28,9 +29,11 @@ class DownloadHandler {
             ? Uri.parse(downloadUrl)
                 .replace(queryParameters: urlQueryParameters)
             : Uri.parse(downloadUrl);
-        // await JsProvider().downloadFile(
-        //     url: uri.toString(), name:fileName?? url.split("/").last, headers: headers);
-        String downloadPath = fileName ?? downloadUrl.split("/").last;
+        await JsProvider().download(
+            url: uri.toString(),
+            filename: fileName ?? downloadUrl.split("/").last,
+            headers: headers);
+        /*  String downloadPath = fileName ?? downloadUrl.split("/").last;
         final response = await http.get(uri, headers: headers);
 
         if (response.statusCode == 200) {
@@ -51,7 +54,7 @@ class DownloadHandler {
         } else {
           throw Exception(
               'Failed to download file. HTTP ${response.statusCode}');
-        }
+        }*/
       } else {
         await pop_up_items.loadLibrary();
         pop_up_items.PopUpItems()

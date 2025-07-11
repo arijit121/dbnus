@@ -66,6 +66,20 @@ class JsProvider {
     return null;
   }
 
+  Future<String?> download(
+      {required String url,
+      required String filename,
+      Map<String, dynamic>? headers}) async {
+    String jsPath = "assets/js/download.js";
+    try {
+      return await jsHelper.loadJs<String>(
+          jsPath: jsPath, jsFunctionName: 'download', jsFunctionArgs: [url, filename, headers]);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   Future paytm(
       {required String txnToken,
       required String orderId,
