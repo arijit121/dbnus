@@ -15,6 +15,7 @@ import '../../../../../storage/user_preference.dart';
 import '../../../../../utils/text_utils.dart';
 import '../../../../../widget/custom_text.dart';
 import '../../../../../widget/loading_widget.dart';
+import 'package:flutter/foundation.dart';
 
 class RayzorPay extends StatefulWidget {
   const RayzorPay({super.key, required this.razorpayMerchantDetails});
@@ -77,7 +78,7 @@ class _RayzorPayState extends State<RayzorPay> {
 
       // Create the payment using dynamicJsLoader
       final jsOptions = LoadJsOptions(
-        jsPath: 'assets/js/razorpay_wrapper.js',
+        jsPath: '${kReleaseMode ? 'assets/' : ''}assets/js/razorpay_wrapper.js',
         jsFunctionName: 'createRazorpayPayment',
         jsFunctionArgs: [testOptions.jsify()].toJS,
         usePromise: true,
@@ -90,7 +91,7 @@ class _RayzorPayState extends State<RayzorPay> {
       AppLog.i(json.encode(resultMap), tag: "resultMap");
 
       if (resultMap?['success'].toString() == "true") {
-        var successReturnBody = {};
+        var successReturnBody = {"PayMent_STATUS": "TXN_SUCCESS"};
         // onPaymentSuccess?.call(paymentResult);
         // var successReturnBody = {
         //   "razorpay_payment_id": response.paymentId,
@@ -106,7 +107,7 @@ class _RayzorPayState extends State<RayzorPay> {
           Navigator.of(context).pop(successReturnBody);
         }
       } else {
-        var errorReturnBody = {};
+        var errorReturnBody = {"PayMent_STATUS": "TXN_FAILED"};
         BuildContext context = CurrentContext().context;
         if (context.mounted) {
           Navigator.of(context).pop(errorReturnBody);
