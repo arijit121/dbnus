@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../const/color_const.dart';
 import '../../../../../extension/logger_extension.dart';
 import '../../../../../service/open_service.dart';
 import '../../../../../service/value_handler.dart';
+import '../../../../../utils/pop_up_items.dart';
 import '../model/web_view_payment_gateway_model.dart';
 import '../utils/web_view_payment_gateway_utils.dart';
 
@@ -55,9 +57,23 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             String uri = navigationAction.request.url.toString();
             AppLog.i(uri, tag: "ShouldOverrideUrlLoading");
-            if (!uri.startsWith("http")) {
-              await OpenService().openUrl(
+            if (uri.contains("upi://pay")) {
+              bool? result = await OpenService().openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
+              if (result != true) {
+                PopUpItems().toastMessage(
+                    "Looks like there’s no UPI app available on your device.",
+                    ColorConst.red);
+              }
+              return NavigationActionPolicy.CANCEL;
+            } else if (!uri.startsWith("http")) {
+              bool? result = await OpenService().openUrl(
+                  uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
+              if (result != true) {
+                PopUpItems().toastMessage(
+                    "Couldn’t open the requested app. Please try again or install a supported application.",
+                    ColorConst.red);
+              }
               return NavigationActionPolicy.CANCEL;
             }
 
