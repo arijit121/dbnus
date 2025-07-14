@@ -4,7 +4,7 @@ import '../extension/logger_extension.dart';
 import 'app_config.dart' deferred as app_config;
 
 class ApiConfig {
-  Future<Map<String, String>> getHeaders({
+  static Future<Map<String, String>> getHeaders({
     bool? isPinCodeRequired,
     bool? onlyContentType,
     bool? noToken,
@@ -67,7 +67,7 @@ class ApiConfig {
     }
   }
 
-  Future<Map<String, dynamic>> getParams({
+  static Future<Map<String, dynamic>> getParams({
     bool? isPinCodeRequired,
     // bool? warehouseID,
     // bool? isLab,
