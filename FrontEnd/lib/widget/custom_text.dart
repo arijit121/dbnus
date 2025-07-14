@@ -1,7 +1,7 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../service/open_service.dart';
@@ -255,6 +255,7 @@ class CustomHtmlText extends StatelessWidget {
   final bool lineGapNeeded;
   final Color? backGroundColor;
   final String? font;
+  final CustomWidgetBuilder? customWidgetBuilder;
 
   const CustomHtmlText(
     this.html, {
@@ -267,6 +268,7 @@ class CustomHtmlText extends StatelessWidget {
     this.lineGapNeeded = false,
     this.backGroundColor,
     this.font,
+    this.customWidgetBuilder,
   });
 
   @override
@@ -290,6 +292,7 @@ class CustomHtmlText extends StatelessWidget {
         await OpenService().openUrl(uri: Uri.parse(url));
         return true;
       },
+      customWidgetBuilder: customWidgetBuilder,
     );
   }
 }
