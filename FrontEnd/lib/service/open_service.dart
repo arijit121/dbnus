@@ -10,7 +10,7 @@ import '../widget/pdf_viewer_widget.dart' deferred as pdf_viewer_widget;
 import 'context_service.dart';
 
 class OpenService {
-  void openWhatsApp({required String contactNo, String? message}) {
+  static void openWhatsApp({required String contactNo, String? message}) {
     try {
       Uri whatsAppUrl = Uri.parse('https://wa.me/$contactNo')
           .replace(queryParameters: message != null ? {"text": message} : null);
@@ -20,9 +20,7 @@ class OpenService {
     }
   }
 
-  void callNumber({
-    required String contactNo,
-  }) {
+  static void callNumber({required String contactNo}) {
     try {
       Uri callUrl = Uri(scheme: 'tel', path: contactNo);
       openUrl(uri: callUrl, mode: LaunchMode.externalApplication);
@@ -31,18 +29,18 @@ class OpenService {
     }
   }
 
-  Future<bool?> openUrl(
+  static Future<bool?> openUrl(
       {required Uri uri, LaunchMode mode = LaunchMode.platformDefault}) async {
     try {
       AppLog.i("OpenUrl==> $uri");
-     return await launchUrl(uri, mode: mode);
+      return await launchUrl(uri, mode: mode);
     } catch (e) {
       AppLog.e('Could not launch $uri', error: e);
     }
     return null;
   }
 
-  Future<void> requestReview() async {
+  static Future<void> requestReview() async {
     try {
       await in_app_review.loadLibrary();
       final inAppReview = in_app_review.InAppReview.instance;
@@ -54,7 +52,7 @@ class OpenService {
     }
   }
 
-  Future<void> openFile(String filePath) async {
+  static Future<void> openFile(String filePath) async {
     await open_file.loadLibrary();
     await Permission.storage.request();
     await Permission.manageExternalStorage.request();
@@ -62,12 +60,12 @@ class OpenService {
     await open_file.OpenFile.open(filePath);
   }
 
-  Future<ShareResultStatus> share({required String text}) async {
+  static Future<ShareResultStatus> share({required String text}) async {
     final result = await Share.share(text);
     return result.status;
   }
 
-  Future<void> openAddressInMap(
+  static Future<void> openAddressInMap(
       {required String address, bool? direction}) async {
     String url = direction == true
         ? "https://www.google.com/maps/dir/?api=1&layer=traffic&destination=$address"
@@ -77,7 +75,7 @@ class OpenService {
     );
   }
 
-  Future<void> openCoordinatesInMap(
+  static Future<void> openCoordinatesInMap(
       {required double latitude,
       required double longitude,
       bool? direction}) async {
@@ -89,7 +87,7 @@ class OpenService {
     );
   }
 
-  Future<void> openPdf({required String pdfUrl, String? title}) async {
+  static Future<void> openPdf({required String pdfUrl, String? title}) async {
     await pdf_viewer_widget.loadLibrary();
     Navigator.push(
       CurrentContext().context,

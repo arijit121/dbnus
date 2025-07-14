@@ -46,7 +46,7 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () {
-              DownloadHandler().download(
+              DownloadHandler.download(
                   downloadUrl:
                       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
@@ -58,7 +58,7 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () {
-              DownloadHandler().download(
+              DownloadHandler.download(
                   downloadUrl:
                       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
             },
@@ -299,7 +299,7 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
-              OpenService()
+              OpenService
                   .openAddressInMap(address: 'Kolkata', direction: true);
             }),
         20.ph,
@@ -307,7 +307,7 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
-              OpenService().openCoordinatesInMap(
+              OpenService.openCoordinatesInMap(
                 latitude: 22.5354273,
                 longitude: 88.3473527,
               );

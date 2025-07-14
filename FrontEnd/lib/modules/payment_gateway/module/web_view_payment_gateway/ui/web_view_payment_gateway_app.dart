@@ -58,7 +58,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
             String uri = navigationAction.request.url.toString();
             AppLog.i(uri, tag: "ShouldOverrideUrlLoading");
             if (uri.contains("upi://pay")) {
-              bool? result = await OpenService().openUrl(
+              bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
                 PopUpItems().toastMessage(
@@ -67,7 +67,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
               }
               return NavigationActionPolicy.CANCEL;
             } else if (!uri.startsWith("http")) {
-              bool? result = await OpenService().openUrl(
+              bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
                 PopUpItems().toastMessage(

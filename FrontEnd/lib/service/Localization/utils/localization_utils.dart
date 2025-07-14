@@ -11,14 +11,14 @@ class LocalizationUtils {
   static List<Locale> supportedLocales =
       LanguageEnum.values.map((language) => language.locale).toList();
 
-  Future<void> store({required Locale local}) async {
+  static  Future<void> store({required Locale local}) async {
     await local_preferences.loadLibrary();
     await local_preferences.LocalPreferences().setString(
         key: local_preferences.LocalPreferences.localizationKey,
         value: local.toLanguageTag());
   }
 
-  Future<Locale?> getFromStore() async {
+  static Future<Locale?> getFromStore() async {
     await Future.wait(
         [local_preferences.loadLibrary(), value_handler.loadLibrary()]);
     String? value = await local_preferences.LocalPreferences()
@@ -40,7 +40,7 @@ class LocalizationUtils {
     return null;
   }
 
-  void changeLanguage({required Locale locale}) {
+ static void changeLanguage({required Locale locale}) {
     CurrentContext()
         .context
         .read<LocalizationBloc>()

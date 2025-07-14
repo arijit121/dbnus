@@ -11,13 +11,14 @@ import '../extension/logger_extension.dart';
 import '../utils/pop_up_items.dart' deferred as pop_up_items;
 import 'JsService/provider/js_provider.dart';
 import 'open_service.dart' deferred as open_service;
+
 // import 'package:http/http.dart' as http;
 // import 'package:universal_html/html.dart' deferred as html;
 
 class DownloadHandler {
-  final String _group = 'bunchOfFiles';
+  static const String _group = 'bunchOfFiles';
 
-  Future<void> download(
+  static Future<void> download(
       {required String downloadUrl,
       String? fileName,
       bool? inGroup,
@@ -95,7 +96,7 @@ class DownloadHandler {
               String filePath = await result.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
               await open_service.loadLibrary();
-              await open_service.OpenService().openFile(filePath);
+              await open_service.OpenService.openFile(filePath);
               AppLog.i('Success!');
 
             case TaskStatus.canceled:
@@ -124,7 +125,7 @@ class DownloadHandler {
           String filePath = await task.filePath();
           AppLog.i(filePath, tag: "FilePath");
           await open_service.loadLibrary();
-          await open_service.OpenService().openFile(filePath);
+          await open_service.OpenService.openFile(filePath);
         })
         .configureNotificationForGroup(FileDownloader.defaultGroup,
             // For the main download button
@@ -173,7 +174,7 @@ class DownloadHandler {
               String filePath = await update.task.filePath();
               AppLog.i(filePath, tag: "FilePath");
               await open_service.loadLibrary();
-              await open_service.OpenService().openFile(filePath);
+              await open_service.OpenService.openFile(filePath);
             case TaskStatus.canceled:
               AppLog.i('Download was canceled');
 
@@ -189,7 +190,7 @@ class DownloadHandler {
     });
   }
 
-  Future<String> downloadPath() async {
+  static Future<String> downloadPath() async {
     try {
       await path_provider.loadLibrary();
       String directoryPath;

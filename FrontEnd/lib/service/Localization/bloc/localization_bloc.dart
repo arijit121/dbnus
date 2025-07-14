@@ -15,12 +15,12 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
                 value: LocalizationUtils.supportedLocales.first))) {
     on<LocalizationEvent>((event, emit) async {
       if (event is InitLocalization) {
-        Locale? local = await LocalizationUtils().getFromStore();
+        Locale? local = await LocalizationUtils.getFromStore();
         if (local != null) {
           emit(state.copyWith(locale: DynamicBlocData.init(value: local)));
           emit(state.copyWith(locale: DynamicBlocData.success(value: local)));
         } else if (state.locale.value != null) {
-          await LocalizationUtils().store(local: state.locale.value!);
+          await LocalizationUtils.store(local: state.locale.value!);
         }
       } else if (event is ChangeLanguage) {
         emit(state.copyWith(locale: DynamicBlocData.loading()));
@@ -31,7 +31,7 @@ class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
         if (supportedLocale.languageCode.isNotEmpty) {
           emit(state.copyWith(
               locale: DynamicBlocData.success(value: event.locale)));
-          await LocalizationUtils().store(local: event.locale);
+          await LocalizationUtils.store(local: event.locale);
         } else {
           emit(state.copyWith(
               locale: DynamicBlocData.error(error: "Unsupported locale")));

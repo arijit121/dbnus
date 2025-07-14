@@ -289,7 +289,7 @@ class CustomHtmlText extends StatelessWidget {
           backgroundColor: backGroundColor,
           decorationColor: color),
       onTapUrl: (url) async {
-        await OpenService().openUrl(uri: Uri.parse(url));
+        await OpenService.openUrl(uri: Uri.parse(url));
         return true;
       },
       customWidgetBuilder: customWidgetBuilder,

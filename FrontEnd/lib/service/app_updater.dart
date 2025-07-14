@@ -113,7 +113,7 @@ class AppUpdater {
           ),
         );
         if (result == "Y") {
-          OpenService().openUrl(uri: Uri.parse(appStoreListingURL ?? ""));
+          OpenService.openUrl(uri: Uri.parse(appStoreListingURL ?? ""));
         } else if (isForceUpdate == true) {
           SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
