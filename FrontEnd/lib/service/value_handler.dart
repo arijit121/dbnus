@@ -3,12 +3,10 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart' deferred as crypto;
 import 'package:encrypt/encrypt.dart' deferred as encrypt;
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
-import '../service/context_service.dart';
 
 class ValueHandler {
   int generateTimestamp() {
@@ -163,13 +161,16 @@ class ValueHandler {
 
   String? timeOfDayParser({String? timeOfDayString}) {
     try {
-      if (timeOfDayString != null) {
-        TimeOfDay timeOfDay = TimeOfDay(
-            hour: int.parse(timeOfDayString.split(":")[0]),
-            minute: int.parse(timeOfDayString.split(":")[1]));
-        timeOfDay.toString();
-        return timeOfDay.format(CurrentContext().context);
+      if (timeOfDayString == null || timeOfDayString.trim().isEmpty) {
+        return null;
       }
+
+      // Parse the 24-hour format input
+      DateTime parsedTime =
+      DateFormat.Hm().parse(timeOfDayString); // e.g., "10:30"
+
+      // Format to 12-hour format with AM/PM
+      return DateFormat.jm().format(parsedTime); // e.g., "10:30 AM"
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
