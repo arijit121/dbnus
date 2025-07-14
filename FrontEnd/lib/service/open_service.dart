@@ -31,14 +31,15 @@ class OpenService {
     }
   }
 
-  Future<void> openUrl(
+  Future<bool?> openUrl(
       {required Uri uri, LaunchMode mode = LaunchMode.platformDefault}) async {
     try {
       AppLog.i("OpenUrl==> $uri");
-      await launchUrl(uri, mode: mode);
+     return await launchUrl(uri, mode: mode);
     } catch (e) {
       AppLog.e('Could not launch $uri', error: e);
     }
+    return null;
   }
 
   Future<void> requestReview() async {
