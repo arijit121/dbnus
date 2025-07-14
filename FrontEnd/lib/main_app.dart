@@ -35,7 +35,7 @@ import 'utils/text_utils.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseService().showNotification(message);
+  FirebaseService.showNotification(message);
   AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
@@ -47,18 +47,18 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    FirebaseService().showNotification(message);
+    FirebaseService.showNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
-      RedirectEngine().redirectRoutes(
+      RedirectEngine.redirectRoutes(
         redirectUrl: Uri.parse(event.data["ActionURL"]),
         delayedSeconds: 4,
       );
     }
   });
 
-  CrashUtils().setValue(value: false);
+  CrashUtils.setValue(value: false);
   FlutterError.onError = (errorDetails) {
     if (errorDetails.library?.contains("widgets library") == true) {
       AppLog.e("${errorDetails.exception}",
@@ -66,7 +66,7 @@ Future<void> main() async {
       if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       }
-      CrashUtils().navigateToCrashPage({
+      CrashUtils.navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
@@ -89,15 +89,15 @@ Future<void> main() async {
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  await FirebaseService().getInitialMessage();
-  await FirebaseService().setAnalyticsCollectionEnabled();
-  await NotificationHandler().requestPermissions();
-  await NotificationHandler().initiateNotification();
+  await FirebaseService.getInitialMessage();
+  await FirebaseService.setAnalyticsCollectionEnabled();
+  await NotificationHandler.requestPermissions();
+  await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
     runApp(const MyApp());
   });
@@ -115,10 +115,10 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       BackButtonInterceptor.add(myInterceptor);
-      await FirebaseService().generateToken();
-      await AppUpdater().startUpdate();
+      await FirebaseService.generateToken();
+      await AppUpdater.startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
-        RedirectEngine().redirectRoutes(redirectUrl: uri);
+        RedirectEngine.redirectRoutes(redirectUrl: uri);
       });
     });
 
@@ -134,10 +134,10 @@ class _MyAppState extends State<MyApp> {
   bool _isExitAppDialogOpen = false;
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (CustomRoute().currentRoute() == RouteName.initialView) {
+    if (CustomRoute.currentRoute() == RouteName.initialView) {
       if (!_isExitAppDialogOpen) {
         _isExitAppDialogOpen = true;
-        PopUpItems().cupertinoPopup(
+        PopUpItems.cupertinoPopup(
             cancelBtnPresses: () {
               _isExitAppDialogOpen = false;
             },
@@ -152,7 +152,7 @@ class _MyAppState extends State<MyApp> {
     } else if (RouterManager.getInstance.router.canPop() == true) {
       return false;
     } else {
-      CustomRoute().clearAndNavigate(RouteName.initialView);
+      CustomRoute.clearAndNavigate(RouteName.initialView);
       return true;
     }
   }
@@ -163,19 +163,16 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (BuildContext context) =>
-          LocalCartBloc()
-            ..add(InItLocalCartEvent()),
+              LocalCartBloc()..add(InItLocalCartEvent()),
         ),
         BlocProvider(
           create: (BuildContext context) =>
-          LocalizationBloc()
-            ..add(InitLocalization()),
+              LocalizationBloc()..add(InitLocalization()),
         ),
         BlocProvider(
           lazy: false,
           create: (BuildContext context) =>
-          ConnectionBloc()
-            ..add(InitConnection()),
+              ConnectionBloc()..add(InitConnection()),
         ),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(

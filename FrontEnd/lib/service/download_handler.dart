@@ -30,7 +30,7 @@ class DownloadHandler {
             ? Uri.parse(downloadUrl)
                 .replace(queryParameters: urlQueryParameters)
             : Uri.parse(downloadUrl);
-        await JsProvider().download(
+        await JsProvider.download(
             url: uri.toString(),
             filename: fileName ?? downloadUrl.split("/").last,
             headers: headers);
@@ -58,8 +58,8 @@ class DownloadHandler {
         }*/
       } else {
         await pop_up_items.loadLibrary();
-        pop_up_items.PopUpItems()
-            .toastMessage("Downloading ...", Colors.blueAccent);
+        pop_up_items.PopUpItems.toastMessage(
+            "Downloading ...", Colors.blueAccent);
         if (inGroup == true) {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
@@ -226,7 +226,7 @@ class DownloadHandler {
     final status = await Permission.storage.request();
     if (status.isPermanentlyDenied) {
       await pop_up_items.loadLibrary();
-      await pop_up_items.PopUpItems().cupertinoPopup(
+      await pop_up_items.PopUpItems.cupertinoPopup(
         title: "File Permission Required",
         content: "For download file.",
         cancelBtnPresses: () {},

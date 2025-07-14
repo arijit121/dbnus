@@ -67,14 +67,14 @@ class UserModel {
       lastName = json['LastName'];
       maritalStatus = json['MaritalStatus'];
       middleName = json['MiddleName'];
-      mobileNo = ValueHandler().stringify(json['MobileNo']);
-      pinCode = ValueHandler().stringify(json['PinCode']);
+      mobileNo = ValueHandler.stringify(json['MobileNo']);
+      pinCode = ValueHandler.stringify(json['PinCode']);
       smartReportExists = json['SmartReportExists'];
       stateName = json['StateName'];
       status = json['Status'];
-      userId = ValueHandler().stringify(json['UserId']);
+      userId = ValueHandler.stringify(json['UserId']);
       custUserId = json['CustUserId'];
-      lastPincode = ValueHandler().stringify(json['LastPincode']);
+      lastPincode = ValueHandler.stringify(json['LastPincode']);
       accessToken = json['access_token'];
       rtoken = json['rtoken'];
     } catch (e, stacktrace) {

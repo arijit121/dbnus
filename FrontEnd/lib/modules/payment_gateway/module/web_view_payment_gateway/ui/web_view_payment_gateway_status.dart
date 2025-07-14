@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../../../../router/custom_router/custom_route.dart';
@@ -30,11 +29,11 @@ class _WebViewPaymentGatewayStatusState
   Future<void> start() async {
     WebViewPaymentGatewayModel webViewPaymentGatewayModel =
         await WebViewPaymentGatewayPreference().get();
-    if (ValueHandler()
-        .isTextNotEmptyOrNull(webViewPaymentGatewayModel.transactionId)) {
+    if (ValueHandler.isTextNotEmptyOrNull(
+        webViewPaymentGatewayModel.transactionId)) {
       // Call for success
     } else {
-      CustomRoute().clearAndNavigate(RouteName.initialView);
+      CustomRoute.clearAndNavigate(RouteName.initialView);
     }
     await WebViewPaymentGatewayPreference().clear();
   }

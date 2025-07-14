@@ -138,19 +138,7 @@ class _TestPageState extends State<TestPage> {
                     Colors.blue,
                   ]),
                   child: const CustomText("GlucoseFasting")),
-              20.ph,
-              CustomGOEButton(
-                  onPressed: () {
-                    OpenService.openPdf(
-                        pdfUrl:
-                            "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
-                  },
-                  gradient: const LinearGradient(colors: [
-                    ColorConst.red,
-                    Colors.blue,
-                  ]),
-                  child: const CustomText("LipidProfile")),
-              20.ph,
+              20.ph,  
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler.download(
@@ -181,8 +169,8 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () async {
-                    ForwardGeocoding? forwardGeocoding = await Geocoding()
-                        .forwardGeocoding(
+                    ForwardGeocoding? forwardGeocoding =
+                        await Geocoding.forwardGeocoding(
                             address:
                                 "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India");
                     AppLog.i(forwardGeocoding?.longitude);
@@ -196,8 +184,8 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () async {
-                    ReverseGeocoding? reverseGeocoding = await Geocoding()
-                        .reverseGeocoding(
+                    ReverseGeocoding? reverseGeocoding =
+                        await Geocoding.reverseGeocoding(
                             latitude: 22.5754, longitude: 88.4798);
                     AppLog.i(reverseGeocoding?.displayName);
                   },
@@ -212,7 +200,7 @@ class _TestPageState extends State<TestPage> {
                   onPressed: () async {
                     String? deviceId = await AppConfig().getDeviceId();
                     AppLog.i(deviceId);
-                    PopUpItems().toastMessage(deviceId ?? "", Colors.green);
+                    PopUpItems.toastMessage(deviceId ?? "", Colors.green);
                   },
                   gradient: const LinearGradient(colors: [
                     ColorConst.red,
@@ -237,7 +225,7 @@ class _TestPageState extends State<TestPage> {
                   width: 200,
                   onPressed: () async {
                     CustomFile? customFile =
-                        await CustomFilePicker().customFilePicker();
+                        await CustomFilePicker.customFilePicker();
                     AppLog.i(customFile?.name, tag: "CustomFile");
                   },
                   gradient: const LinearGradient(colors: [
@@ -249,7 +237,7 @@ class _TestPageState extends State<TestPage> {
               CustomGOEButton(
                   width: 200,
                   onPressed: () async {
-                    CustomRoute().pushNamed(
+                    CustomRoute.pushNamed(
                         name: RouteName.rayzorPay,
                         arguments: RazorpayMerchantDetails());
                   },
@@ -263,8 +251,8 @@ class _TestPageState extends State<TestPage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      PopUpItems()
-                          .toastMessage("On Tap", ColorConst.baseHexColor);
+                      PopUpItems.toastMessage(
+                          "On Tap", ColorConst.baseHexColor);
                     },
                     child: CustomNetWorkImageView(
                       url: ApiUrlConst.testImgUrl,
@@ -317,114 +305,10 @@ class _TestPageState extends State<TestPage> {
                 ],
               ),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
               CustomGOEButton(
                   width: 160,
                   onPressed: () async {
-                    PopUpItems().customMsgDialog(
+                    PopUpItems.customMsgDialog(
                         title: "Success",
                         content: "Thank you, transaction complete.",
                         type: DialogType.success);

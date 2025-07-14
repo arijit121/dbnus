@@ -21,9 +21,9 @@ class ConnectionUtils {
     String? ssIpV4 =
         await LocalPreferences().getString(key: LocalPreferences.ssIpV4);
     await value_handler.loadLibrary();
-    if (!value_handler.ValueHandler().isTextNotEmptyOrNull(ssIpV4)) {
+    if (!value_handler.ValueHandler.isTextNotEmptyOrNull(ssIpV4)) {
       ssIpV4 = await fetchWifiIpV4();
-      if (value_handler.ValueHandler().isTextNotEmptyOrNull(ssIpV4)) {
+      if (value_handler.ValueHandler.isTextNotEmptyOrNull(ssIpV4)) {
         await setIpV4(ssIpV4!);
       }
     }
@@ -39,9 +39,9 @@ class ConnectionUtils {
     String? ssIpV6 =
         await LocalPreferences().getString(key: LocalPreferences.ssIpV6);
     await value_handler.loadLibrary();
-    if (!value_handler.ValueHandler().isTextNotEmptyOrNull(ssIpV6)) {
+    if (!value_handler.ValueHandler.isTextNotEmptyOrNull(ssIpV6)) {
       ssIpV6 = await fetchWifiIpV6();
-      if (value_handler.ValueHandler().isTextNotEmptyOrNull(ssIpV6)) {
+      if (value_handler.ValueHandler.isTextNotEmptyOrNull(ssIpV6)) {
         await setIpV6(ssIpV6!);
       }
     }

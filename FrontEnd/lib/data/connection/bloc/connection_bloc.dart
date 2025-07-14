@@ -23,11 +23,11 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {
         await Future.wait(
             [value_handler.loadLibrary(), connection_utils.loadLibrary()]);
         String? ipV4 = await connection_utils.ConnectionUtils().fetchWifiIpV4();
-        if (value_handler.ValueHandler().isTextNotEmptyOrNull(ipV4)) {
+        if (value_handler.ValueHandler.isTextNotEmptyOrNull(ipV4)) {
           connection_utils.ConnectionUtils().setIpV4(ipV4 ?? '');
         }
         String? ipV6 = await connection_utils.ConnectionUtils().fetchWifiIpV6();
-        if (value_handler.ValueHandler().isTextNotEmptyOrNull(ipV6)) {
+        if (value_handler.ValueHandler.isTextNotEmptyOrNull(ipV6)) {
           connection_utils.ConnectionUtils().setIpV6(ipV6 ?? '');
         }
       }

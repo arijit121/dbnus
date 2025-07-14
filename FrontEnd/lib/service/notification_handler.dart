@@ -37,13 +37,13 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 }
 
 class NotificationHandler {
-  Future<void> initiateNotification() async {
-    await setupFlutterNotifications();
+  static Future<void> initiateNotification() async {
+    await NotificationHandler.setupFlutterNotifications();
     // await requestPermissions();
-    _configureSelectNotificationSubject();
+    NotificationHandler._configureSelectNotificationSubject();
   }
 
-  Future<void> setupFlutterNotifications() async {
+  static Future<void> setupFlutterNotifications() async {
     if (isFlutterLocalNotificationsInitialized) {
       return;
     }
@@ -127,11 +127,11 @@ class NotificationHandler {
     isFlutterLocalNotificationsInitialized = true;
   }
 
-  void _configureSelectNotificationSubject() {
+  static void _configureSelectNotificationSubject() {
     selectNotificationStream.stream.listen((String? payload) async {
       if (payload != null && payload.isNotEmpty) {
-        RedirectEngine()
-            .redirectRoutes(redirectUrl: Uri.parse(payload), delayedSeconds: 3);
+        RedirectEngine.redirectRoutes(
+            redirectUrl: Uri.parse(payload), delayedSeconds: 3);
       }
     });
 
@@ -141,13 +141,13 @@ class NotificationHandler {
       var payload = value?.notificationResponse?.payload;
 
       if (payload != null && payload.isNotEmpty) {
-        RedirectEngine()
-            .redirectRoutes(redirectUrl: Uri.parse(payload), delayedSeconds: 4);
+        RedirectEngine.redirectRoutes(
+            redirectUrl: Uri.parse(payload), delayedSeconds: 4);
       }
     });
   }
 
-  Future<void> requestPermissions() async {
+  static Future<void> requestPermissions() async {
     if (Platform.isIOS || Platform.isMacOS) {
       await FirebaseMessaging.instance
           .setForegroundNotificationPresentationOptions(
@@ -185,51 +185,51 @@ class NotificationHandler {
   }
 
   /// Return notification Id
-  Future<int?> showUpdateFlutterNotification(
+  static Future<int?> showUpdateFlutterNotification(
       CustomNotificationModel notificationModel,
       {int? notificationId}) async {
     if (Platform.isAndroid && notificationModel.title != null) {
-      return await _showUpdateNotificationAndroid(notificationModel,
+      return await NotificationHandler._showUpdateNotificationAndroid(
+          notificationModel,
           notificationId: notificationId);
     } else if (Platform.isIOS && notificationModel.title != null) {
-      return await _showUpdateNotificationIos(notificationModel,
+      return await NotificationHandler._showUpdateNotificationIos(
+          notificationModel,
           notificationId: notificationId);
     }
     return null;
   }
 
   /// Return notification Id
-  Future<int> _showUpdateNotificationIos(
+  static Future<int> _showUpdateNotificationIos(
       CustomNotificationModel notificationModel,
       {int? notificationId}) async {
-    int tempNotificationId = notificationId ?? getId();
+    int tempNotificationId = notificationId ?? NotificationHandler.getId();
     bool isNotificationActive = (notificationId != null) &&
-        (await _isNotificationActive(notificationId));
+        (await NotificationHandler._isNotificationActive(notificationId));
     final String? bigPicturePath =
-        ValueHandler().isTextNotEmptyOrNull(notificationModel.imageUrl)
-            ? await _downloadAndSaveFile(
+        ValueHandler.isTextNotEmptyOrNull(notificationModel.imageUrl)
+            ? await NotificationHandler._downloadAndSaveFile(
                 notificationModel.imageUrl!, 'bigPicture.jpg')
             : null;
 
     final DarwinNotificationDetails darwinNotificationDetailsImage =
         DarwinNotificationDetails(
-            subtitle:
-                ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
-                    ? ValueHandler()
-                        .parseHtmlToText(notificationModel.message ?? "")
-                    : null,
+            subtitle: ValueHandler.isTextNotEmptyOrNull(
+                    notificationModel.bigText)
+                ? ValueHandler.parseHtmlToText(notificationModel.message ?? "")
+                : null,
             attachments: bigPicturePath != null
                 ? <DarwinNotificationAttachment>[
                     DarwinNotificationAttachment(bigPicturePath,
                         hideThumbnail: false)
                   ]
                 : null,
-            sound: ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)
+            sound: ValueHandler.isTextNotEmptyOrNull(notificationModel.sound)
                 ? "${notificationModel.sound ?? ""}.aiff"
                 : null,
-            presentSound: !ValueHandler()
-                    .isTextNotEmptyOrNull(notificationId) &&
-                ValueHandler().isTextNotEmptyOrNull(notificationModel.sound),
+            presentSound: !ValueHandler.isTextNotEmptyOrNull(notificationId) &&
+                ValueHandler.isTextNotEmptyOrNull(notificationModel.sound),
             presentAlert: !isNotificationActive,
             presentBadge: !isNotificationActive);
     final NotificationDetails notificationDetailsImage = NotificationDetails(
@@ -239,14 +239,15 @@ class NotificationHandler {
     await flutterLocalNotificationsPlugin.show(
         tempNotificationId,
         notificationModel.title ?? "",
-        ValueHandler().parseHtmlToText(
+        ValueHandler.parseHtmlToText(
             notificationModel.bigText ?? notificationModel.message ?? ""),
         notificationDetailsImage,
         payload: notificationModel.actionURL);
     return tempNotificationId;
   }
 
-  Future<String> _downloadAndSaveFile(String url, String fileName) async {
+  static Future<String> _downloadAndSaveFile(
+      String url, String fileName) async {
     final Directory directory = await getApplicationDocumentsDirectory();
     final String filePath = '${directory.path}/$fileName';
     final http.Response response =
@@ -256,7 +257,7 @@ class NotificationHandler {
     return filePath;
   }
 
-  int getId() {
+  static int getId() {
     int max = 2147483647;
     int min = 1000;
     Random rnd = Random();
@@ -265,15 +266,16 @@ class NotificationHandler {
   }
 
   /// Return notification Id
-  Future<int> _showUpdateNotificationAndroid(
+  static Future<int> _showUpdateNotificationAndroid(
       CustomNotificationModel notificationModel,
       {int? notificationId}) async {
-    int tempNotificationId = notificationId ?? getId();
+    int tempNotificationId = notificationId ?? NotificationHandler.getId();
     bool isNotificationActive = (notificationId != null) &&
-        (await _isNotificationActive(notificationId));
+        (await NotificationHandler._isNotificationActive(notificationId));
     ByteArrayAndroidBitmap? bigPicture;
-    if (ValueHandler().isTextNotEmptyOrNull(notificationModel.imageUrl)) {
-      Uint8List? byte = await _getByteArrayFromUrl(notificationModel.imageUrl!);
+    if (ValueHandler.isTextNotEmptyOrNull(notificationModel.imageUrl)) {
+      Uint8List? byte = await NotificationHandler._getByteArrayFromUrl(
+          notificationModel.imageUrl!);
       if (byte != null) {
         bigPicture = ByteArrayAndroidBitmap(byte);
       } else {
@@ -288,14 +290,14 @@ class NotificationHandler {
             // largeIcon: largeIcon,
             contentTitle: notificationModel.title,
             summaryText:
-                ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
+                ValueHandler.isTextNotEmptyOrNull(notificationModel.bigText)
                     ? notificationModel.bigText
                     : notificationModel.message,
             htmlFormatContentTitle: true,
             htmlFormatSummaryText: true,
             htmlFormatContent: true,
             htmlFormatTitle: true)
-        : ValueHandler().isTextNotEmptyOrNull(notificationModel.bigText)
+        : ValueHandler.isTextNotEmptyOrNull(notificationModel.bigText)
             ? BigTextStyleInformation(notificationModel.bigText ?? "",
                 contentTitle: notificationModel.title,
                 summaryText: notificationModel.message,
@@ -307,7 +309,7 @@ class NotificationHandler {
             : null;
 
     AndroidNotificationChannel tempChannel = channel;
-    if (ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)) {
+    if (ValueHandler.isTextNotEmptyOrNull(notificationModel.sound)) {
       AndroidNotificationChannel dynamicChannel = AndroidNotificationChannel(
         "${channel.id}_${notificationModel.sound}", // id
         channel.name, // name
@@ -330,8 +332,8 @@ class NotificationHandler {
             channelDescription: tempChannel.description,
             styleInformation: styleInformation,
             playSound: !isNotificationActive &&
-                ValueHandler().isTextNotEmptyOrNull(notificationModel.sound),
-            sound: ValueHandler().isTextNotEmptyOrNull(notificationModel.sound)
+                ValueHandler.isTextNotEmptyOrNull(notificationModel.sound),
+            sound: ValueHandler.isTextNotEmptyOrNull(notificationModel.sound)
                 ? RawResourceAndroidNotificationSound(notificationModel.sound!)
                 : null,
             importance: isNotificationActive ? Importance.low : Importance.high,
@@ -350,7 +352,7 @@ class NotificationHandler {
     return tempNotificationId;
   }
 
-  Future<Uint8List?> _getByteArrayFromUrl(String url) async {
+  static Future<Uint8List?> _getByteArrayFromUrl(String url) async {
     try {
       final http.Response response =
           await http.get(Uri.parse(url)).timeout(const Duration(minutes: 5));
@@ -361,14 +363,14 @@ class NotificationHandler {
     return null;
   }
 
-  Future<bool> _isNotificationActive(int notificationId) async {
+  static Future<bool> _isNotificationActive(int notificationId) async {
     final List<ActiveNotification> activeNotifications =
         await flutterLocalNotificationsPlugin.getActiveNotifications();
 
     return activeNotifications.any((n) => n.id == notificationId);
   }
 
-  Future<bool> _isNotificationPending(int notificationId) async {
+  static Future<bool> _isNotificationPending(int notificationId) async {
     final List<PendingNotificationRequest> pendingNotifications =
         await flutterLocalNotificationsPlugin.pendingNotificationRequests();
 

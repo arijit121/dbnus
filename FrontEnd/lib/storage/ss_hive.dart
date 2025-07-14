@@ -62,7 +62,7 @@ class SsHive {
     final localPreferences = local_preferences.LocalPreferences();
     String? encryptionKey = await localPreferences.getString(
         key: local_preferences.LocalPreferences.hiveEncryptionKey);
-    if (value_handler.ValueHandler().isTextNotEmptyOrNull(encryptionKey)) {
+    if (value_handler.ValueHandler.isTextNotEmptyOrNull(encryptionKey)) {
       var key = base64Url.decode(encryptionKey ?? "");
       return key;
     } else {

@@ -24,10 +24,10 @@ class CrashUi extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) async {
-        await CrashUtils().setValue(value: false);
-        await CrashUtils().logCrash(args: errorDetails);
+        await CrashUtils.setValue(value: false);
+        await CrashUtils.logCrash(args: errorDetails);
         kIsWeb
-            ? CustomRoute().clearAndNavigate(RouteName.initialView)
+            ? CustomRoute.clearAndNavigate(RouteName.initialView)
             : SystemNavigator.pop();
       },
       child: Scaffold(
@@ -63,12 +63,12 @@ class CrashUi extends StatelessWidget {
                     radius: 8,
                     width: double.infinity,
                     onPressed: () async {
-                      await CrashUtils().setValue(value: false);
-                      await CrashUtils().logCrash(args: errorDetails);
+                      await CrashUtils.setValue(value: false);
+                      await CrashUtils.logCrash(args: errorDetails);
                       kIsWeb
-                          ? CustomRoute().clearAndNavigate(RouteName.initialView)
+                          ? CustomRoute.clearAndNavigate(RouteName.initialView)
                           : SystemNavigator.pop();
-                      await CrashUtils().setValue(value: false);
+                      await CrashUtils.setValue(value: false);
                       SystemNavigator.pop();
                     },
                     child: Center(

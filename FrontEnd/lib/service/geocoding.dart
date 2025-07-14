@@ -8,8 +8,10 @@ import '../data/model/reverse_geocoding.dart';
 import '../extension/logger_extension.dart';
 
 class Geocoding {
-  final String _reverseGeocode = "https://nominatim.openstreetmap.org/reverse";
-  final String _forwardGeocode = "https://nominatim.openstreetmap.org/search";
+  static const String _reverseGeocode =
+      "https://nominatim.openstreetmap.org/reverse";
+  static const String _forwardGeocode =
+      "https://nominatim.openstreetmap.org/search";
 
   ///
   ///
@@ -78,7 +80,7 @@ class Geocoding {
   ///
   ///
 
-  Future<ReverseGeocoding?> reverseGeocoding(
+  static Future<ReverseGeocoding?> reverseGeocoding(
       {required double latitude, required double longitude}) async {
     try {
       ApiReturnModel? v = await apiRepo().callApi(
@@ -146,7 +148,8 @@ class Geocoding {
   ///
   ///
 
-  Future<ForwardGeocoding?> forwardGeocoding({required String address}) async {
+  static Future<ForwardGeocoding?> forwardGeocoding(
+      {required String address}) async {
     try {
       ApiReturnModel? v = await apiRepo().callApi(
           tag: "ForwardGeocoding",

@@ -62,11 +62,11 @@ class AppConfig {
           [local_preferences.loadLibrary(), value_handler.loadLibrary()]);
       String? browserId = await local_preferences.LocalPreferences()
           .getString(key: local_preferences.LocalPreferences.browserId);
-      if (value_handler.ValueHandler().isTextNotEmptyOrNull(browserId)) {
+      if (value_handler.ValueHandler.isTextNotEmptyOrNull(browserId)) {
         return browserId;
       } else {
         await Future.wait([uuid.loadLibrary(), js_provider.loadLibrary()]);
-        String? browserId = await js_provider.JsProvider().getDeviceId();
+        String? browserId = await js_provider.JsProvider.getDeviceId();
         await local_preferences.LocalPreferences().setString(
             key: local_preferences.LocalPreferences.browserId,
             value: browserId ?? uuid.Uuid().v4());
@@ -85,7 +85,7 @@ class AppConfig {
   Future<String?> getUserAgent() async {
     try {
       await js_provider.loadLibrary();
-      return js_provider.JsProvider().getUserAgent();
+      return js_provider.JsProvider.getUserAgent();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return null;

@@ -12,7 +12,7 @@ class WebViewPaymentGatewayUtils {
     if (uri.contains(webViewPaymentGatewayModel.redirectLink)) {
       Navigator.of(CurrentContext().context)
           .pop({"PayMent_STATUS": "TXN_SUCCESS"});
-    } else if (ValueHandler().isTextNotEmptyOrNull(
+    } else if (ValueHandler.isTextNotEmptyOrNull(
             webViewPaymentGatewayModel.failedRedirectLink) &&
         uri.contains(webViewPaymentGatewayModel.failedRedirectLink ?? "")) {
       Navigator.of(CurrentContext().context)

@@ -1,4 +1,3 @@
-
 import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +56,7 @@ class ErrorRouteWidget extends StatelessWidget {
                 radius: 6,
                 backGroundColor: Colors.blueAccent,
                 onPressed: () {
-                  CustomRoute().clearAndNavigate(RouteName.initialView);
+                  CustomRoute.clearAndNavigate(RouteName.initialView);
                 },
                 child: const CustomText(
                   "Back to Home",

@@ -142,7 +142,7 @@ class CustomGridView extends StatelessWidget {
   }) {
     return _CustomGridView(
       key: key,
-      crossAxisCount: ValueHandler().isNonZeroNumericValue(crossAxisCount)
+      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
           ? crossAxisCount
           : 1,
       crossAxisSpacing: crossAxisSpacing,
@@ -162,7 +162,7 @@ class CustomGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return _CustomGridView(
       key: key,
-      crossAxisCount: ValueHandler().isNonZeroNumericValue(crossAxisCount)
+      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
           ? crossAxisCount
           : 1,
       crossAxisSpacing: crossAxisSpacing,

@@ -48,19 +48,7 @@ class _UiTempState extends State<UiTemp> {
             onPressed: () {
               DownloadHandler.download(
                   downloadUrl:
-                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
-            },
-            gradient: const LinearGradient(colors: [
-              ColorConst.red,
-              Colors.blue,
-            ]),
-            child: const CustomText("Download")),
-        20.ph,
-        CustomGOEButton(
-            onPressed: () {
-              DownloadHandler.download(
-                  downloadUrl:
-                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                      "https://file-examples.com/storage/fe6146b54768752f9a08cf7/2017/10/file-example_PDF_1MB.pdf");
             },
             backGroundColor: Colors.blue.shade300,
             child: const CustomText("Download")),
@@ -68,7 +56,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             onPressed: () async {
               notificationId =
-                  await NotificationHandler().showUpdateFlutterNotification(
+                  await NotificationHandler.showUpdateFlutterNotification(
                 CustomNotificationModel(
                   title: "Silent Notification4",
                   message: "test",
@@ -88,7 +76,7 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () {
-              NotificationHandler().showUpdateFlutterNotification(
+              NotificationHandler.showUpdateFlutterNotification(
                 CustomNotificationModel(
                   title: "Silent Notification update",
                   message: "test ${notificationId}",
@@ -109,8 +97,8 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () async {
-              String? value = await JsProvider()
-                  .loadJsAndPassValueWithCallbackAsync(
+              String? value =
+                  await JsProvider.loadJsAndPassValueWithCallbackAsync(
                       value: "testvdshvhfvsfhvs");
               AppLog.i(value);
             },
@@ -122,7 +110,7 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () async {
-              await JsProvider().changeUrl(path: "/test");
+              await JsProvider.changeUrl(path: "/test");
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -133,7 +121,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 160,
             onPressed: () async {
-              CustomFilePicker().customFilePicker();
+              CustomFilePicker.customFilePicker();
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -255,7 +243,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 160,
             onPressed: () async {
-              PopUpItems().customMsgDialog(
+              PopUpItems.customMsgDialog(
                   title: "Success",
                   content: "Thank you, transaction complete.",
                   type: DialogType.success);
@@ -299,8 +287,7 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
-              OpenService
-                  .openAddressInMap(address: 'Kolkata', direction: true);
+              OpenService.openAddressInMap(address: 'Kolkata', direction: true);
             }),
         20.ph,
         CustomIconButton(
@@ -316,7 +303,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 200,
             onPressed: () async {
-              CustomRoute().clearAndNavigate(RouteName.leaderBoard);
+              CustomRoute.clearAndNavigate(RouteName.leaderBoard);
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -341,8 +328,8 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.add_box),
             onPressed: () {
-              PopUpItems()
-                  .toastMessage("Show tost msg..", ColorConst.primaryDark);
+              PopUpItems.toastMessage(
+                  "Show tost msg..", ColorConst.primaryDark);
             }),
       ],
     );

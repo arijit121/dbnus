@@ -403,7 +403,7 @@ Widget customCartButton(
                                         serviceId: e.serviceId))
                                     .toList())));
                         if (redirectUrl != null) {
-                          RedirectEngine().redirectRoutes(
+                          RedirectEngine.redirectRoutes(
                               redirectUrl: Uri.parse(redirectUrl));
                         }
                       },

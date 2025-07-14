@@ -138,7 +138,7 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
     return ValueListenableBuilder<bool>(
       valueListenable: errorFound,
       builder: (BuildContext context, bool value, _) {
-        return value || !ValueHandler().isTextNotEmptyOrNull(widget.url)
+        return value || !ValueHandler.isTextNotEmptyOrNull(widget.url)
             ? widget.errorWidget ??
                 Image.asset(
                   AssetsConst.dbnusNoImageLogo,

@@ -16,14 +16,14 @@ import 'context_service.dart';
 import 'open_service.dart';
 
 class AppUpdater {
-  Future<void> startUpdate({bool? isForceUpdate}) async {
+  static Future<void> startUpdate({bool? isForceUpdate}) async {
     try {
       if (Platform.isIOS) {
-        _checkAndUpdateIos(isForceUpdate: isForceUpdate);
+        AppUpdater._checkAndUpdateIos(isForceUpdate: isForceUpdate);
       } else if (Platform.isAndroid) {
         isForceUpdate == true
-            ? _checkForImmediateUpdateAndUpdate()
-            : _checkForFlexibleUpdateAndUpdate();
+            ? AppUpdater._checkForImmediateUpdateAndUpdate()
+            : AppUpdater._checkForFlexibleUpdateAndUpdate();
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -31,7 +31,7 @@ class AppUpdater {
   }
 
   /// Returns `true` if the store version of the application is greater than the local version.
-  bool _canUpdate(
+  static bool _canUpdate(
       {required String storeVersion, required String localVersion}) {
     final local = localVersion.split('.').map(int.parse).toList();
     final store = storeVersion.split('.').map(int.parse).toList();
@@ -55,7 +55,7 @@ class AppUpdater {
     return false;
   }
 
-  Future<void> _checkAndUpdateIos({bool? isForceUpdate}) async {
+  static Future<void> _checkAndUpdateIos({bool? isForceUpdate}) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     final newVersion = NewVersionPlus(
         iOSId: packageInfo.packageName, iOSAppStoreCountry: "us");
@@ -66,7 +66,7 @@ class AppUpdater {
       String? appStoreListingURL = response.appStoreLink;
       String localVersion = packageInfo.version;
       BuildContext context = CurrentContext().context;
-      if (_canUpdate(
+      if (AppUpdater._canUpdate(
               storeVersion: storeVersion ?? "", localVersion: localVersion) &&
           context.mounted) {
         String? result = await showDialog<String>(
@@ -121,7 +121,7 @@ class AppUpdater {
     }
   }
 
-  Future<void> _checkForFlexibleUpdateAndUpdate() async {
+  static Future<void> _checkForFlexibleUpdateAndUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       if (info.updateAvailability == UpdateAvailability.updateAvailable) {
         InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
@@ -141,7 +141,7 @@ class AppUpdater {
     });
   }
 
-  Future<void> _checkForImmediateUpdateAndUpdate() async {
+  static Future<void> _checkForImmediateUpdateAndUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       if (info.updateAvailability == UpdateAvailability.updateAvailable) {
         InAppUpdate.performImmediateUpdate().then((onValue) async {

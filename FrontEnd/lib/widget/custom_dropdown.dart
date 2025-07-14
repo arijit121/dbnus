@@ -196,7 +196,7 @@ class CustomMultiSelectorBottomSheet<T> extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      if (ValueHandler().isTextNotEmptyOrNull(title))
+                      if (ValueHandler.isTextNotEmptyOrNull(title))
                         Expanded(
                           child: CustomText(title!,
                               color: ColorConst.primaryDark,
@@ -213,7 +213,7 @@ class CustomMultiSelectorBottomSheet<T> extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (ValueHandler().isTextNotEmptyOrNull(title))
+                if (ValueHandler.isTextNotEmptyOrNull(title))
                   Divider(color: ColorConst.lineGrey, height: 2),
                 Flexible(
                   child: CustomGridView.count(

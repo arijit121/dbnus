@@ -30,10 +30,10 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
       try {
         await js_provider.loadLibrary();
         await Future.wait([
-          js_provider.JsProvider().loadJs(
+          js_provider.JsProvider.loadJs(
               jsPath:
                   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"),
-          js_provider.JsProvider().loadJs(
+          js_provider.JsProvider.loadJs(
               jsPath:
                   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js")
         ]);

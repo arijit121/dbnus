@@ -39,13 +39,13 @@ Future<void> main() async {
   });
 
   crash_utils.loadLibrary().then((_) async {
-    await crash_utils.CrashUtils().setValue(value: false);
+    await crash_utils.CrashUtils.setValue(value: false);
   });
 
   FlutterError.onError = (errorDetails) async {
     if (errorDetails.library?.contains("widgets library") == true) {
       await crash_utils.loadLibrary();
-      crash_utils.CrashUtils().navigateToCrashPage({
+      crash_utils.CrashUtils.navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
@@ -83,15 +83,15 @@ class _MyWebAppState extends State<MyWebApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await firebase_service.loadLibrary();
-      await firebase_service.FirebaseService().setAnalyticsCollectionEnabled();
-      await firebase_service.FirebaseService().generateToken();
+      await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
+      await firebase_service.FirebaseService.generateToken();
       await js_provider.loadLibrary();
       foundation.loadLibrary().then((_) async {
-        await js_provider.JsProvider().loadJs(
+        await js_provider.JsProvider.loadJs(
             jsPath:
                 "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js");
       });
-      await js_provider.JsProvider().loadJs(
+      await js_provider.JsProvider.loadJs(
           jsPath:
               "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
     });

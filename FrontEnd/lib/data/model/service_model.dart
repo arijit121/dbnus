@@ -126,14 +126,14 @@ class ServiceModel {
       isPopular = json['IsPopular'];
       pkgWebServiceImage = json['PkgWebServiceImage'];
       pkgWebBannerImage = json['PkgWebBannerImage'];
-      subDeptId = ValueHandler().stringify(json['SubDeptId']);
+      subDeptId = ValueHandler.stringify(json['SubDeptId']);
       newServiceImage = json['NewServiceImage'];
       serviceImage = json['ServiceImage'];
       discAmount = json['DiscAmount'] ?? json['Discount'];
-      serviceId = ValueHandler().stringify(json['ServiceId']);
+      serviceId = ValueHandler.stringify(json['ServiceId']);
       promoApplicable = json['PromoApplicable'];
       appPackageImage = json['AppPackageImage'] ?? json['icon250ImageUrl'];
-      isPackage = ValueHandler().boolify(json['IsPackage']);
+      isPackage = ValueHandler.boolify(json['IsPackage']);
       serviceText = json['ServiceText'];
       offerFees = json['OfferFees'] ?? json["OfferPrice"];
       isRadiology = json['IsRadiology'];
@@ -150,7 +150,7 @@ class ServiceModel {
           packageServices!.add(Services.fromJson(v));
         });
       }
-      labId = ValueHandler().stringify(json['LabId']);
+      labId = ValueHandler.stringify(json['LabId']);
       serviceName = json['ServiceName'];
       isYana = json['IsYana'];
       testCase = json['TestCase'];
@@ -207,14 +207,14 @@ class ServiceModel {
       isPopular = json['IsPopular'];
       pkgWebServiceImage = json['PkgWebServiceImage'];
       pkgWebBannerImage = json['PkgWebBannerImage'];
-      subDeptId = ValueHandler().stringify(json['SubDeptId']);
+      subDeptId = ValueHandler.stringify(json['SubDeptId']);
       newServiceImage = json['NewServiceImage'];
       serviceImage = json['ServiceImage'];
       discAmount = json['DiscAmount'] ?? json['Discount'];
-      serviceId = ValueHandler().stringify(json['ServiceId']);
+      serviceId = ValueHandler.stringify(json['ServiceId']);
       promoApplicable = json['PromoApplicable'];
       appPackageImage = json['AppPackageImage'] ?? json['icon250ImageUrl'];
-      isPackage = ValueHandler().boolify(json['IsPackage']);
+      isPackage = ValueHandler.boolify(json['IsPackage']);
       serviceText = json['ServiceText'];
       offerFees = json['OfferFees'] ?? json["OfferPrice"];
       isRadiology = json['IsRadiology'];
@@ -231,7 +231,7 @@ class ServiceModel {
           packageServices!.add(Services.fromJson(v));
         });
       }
-      labId = ValueHandler().stringify(json['LabId']);
+      labId = ValueHandler.stringify(json['LabId']);
       serviceName = json['ServiceName'];
       isYana = json['IsYana'];
       testCase = json['TestCase'];
@@ -274,12 +274,12 @@ class ServiceModel {
 
   ServiceModel.fromConsultationLabTestJson(Map<String, dynamic> json) {
     try {
-      serviceId = ValueHandler().stringify(json['ServiceId']);
+      serviceId = ValueHandler.stringify(json['ServiceId']);
       serviceName = json['ServiceName'];
       discPercent = json['Discount'];
       fees = json['Fees'] ?? json['fees'];
       offerFees = json['OfferFees'] ?? json["OfferPrice"];
-      labId = ValueHandler().stringify(json['LabId']);
+      labId = ValueHandler.stringify(json['LabId']);
       if (json['PackageServices'] != null) {
         packageServices = <Services>[];
         json['PackageServices'].forEach((v) {
@@ -287,7 +287,7 @@ class ServiceModel {
         });
       }
       permalinkNew = json['PermalinkNew'];
-      isPackage = ValueHandler().boolify(json['IsPackage']);
+      isPackage = ValueHandler.boolify(json['IsPackage']);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -467,7 +467,7 @@ class Labs {
 //     try {
 //       serviceName = json['ServiceName'];
 //       serviceDesc = json['ServiceDesc'];
-//       serviceId = ValueHandler().stringify(json['ServiceId']);
+//       serviceId = ValueHandler.stringify(json['ServiceId']);
 //     } catch (e, stacktrace) {
 //       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
 //     }
@@ -572,24 +572,24 @@ class Services {
 
   Services.fromJson(Map<String, dynamic> json) {
     try {
-      appOrganImage = ValueHandler().stringify(json['AppOrganImage']);
-      isPackage = ValueHandler().intify(json['IsPackage']);
-      isYana = ValueHandler().intify(json['IsYana']);
-      newServiceImage = ValueHandler().stringify(json['NewServiceImage']);
-      noOfParameters = ValueHandler().intify(json['NoOfParameters']);
-      organId = ValueHandler().stringify(json['OrganId']);
-      organImage = ValueHandler().stringify(json['OrganImage']);
-      organName = ValueHandler().stringify(json['OrganName']);
-      permalink = ValueHandler().stringify(json['Permalink']);
-      permalinkNew = ValueHandler().stringify(json['PermalinkNew']);
-      promoApplicable = ValueHandler().intify(json['PromoApplicable']);
-      sampleReport = ValueHandler().stringify(json['SampleReport']);
-      serviceDesc = ValueHandler().stringify(json['ServiceDesc']);
-      serviceId = ValueHandler().stringify(json['ServiceId']);
-      serviceName = ValueHandler().stringify(json['ServiceName']);
-      slotEndTime = ValueHandler().stringify(json['SlotEndTime']);
-      slotId = ValueHandler().stringify(json['SlotId']);
-      slotStartTime = ValueHandler().stringify(json['SlotStartTime']);
+      appOrganImage = ValueHandler.stringify(json['AppOrganImage']);
+      isPackage = ValueHandler.intify(json['IsPackage']);
+      isYana = ValueHandler.intify(json['IsYana']);
+      newServiceImage = ValueHandler.stringify(json['NewServiceImage']);
+      noOfParameters = ValueHandler.intify(json['NoOfParameters']);
+      organId = ValueHandler.stringify(json['OrganId']);
+      organImage = ValueHandler.stringify(json['OrganImage']);
+      organName = ValueHandler.stringify(json['OrganName']);
+      permalink = ValueHandler.stringify(json['Permalink']);
+      permalinkNew = ValueHandler.stringify(json['PermalinkNew']);
+      promoApplicable = ValueHandler.intify(json['PromoApplicable']);
+      sampleReport = ValueHandler.stringify(json['SampleReport']);
+      serviceDesc = ValueHandler.stringify(json['ServiceDesc']);
+      serviceId = ValueHandler.stringify(json['ServiceId']);
+      serviceName = ValueHandler.stringify(json['ServiceName']);
+      slotEndTime = ValueHandler.stringify(json['SlotEndTime']);
+      slotId = ValueHandler.stringify(json['SlotId']);
+      slotStartTime = ValueHandler.stringify(json['SlotStartTime']);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

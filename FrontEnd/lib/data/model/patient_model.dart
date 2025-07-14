@@ -97,10 +97,10 @@ class PatientAddress {
     try {
       addline = json['Addline'];
       addressId = json['AddressId'];
-      addressType = ValueHandler().stringify(json['AddressType']);
+      addressType = ValueHandler.stringify(json['AddressType']);
       city = json['City'];
       isPrimary = json['IsPrimary'];
-      landmark = ValueHandler().stringify(json['Landmark']);
+      landmark = ValueHandler.stringify(json['Landmark']);
       lastBookedAddress = json['LastBookedAddress'];
       nickName = json['NickName'];
       patientId = json['PatientId'];

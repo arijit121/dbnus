@@ -20,7 +20,7 @@ class CustomRoute {
   /// Manually navigating back always returns `[1]` as the default value in `[App]`,
   /// ensuring a consistent behavior across the application.
   /// If a `result` is provided, it will be used instead of `[1]` on non-web platforms.
-  void back<T extends Object?>([T? result]) {
+  static void back<T extends Object?>([T? result]) {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
 
@@ -28,22 +28,22 @@ class CustomRoute {
       bool canBack = CustomRouterWeb().canBack();
       canBack
           ? CustomRouterWeb().back()
-          : clearAndNavigate(RouteName.initialView);
+          : CustomRoute.clearAndNavigate(RouteName.initialView);
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
         RouterManager.getInstance.router.pop(result ?? 1);
       } else {
-        clearAndNavigate(RouteName.initialView);
+        CustomRoute.clearAndNavigate(RouteName.initialView);
       }
     }
   }
 
-  void secBack() {
-    back();
-    back();
+  static void secBack() {
+    CustomRoute.back();
+    CustomRoute.back();
   }
 
-  void clearAndNavigate(String name,
+  static void clearAndNavigate(String name,
       {Map<String, String> pathParameters = const <String, String>{},
       Map<String, dynamic> queryParameters = const <String, dynamic>{},
       Object? extra}) {
@@ -68,7 +68,7 @@ class CustomRoute {
     }
   }
 
-  Future<MaterialPageRoute> _getRoute(
+  static Future<MaterialPageRoute> _getRoute(
       {required String name, dynamic arguments}) async {
     switch (name) {
       case RouteName.rayzorPay:
@@ -112,12 +112,12 @@ class CustomRoute {
     }
   }
 
-  Future pushNamed({required String name, dynamic arguments}) async {
-    final route = await _getRoute(name: name, arguments: arguments);
+  static Future pushNamed({required String name, dynamic arguments}) async {
+    final route = await CustomRoute._getRoute(name: name, arguments: arguments);
     return await Navigator.push(CurrentContext().context, route);
   }
 
-  String? currentRoute() {
+  static String? currentRoute() {
     try {
       final RouteMatch lastMatch = RouterManager
           .getInstance.router.routerDelegate.currentConfiguration.last;
@@ -133,7 +133,7 @@ class CustomRoute {
     return null;
   }
 
-  Future<void> navigateNamed(
+  static Future<void> navigateNamed(
     String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},

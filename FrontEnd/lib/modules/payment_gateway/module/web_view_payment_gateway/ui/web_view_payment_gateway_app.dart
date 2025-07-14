@@ -61,7 +61,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
               bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
-                PopUpItems().toastMessage(
+                PopUpItems.toastMessage(
                     "Looks like there’s no UPI app available on your device.",
                     ColorConst.red);
               }
@@ -70,7 +70,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
               bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
-                PopUpItems().toastMessage(
+                PopUpItems.toastMessage(
                     "Couldn’t open the requested app. Please try again or install a supported application.",
                     ColorConst.red);
               }
@@ -81,7 +81,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
           },
           onUpdateVisitedHistory: (controller, uri, isReload) {
             AppLog.i(uri, tag: "OnUpdateVisitedHistory");
-            if (ValueHandler().isTextNotEmptyOrNull(uri)) {
+            if (ValueHandler.isTextNotEmptyOrNull(uri)) {
               AppLog.i(uri, tag: "UrlChange");
               WebViewPaymentGatewayUtils().onUrlChange(
                   uri: uri.toString(),

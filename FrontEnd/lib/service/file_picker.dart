@@ -23,11 +23,10 @@ import '../widget/loading_widget.dart';
 import 'JsService/provider/js_provider.dart' deferred as js_provider;
 
 class CustomFilePicker {
-  final int _maxFileSize = 5;
-  final String _notJpgErrorMsg =
-      "Invalid file format. Please select an image in JPG format";
+  static const int _maxFileSize = 5;
 
-  Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
+  static Future<CustomFile?> pickSingleFile(
+      {List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
@@ -50,7 +49,7 @@ class CustomFilePicker {
         int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
         if (!allowedExtensionsFinal.contains(platformFile.extension)) {
-          PopUpItems().toastMessage("Invalid file type.", ColorConst.red,
+          PopUpItems.toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
         } else if (platformFile.extension == 'jpg' ||
             platformFile.extension == 'jpeg') {
@@ -75,7 +74,7 @@ class CustomFilePicker {
             );
           }
         } else if (sizeInMb > _maxFileSize) {
-          PopUpItems().toastMessage(
+          PopUpItems.toastMessage(
               "File limit exceeded. Please try again by uploading a file of size 5 MB or less.",
               Colors.red,
               durationSeconds: 4);
@@ -96,7 +95,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<List<CustomFile>?> pickMultipleFile(
+  static Future<List<CustomFile>?> pickMultipleFile(
       {List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb && Platform.isIOS) {
@@ -132,7 +131,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> cameraPicker() async {
+  static Future<CustomFile?> cameraPicker() async {
     try {
       final permissionStatus = await _fileManagerPermission(
           permission: Permission.camera, name: 'Camera');
@@ -172,7 +171,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> galleryPicker() async {
+  static Future<CustomFile?> galleryPicker() async {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
@@ -214,7 +213,8 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> customFilePicker({bool? noDocs, bool? noCamera}) async {
+  static Future<CustomFile?> customFilePicker(
+      {bool? noDocs, bool? noCamera}) async {
     int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -335,9 +335,9 @@ class CustomFilePicker {
           },
         );
         if (result == "Camera") {
-          return cameraPicker();
+          return await cameraPicker();
         } else if (result == "Gallery") {
-          return galleryPicker();
+          return await galleryPicker();
         } else if (result == "Folder") {
           return await pickSingleFile(
               allowedExtensions: noDocs == true ? ['jpeg', 'jpg'] : null);
@@ -349,7 +349,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> _compressAndResizeImage(CustomFile file) async {
+  static Future<CustomFile?> _compressAndResizeImage(CustomFile file) async {
     showLoading();
     CustomFile? customFile;
     try {
@@ -359,7 +359,7 @@ class CustomFilePicker {
         path_provider.loadLibrary(),
       ]);
 
-      await js_provider.JsProvider().loadJs(
+      await js_provider.JsProvider.loadJs(
           jsPath: "https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js");
       file.bytes ??= await File(file.path!).readAsBytes();
       ui.Image image = await decodeImageFromList(file.bytes!);
@@ -413,14 +413,14 @@ class CustomFilePicker {
     return customFile;
   }
 
-  Future<PermissionStatus> _fileManagerPermission(
+  static Future<PermissionStatus> _fileManagerPermission(
       {required Permission permission, required String name}) async {
     final permissionStatus = await permission.request();
     if (!permissionStatus.isGranted) {
       final currentStatus = await permission.status;
       bool permanentlyDenied = currentStatus.isPermanentlyDenied;
       if (permanentlyDenied) {
-        await PopUpItems().cupertinoPopup(
+        await PopUpItems.cupertinoPopup(
           title: "$name permission Required",
           content:
               "$name access is permanently denied. Please enable it in settings to use this feature.",
@@ -430,7 +430,7 @@ class CustomFilePicker {
           },
         );
       } else {
-        PopUpItems().toastMessage(
+        PopUpItems.toastMessage(
           "$name access is required to use this feature. Please grant permission to continue.",
           ColorConst.baseHexColor,
           durationSeconds: 3,

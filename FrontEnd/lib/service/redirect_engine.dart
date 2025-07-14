@@ -7,14 +7,13 @@ import '../router/router_name.dart';
 import 'value_handler.dart';
 
 class RedirectEngine {
-  Future<void> redirectRoutes(
+  static Future<void> redirectRoutes(
       {required Uri redirectUrl, int delayedSeconds = 0}) async {
     Future.delayed(Duration(seconds: delayedSeconds), () async {
       RouterManager routerManager = RouterManager.getInstance;
       String location =
           redirectUrl.toString().replaceAll(ApiUrlConst.hostUrl, "").trim();
-      String? currentRoute = CustomRoute()
-          .currentRoute()
+      String? currentRoute = CustomRoute.currentRoute()
           ?.replaceAll(ApiUrlConst.hostUrl, "")
           .trim();
       if (routerManager.router.routeInformationParser.configuration
@@ -39,7 +38,7 @@ class RedirectEngine {
               routerManager.router.goNamed(location);
               break;
             default:
-              ValueHandler().isTextNotEmptyOrNull(currentRoute)
+              ValueHandler.isTextNotEmptyOrNull(currentRoute)
                   ? routerManager.router.push(location)
                   : routerManager.router.go(location);
               break;

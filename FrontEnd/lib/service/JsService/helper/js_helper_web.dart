@@ -75,7 +75,7 @@ class JSHelper {
             ..type = 'application/javascript'
             ..src = _jsFilePath;
 
-          if (ValueHandler().isTextNotEmptyOrNull(id)) {
+          if (ValueHandler.isTextNotEmptyOrNull(id)) {
             script.id = id!;
           }
           // Append the script to the document head

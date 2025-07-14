@@ -17,7 +17,7 @@ TextStyle customizeTextStyle(
     Color? backgroundColor,
     String? font,
     FontStyle? fontStyle}) {
-  return ValueHandler().isTextNotEmptyOrNull(font)
+  return ValueHandler.isTextNotEmptyOrNull(font)
       ? GoogleFonts.getFont(
           font!,
           decoration: decoration,

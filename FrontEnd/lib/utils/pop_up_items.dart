@@ -16,7 +16,8 @@ import '../widget/custom_text.dart';
 import '../widget/custom_text_formfield.dart';
 
 class PopUpItems {
-  void toastMessage(String message, Color color, {int? durationSeconds}) {
+  static void toastMessage(String message, Color color,
+      {int? durationSeconds}) {
     SnackBar snackBar = SnackBar(
       duration: Duration(seconds: durationSeconds ?? 2),
       content: ToastMassage(
@@ -31,7 +32,7 @@ class PopUpItems {
     ScaffoldMessenger.of(CurrentContext().context).showSnackBar(snackBar);
   }
 
-  Future<DateTime?> buildMaterialDatePicker(
+  static Future<DateTime?> buildMaterialDatePicker(
       {DateTime? initDate, DateTime? startDate, DateTime? endDate}) async {
     final DateTime? picked = await showDatePicker(
       context: CurrentContext().context,
@@ -51,14 +52,14 @@ class PopUpItems {
     return picked;
   }
 
-  Future<String?> emailPicker() {
+  static Future<String?> emailPicker() {
     return Navigator.of(CurrentContext().context).push(
       PageRouteBuilder(
           opaque: false, pageBuilder: (_, __, ___) => const EmailPicker()),
     );
   }
 
-  Future<void> cupertinoPopup({
+  static Future<void> cupertinoPopup({
     String? title,
     void Function()? cancelBtnPresses,
     void Function()? okBtnPressed,
@@ -74,7 +75,7 @@ class PopUpItems {
         child: CupertinoAlertDialog(
           title: title != null ? CustomText(title, size: 14) : null,
           content: content != null
-              ? ValueHandler().isHtml(content)
+              ? ValueHandler.isHtml(content)
                   ? CustomHtmlText(content,
                       color: ColorConst.primaryDark, size: 14)
                   : CustomText(content, color: ColorConst.primaryDark, size: 14)
@@ -111,7 +112,7 @@ class PopUpItems {
     }
   }
 
-  Future<void> customMsgDialog(
+  static Future<void> customMsgDialog(
       {String? title,
       String? content,
       DialogType? type,
@@ -160,7 +161,7 @@ class PopUpItems {
                     Icon(icon, color: iconButtonColor, size: 60.0),
                   if (content != null && icon != null) 12.ph,
                   if (content != null)
-                    ValueHandler().isHtml(content)
+                    ValueHandler.isHtml(content)
                         ? CustomHtmlText(content,
                             color: ColorConst.primaryDark, size: 14)
                         : CustomText(content,
@@ -278,7 +279,7 @@ class _EmailPickerState extends State<EmailPicker> {
                           hintText: TextUtils.enter_email,
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
-                          validator: Validator().emailValidator)),
+                          validator: Validator.emailValidator)),
                   10.ph,
                   CustomGOEButton(
                       width: 80,
