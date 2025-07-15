@@ -240,6 +240,9 @@ class PinCodeFormField extends StatefulWidget {
   /// Default [fieldWidth] is 46.
   final double fieldWidth;
 
+  /// Default [fieldHeight] is 46.
+  final double fieldHeight;
+
   /// Custom border for each digit field.
   final InputBorder? border;
 
@@ -261,6 +264,7 @@ class PinCodeFormField extends StatefulWidget {
     this.autoFocus = false,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.fieldWidth = 46,
+    this.fieldHeight = 46,
     this.border,
     this.filled,
   });
@@ -417,116 +421,121 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     final enabledColor =
         widget.enabled ? ColorConst.primaryDark : ColorConst.secondaryDark;
 
-    return Stack(
-      children: [
-        // Hidden TextField to support tester.enterText
-        Opacity(
-          opacity: 0,
-          child: SizedBox(
-            height: 0,
-            width: 0,
-            child: Semantics(
-              label: _extractKeyName(widget.uniqueKey),
-              hidden: false,
-              child: TextField(
-                key: widget.uniqueKey,
-                scrollPadding: widget.scrollPadding,
-                autofocus: false,
-                enableInteractiveSelection: false,
-                keyboardType: TextInputType.number,
-                onChanged: (value) {
-                  if (value.length > widget.length) return;
+    return SizedBox(
+      height: widget.fieldHeight,
+      child: Stack(
+        children: [
+          // Hidden TextField to support tester.enterText
+          Opacity(
+            opacity: 0,
+            child: SizedBox(
+              height: 0,
+              width: 0,
+              child: Semantics(
+                label: _extractKeyName(widget.uniqueKey),
+                hidden: false,
+                child: TextField(
+                  key: widget.uniqueKey,
+                  scrollPadding: widget.scrollPadding,
+                  autofocus: false,
+                  enableInteractiveSelection: false,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    if (value.length > widget.length) return;
 
-                  for (int i = 0; i < widget.length; i++) {
-                    _fieldControllers[i].text =
-                        i < value.length ? value[i] : '';
-                  }
+                    for (int i = 0; i < widget.length; i++) {
+                      _fieldControllers[i].text =
+                          i < value.length ? value[i] : '';
+                    }
 
-                  _mainController.text = value;
-                  if (value.length == widget.length) {
-                    widget.onCompleted?.call(value);
-                  }
-                  setState(() {
-                    _hasCompleted = value.length == widget.length;
-                    _hasError = false;
-                  });
-                },
+                    _mainController.text = value;
+                    if (value.length == widget.length) {
+                      widget.onCompleted?.call(value);
+                    }
+                    setState(() {
+                      _hasCompleted = value.length == widget.length;
+                      _hasError = false;
+                    });
+                  },
+                ),
               ),
             ),
           ),
-        ),
 
-        // Visible input fields
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          spacing: 8,
-          children: List.generate(widget.length, (index) {
-            final isFilled = _fieldControllers[index].text.isNotEmpty;
-            final color = _hasError
-                ? errorColor
-                : _hasCompleted && isFilled
-                    ? activeColor
-                    : baseColor;
+          // Visible input fields
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 8,
+            children: List.generate(widget.length, (index) {
+              final isFilled = _fieldControllers[index].text.isNotEmpty;
+              final color = _hasError
+                  ? errorColor
+                  : _hasCompleted && isFilled
+                      ? activeColor
+                      : baseColor;
 
-            InputBorder? border = widget.border;
-            if (border != InputBorder.none && border != null) {
-              if (border is OutlineInputBorder) {
-                border = border.copyWith(
-                  borderSide: BorderSide(color: color, width: 1),
-                  borderRadius: widget.borderRadius,
-                );
-              } else if (border is UnderlineInputBorder) {
-                border = border.copyWith(
+              InputBorder? border = widget.border;
+              if (border != InputBorder.none && border != null) {
+                if (border is OutlineInputBorder) {
+                  border = border.copyWith(
                     borderSide: BorderSide(color: color, width: 1),
-                    borderRadius: widget.borderRadius);
-              } else {
-                border = border.copyWith(
-                  borderSide: BorderSide(color: color, width: 1),
-                );
+                    borderRadius: widget.borderRadius,
+                  );
+                } else if (border is UnderlineInputBorder) {
+                  border = border.copyWith(
+                      borderSide: BorderSide(color: color, width: 1),
+                      borderRadius: widget.borderRadius);
+                } else {
+                  border = border.copyWith(
+                    borderSide: BorderSide(color: color, width: 1),
+                  );
+                }
               }
-            }
 
-            return SizedBox(
-              width: widget.fieldWidth,
-              child: TextField(
-                key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
-                cursorColor: ColorConst.primaryDark,
-                cursorErrorColor: ColorConst.primaryDark,
-                autofocus: index == 0 ? widget.autoFocus : false,
-                scrollPadding: widget.scrollPadding,
-                enabled: widget.enabled,
-                controller: _fieldControllers[index],
-                focusNode: _focusNodes[index],
-                textAlign: TextAlign.center,
-                keyboardType: widget.keyboardType,
-                inputFormatters: widget.inputFormatters ??
-                    [FilteringTextInputFormatter.digitsOnly],
-                maxLength: 1,
-                obscureText: widget.obscureText,
-                obscuringCharacter: widget.obscuringCharacter,
-                style: customizeTextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
-                  fontColor: enabledColor,
+              return SizedBox(
+                width: widget.fieldWidth,
+                child: TextField(
+                  key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
+                  cursorColor: ColorConst.primaryDark,
+                  cursorErrorColor: ColorConst.primaryDark,
+                  autofocus: index == 0 ? widget.autoFocus : false,
+                  scrollPadding: widget.scrollPadding,
+                  enabled: widget.enabled,
+                  controller: _fieldControllers[index],
+                  focusNode: _focusNodes[index],
+                  textAlign: TextAlign.center,
+                  keyboardType: widget.keyboardType,
+                  inputFormatters: widget.inputFormatters ??
+                      [FilteringTextInputFormatter.digitsOnly],
+                  maxLength: 1,
+                  obscureText: widget.obscureText,
+                  obscuringCharacter: widget.obscuringCharacter,
+                  style: customizeTextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 16,
+                    fontColor: enabledColor,
+                  ),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    filled: widget.filled,
+                    fillColor: ColorExe.lighten(baseColor),
+                    border: border != InputBorder.none
+                        ? border
+                        : OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius:
+                                widget.borderRadius ?? BorderRadius.zero),
+                  ),
+                  onChanged: (value) => _onChanged(value, index),
+                  autofillHints: const [AutofillHints.oneTimeCode],
+                  expands: true,
+                  maxLines: null,
                 ),
-                decoration: InputDecoration(
-                  counterText: '',
-                  filled: widget.filled,
-                  fillColor: ColorExe.lighten(baseColor),
-                  border: border != InputBorder.none
-                      ? border
-                      : OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius:
-                              widget.borderRadius ?? BorderRadius.zero),
-                ),
-                onChanged: (value) => _onChanged(value, index),
-                autofillHints: const [AutofillHints.oneTimeCode],
-              ),
-            );
-          }),
-        ),
-      ],
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 }
