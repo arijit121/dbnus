@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../service/open_service.dart';
 import '../service/value_handler.dart';
+import 'custom_button.dart';
 
 TextStyle customizeTextStyle(
     {FontWeight? fontWeight,
@@ -444,3 +445,68 @@ class CustomTextEnum extends StatelessWidget {
     );
   }
 }
+
+class CustomObscureText extends StatefulWidget {
+  final String text;
+  final String obscureText;
+  final bool initialObscure;
+  final TextStyle style;
+  final Widget obscureIcon;
+  final Widget visibleIcon;
+
+  const CustomObscureText(
+      this.text, {
+        super.key,
+        this.obscureText = "*",
+        this.initialObscure = true,
+        required this.style,
+        this.obscureIcon = const Icon(Icons.visibility_off_outlined),
+        this.visibleIcon = const Icon(Icons.visibility_outlined),
+      });
+
+  @override
+  State<CustomObscureText> createState() => _CustomObscureTextState();
+}
+
+class _CustomObscureTextState extends State<CustomObscureText> {
+  late bool _obscure;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscure = widget.initialObscure;
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _obscure = !_obscure;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 100),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 8,
+        children: [
+          Flexible(
+            child: Text(
+              _obscure ? widget.obscureText * widget.text.length : widget.text,
+              style: widget.style,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          CustomIconButton(
+            icon: !_obscure ? widget.obscureIcon : widget.visibleIcon,
+            color: widget.style.color,
+            iconSize: widget.style.fontSize,
+            onPressed: _toggleObscure,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
