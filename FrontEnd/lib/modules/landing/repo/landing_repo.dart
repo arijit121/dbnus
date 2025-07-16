@@ -12,7 +12,7 @@ class LandingRepo {
   Future<LandingBannerResponse?> getSplashBanner() async {
     try {
       Map<String, String> headers = await ApiConfig.getHeaders();
-      ApiReturnModel? response = await apiRepo().callApi(
+      ApiReturnModel? response = await ApiEngine.callApi(
           tag: 'Books',
           uri: ApiUrlConst.books,
           method: Method.get,

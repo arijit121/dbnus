@@ -85,7 +85,7 @@ class ConnectionUtils {
     bool onlineStatus = await connectionStatus.checkConnection();
     if (onlineStatus) {
       final response = await api_repo
-          .apiRepo()
+          .ApiEngine
           .callApi(tag: tag, uri: uri, method: api_repo_imp.Method.get);
       if (response?.responseString != null && response?.statusCode == 200) {
         var v = json.decode(response?.responseString ?? "");

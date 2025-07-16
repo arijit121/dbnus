@@ -135,15 +135,28 @@ class ApiRepoImp extends ApiRepo {
 
   @override
   Future<Uint8List?> urlToByte(
-      {required String url, Duration? timeOut, String? tag}) async {
+      {required String uri,
+      Map<String, dynamic>? queryParameters,
+      Map<String, String>? headers,
+      String? tag}) async {
     try {
+      Map<String, String> stringQueryParameters = <String, String>{};
+      queryParameters?.forEach((key, value) {
+        if (value != null) {
+          stringQueryParameters[key] = value!.toString();
+        }
+      });
+      Uri.parse(uri).queryParameters.forEach((key, value) {
+        stringQueryParameters[key] = value.toString();
+      });
+      Uri url = stringQueryParameters.isNotEmpty
+          ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
+          : Uri.parse(uri);
+
       AppLog.i(tag: "$tag Url", url, time: DateTime.now());
       DateTime requestTime = DateTime.now();
-      http.Response response = await http
-          .get(
-        Uri.parse(url),
-      )
-          .timeout(timeOut ?? timeout());
+      http.Response response =
+          await http.get(url, headers: headers).timeout(timeout());
       if (response.statusCode == 200) {
         AppLog.i(
             tag: "$tag Response time",

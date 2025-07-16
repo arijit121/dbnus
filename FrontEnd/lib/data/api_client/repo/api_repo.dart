@@ -13,7 +13,12 @@ abstract class ApiRepo {
       BodyData? bodyData});
 
   Future<Uint8List?> urlToByte(
-      {required String url, Duration? timeOut, String? tag});
+      {required String uri,
+      Map<String, dynamic>? queryParameters,
+      Map<String, String>? headers,
+      String? tag});
 }
 
-ApiRepo apiRepo() => ApiRepoImp();
+ApiRepo _apiRepo() => ApiRepoImp();
+
+ApiRepo ApiEngine = _apiRepo();
