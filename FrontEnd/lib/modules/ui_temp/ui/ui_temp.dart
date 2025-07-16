@@ -254,7 +254,11 @@ class _UiTempState extends State<UiTemp> {
               color: Colors.white,
             )),
         20.ph,
-        const CustomTextFormField(),
+        CustomTextFormField(fieldHeight: 200),
+        20.ph,
+        CustomTextFormField(),
+        20.ph,
+        CustomTextFormField(maxLines: 1),
         20.ph,
         CustomDropdownMenuFormField<String>(
             hintText: "Please choose val",

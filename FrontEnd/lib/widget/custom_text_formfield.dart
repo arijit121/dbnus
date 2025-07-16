@@ -1,3 +1,4 @@
+import 'package:dbnus/service/value_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? errorText;
   final BorderRadius borderRadius;
   final TextInputAction? textInputAction;
+  final double? fieldHeight;
 
   const CustomTextFormField({
     super.key,
@@ -50,14 +52,18 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.onFieldSubmitted,
-    this.maxLines = 1,
+    this.maxLines,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.autofocus = false,
     this.textAlign,
     this.errorText,
     this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
     this.textInputAction = TextInputAction.done,
-  });
+    this.fieldHeight,
+  }) : assert(
+          fieldHeight == null || maxLines == null,
+          'maxLines must be null when fieldHeight is not null or zero.',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -72,99 +78,109 @@ class CustomTextFormField extends StatelessWidget {
                 size: 14,
                 fontWeight: FontWeight.w400),
           ),
-        TextFormField(
-            textInputAction: textInputAction,
-            autofocus: autofocus,
-            cursorColor: ColorConst.primaryDark,
-            cursorErrorColor: ColorConst.primaryDark,
-            onChanged: onChanged,
-            readOnly: readOnly,
-            controller: controller,
-            validator: validator,
-            keyboardType: keyboardType,
-            inputFormatters: inputFormatters,
-            maxLength: maxLength,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onTap: onTap,
-            enabled: enabled,
-            focusNode: focusNode,
-            scrollPadding: scrollPadding,
-            onFieldSubmitted: onFieldSubmitted,
-            maxLines: maxLines,
-            textAlign: textAlign ?? TextAlign.start,
-            style: customizeTextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                fontColor: ColorConst.primaryDark),
-            decoration: InputDecoration(
-              errorText: errorText,
-              counterText: "",
-              prefixIcon: prefix,
-              suffixIcon: suffix,
-              labelText: (label?.isNotEmpty == true)
-                  ? '${label ?? ""}${isRequired == true ? " *" : ""}'
-                  : null,
-              hintText: hintText,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              errorStyle: customizeTextStyle(
+        SizedBox(
+          height: ValueHandler.isNonZeroNumericValue(fieldHeight)
+              ? fieldHeight
+              : null,
+          child: TextFormField(
+              textInputAction: textInputAction,
+              autofocus: autofocus,
+              cursorColor: ColorConst.primaryDark,
+              cursorErrorColor: ColorConst.primaryDark,
+              onChanged: onChanged,
+              readOnly: readOnly,
+              controller: controller,
+              validator: validator,
+              keyboardType: keyboardType,
+              inputFormatters: inputFormatters,
+              maxLength: maxLength,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              onTap: onTap,
+              enabled: enabled,
+              focusNode: focusNode,
+              scrollPadding: scrollPadding,
+              onFieldSubmitted: onFieldSubmitted,
+              maxLines: maxLines,
+              minLines:
+                  ValueHandler.isNonZeroNumericValue(fieldHeight) ? null : 1,
+              expands: ValueHandler.isNonZeroNumericValue(fieldHeight)
+                  ? true
+                  : false,
+              textAlign: textAlign ?? TextAlign.start,
+              style: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  fontColor: ColorConst.red),
-              hintStyle: customizeTextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  fontColor: ColorConst.blueGrey),
-              labelStyle: customizeTextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  fontColor: ColorConst.blueGrey),
-              floatingLabelStyle: customizeTextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17,
-                  fontColor: ColorConst.baseHexColor),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: Colors.blue,
-                  width: 1,
+                  fontColor: ColorConst.primaryDark),
+              decoration: InputDecoration(
+                errorText: errorText,
+                counterText: "",
+                prefixIcon: prefix,
+                suffixIcon: suffix,
+                labelText: (label?.isNotEmpty == true)
+                    ? '${label ?? ""}${isRequired == true ? " *" : ""}'
+                    : null,
+                hintText: hintText,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                errorStyle: customizeTextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    fontColor: ColorConst.red),
+                hintStyle: customizeTextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    fontColor: ColorConst.blueGrey),
+                labelStyle: customizeTextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    fontColor: ColorConst.blueGrey),
+                floatingLabelStyle: customizeTextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17,
+                    fontColor: ColorConst.baseHexColor),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: const BorderSide(
+                    color: Colors.blue,
+                    width: 1,
+                  ),
                 ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                  width: 1,
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: const BorderSide(
+                    color: Colors.white,
+                    width: 1,
+                  ),
                 ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: BorderSide(
-                  color: ColorConst.grey,
-                  width: 1,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: BorderSide(
+                    color: ColorConst.grey,
+                    width: 1,
+                  ),
                 ),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  width: 1,
+                border: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: const BorderSide(
+                    width: 1,
+                  ),
                 ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: ColorConst.red,
-                  width: 1,
+                errorBorder: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: const BorderSide(
+                    color: ColorConst.red,
+                    width: 1,
+                  ),
                 ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: borderRadius,
-                borderSide: const BorderSide(
-                  color: ColorConst.red,
-                  width: 1,
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: borderRadius,
+                  borderSide: const BorderSide(
+                    color: ColorConst.red,
+                    width: 1,
+                  ),
                 ),
-              ),
-            )),
+              )),
+        ),
       ],
     );
   }
