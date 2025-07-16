@@ -14,8 +14,10 @@ import 'error_widget.dart';
 class PdfViewerWidget extends StatefulWidget {
   final String pdfUrl;
   final String? title;
+  final Map<String, String>? headers;
 
-  const PdfViewerWidget({super.key, required this.pdfUrl, this.title});
+  const PdfViewerWidget(
+      {super.key, required this.pdfUrl, this.title, this.headers});
 
   @override
   State<PdfViewerWidget> createState() => _PdfViewerWidgetState();
@@ -70,7 +72,8 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
             builder: (BuildContext context, bool value, child) {
               return value
                   ? FutureBuilder<Uint8List?>(
-                      future: ApiEngine.instance.urlToByte(uri: widget.pdfUrl),
+                      future: ApiEngine.instance.urlToByte(
+                          uri: widget.pdfUrl, headers: widget.headers),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
