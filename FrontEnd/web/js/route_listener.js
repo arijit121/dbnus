@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    let historyPatched = "";
+
     // Generalized data setter for any container
     function setData({ containerId, file, replaceData = {} }) {
         const container = document.getElementById(containerId);
@@ -99,6 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function handleRouteChange() {
 
+        const path = window.location.pathname;
+
+        if (path === historyPatched) {
+            return;
+        }
+        historyPatched = path;
+        console.log(`Route changed: ${historyPatched}`);
+
         const loader = document.getElementById("web-loader");
         if (loader) {
             loader.style.display = "none";
@@ -110,9 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
             seoContent.style.display = "none";
             seoContent.innerHTML = ""; // Clear previous content
         }
-
-        const path = window.location.pathname;
-        console.log(`Route changed: ${path}`);
 
         if (path === "/" || path === "/index.html") {
             setData({ containerId: "web-loader", file: "design/default-loader.html" });
