@@ -262,6 +262,9 @@ class PinCodeFormField extends StatefulWidget {
   /// Whether to fill the background of the input fields.
   final bool? filled;
 
+  /// Whether to enable auto fill.
+  final bool? autoFill;
+
   const PinCodeFormField({
     super.key,
     this.length = 6,
@@ -279,6 +282,7 @@ class PinCodeFormField extends StatefulWidget {
     this.fieldWidth = 46,
     this.border,
     this.filled,
+    this.autoFill,
   });
 
   @override
@@ -325,27 +329,30 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
         }
       }
     });*/
-    for (int i = 0; i < widget.length; i++) {
-      _focusNodes[i].addListener(() async {
-        if (_hasCompleted) return;
-        if (_focusNodes[i].hasFocus) {
-          final data = await Clipboard.getData('text/plain');
-          final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
-          if (pasted.length == widget.length) {
-            for (int j = 0; j < widget.length; j++) {
-              _fieldControllers[j].text = pasted[j];
-            }
-            _mainController.text = pasted;
-            setState(() {
-              _hasCompleted = true;
-              _hasError = false;
-            });
-            if (_fieldControllers.lastOrNull?.text.length == 1) {
-              widget.onCompleted?.call(pasted);
+    if (widget.autoFill == true) {
+      /// Auto Fill
+      for (int i = 0; i < widget.length; i++) {
+        _focusNodes[i].addListener(() async {
+          if (_hasCompleted) return;
+          if (_focusNodes[i].hasFocus) {
+            final data = await Clipboard.getData('text/plain');
+            final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
+            if (pasted.length == widget.length) {
+              for (int j = 0; j < widget.length; j++) {
+                _fieldControllers[j].text = pasted[j];
+              }
+              _mainController.text = pasted;
+              setState(() {
+                _hasCompleted = true;
+                _hasError = false;
+              });
+              if (_fieldControllers.lastOrNull?.text.length == 1) {
+                widget.onCompleted?.call(pasted);
+              }
             }
           }
-        }
-      });
+        });
+      }
     }
   }
 
