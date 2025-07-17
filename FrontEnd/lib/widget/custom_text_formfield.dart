@@ -253,9 +253,6 @@ class PinCodeFormField extends StatefulWidget {
   /// ScrollPadding follows the same property as TextField's ScrollPadding, default to const EdgeInsets.all(20),
   final EdgeInsets scrollPadding;
 
-  /// Default [fieldWidth] is 46.
-  final double fieldWidth;
-
   /// Default [fieldHeight] is 46.
   final double fieldHeight;
 
@@ -279,7 +276,6 @@ class PinCodeFormField extends StatefulWidget {
     this.uniqueKey,
     this.autoFocus = false,
     this.scrollPadding = const EdgeInsets.all(20.0),
-    this.fieldWidth = 46,
     this.fieldHeight = 46,
     this.border,
     this.filled,
@@ -509,7 +505,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
               }
 
               return SizedBox(
-                width: widget.fieldWidth,
+                width: 58,
                 child: TextField(
                   key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
                   cursorColor: ColorConst.primaryDark,
@@ -544,8 +540,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
                   ),
                   onChanged: (value) => _onChanged(value, index),
                   autofillHints: const [AutofillHints.oneTimeCode],
-                  expands: true,
-                  maxLines: null,
+                  maxLines: 1,
                 ),
               );
             }),
