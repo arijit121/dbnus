@@ -87,7 +87,10 @@ class OpenService {
     );
   }
 
-  static Future<void> openPdf({required String pdfUrl, String? title}) async {
+  static Future<void> openPdf(
+      {required String pdfUrl,
+      String? title,
+      Map<String, String>? headers}) async {
     await pdf_viewer_widget.loadLibrary();
     Navigator.push(
       CurrentContext().context,
@@ -95,6 +98,7 @@ class OpenService {
         builder: (context) => pdf_viewer_widget.PdfViewerWidget(
           pdfUrl: pdfUrl,
           title: title,
+          headers: headers,
         ),
       ),
     );

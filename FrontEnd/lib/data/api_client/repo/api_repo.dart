@@ -19,6 +19,7 @@ abstract class ApiRepo {
       String? tag});
 }
 
-ApiRepo _apiRepo() => ApiRepoImp();
-
-ApiRepo ApiEngine = _apiRepo();
+class ApiEngine {
+  static ApiRepo _apiRepo() => ApiRepoImp();
+  static final ApiRepo instance = _apiRepo();
+}

@@ -83,7 +83,7 @@ class Geocoding {
   static Future<ReverseGeocoding?> reverseGeocoding(
       {required double latitude, required double longitude}) async {
     try {
-      ApiReturnModel? v = await ApiEngine.callApi(
+      ApiReturnModel? v = await ApiEngine.instance.callApi(
           tag: "ReverseGeocoding",
           uri: _reverseGeocode,
           queryParameters: {
@@ -151,7 +151,7 @@ class Geocoding {
   static Future<ForwardGeocoding?> forwardGeocoding(
       {required String address}) async {
     try {
-      ApiReturnModel? v = await ApiEngine.callApi(
+      ApiReturnModel? v = await ApiEngine.instance.callApi(
           tag: "ForwardGeocoding",
           uri: _forwardGeocode,
           queryParameters: {"format": "geojson", "q": address},
