@@ -385,10 +385,12 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
   }
 
   void _onChanged(String value, int index) {
-    if (value.length == 1 && index < widget.length - 1) {
-      _focusNodes[index + 1].requestFocus();
+    if (value.length == 1 && index == widget.length - 1) {
+      _requestFocus(index);
+    } else if (value.length == 1 && index < widget.length - 1) {
+      _requestFocus(index + 1);
     } else if (value.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
+      _requestFocus(index - 1);
     }
 
     final pin = _fieldControllers.map((c) => c.text).join();
@@ -402,6 +404,14 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
       });
       widget.onCompleted?.call(pin);
     }
+  }
+
+  void _requestFocus(int index) {
+    _focusNodes.elementAt(index).requestFocus();
+    Future.microtask(() {
+      _fieldControllers.elementAt(index).selection = TextSelection.collapsed(
+          offset: _fieldControllers.elementAt(index).text.length);
+    });
   }
 
   /// Clears all digits and resets state
