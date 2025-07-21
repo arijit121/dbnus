@@ -66,7 +66,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
                     ColorConst.red);
               }
               return NavigationActionPolicy.CANCEL;
-            } else if (!uri.startsWith("http")) {
+            } else if (!uri.startsWith("http") && !uri.startsWith("about:")) {
               bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
