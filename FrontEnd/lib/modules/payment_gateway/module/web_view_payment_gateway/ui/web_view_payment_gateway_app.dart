@@ -57,7 +57,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             String uri = navigationAction.request.url.toString();
             AppLog.i(uri, tag: "ShouldOverrideUrlLoading");
-            if (uri.contains("upi://pay")) {
+            if (uri.startsWith("upi://pay")) {
               bool? result = await OpenService.openUrl(
                   uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
               if (result != true) {
