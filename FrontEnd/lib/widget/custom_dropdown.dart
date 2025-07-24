@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../const/color_const.dart';
 import '../extension/hex_color.dart';
 import '../service/value_handler.dart';
+import '../utils/screen_utils.dart';
 import 'custom_button.dart';
 import 'custom_grid_view.dart';
 import 'custom_text.dart';
@@ -186,117 +187,132 @@ class CustomMultiSelectorBottomSheet<T> extends StatelessWidget {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (ValueHandler.isTextNotEmptyOrNull(title))
-                        Expanded(
-                          child: CustomText(title!,
-                              color: ColorConst.primaryDark,
-                              size: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      CustomIconButton(
-                          color: ColorConst.primaryDark,
-                          onPressed: () async {
-                            Navigator.pop(context,
-                                selectedItems?.map((e) => e.value).toList());
-                          },
-                          icon: const Icon(Icons.close))
-                    ],
-                  ),
-                ),
-                if (ValueHandler.isTextNotEmptyOrNull(title))
-                  Divider(color: ColorConst.lineGrey, height: 2),
-                Flexible(
-                  child: CustomGridView.count(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    shrinkWrap: true,
-                    crossAxisCount: crossAxisCount ?? 1,
-                    crossAxisSpacing: 8,
-                    itemCount: items.length,
-                    builder: (context, index) {
-                      final item = items.elementAt(index);
-                      final isSelected = selected.contains(item.value);
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (isSelected == true) {
-                              selected.remove(item.value);
-                            } else {
-                              selected.add(item.value);
-                            }
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomText(items.elementAt(index).title ?? "",
-                                color: ColorConst.primaryDark, size: 13),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4),
-                              child: CustomContainer(
-                                color:
-                                    isSelected ? ColorConst.baseHexColor : null,
-                                height: 18,
-                                width: 18,
-                                borderRadius: BorderRadius.circular(4),
-                                borderColor: isSelected
-                                    ? ColorConst.baseHexColor
-                                    : ColorConst.grey,
-                                child: isSelected
-                                    ? Center(
-                                        child: Icon(Icons.check,
-                                            color: Colors.white, size: 16))
-                                    : null,
-                              ),
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: ScreenUtils.nh() / 1.5, // Set max height here
+              ),
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (ValueHandler.isTextNotEmptyOrNull(title))
+                            Expanded(
+                              child: CustomText(title!,
+                                  color: ColorConst.primaryDark,
+                                  size: 16,
+                                  fontWeight: FontWeight.w600),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return 8.ph;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (cancelButtonWidget != null)
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context,
-                                selectedItems?.map((e) => e.value).toList());
-                          },
-                          child: cancelButtonWidget,
-                        ),
-                      InkWell(
-                        onTap: () {
-                          final selectedModels = items
-                              .where((item) => selected.contains(item.value))
-                              .toList();
-                          Navigator.pop(context,
-                              selectedModels.map((e) => e.value).toList());
-                        },
-                        child: okButtonWidget,
+                          CustomIconButton(
+                              color: ColorConst.primaryDark,
+                              onPressed: () async {
+                                Navigator.pop(
+                                    context,
+                                    selectedItems
+                                        ?.map((e) => e.value)
+                                        .toList());
+                              },
+                              icon: const Icon(Icons.close))
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    if (ValueHandler.isTextNotEmptyOrNull(title))
+                      Divider(color: ColorConst.lineGrey, height: 2),
+                    Flexible(
+                      child: CustomGridView.count(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        shrinkWrap: true,
+                        crossAxisCount: crossAxisCount ?? 1,
+                        crossAxisSpacing: 8,
+                        itemCount: items.length,
+                        builder: (context, index) {
+                          final item = items.elementAt(index);
+                          final isSelected = selected.contains(item.value);
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected == true) {
+                                  selected.remove(item.value);
+                                } else {
+                                  selected.add(item.value);
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(items.elementAt(index).title ?? "",
+                                    color: ColorConst.primaryDark, size: 13),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: CustomContainer(
+                                    color: isSelected
+                                        ? ColorConst.baseHexColor
+                                        : null,
+                                    height: 18,
+                                    width: 18,
+                                    borderRadius: BorderRadius.circular(4),
+                                    borderColor: isSelected
+                                        ? ColorConst.baseHexColor
+                                        : ColorConst.grey,
+                                    child: isSelected
+                                        ? Center(
+                                            child: Icon(Icons.check,
+                                                color: Colors.white, size: 16))
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return 8.ph;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (cancelButtonWidget != null)
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(
+                                    context,
+                                    selectedItems
+                                        ?.map((e) => e.value)
+                                        .toList());
+                              },
+                              child: cancelButtonWidget,
+                            ),
+                          InkWell(
+                            onTap: () {
+                              final selectedModels = items
+                                  .where(
+                                      (item) => selected.contains(item.value))
+                                  .toList();
+                              Navigator.pop(context,
+                                  selectedModels.map((e) => e.value).toList());
+                            },
+                            child: okButtonWidget,
+                          ),
+                        ],
+                      ),
+                    ),
+                    8.ph
+                  ],
                 ),
-                8.ph
-              ],
+              ),
             );
           },
         );
