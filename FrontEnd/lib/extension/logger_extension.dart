@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
 
 /// A Logger For Flutter Apps
 /// Usage:
@@ -42,32 +42,52 @@ class AppLog {
 
   static _log(int priority, String tag, String message,
       {Object? error, StackTrace? stackTrace, DateTime? time}) {
-    if (_currentLogLevel <= priority && (!kReleaseMode || _enableOnRelease)) {
-      print(_ascieEscape(priority,
-          text: "${_getPriorityText(priority)}$tag::==>  $message"));
-      if (error != null) {
-        print(_ascieEscape(priority, text: error.toString()));
-      }
+    if (_currentLogLevel <= priority) {
+      if (_enableOnRelease) {
+        _logLargeMessage(_ascieEscape(priority,
+            text: "${_getPriorityText(priority)}$tag::==>  $message"));
+        if (error != null) {
+          _logLargeMessage(_ascieEscape(priority, text: error.toString()));
+        }
 
-      if (stackTrace != null) {
-        print(_ascieEscape(priority, text: stackTrace.toString()));
+        if (stackTrace != null) {
+          _logLargeMessage(_ascieEscape(priority, text: stackTrace.toString()));
+        }
+        if (time != null) {
+          print(_ascieEscape(priority, text: time.toString()));
+        }
+      } else {
+        log(
+          "::==>  $message",
+          name: " ${_getPriorityText(priority)}$tag",
+          level: priority * 100,
+          // e.g., INFO=400, ERROR=600
+          error: error,
+          stackTrace: stackTrace,
+          time: time ?? DateTime.now(),
+        );
       }
-      if (time != null) {
-        print(_ascieEscape(priority, text: time.toString()));
-      }
+    }
+  }
+
+  static void _logLargeMessage(String message, {int chunkSize = 220}) {
+    for (var i = 0; i < message.length; i += chunkSize) {
+      final chunk = message.substring(
+          i, i + chunkSize > message.length ? message.length : i + chunkSize);
+      print(chunk);
     }
   }
 
   static String _getPriorityText(int priority) {
     switch (priority) {
       case _INFO:
-        return "💡 INFO | ";
+        return "💡 INFO   | ";
       case _DEBUG:
-        return "🛠️ DEBUG | ";
+        return "🛠️ DEBUG  | ";
       case _ERROR:
-        return "⛔ ERROR | ";
+        return "⛔ ERROR  | ";
       case _WARN:
-        return "🚧 WARN | ";
+        return "🚧 WARN   | ";
       case _Failed:
         return "🚫 Failed | ";
       case _VERBOSE:
