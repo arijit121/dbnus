@@ -28,6 +28,7 @@ import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
+import '../../../widget/smooth_scroll.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -44,7 +45,7 @@ class _TestPageState extends State<TestPage> {
     return Column(
       children: [
         Expanded(
-          child: ListView(
+          child: SmoothScroll(
             primary: false,
             children: [
               CustomTextEnum(
