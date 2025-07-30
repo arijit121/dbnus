@@ -29,6 +29,20 @@ class OpenService {
     }
   }
 
+  Future<void> sendEmail(
+      {required String toEmail, String? subject, String? body}) async {
+    try {
+      final Uri emailLaunchUri = Uri(
+        scheme: 'mailto',
+        path: toEmail,
+        queryParameters: {'subject': subject, 'body': body},
+      );
+      await openUrl(uri: emailLaunchUri, mode: LaunchMode.externalApplication);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+  }
+
   static Future<bool?> openUrl(
       {required Uri uri, LaunchMode mode = LaunchMode.platformDefault}) async {
     try {
