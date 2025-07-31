@@ -1,4 +1,5 @@
 import 'package:dbnus/service/value_handler.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -300,7 +301,10 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
   @override
   void initState() {
     super.initState();
+    _init();
+  }
 
+  Future<void> _init() async {
     _fieldControllers =
         List.generate(widget.length, (_) => TextEditingController());
     _focusNodes = List.generate(widget.length, (_) => FocusNode());
@@ -330,6 +334,11 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
       }
     });*/
     if (widget.autoFill == true) {
+      /// Clear the clipboard Web
+      if (kIsWeb) {
+        await Clipboard.setData(const ClipboardData(text: ''));
+      }
+
       /// Auto Fill
       for (int i = 0; i < widget.length; i++) {
         _focusNodes[i].addListener(() async {
