@@ -123,7 +123,7 @@ class PopUpItems {
     if (type != null) {
       switch (type) {
         case DialogType.success:
-          icon = Icons.check_circle;
+          icon = CupertinoIcons.checkmark_seal_fill;
           iconButtonColor = Colors.green;
           break;
         case DialogType.error:
