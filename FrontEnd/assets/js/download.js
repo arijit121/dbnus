@@ -1,38 +1,49 @@
-async function download(url, filename, headers = {}) {
-    try {
-        // Create request with custom headers
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                ...headers
-            }
+let axiosInstancePromise;
+
+function loadAxios() {
+  if (!axiosInstancePromise) {
+    axiosInstancePromise = import('https://esm.sh/axios')
+      .then(({ default: axios }) => axios)
+      .catch(error => {
+        console.error('Failed to load Axios:', error);
+        axiosInstancePromise = null;
+        throw error;
+      });
+  }
+  return axiosInstancePromise;
+}
+
+
+function download(url, filename, headers = {}) {
+  return new Promise((resolve, reject) => {
+    loadAxios()
+      .then(axios => {
+        return axios.get(url, {
+          responseType: 'blob',
+          headers: {
+            'Content-Type': 'application/octet-stream',
+            ...headers
+          }
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // Get the blob data
-        const blob = await response.blob();
-
-        // Create download link
+      })
+      .then(response => {
+        const blob = response.data;
         const downloadUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = downloadUrl;
         a.download = filename;
 
-        // Trigger download
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
 
-        // Clean up
         window.URL.revokeObjectURL(downloadUrl);
 
-        return { success: true, message: 'Download completed' };
-    } catch (error) {
+        resolve({ success: true, message: 'Download completed' });
+      })
+      .catch(error => {
         console.error('Download failed:', error);
-        return { success: false, error: error.message };
-    }
+        reject({ success: false, error: error.message });
+      });
+  });
 }
