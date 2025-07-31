@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../service/value_handler.dart';
+import 'smooth_scroll.dart';
 
 /// A custom [GridView] widget that allows for flexible configuration
 /// of the grid's layout and behavior.
@@ -69,6 +71,7 @@ class CustomGridView extends StatelessWidget {
     this.physics,
     this.shrinkWrap = false,
     this.padding,
+    this.smoothScroll = true,
     required this.children,
     this.rowCrossAxisAlignment = CrossAxisAlignment.start,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
@@ -96,6 +99,11 @@ class CustomGridView extends StatelessWidget {
 
   /// The padding around the grid.
   final EdgeInsetsGeometry? padding;
+
+  /// Whether the grid should smooth scroll.
+  ///
+  /// Defaults to `true`.
+  final bool smoothScroll;
 
   /// The widgets to display in the grid.
   final List<Widget> children;
@@ -134,13 +142,17 @@ class CustomGridView extends StatelessWidget {
     ScrollPhysics? physics,
     bool shrinkWrap = false,
     EdgeInsetsGeometry? padding,
+    bool smoothScroll = true,
     required int itemCount,
     required IndexedWidgetBuilder builder,
     CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
         ScrollViewKeyboardDismissBehavior.manual,
   }) {
-    return _CustomGridView(
+    final shouldSmoothScroll = (kIsWeb || _isDesktop()) && smoothScroll;
+    final smoothScrollController = controller ?? ScrollController();
+
+    final Widget widget = _CustomGridView(
       key: key,
       crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
           ? crossAxisCount
@@ -149,18 +161,27 @@ class CustomGridView extends StatelessWidget {
       separatorBuilder: separatorBuilder,
       physics: physics,
       shrinkWrap: shrinkWrap,
-      controller: controller,
+      controller: shouldSmoothScroll ? smoothScrollController : controller,
       itemCount: itemCount,
       builder: builder,
       padding: padding,
       rowCrossAxisAlignment: rowCrossAxisAlignment,
       keyboardDismissBehavior: keyboardDismissBehavior,
     );
+    if (shouldSmoothScroll) {
+      return SmoothScrollWrapper(
+          controller: smoothScrollController, child: widget);
+    } else {
+      return widget;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _CustomGridView(
+    final shouldSmoothScroll = (kIsWeb || _isDesktop()) && smoothScroll;
+    final smoothScrollController = controller ?? ScrollController();
+
+    final Widget widget = _CustomGridView(
       key: key,
       crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
           ? crossAxisCount
@@ -169,13 +190,19 @@ class CustomGridView extends StatelessWidget {
       separatorBuilder: separatorBuilder,
       physics: physics,
       shrinkWrap: shrinkWrap,
-      controller: controller,
+      controller: shouldSmoothScroll ? smoothScrollController : controller,
       itemCount: children.length,
       padding: padding,
       rowCrossAxisAlignment: rowCrossAxisAlignment,
       keyboardDismissBehavior: keyboardDismissBehavior,
       children: children,
     );
+    if (shouldSmoothScroll) {
+      return SmoothScrollWrapper(
+          controller: smoothScrollController, child: widget);
+    } else {
+      return widget;
+    }
   }
 }
 
@@ -249,4 +276,10 @@ class _CustomGridView extends StatelessWidget {
       },
     );
   }
+}
+
+bool _isDesktop() {
+  return defaultTargetPlatform == TargetPlatform.windows ||
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.linux;
 }

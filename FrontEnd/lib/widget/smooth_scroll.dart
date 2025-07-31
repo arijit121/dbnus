@@ -22,7 +22,7 @@ class SmoothScroll extends StatefulWidget {
   final IndexedWidgetBuilder? separatorBuilder;
 
   const SmoothScroll({
-    Key? key,
+    super.key,
     required this.children,
     this.controller,
     this.physics,
@@ -32,11 +32,10 @@ class SmoothScroll extends StatefulWidget {
     this.scrollDirection = Axis.vertical,
   })  : itemCount = null,
         itemBuilder = null,
-        separatorBuilder = null,
-        super(key: key);
+        separatorBuilder = null;
 
   const SmoothScroll.builder({
-    Key? key,
+    super.key,
     required this.itemCount,
     required this.itemBuilder,
     this.separatorBuilder,
@@ -46,8 +45,7 @@ class SmoothScroll extends StatefulWidget {
     this.primary,
     this.shrinkWrap = false,
     this.scrollDirection = Axis.vertical,
-  })  : children = null,
-        super(key: key);
+  }) : children = null;
 
   @override
   State<SmoothScroll> createState() => _SmoothScrollState();
@@ -55,13 +53,11 @@ class SmoothScroll extends StatefulWidget {
 
 class _SmoothScrollState extends State<SmoothScroll> {
   late final ScrollController _controller;
-  double _scrollPosition = 0.0;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? ScrollController();
-    _scrollPosition = _controller.initialScrollOffset;
   }
 
   @override
@@ -109,13 +105,49 @@ class _SmoothScrollState extends State<SmoothScroll> {
 
     if (!shouldSmoothScroll) return listView;
 
+    return SmoothScrollWrapper(
+      controller: _controller,
+      child: listView,
+    );
+  }
+
+  bool isDesktop() {
+    return defaultTargetPlatform == TargetPlatform.windows ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux;
+  }
+}
+
+class SmoothScrollWrapper extends StatefulWidget {
+  const SmoothScrollWrapper(
+      {super.key, required this.controller, required this.child});
+
+  final ScrollController controller;
+  final Widget child;
+
+  @override
+  State<SmoothScrollWrapper> createState() => _SmoothScrollWrapperState();
+}
+
+class _SmoothScrollWrapperState extends State<SmoothScrollWrapper> {
+  late final ScrollController _controller;
+  double _scrollPosition = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.controller ?? ScrollController();
+    _scrollPosition = _controller.initialScrollOffset;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Listener(
       onPointerSignal: (pointerSignal) {
         if (pointerSignal is PointerScrollEvent) {
           int duration = NORMAL_SCROLL_ANIMATION_LENGTH_MS;
-          _scrollPosition += pointerSignal.scrollDelta.dy > 0
-              ? SCROLL_SPEED
-              : -SCROLL_SPEED;
+          _scrollPosition +=
+              pointerSignal.scrollDelta.dy > 0 ? SCROLL_SPEED : -SCROLL_SPEED;
 
           final max = _controller.position.maxScrollExtent;
           final min = _controller.position.minScrollExtent;
@@ -136,13 +168,7 @@ class _SmoothScrollState extends State<SmoothScroll> {
         }
       },
       behavior: HitTestBehavior.deferToChild,
-      child: listView,
+      child: widget.child,
     );
-  }
-
-  bool isDesktop() {
-    return defaultTargetPlatform == TargetPlatform.windows ||
-        defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.linux;
   }
 }
