@@ -300,10 +300,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
   @override
   void initState() {
     super.initState();
-    _init();
-  }
 
-  Future<void> _init() async {
     _fieldControllers =
         List.generate(widget.length, (_) => TextEditingController());
     _focusNodes = List.generate(widget.length, (_) => FocusNode());
@@ -333,9 +330,6 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
       }
     });*/
     if (widget.autoFill == true) {
-      // Clear the clipboard
-      await Clipboard.setData(const ClipboardData(text: ''));
-
       /// Auto Fill
       for (int i = 0; i < widget.length; i++) {
         _focusNodes[i].addListener(() async {
