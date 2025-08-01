@@ -79,8 +79,8 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
 
             return NavigationActionPolicy.ALLOW;
           },
-          onUpdateVisitedHistory: (controller, uri, isReload) {
-            AppLog.i(uri, tag: "OnUpdateVisitedHistory");
+          onLoadStop: (controller, uri) {
+            AppLog.i(uri, tag: "OnLoadStop");
             if (ValueHandler.isTextNotEmptyOrNull(uri)) {
               AppLog.i(uri, tag: "UrlChange");
               WebViewPaymentGatewayUtils().onUrlChange(
