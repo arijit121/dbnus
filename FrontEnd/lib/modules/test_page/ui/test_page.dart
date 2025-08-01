@@ -256,7 +256,7 @@ class _TestPageState extends State<TestPage> {
                           "On Tap", ColorConst.baseHexColor);
                     },
                     child: CustomNetWorkImageView(
-                      url: ApiUrlConst.testImgUrl,
+                      url: ApiUrlConst.testImgUrl(),
                       radius: 8,
                       height: 200,
                       width: 120,
@@ -264,14 +264,14 @@ class _TestPageState extends State<TestPage> {
                     ),
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl + "lfmbldmfbl",
+                    url: "${ApiUrlConst.testImgUrl()}lfmbldmfbl",
                     radius: 8,
                     height: 100,
                     width: 120,
                     fit: BoxFit.fill,
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
@@ -283,21 +283,21 @@ class _TestPageState extends State<TestPage> {
               Row(
                 children: [
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
                     fit: BoxFit.fill,
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
                     fit: BoxFit.fill,
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
@@ -323,7 +323,7 @@ class _TestPageState extends State<TestPage> {
               Row(
                 children: [
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
@@ -338,7 +338,7 @@ class _TestPageState extends State<TestPage> {
                     fit: BoxFit.fill,
                   ),
                   CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
+                    url: ApiUrlConst.testImgUrl(),
                     radius: 8,
                     height: 100,
                     width: 120,
@@ -353,7 +353,7 @@ class _TestPageState extends State<TestPage> {
                 imageList: List.generate(5, (int index) {
                   return index == 4
                       ? "https://picsum.photos/1080/512.jpg"
-                      : ApiUrlConst.testImgUrl;
+                      : ApiUrlConst.testImgUrl();
                 }),
                 onTap: (index) {
                   kIsWeb

@@ -62,7 +62,7 @@ class _UiTempState extends State<UiTemp> {
                   message: "test",
                   bigText:
                       "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
-                  imageUrl: ApiUrlConst.testImgUrl,
+                  imageUrl: ApiUrlConst.testImgUrl(),
                   // actionURL: "http://localhost:6906/leader_board",
                   sound: "slow_spring_board",
                 ),
@@ -82,7 +82,7 @@ class _UiTempState extends State<UiTemp> {
                   message: "test ${notificationId}",
                   bigText:
                       "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
-                  imageUrl: ApiUrlConst.testImgUrl,
+                  imageUrl: ApiUrlConst.testImgUrl(),
                   // actionURL: "http://localhost:6906/leader_board",
                   sound: "slow_spring_board",
                 ),
