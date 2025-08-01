@@ -309,22 +309,15 @@ class _TestPageState extends State<TestPage> {
                     width: 120,
                     fit: BoxFit.fill,
                   ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
                 ],
               ),
               20.ph,
-               CarouselSlider(
+              CarouselSlider(
                 radius: 8,
                 autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
-                  return index == 4
-                      ? "https://picsum.photos/1080/512.jpg"
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
                       : ApiUrlConst.testImgUrl();
                 }),
                 onTap: (index) {
@@ -333,6 +326,115 @@ class _TestPageState extends State<TestPage> {
                       : context.pushNamed(RouteName.games);
                 },
                 height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CustomNetWorkImageView(
+                url: ApiUrlConst.testImgUrl(
+                    aspectRatio: ScreenUtils.nw() / (ScreenUtils.nw() / 2)),
+                radius: 8,
+                height: ScreenUtils.nw() / 2,
+                fit: BoxFit.fill,
               ),
               20.ph,
             ],
