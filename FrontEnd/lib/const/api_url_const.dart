@@ -14,6 +14,9 @@ class ApiUrlConst {
   static String books = "${baseUrl}books/v1/volumes";
   static String hostUrl = "https://www.google.com";
 
-  static String testImgUrl() =>
-      "https://picsum.photos/${Random().nextInt(2160) + 512}/${Random().nextInt(2160) + 512}.jpg";
+  static String testImgUrl({num aspectRatio = 1}) {
+    int width = Random().nextInt(2160) + 512;
+    int height = (width / aspectRatio).toInt();
+    return "https://picsum.photos/$width/$height.jpg";
+  }
 }

@@ -61,6 +61,14 @@ class _SmoothScrollState extends State<SmoothScroll> {
   }
 
   @override
+  void dispose() {
+    if (widget.controller == null) {
+      _controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final shouldSmoothScroll = kIsWeb || isDesktop();
 
@@ -138,6 +146,17 @@ class _SmoothScrollWrapperState extends State<SmoothScrollWrapper> {
     super.initState();
     _controller = widget.controller ?? ScrollController();
     _scrollPosition = _controller.initialScrollOffset;
+    _controller.addListener(_updateScrollPosition);
+  }
+
+  void _updateScrollPosition() {
+    _scrollPosition = _controller.position.pixels;
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_updateScrollPosition);
+    super.dispose();
   }
 
   @override
@@ -163,7 +182,7 @@ class _SmoothScrollWrapperState extends State<SmoothScrollWrapper> {
           _controller.animateTo(
             _scrollPosition,
             duration: Duration(milliseconds: duration),
-            curve: Curves.linear,
+            curve: Curves.easeOutCubic,
           );
         }
       },
