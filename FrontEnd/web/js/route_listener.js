@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         historyPatched = path;
-        console.log(`Route changed: ${historyPatched}`);
+        // console.log(`Route changed: ${historyPatched}`);
 
         const loader = document.getElementById("web-loader");
         if (loader) {
