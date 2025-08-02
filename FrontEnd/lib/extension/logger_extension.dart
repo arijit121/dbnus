@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 
 /// A Logger For Flutter Apps
 /// Usage:
@@ -7,6 +8,7 @@ import 'dart:developer';
 ///
 class AppLog {
   static const bool _enableOnRelease = false;
+  static const bool _enableLogger = false;
   static const String _DEFAULT_TAG_PREFIX = "AppLog";
 
   ///use Log.v. Print all Logs
@@ -43,7 +45,7 @@ class AppLog {
   static _log(int priority, String tag, String message,
       {Object? error, StackTrace? stackTrace, DateTime? time}) {
     if (_currentLogLevel <= priority) {
-      if (_enableOnRelease) {
+      if (!_enableLogger) {
         _logLargeMessage(_ascieEscape(priority,
             text: "${_getPriorityText(priority)}$tag::==>  $message"));
         if (error != null) {
@@ -74,7 +76,11 @@ class AppLog {
     for (var i = 0; i < message.length; i += chunkSize) {
       final chunk = message.substring(
           i, i + chunkSize > message.length ? message.length : i + chunkSize);
-      print(chunk);
+      if (_enableOnRelease) {
+        print(chunk);
+      } else {
+        debugPrint(chunk);
+      }
     }
   }
 

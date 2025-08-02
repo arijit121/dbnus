@@ -30,6 +30,7 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/smooth_scroll.dart';
+import '../../../widget/youtube_video_player.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -262,6 +263,11 @@ class _TestPageState extends State<TestPage> {
                     "Show Success",
                     color: Colors.white,
                   )),
+              20.ph,
+              YoutubeVideoPlayer(
+                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                height: 200,
+              ),
               20.ph,
               Row(
                 spacing: 8,
