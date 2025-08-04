@@ -16,7 +16,7 @@ abstract class ApiRepo {
       {required String uri,
       Map<String, dynamic>? queryParameters,
       Map<String, String>? headers,
-      String? tag});
+      required String tag});
 }
 
 class ApiEngine {

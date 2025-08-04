@@ -138,7 +138,7 @@ class ApiRepoImp extends ApiRepo {
       {required String uri,
       Map<String, dynamic>? queryParameters,
       Map<String, String>? headers,
-      String? tag}) async {
+      required String tag}) async {
     try {
       Map<String, String> stringQueryParameters = <String, String>{};
       queryParameters?.forEach((key, value) {

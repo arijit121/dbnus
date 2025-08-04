@@ -15,7 +15,7 @@ class NetworkBytesImgBloc
     on<NetworkBytesImgEvent>((event, emit) async {
       if (event is GetData) {
         try {
-          Uint8List? bytes = await ApiEngine.instance.urlToByte(uri: event.url);
+          Uint8List? bytes = await ApiEngine.instance.urlToByte(uri: event.url, tag: 'NetworkBytesImg');
           if (bytes == null) {
             emit(state.copyWith(bytes: bytes, isLoaded: true));
           } else {
