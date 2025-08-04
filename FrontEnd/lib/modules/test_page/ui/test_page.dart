@@ -5,6 +5,7 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
 import 'package:dbnus/service/Localization/extension/localization_ext.dart';
 import 'package:dbnus/service/file_picker.dart';
+import 'package:dbnus/utils/screen_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +30,7 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/smooth_scroll.dart';
+import '../../../widget/youtube_video_player.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -139,7 +141,7 @@ class _TestPageState extends State<TestPage> {
                     Colors.blue,
                   ]),
                   child: const CustomText("GlucoseFasting")),
-              20.ph,  
+              20.ph,
               CustomGOEButton(
                   onPressed: () {
                     DownloadHandler.download(
@@ -248,7 +250,28 @@ class _TestPageState extends State<TestPage> {
                   ]),
                   child: const CustomText("Razorpay")),
               20.ph,
+              CustomGOEButton(
+                  width: 160,
+                  onPressed: () async {
+                    PopUpItems.customMsgDialog(
+                        title: "Success",
+                        content: "Thank you, transaction complete.",
+                        type: DialogType.success);
+                  },
+                  backGroundColor: Colors.amber,
+                  child: const CustomText(
+                    "Show Success",
+                    color: Colors.white,
+                  )),
+              20.ph,
+              YoutubeVideoPlayer(
+                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                height: 200,
+              ),
+              20.ph,
               Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InkWell(
                     onTap: () {
@@ -270,57 +293,12 @@ class _TestPageState extends State<TestPage> {
                     width: 120,
                     fit: BoxFit.fill,
                   ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
                 ],
               ),
               20.ph,
               Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              CustomGOEButton(
-                  width: 160,
-                  onPressed: () async {
-                    PopUpItems.customMsgDialog(
-                        title: "Success",
-                        content: "Thank you, transaction complete.",
-                        type: DialogType.success);
-                  },
-                  backGroundColor: Colors.amber,
-                  child: const CustomText(
-                    "Show Success",
-                    color: Colors.white,
-                  )),
-              20.ph,
-              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomNetWorkImageView(
                     url: ApiUrlConst.testImgUrl(),
@@ -337,13 +315,6 @@ class _TestPageState extends State<TestPage> {
                     width: 120,
                     fit: BoxFit.fill,
                   ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl(),
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
                 ],
               ),
               20.ph,
@@ -351,8 +322,8 @@ class _TestPageState extends State<TestPage> {
                 radius: 8,
                 autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
-                  return index == 4
-                      ? "https://picsum.photos/1080/512.jpg"
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
                       : ApiUrlConst.testImgUrl();
                 }),
                 onTap: (index) {
@@ -361,6 +332,115 @@ class _TestPageState extends State<TestPage> {
                       : context.pushNamed(RouteName.games);
                 },
                 height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CustomNetWorkImageView(
+                url: ApiUrlConst.testImgUrl(
+                    aspectRatio: ScreenUtils.nw() / (ScreenUtils.nw() / 2)),
+                radius: 8,
+                height: ScreenUtils.nw() / 2,
+                fit: BoxFit.fill,
               ),
               20.ph,
             ],

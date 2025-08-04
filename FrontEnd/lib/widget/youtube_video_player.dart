@@ -13,7 +13,8 @@ class YoutubeVideoPlayer extends StatefulWidget {
     required this.videoUrl,
     this.height,
     this.width,
-  });
+  }) : assert(height != null || width != null,
+            'Height or Width must be provided for YoutubeVideoPlayer');
 
   @override
   State<YoutubeVideoPlayer> createState() => _YoutubeVideoPlayerState();
@@ -51,11 +52,15 @@ class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
         ? widget.width! / widget.height!
         : 16 / 9;
 
+    double width = widget.width ?? (widget.height ?? 0) * aspectRatio;
+    double height = widget.height ?? (widget.width ?? 0) / aspectRatio;
+  
+
     return _controller != null && videoId != null
         ? YoutubePlayer(
             controller: _controller!,
             aspectRatio: aspectRatio,
           )
-        : CustomErrorWidget();
+        : CustomErrorWidget(width: width, height: height);
   }
 }
