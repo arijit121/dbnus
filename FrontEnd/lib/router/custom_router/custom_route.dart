@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/model/razorpay_merchant_details.dart';
+import '../../data/model/route_model.dart';
 import '../../extension/logger_extension.dart';
 import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
     deferred as rayzorpay;
@@ -127,6 +128,18 @@ class CustomRoute {
               .getInstance.router.routerDelegate.currentConfiguration;
       final String location = matchList.uri.toString();
       return location;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  RouteModel? previousRouteAtIndex({int index = 1}) {
+    try {
+      return RouterManager.getInstance.routeHistory.length >= (1 + index)
+          ? RouterManager.getInstance.routeHistory[
+      RouterManager.getInstance.routeHistory.length - (1 + index)]
+          : null;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

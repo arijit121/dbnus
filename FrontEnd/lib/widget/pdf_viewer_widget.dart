@@ -73,7 +73,7 @@ class _PdfViewerWidgetState extends State<PdfViewerWidget> {
               return value
                   ? FutureBuilder<Uint8List?>(
                       future: ApiEngine.instance.urlToByte(
-                          uri: widget.pdfUrl, headers: widget.headers),
+                          uri: widget.pdfUrl, headers: widget.headers, tag: 'Pdf'),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
