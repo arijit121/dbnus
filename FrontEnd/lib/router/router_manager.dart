@@ -13,6 +13,7 @@ import '../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_p
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
 import '../service/seo_handler.dart';
+import '../service/value_handler.dart';
 import '../utils/text_utils.dart';
 import '../widget/error_route_widget.dart' deferred as error_route_widget;
 import 'router_name.dart';
@@ -43,7 +44,8 @@ class RouterManager {
         queryParameters: route.uri.queryParameters,
         extra: route.extra);
     // Avoid duplicates if the same route is pushed consecutively
-    if (routeHistory.isEmpty || routeHistory.last.uri != data.uri) {
+    if ((routeHistory.isEmpty || routeHistory.last.uri != data.uri) &&
+        ValueHandler.isTextNotEmptyOrNull(data.uri)) {
       routeHistory.add(data);
 
       // Maintain max history size

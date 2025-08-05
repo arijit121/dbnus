@@ -134,11 +134,11 @@ class CustomRoute {
     return null;
   }
 
-  RouteModel? previousRouteAtIndex({int index = 1}) {
+  static RouteModel? previousRouteAtIndex({int index = 1}) {
     try {
       return RouterManager.getInstance.routeHistory.length >= (1 + index)
           ? RouterManager.getInstance.routeHistory[
-      RouterManager.getInstance.routeHistory.length - (1 + index)]
+              RouterManager.getInstance.routeHistory.length - (1 + index)]
           : null;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
