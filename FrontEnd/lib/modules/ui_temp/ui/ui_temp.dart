@@ -185,6 +185,7 @@ class _UiTempState extends State<UiTemp> {
                         controller: _pinController,
                         length: 5,
                         autoFocus: true,
+                        autoFill: true,
                         onCompleted: (value) {
                           AppLog.i(_pinController.text);
                         },
