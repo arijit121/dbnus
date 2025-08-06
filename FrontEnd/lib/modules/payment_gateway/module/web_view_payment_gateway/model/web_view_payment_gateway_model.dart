@@ -3,6 +3,7 @@ class WebViewPaymentGatewayModel {
   String redirectLink;
   String transactionId;
   String? payType;
+  String? transactionType;
   num? walletDeduction;
   String? failedRedirectLink;
 
@@ -11,6 +12,7 @@ class WebViewPaymentGatewayModel {
       required this.redirectLink,
       required this.transactionId,
       this.payType,
+      this.transactionType,
       this.walletDeduction,
       this.failedRedirectLink});
 
@@ -20,6 +22,7 @@ class WebViewPaymentGatewayModel {
       redirectLink: json['redirectLink'],
       transactionId: json['transactionId'],
       payType: json['payType'],
+      transactionType: json['transactionType'],
       walletDeduction: json['walletDeduction'],
       failedRedirectLink: json['failedRedirectLink'],
     );
@@ -31,6 +34,7 @@ class WebViewPaymentGatewayModel {
       'redirectLink': redirectLink,
       'transactionId': transactionId,
       'payType': payType,
+      'transactionType': transactionType,
       'walletDeduction': walletDeduction,
       'failedRedirectLink': failedRedirectLink,
     };
