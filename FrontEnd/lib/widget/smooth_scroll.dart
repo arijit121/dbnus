@@ -144,7 +144,7 @@ class _SmoothScrollWrapperState extends State<SmoothScrollWrapper> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? ScrollController();
+    _controller = widget.controller;
     _scrollPosition = _controller.initialScrollOffset;
     _controller.addListener(_updateScrollPosition);
   }
