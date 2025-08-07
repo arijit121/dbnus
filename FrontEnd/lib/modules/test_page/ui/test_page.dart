@@ -47,7 +47,7 @@ class _TestPageState extends State<TestPage> {
     return Column(
       children: [
         Expanded(
-          child: ListView(
+          child: SmoothScroll(
             primary: false,
             children: [
               CustomTextEnum(
