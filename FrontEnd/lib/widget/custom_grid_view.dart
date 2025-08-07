@@ -71,52 +71,11 @@ class CustomGridView extends StatelessWidget {
     this.physics,
     this.shrinkWrap = false,
     this.padding,
-    this.smoothScroll = true,
     required this.children,
     this.rowCrossAxisAlignment = CrossAxisAlignment.start,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
-  });
-
-  /// The [ScrollController] to control the grid's scrolling behavior.
-  final ScrollController? controller;
-
-  /// The number of columns in the grid.
-  final int crossAxisCount;
-
-  /// The amount of space between columns.
-  final double crossAxisSpacing;
-
-  /// The separatorBuilder is the widget which separate the row.
-  final IndexedWidgetBuilder separatorBuilder;
-
-  /// The physics to use for the grid's scroll view.
-  final ScrollPhysics? physics;
-
-  /// Whether the grid should shrink-wrap its content.
-  ///
-  /// Defaults to `false`.
-  final bool shrinkWrap;
-
-  /// The padding around the grid.
-  final EdgeInsetsGeometry? padding;
-
-  /// Whether the grid should smooth scroll.
-  ///
-  /// Defaults to `true`.
-  final bool smoothScroll;
-
-  /// The widgets to display in the grid.
-  final List<Widget> children;
-
-  /// How the children should be aligned in the cross axis within each row.
-  ///
-  /// Defaults to [CrossAxisAlignment.start].
-  final CrossAxisAlignment rowCrossAxisAlignment;
-
-  /// Determines how the keyboard is dismissed during scrolling.
-  ///
-  /// Defaults to [ScrollViewKeyboardDismissBehavior.manual].
-  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  })  : itemCount = null,
+        builder = null;
 
   /// Creates a [CustomGridView] with a specified item count and builder function.
   ///
@@ -133,76 +92,98 @@ class CustomGridView extends StatelessWidget {
   ///   },
   /// );
   /// ```
-  static Widget count({
-    Key? key,
-    ScrollController? controller,
-    required int crossAxisCount,
-    required double crossAxisSpacing,
-    required IndexedWidgetBuilder separatorBuilder,
-    ScrollPhysics? physics,
-    bool shrinkWrap = false,
-    EdgeInsetsGeometry? padding,
-    bool smoothScroll = true,
-    required int itemCount,
-    required IndexedWidgetBuilder builder,
-    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.start,
-    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
-        ScrollViewKeyboardDismissBehavior.manual,
-  }) {
-    final shouldSmoothScroll = (kIsWeb || _isDesktop()) && smoothScroll;
-    final smoothScrollController = controller ?? ScrollController();
+  const CustomGridView.count({
+    super.key,
+    this.controller,
+    required this.crossAxisCount,
+    required this.itemCount,
+    required this.builder,
+    this.crossAxisSpacing = 0,
+    required this.separatorBuilder,
+    this.physics,
+    this.shrinkWrap = false,
+    this.padding,
+    this.rowCrossAxisAlignment = CrossAxisAlignment.start,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+  }) : children = null;
 
-    final Widget widget = _CustomGridView(
-      key: key,
-      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
-          ? crossAxisCount
-          : 1,
-      crossAxisSpacing: crossAxisSpacing,
-      separatorBuilder: separatorBuilder,
-      physics: physics,
-      shrinkWrap: shrinkWrap,
-      controller: shouldSmoothScroll ? smoothScrollController : controller,
-      itemCount: itemCount,
-      builder: builder,
-      padding: padding,
-      rowCrossAxisAlignment: rowCrossAxisAlignment,
-      keyboardDismissBehavior: keyboardDismissBehavior,
-    );
-    if (shouldSmoothScroll) {
-      return SmoothScrollWrapper(
-          controller: smoothScrollController, child: widget);
-    } else {
-      return widget;
-    }
-  }
+  /// The [ScrollController] to control the grid's scrolling behavior.
+  final ScrollController? controller;
+
+  /// The number of columns in the grid.
+  final int crossAxisCount;
+
+  /// The amount of space between columns.
+  final double crossAxisSpacing;
+
+  /// The separatorBuilder is the widget which separate the row.
+  final IndexedWidgetBuilder separatorBuilder;
+
+  /// ItemCount for [CustomGridView.count)].
+  final int? itemCount;
+
+  /// The builder is the widget for[CustomGridView.count)].
+  final IndexedWidgetBuilder? builder;
+
+  /// The physics to use for the grid's scroll view.
+  final ScrollPhysics? physics;
+
+  /// Whether the grid should shrink-wrap its content.
+  ///
+  /// Defaults to `false`.
+  final bool shrinkWrap;
+
+  /// The padding around the grid.
+  final EdgeInsetsGeometry? padding;
+
+  /// The widgets to display in the grid.
+  final List<Widget>? children;
+
+  /// How the children should be aligned in the cross axis within each row.
+  ///
+  /// Defaults to [CrossAxisAlignment.start].
+  final CrossAxisAlignment rowCrossAxisAlignment;
+
+  /// Determines how the keyboard is dismissed during scrolling.
+  ///
+  /// Defaults to [ScrollViewKeyboardDismissBehavior.manual].
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
 
   @override
   Widget build(BuildContext context) {
-    final shouldSmoothScroll = (kIsWeb || _isDesktop()) && smoothScroll;
-    final smoothScrollController = controller ?? ScrollController();
-
-    final Widget widget = _CustomGridView(
-      key: key,
-      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
-          ? crossAxisCount
-          : 1,
-      crossAxisSpacing: crossAxisSpacing,
-      separatorBuilder: separatorBuilder,
-      physics: physics,
-      shrinkWrap: shrinkWrap,
-      controller: shouldSmoothScroll ? smoothScrollController : controller,
-      itemCount: children.length,
-      padding: padding,
-      rowCrossAxisAlignment: rowCrossAxisAlignment,
-      keyboardDismissBehavior: keyboardDismissBehavior,
-      children: children,
-    );
-    if (shouldSmoothScroll) {
-      return SmoothScrollWrapper(
-          controller: smoothScrollController, child: widget);
-    } else {
-      return widget;
-    }
+    return children != null
+        ? _CustomGridView(
+            key: key,
+            crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
+                ? crossAxisCount
+                : 1,
+            crossAxisSpacing: crossAxisSpacing,
+            separatorBuilder: separatorBuilder,
+            physics: physics,
+            shrinkWrap: shrinkWrap,
+            controller: controller,
+            itemCount: children!.length,
+            padding: padding,
+            rowCrossAxisAlignment: rowCrossAxisAlignment,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+            children: children,
+          )
+        : _CustomGridView(
+            key: key,
+            crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
+                ? crossAxisCount
+                : 1,
+            crossAxisSpacing: crossAxisSpacing,
+            separatorBuilder: separatorBuilder,
+            physics: physics,
+            shrinkWrap: shrinkWrap,
+            controller: controller,
+            itemCount: itemCount!,
+            builder: builder,
+            padding: padding,
+            rowCrossAxisAlignment: rowCrossAxisAlignment,
+            keyboardDismissBehavior: keyboardDismissBehavior,
+          );
   }
 }
 
@@ -276,10 +257,4 @@ class _CustomGridView extends StatelessWidget {
       },
     );
   }
-}
-
-bool _isDesktop() {
-  return defaultTargetPlatform == TargetPlatform.windows ||
-      defaultTargetPlatform == TargetPlatform.macOS ||
-      defaultTargetPlatform == TargetPlatform.linux;
 }
