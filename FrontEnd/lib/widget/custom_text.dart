@@ -253,7 +253,7 @@ class CustomHtmlText extends StatelessWidget {
   final FontWeight? fontWeight;
   final int? maxLines;
   final TextDecoration? decoration;
-  final bool lineGapNeeded;
+  final double? height;
   final Color? backGroundColor;
   final String? font;
   final CustomWidgetBuilder? customWidgetBuilder;
@@ -266,7 +266,7 @@ class CustomHtmlText extends StatelessWidget {
     this.fontWeight,
     this.maxLines,
     this.decoration,
-    this.lineGapNeeded = false,
+    this.height,
     this.backGroundColor,
     this.font,
     this.customWidgetBuilder,
@@ -281,11 +281,7 @@ class CustomHtmlText extends StatelessWidget {
           fontWeight: fontWeight,
           fontSize: size,
           fontColor: color,
-          height: lineGapNeeded == true
-              ? 1.8
-              : kIsWeb
-                  ? 1.2
-                  : 0.0,
+          height: height ?? (kIsWeb ? 1.2 : 0.0),
           decoration: decoration,
           backgroundColor: backGroundColor,
           decorationColor: color),
@@ -399,7 +395,7 @@ class CustomTextEnum extends StatelessWidget {
   final Color? color;
 
   /// Whether additional line spacing is needed.
-  final bool lineGapNeeded;
+  final double? height;
 
   /// Text decoration for underlining, striking, etc.
   final TextDecoration? decoration;
@@ -420,7 +416,7 @@ class CustomTextEnum extends StatelessWidget {
     this.maxLines,
     this.textAlign,
     this.color,
-    this.lineGapNeeded = false,
+    this.height,
     this.decoration,
     this.backGroundColor,
     this.font,
@@ -437,7 +433,7 @@ class CustomTextEnum extends StatelessWidget {
       fontWeight: styleType.fontWeight,
       maxLines: maxLines,
       decoration: decoration,
-      height: lineGapNeeded ? 1.8 : null,
+      height: height ?? (kIsWeb ? 1.2 : 0.0),
       textAlign: textAlign,
       backGroundColor: backGroundColor,
       font: font,
@@ -455,14 +451,14 @@ class CustomObscureText extends StatefulWidget {
   final Widget visibleIcon;
 
   const CustomObscureText(
-      this.text, {
-        super.key,
-        this.obscureText = "*",
-        this.initialObscure = true,
-        required this.style,
-        this.obscureIcon = const Icon(Icons.visibility_off_outlined),
-        this.visibleIcon = const Icon(Icons.visibility_outlined),
-      });
+    this.text, {
+    super.key,
+    this.obscureText = "*",
+    this.initialObscure = true,
+    required this.style,
+    this.obscureIcon = const Icon(Icons.visibility_off_outlined),
+    this.visibleIcon = const Icon(Icons.visibility_outlined),
+  });
 
   @override
   State<CustomObscureText> createState() => _CustomObscureTextState();
@@ -509,4 +505,3 @@ class _CustomObscureTextState extends State<CustomObscureText> {
     );
   }
 }
-
