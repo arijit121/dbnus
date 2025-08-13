@@ -390,6 +390,12 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
         _hasCompleted = false;
         _hasError = false;
       });
+    } else if (text.length == widget.length) {
+      setState(() {
+        _hasCompleted = true;
+        _hasError = false;
+      });
+      widget.onCompleted?.call(text);
     }
   }
 
