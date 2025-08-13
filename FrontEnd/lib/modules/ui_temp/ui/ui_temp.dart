@@ -187,7 +187,7 @@ class _UiTempState extends State<UiTemp> {
                         autoFocus: true,
                         autoFill: true,
                         onCompleted: (value) {
-                          AppLog.i(_pinController.text);
+                          AppLog.i(_pinController.text,tag: "OnCompleted");
                         },
                       )
                       /*PinCodeTextField(
