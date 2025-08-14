@@ -27,7 +27,7 @@ class CrashUi extends StatelessWidget {
         await CrashUtils.setValue(value: false);
         await CrashUtils.logCrash(args: errorDetails);
         kIsWeb
-            ? CustomRoute.clearAndNavigate(RouteName.initialView)
+            ? CustomRoute.clearAndNavigateName(RouteName.initialView)
             : SystemNavigator.pop();
       },
       child: Scaffold(
@@ -66,7 +66,7 @@ class CrashUi extends StatelessWidget {
                       await CrashUtils.setValue(value: false);
                       await CrashUtils.logCrash(args: errorDetails);
                       kIsWeb
-                          ? CustomRoute.clearAndNavigate(RouteName.initialView)
+                          ? CustomRoute.clearAndNavigateName(RouteName.initialView)
                           : SystemNavigator.pop();
                       await CrashUtils.setValue(value: false);
                       SystemNavigator.pop();

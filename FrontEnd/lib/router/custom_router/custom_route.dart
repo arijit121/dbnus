@@ -29,12 +29,12 @@ class CustomRoute {
       bool canBack = CustomRouterWeb().canBack();
       canBack
           ? CustomRouterWeb().back()
-          : CustomRoute.clearAndNavigate(RouteName.initialView);
+          : CustomRoute.clearAndNavigateName(RouteName.initialView);
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
         RouterManager.getInstance.router.pop(result ?? 1);
       } else {
-        CustomRoute.clearAndNavigate(RouteName.initialView);
+        CustomRoute.clearAndNavigateName(RouteName.initialView);
       }
     }
   }
@@ -44,7 +44,7 @@ class CustomRoute {
     CustomRoute.back();
   }
 
-  static void clearAndNavigate(String name,
+  static void clearAndNavigateName(String name,
       {Map<String, String> pathParameters = const <String, String>{},
       Map<String, dynamic> queryParameters = const <String, dynamic>{},
       Object? extra}) {

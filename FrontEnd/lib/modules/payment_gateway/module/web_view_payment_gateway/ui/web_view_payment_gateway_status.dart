@@ -33,7 +33,7 @@ class _WebViewPaymentGatewayStatusState
         webViewPaymentGatewayModel.transactionId)) {
       // Call for success
     } else {
-      CustomRoute.clearAndNavigate(RouteName.initialView);
+      CustomRoute.clearAndNavigateName(RouteName.initialView);
     }
     await WebViewPaymentGatewayPreference().clear();
   }

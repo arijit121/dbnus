@@ -152,7 +152,7 @@ class _MyAppState extends State<MyApp> {
     } else if (RouterManager.getInstance.router.canPop() == true) {
       return false;
     } else {
-      CustomRoute.clearAndNavigate(RouteName.initialView);
+      CustomRoute.clearAndNavigateName(RouteName.initialView);
       return true;
     }
   }

@@ -307,7 +307,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 200,
             onPressed: () async {
-              CustomRoute.clearAndNavigate(RouteName.leaderBoard);
+              CustomRoute.clearAndNavigateName(RouteName.leaderBoard);
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
