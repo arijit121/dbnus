@@ -56,7 +56,7 @@ class AppLog {
           _logLargeMessage(_ascieEscape(priority, text: stackTrace.toString()));
         }
         if (time != null) {
-          print(_ascieEscape(priority, text: time.toString()));
+          _logLargeMessage(_ascieEscape(priority, text: time.toString()));
         }
       } else {
         log(
