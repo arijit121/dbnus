@@ -48,6 +48,7 @@ class CustomRoute {
       {Map<String, String> pathParameters = const <String, String>{},
       Map<String, dynamic> queryParameters = const <String, dynamic>{},
       Object? extra}) {
+    RouterManager.getInstance.routeHistory.clear();
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.goNamed(name,
@@ -65,6 +66,23 @@ class CustomRoute {
             queryParameters: queryParameters,
             pathParameters: pathParameters,
             extra: extra);
+      });
+    }
+  }
+
+  static void clearAndNavigateGo(String location, {Object? extra}) {
+    RouterManager.getInstance.routeHistory.clear();
+    if (!kIsWeb) {
+      RouterManager routerManager = RouterManager.getInstance;
+      routerManager.router.go(location, extra: extra);
+    } else {
+      RouterManager routerManager = RouterManager.getInstance;
+      if (CustomRouterWeb().historyIndex() != 0) {
+        CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
+      }
+      Future.delayed(
+          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
+        routerManager.router.replace(location, extra: extra);
       });
     }
   }
