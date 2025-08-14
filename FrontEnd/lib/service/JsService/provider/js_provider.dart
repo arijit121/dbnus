@@ -114,6 +114,19 @@ class JsProvider {
     }
   }
 
+  Future<String?> getWebOtp() async {
+    String jsPath = "assets/js/webotp.js";
+    try {
+      return await jsHelper.loadJs<String>(
+          jsPath: jsPath,
+          jsFunctionName: 'getOtpCodeFunction',
+          usePromise: true);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   static Future<void> loadJs({required String jsPath, String? id}) async {
     try {
       await jsHelper.loadJs(jsPath: jsPath, id: id);
