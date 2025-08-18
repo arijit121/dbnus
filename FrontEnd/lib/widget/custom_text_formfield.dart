@@ -356,29 +356,18 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
 
   void _syncFromMainController() {
     final text = _mainController.text;
-    for (int i = 0; i < widget.length; i++) {
-      _fieldControllers[i].text = i < text.length ? text[i] : '';
-    }
-    if (text.isEmpty) {
-      setState(() {
-        _hasCompleted = false;
-        _hasError = false;
-      });
-    } else if (text.length == widget.length) {
-      setState(() {
-        _hasCompleted = true;
-        _hasError = false;
-      });
-      widget.onCompleted?.call(text);
-    }
+    _pasted(text);
   }
 
   void _onChanged(String value, int index) {
     if (value.length == widget.length) {
-      _setAutofill(value);
+      _pasted(value);
       return;
     }
-    if (value.length == 1 && index == widget.length - 1) {
+    if (value.length == 2 && index == widget.length - 1) {
+      _fieldControllers[index].text = value[1];
+      _requestFocus(index);
+    } else if (value.length == 1 && index == widget.length - 1) {
       _requestFocus(index);
     } else if (value.length == 1 && index < widget.length - 1) {
       _requestFocus(index + 1);
@@ -448,39 +437,51 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
         if (_focusNodes[i].hasFocus) {
           final data = await Clipboard.getData('text/plain');
           final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
-          _setAutofill(pasted);
+          if (pasted.length == widget.length) {
+            _pasted(pasted);
+          }
         }
       }
 
       if (kIsWeb) {
         await js_provider.loadLibrary();
         final pasted = await js_provider.JsProvider().getWebOtp();
-        if (pasted != null) {
-          _setAutofill(pasted);
+        if (pasted?.length == widget.length) {
+          _pasted(pasted!);
         }
       } else if (Platform.isAndroid) {
         SmsAutoFill().listenForCode();
-        SmsAutoFill().code.listen((code) {
-          _setAutofill(code);
+        SmsAutoFill().code.listen((pasted) {
+          if (pasted.length == widget.length) {
+            _pasted(pasted);
+          }
           SmsAutoFill().unregisterListener();
         });
       }
     }
   }
 
-  Future<void> _setAutofill(String pasted) async {
-    if (pasted.length == widget.length) {
-      for (int j = 0; j < widget.length; j++) {
-        _fieldControllers[j].text = pasted[j];
-      }
+  Future<void> _pasted(String pasted) async {
+    for (int j = 0; j < widget.length; j++) {
+      _fieldControllers[j].text = j < pasted.length ? pasted[j] : '';
+    }
+    if (pasted != _mainController.text) {
       _mainController.text = pasted;
+    }
+    int lastIndex = pasted.length - 1;
+    lastIndex = lastIndex < 0 ? 0 : lastIndex;
+    _requestFocus(lastIndex);
+    if (pasted.length == widget.length) {
       setState(() {
         _hasCompleted = true;
         _hasError = false;
       });
-      if (_fieldControllers.lastOrNull?.text.length == 1) {
-        widget.onCompleted?.call(pasted);
-      }
+      widget.onCompleted?.call(pasted);
+    } else {
+      setState(() {
+        _hasCompleted = false;
+        _hasError = false;
+      });
     }
   }
 
