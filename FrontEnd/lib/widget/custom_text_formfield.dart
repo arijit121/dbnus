@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:dbnus/service/value_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../const/color_const.dart';
 import '../extension/color_exe.dart';
+import '../service/JsService/provider/js_provider.dart' deferred as js_provider;
 import '../widget/custom_text.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -311,7 +315,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     _mainController = widget.controller ?? TextEditingController();
 
     _mainController.addListener(_syncFromMainController);
-
+    _autofill();
     // Listen for paste on first box
     /*_focusNodes[0].addListener(() async {
       if (_hasCompleted) return;
@@ -333,36 +337,6 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
         }
       }
     });*/
-    if (widget.autoFill == true) {
-      /// Clear the clipboard Web
-      if (kIsWeb) {
-        await Clipboard.setData(const ClipboardData(text: ''));
-      }
-
-      /// Auto Fill
-      for (int i = 0; i < widget.length; i++) {
-        _focusNodes[i].addListener(() async {
-          if (_hasCompleted) return;
-          if (_focusNodes[i].hasFocus) {
-            final data = await Clipboard.getData('text/plain');
-            final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
-            if (pasted.length == widget.length) {
-              for (int j = 0; j < widget.length; j++) {
-                _fieldControllers[j].text = pasted[j];
-              }
-              _mainController.text = pasted;
-              setState(() {
-                _hasCompleted = true;
-                _hasError = false;
-              });
-              if (_fieldControllers.lastOrNull?.text.length == 1) {
-                widget.onCompleted?.call(pasted);
-              }
-            }
-          }
-        });
-      }
-    }
   }
 
   @override
@@ -400,6 +374,10 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
   }
 
   void _onChanged(String value, int index) {
+    if (value.length == widget.length) {
+      _setAutofill(value);
+      return;
+    }
     if (value.length == 1 && index == widget.length - 1) {
       _requestFocus(index);
     } else if (value.length == 1 && index < widget.length - 1) {
@@ -457,6 +435,55 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     return key?.toString() ?? 'pin_code_form_field';
   }
 
+  Future<void> _autofill() async {
+    if (widget.autoFill == true) {
+      /// Clear the clipboard Web
+      if (kIsWeb) {
+        await Clipboard.setData(const ClipboardData(text: ''));
+      }
+
+      /// Auto Fill From Copy
+      for (int i = 0; i < widget.length; i++) {
+        if (_hasCompleted) return;
+        if (_focusNodes[i].hasFocus) {
+          final data = await Clipboard.getData('text/plain');
+          final pasted = data?.text?.replaceAll(RegExp(r'\D'), '') ?? '';
+          _setAutofill(pasted);
+        }
+      }
+
+      if (kIsWeb) {
+        await js_provider.loadLibrary();
+        final pasted = await js_provider.JsProvider().getWebOtp();
+        if (pasted != null) {
+          _setAutofill(pasted);
+        }
+      } else if (Platform.isAndroid) {
+        SmsAutoFill().listenForCode();
+        SmsAutoFill().code.listen((code) {
+          _setAutofill(code);
+          SmsAutoFill().unregisterListener();
+        });
+      }
+    }
+  }
+
+  Future<void> _setAutofill(String pasted) async {
+    if (pasted.length == widget.length) {
+      for (int j = 0; j < widget.length; j++) {
+        _fieldControllers[j].text = pasted[j];
+      }
+      _mainController.text = pasted;
+      setState(() {
+        _hasCompleted = true;
+        _hasError = false;
+      });
+      if (_fieldControllers.lastOrNull?.text.length == 1) {
+        widget.onCompleted?.call(pasted);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final baseColor = ColorConst.lineGrey;
@@ -510,7 +537,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
               keyboardType: widget.keyboardType,
               inputFormatters: widget.inputFormatters ??
                   [FilteringTextInputFormatter.digitsOnly],
-              maxLength: 1,
+              maxLength: widget.length,
               obscureText: widget.obscureText,
               obscuringCharacter: widget.obscuringCharacter,
               style: customizeTextStyle(
@@ -529,7 +556,9 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
                         borderRadius: widget.borderRadius ?? BorderRadius.zero),
               ),
               onChanged: (value) => _onChanged(value, index),
-              autofillHints: const [AutofillHints.oneTimeCode],
+              autofillHints: widget.autoFill == true
+                  ? const [AutofillHints.oneTimeCode]
+                  : [],
               maxLines: 1,
             ),
           ),
