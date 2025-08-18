@@ -24,24 +24,26 @@ class CustomRoute {
   static void back<T extends Object?>([T? result]) {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
-
+    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+      RouterManager.getInstance.routeHistory.removeLast();
+    }
     if (kIsWeb) {
       bool canBack = CustomRouterWeb().canBack();
       canBack
           ? CustomRouterWeb().back()
-          : CustomRoute.clearAndNavigateName(RouteName.initialView);
+          : clearAndNavigateName(RouteName.initialView);
     } else {
       if (RouterManager.getInstance.router.canPop() == true) {
         RouterManager.getInstance.router.pop(result ?? 1);
       } else {
-        CustomRoute.clearAndNavigateName(RouteName.initialView);
+        clearAndNavigateName(RouteName.initialView);
       }
     }
   }
 
   static void secBack() {
-    CustomRoute.back();
-    CustomRoute.back();
+    back();
+    back();
   }
 
   static void clearAndNavigateName(String name,
