@@ -488,7 +488,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
   @override
   Widget build(BuildContext context) {
     final baseColor = ColorConst.lineGrey;
-    final activeColor = ColorConst.lightBlue;
+    final activeColor = ColorConst.deepBlue;
     final errorColor = ColorConst.red;
     final enabledColor =
         widget.enabled ? ColorConst.primaryDark : ColorConst.secondaryDark;
