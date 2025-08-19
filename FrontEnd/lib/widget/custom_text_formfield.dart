@@ -356,7 +356,10 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
 
   void _syncFromMainController() {
     final text = _mainController.text;
-    _pasted(text);
+    final pin = _fieldControllers.map((c) => c.text).join();
+    if (text != pin) {
+      _pasted(text);
+    }
   }
 
   void _onChanged(String value, int index) {
