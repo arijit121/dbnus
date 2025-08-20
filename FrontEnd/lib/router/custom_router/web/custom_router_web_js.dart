@@ -91,12 +91,7 @@ class CustomRouterWeb {
     // } catch (e, s) {
     //   AppLog.e(e, stackTrace: s);
     // }
-    if (index == 0) {
-      index = web.window.history.length - 2;
-      if (index <= 0) {
-        index = 1;
-      }
-    }
+    index = web.window.history.length - 2;
     return index;
   }
 }
