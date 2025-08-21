@@ -21,14 +21,14 @@ class CustomRoute {
   /// Manually navigating back always returns `[1]` as the default value in `[App]`,
   /// ensuring a consistent behavior across the application.
   /// If a `result` is provided, it will be used instead of `[1]` on non-web platforms.
-  static void back<T extends Object?>([T? result]) {
+  static Future<void> back<T extends Object?>([T? result]) async {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
     if (RouterManager.getInstance.routeHistory.isNotEmpty) {
       RouterManager.getInstance.routeHistory.removeLast();
     }
     if (kIsWeb) {
-      bool canBack = CustomRouterWeb().canBack();
+      bool canBack = await CustomRouterWeb().canBack();
       canBack
           ? CustomRouterWeb().back()
           : clearAndNavigateName(RouteName.initialView);
@@ -46,10 +46,10 @@ class CustomRoute {
     back();
   }
 
-  static void clearAndNavigateName(String name,
+  static Future<void> clearAndNavigateName(String name,
       {Map<String, String> pathParameters = const <String, String>{},
       Map<String, dynamic> queryParameters = const <String, dynamic>{},
-      Object? extra}) {
+      Object? extra}) async {
     RouterManager.getInstance.routeHistory.clear();
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
@@ -59,11 +59,11 @@ class CustomRoute {
           extra: extra);
     } else {
       RouterManager routerManager = RouterManager.getInstance;
-      if (CustomRouterWeb().historyIndex() != 0) {
-        CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
+      int historyIndex = await CustomRouterWeb().historyIndex();
+      if (historyIndex != 0) {
+        CustomRouterWeb().numBack(historyIndex);
       }
-      Future.delayed(
-          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
+      Future.delayed(Duration(milliseconds: historyIndex * 10), () {
         routerManager.router.replaceNamed(name,
             queryParameters: queryParameters,
             pathParameters: pathParameters,
@@ -72,18 +72,19 @@ class CustomRoute {
     }
   }
 
-  static void clearAndNavigateGo(String location, {Object? extra}) {
+  static Future<void> clearAndNavigateGo(String location,
+      {Object? extra}) async {
     RouterManager.getInstance.routeHistory.clear();
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.go(location, extra: extra);
     } else {
       RouterManager routerManager = RouterManager.getInstance;
-      if (CustomRouterWeb().historyIndex() != 0) {
-        CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
+      int historyIndex = await CustomRouterWeb().historyIndex();
+      if (historyIndex != 0) {
+        CustomRouterWeb().numBack(historyIndex);
       }
-      Future.delayed(
-          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
+      Future.delayed(Duration(milliseconds: historyIndex * 10), () {
         routerManager.router.replace(location, extra: extra);
       });
     }

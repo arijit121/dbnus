@@ -1,6 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     let historyPatched = "";
+    let routeHistory = JSON.parse(sessionStorage.getItem('routeHistory') || "[]");
+
+    function saveHistory() {
+        // ✅ Keep only the last 20 routes
+        if (routeHistory.length > 20) {
+            routeHistory = routeHistory.slice(-20);
+        }
+        sessionStorage.setItem("routeHistory", JSON.stringify(routeHistory));
+    }
+
+    // ✅ Ensure current path is always in history (no duplicate at the end)
+    const currentPath = window.location.pathname;
+
+    if (routeHistory.length === 0 || routeHistory[routeHistory.length - 1] !== currentPath) {
+        routeHistory.push(currentPath);
+        saveHistory();
+    }
 
     // Generalized data setter for any container
     function setData({ containerId, file, replaceData = {} }) {
@@ -100,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setMetaTags({ title: title,description: description, tag: keywords });
     }
 
-    function handleRouteChange() {
+    function handleRouteChange(event) {
 
         const path = window.location.pathname;
 
@@ -109,6 +126,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         historyPatched = path;
         // console.log(`Route changed: ${historyPatched}`);
+
+        // ✅ Manage routeHistory
+        if (event && event.type === "popstate") {
+            routeHistory.pop(); // Back navigation
+        } else {
+            // Forward navigation
+            if (routeHistory.length === 0 || routeHistory[routeHistory.length - 1] !== path) {
+                routeHistory.push(path); // Add only if different
+            }
+        }
+        saveHistory();
 
         const loader = document.getElementById("web-loader");
         if (loader) {

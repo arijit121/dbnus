@@ -135,6 +135,22 @@ class JsProvider {
     }
   }
 
+  Future<String?> getSessionStorageItem(String key) async {
+    try {
+      String jsPath = "assets/js/storage-utils.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getSessionStorageItem',
+        jsFunctionArgs: [key],
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   static String getUserAgent() {
     return jsHelper.getUserAgent();
   }
