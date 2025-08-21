@@ -86,6 +86,7 @@ class _MyWebAppState extends State<MyWebApp> {
       await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
       await firebase_service.FirebaseService.generateToken();
       await js_provider.loadLibrary();
+      await js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js");
       foundation.loadLibrary().then((_) async {
         await js_provider.JsProvider.loadJs(
             jsPath:
