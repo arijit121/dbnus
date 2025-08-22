@@ -49,6 +49,7 @@ class _LandingUiState extends State<LandingUi> {
           8.pw,
         ],
       );
+
   Widget _largeUiBody({required LandingState state}) => Row(
         children: [
           DrawerNavigationRail(
@@ -124,7 +125,6 @@ class _LandingUiState extends State<LandingUi> {
                       elevation: 0,
                       shadowColor: Colors.transparent,
                     ),
-              backgroundColor: Colors.white,
               body: SafeArea(
                   child: ResponsiveUI(
                 narrowUI: (BuildContext context) {
