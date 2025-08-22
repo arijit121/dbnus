@@ -112,6 +112,82 @@ class PopUpItems {
     }
   }
 
+  Future<void> materialPopup({
+    String? title,
+    required void Function()? cancelBtnPresses,
+    required void Function()? okBtnPressed,
+    String? content,
+    String? cancelBtnText,
+    String? okBtnText,
+  }) async {
+    String? result = await showDialog<String>(
+      context: CurrentContext().context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.white,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (ValueHandler.isTextNotEmptyOrNull(title)) ...[
+              CustomTextEnum(
+                title!,
+                color: ColorConst.primaryDark,
+                styleType: CustomTextStyleType.subHeading1,
+              ),
+              8.ph,
+            ],
+            if (ValueHandler.isTextNotEmptyOrNull(content)) ...[
+              CustomTextEnum(
+                content!,
+                color: ColorConst.primaryDark,
+                styleType: CustomTextStyleType.body2,
+              ),
+            ],
+            24.ph,
+            CustomGOEButton(
+              radius: 8,
+              width: double.infinity,
+              height: 44,
+              backGroundColor: ColorConst.primaryDark,
+              onPressed: () {
+                Navigator.pop(context, "Yes");
+              },
+              child: CustomTextEnum(
+                okBtnText ?? "Ok",
+                color: Colors.white,
+                styleType: CustomTextStyleType.body1,
+              ),
+            ),
+            if (cancelBtnPresses != null) ...[
+              12.ph,
+              CustomGOEButton(
+                borderColor: ColorConst.lineGrey,
+                radius: 8,
+                width: double.infinity,
+                height: 42,
+                backGroundColor: Colors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: CustomTextEnum(cancelBtnText ?? "Cancel",
+                    color: ColorConst.primaryDark,
+                    styleType: CustomTextStyleType.body1),
+              )
+            ],
+          ],
+        ),
+      ),
+    );
+    if (result == "Yes") {
+      if (okBtnPressed != null) {
+        okBtnPressed();
+      }
+    } else {
+      if (cancelBtnPresses != null) {
+        cancelBtnPresses();
+      }
+    }
+  }
+
   static Future<void> customMsgDialog(
       {String? title,
       String? content,
