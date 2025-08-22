@@ -57,6 +57,7 @@ dependencies:
   back_button_interceptor: ^8.0.4
   flutter_localizations:
     sdk: flutter
+  system_theme: ^3.1.2
 
   # Storage
   shared_preferences: ^2.5.2

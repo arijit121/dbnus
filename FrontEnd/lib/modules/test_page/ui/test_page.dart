@@ -53,7 +53,6 @@ class _TestPageState extends State<TestPage> {
               CustomTextEnum(
                 F.title,
                 styleType: CustomTextStyleType.body2,
-                color: ColorConst.primaryDark,
               ),
               20.ph,
               CustomTextEnum(
@@ -102,7 +101,6 @@ class _TestPageState extends State<TestPage> {
                   //   ColorConst.red,
                   //   Colors.blue,
                   // ]),
-                  backGroundColor: Colors.white,
                   borderColor: Colors.blue,
                   child: const CustomText("Change language")),
               20.ph,
