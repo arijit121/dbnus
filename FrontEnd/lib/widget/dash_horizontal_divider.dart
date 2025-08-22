@@ -4,14 +4,11 @@ import '../const/color_const.dart';
 
 class DashHorizontalDivider extends StatelessWidget {
   const DashHorizontalDivider(
-      {super.key,
-      this.height = 1,
-      this.separatedWidth = 10,
-      this.color = ColorConst.primaryDark});
+      {super.key, this.height = 1, this.separatedWidth = 10, this.color});
 
   final double height;
   final double separatedWidth;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +26,8 @@ class DashHorizontalDivider extends StatelessWidget {
               width: dashWidth,
               height: dashHeight,
               child: DecoratedBox(
-                decoration: BoxDecoration(color: color),
+                decoration:
+                    BoxDecoration(color: color ?? ColorConst.primaryDark),
               ),
             );
           }),

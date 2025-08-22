@@ -16,9 +16,9 @@ class ThemeConst {
   static AppBarTheme appBarTheme = AppBarTheme(
     systemOverlayStyle: systemOverlayStyle,
     titleSpacing: 0,
-    color: Colors.white,
-    foregroundColor: Colors.white,
-    surfaceTintColor: Colors.white,
+    color: ColorConst.primaryLight,
+    foregroundColor: ColorConst.primaryLight,
+    surfaceTintColor: ColorConst.primaryLight,
     shadowColor: kIsWeb ? ColorConst.grey : ColorConst.lightGrey,
     iconTheme: IconThemeData(color: ColorConst.primaryDark),
     titleTextStyle: customizeTextStyle(
@@ -35,10 +35,12 @@ class ThemeConst {
     color: ColorConst.baseHexColor,
     foregroundColor: ColorConst.baseHexColor,
     surfaceTintColor: ColorConst.baseHexColor,
-    shadowColor: kIsWeb ? Colors.white38 : ColorConst.lightGrey,
-    iconTheme: IconThemeData(color: Colors.white),
+    shadowColor: kIsWeb ? ColorConst.primaryLight : ColorConst.lightGrey,
+    iconTheme: IconThemeData(color: ColorConst.primaryLight),
     titleTextStyle: customizeTextStyle(
-        fontColor: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+        fontColor: ColorConst.primaryLight,
+        fontSize: 16,
+        fontWeight: FontWeight.w600),
     elevation: 0.5,
     centerTitle: false,
   );
@@ -74,39 +76,39 @@ class ThemeConst {
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    bodyLarge: customizeTextStyle(fontColor: Colors.white),
+    bodyLarge: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces bodyText1
-    bodyMedium: customizeTextStyle(fontColor: Colors.white),
+    bodyMedium: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces bodyText2
-    bodySmall: customizeTextStyle(fontColor: Colors.white),
+    bodySmall: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // For smaller body text
-    labelLarge: customizeTextStyle(fontColor: Colors.white),
+    labelLarge: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces button
-    labelMedium: customizeTextStyle(fontColor: Colors.white),
-    labelSmall: customizeTextStyle(fontColor: Colors.white),
+    labelMedium: customizeTextStyle(fontColor: ColorConst.primaryLight),
+    labelSmall: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces overline
-    titleLarge: customizeTextStyle(fontColor: Colors.white),
+    titleLarge: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline5
-    titleMedium: customizeTextStyle(fontColor: Colors.white),
+    titleMedium: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline6
-    titleSmall: customizeTextStyle(fontColor: Colors.white),
+    titleSmall: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces subtitle1
-    displayLarge: customizeTextStyle(fontColor: Colors.white),
+    displayLarge: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline1
-    displayMedium: customizeTextStyle(fontColor: Colors.white),
+    displayMedium: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline2
-    displaySmall: customizeTextStyle(fontColor: Colors.white),
+    displaySmall: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline3
-    headlineLarge: customizeTextStyle(fontColor: Colors.white),
-    headlineMedium: customizeTextStyle(fontColor: Colors.white),
+    headlineLarge: customizeTextStyle(fontColor: ColorConst.primaryLight),
+    headlineMedium: customizeTextStyle(fontColor: ColorConst.primaryLight),
     // Replaces headline4
-    headlineSmall: customizeTextStyle(fontColor: Colors.white),
+    headlineSmall: customizeTextStyle(fontColor: ColorConst.primaryLight),
   );
 
   static ThemeData theme = ThemeData(
     pageTransitionsTheme: kIsWeb ? NoTransitionsOnWeb() : null,
     colorSchemeSeed: ColorConst.baseHexColor,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: ColorConst.primaryLight,
     brightness: Brightness.light,
     appBarTheme: appBarTheme,
     textTheme: textTheme,
