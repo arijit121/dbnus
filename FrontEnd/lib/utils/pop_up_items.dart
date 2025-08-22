@@ -136,10 +136,17 @@ class PopUpItems {
               8.ph,
             ],
             if (ValueHandler.isTextNotEmptyOrNull(content)) ...[
-              CustomTextEnum(
-                content!,
-                color: ColorConst.primaryDark,
-                styleType: CustomTextStyleType.body2,
+              Flexible(
+                child: SingleChildScrollView(
+                  child: ValueHandler.isHtml(content!)
+                      ? CustomHtmlText(content,
+                          color: ColorConst.primaryDark, size: 14)
+                      : CustomTextEnum(
+                          content!,
+                          color: ColorConst.primaryDark,
+                          styleType: CustomTextStyleType.body2,
+                        ),
+                ),
               ),
             ],
             24.ph,
