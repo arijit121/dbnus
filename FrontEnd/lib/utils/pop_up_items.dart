@@ -141,10 +141,10 @@ class PopUpItems {
                   child: ValueHandler.isHtml(content!)
                       ? CustomHtmlText(content,
                           color: ColorConst.primaryDark, size: 14)
-                      : CustomTextEnum(
-                          content!,
+                      : CustomText(
+                          content,
                           color: ColorConst.primaryDark,
-                          styleType: CustomTextStyleType.body2,
+                          size: 14,
                         ),
                 ),
               ),
