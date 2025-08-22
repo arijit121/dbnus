@@ -112,7 +112,7 @@ class PopUpItems {
     }
   }
 
-  Future<void> materialPopup({
+  static Future<void> materialPopup({
     String? title,
     required void Function()? cancelBtnPresses,
     required void Function()? okBtnPressed,
@@ -201,25 +201,25 @@ class PopUpItems {
       DialogType? type,
       CrossAxisAlignment contentCrossAxisAlignment =
           CrossAxisAlignment.center}) async {
-    IconData? icon;
+    Widget? icon;
     Color? iconButtonColor;
     if (type != null) {
       switch (type) {
         case DialogType.success:
-          icon = CupertinoIcons.checkmark_seal_fill;
           iconButtonColor = Colors.green;
+          icon = Icon(Icons.check_circle, color: iconButtonColor, size: 48);
           break;
         case DialogType.error:
-          icon = Icons.error;
           iconButtonColor = Colors.red;
+          icon = Icon(Icons.error, color: iconButtonColor, size: 48);
           break;
         case DialogType.warning:
-          icon = Icons.warning;
           iconButtonColor = Colors.amber;
+          icon = Icon(Icons.warning, color: iconButtonColor, size: 48);
           break;
         case DialogType.info:
-          icon = Icons.info;
           iconButtonColor = Colors.blue;
+          icon = Icon(Icons.info, color: iconButtonColor, size: 48);
           break;
       }
     }
@@ -228,43 +228,51 @@ class PopUpItems {
       context: CurrentContext().context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: title != null
-            ? CustomText(
-                title,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: contentCrossAxisAlignment,
+          children: [
+            if (icon != null) ...[
+              icon,
+              if (content != null || title != null) 16.ph,
+            ],
+            if (ValueHandler.isTextNotEmptyOrNull(title)) ...[
+              CustomTextEnum(
+                title!,
                 color: ColorConst.primaryDark,
-                size: 16,
-              )
-            : null,
-        content: content != null || icon != null
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: contentCrossAxisAlignment,
-                children: [
-                  if (icon != null)
-                    Icon(icon, color: iconButtonColor, size: 60.0),
-                  if (content != null && icon != null) 12.ph,
-                  if (content != null)
-                    ValueHandler.isHtml(content)
-                        ? CustomHtmlText(content,
-                            color: ColorConst.primaryDark, size: 14)
-                        : CustomText(content,
-                            color: ColorConst.primaryDark,
-                            size: 14,
-                            textAlign: TextAlign.start),
-                ],
-              )
-            : null,
-        actions: <Widget>[
-          CustomGOEButton(
-            width: 72,
-            radius: 8,
-            backGroundColor: iconButtonColor ?? Colors.blueAccent,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: CustomText(TextUtils.ok, color: Colors.white, size: 16),
-          ),
-        ],
+                styleType: CustomTextStyleType.subHeading1,
+              ),
+              if (content != null) 8.ph,
+            ],
+            if (content != null)
+              Flexible(
+                child: SingleChildScrollView(
+                  child: ValueHandler.isHtml(content)
+                      ? CustomHtmlText(content,
+                          color: ColorConst.primaryDark, size: 14)
+                      : CustomText(content,
+                          color: ColorConst.primaryDark,
+                          size: 14,
+                          textAlign: TextAlign.start),
+                ),
+              ),
+            24.ph,
+            CustomGOEButton(
+              radius: 8,
+              width: double.infinity,
+              height: 44,
+              backGroundColor: iconButtonColor ?? Colors.blueAccent,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: CustomTextEnum(
+                TextUtils.ok,
+                color: Colors.white,
+                styleType: CustomTextStyleType.body1,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
