@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:system_theme/system_theme.dart';
 
 class ColorConst {
-  static Color baseHexColor = SystemTheme.accentColor.accent;
+  static const Color baseHexColor = Color(0xCA1A4C8C);
   static const Color primaryDark = Color(0xFF394855);
   static const Color secondaryDark = Color(0xFF7E8E9D);
   static const Color primaryLight = Color(0xFFFFFFFF);
