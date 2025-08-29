@@ -151,6 +151,22 @@ class JsProvider {
     return null;
   }
 
+  Future<bool?> clearSessionStorageKey(String key) async {
+    try {
+      String jsPath = "assets/js/storage-utils.js";
+      final result = await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        jsFunctionName: 'clearSessionStorageKey',
+        jsFunctionArgs: [key],
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
   static String getUserAgent() {
     return jsHelper.getUserAgent();
   }

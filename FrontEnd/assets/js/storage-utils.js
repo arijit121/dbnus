@@ -29,3 +29,27 @@ function getSessionStorageItem(key) {
         }
     });
 }
+
+function clearLocalStorageKey(key) {
+    return new Promise((resolve, reject) => {
+        try {
+            localStorage.removeItem(key);
+            resolve(true);
+        } catch (err) {
+            console.error(`❌ Error clearing localStorage key "${key}":`, err);
+            reject(err);
+        }
+    });
+}
+
+function clearSessionStorageKey(key) {
+    return new Promise((resolve, reject) => {
+        try {
+            sessionStorage.removeItem(key);
+            resolve(true);
+        } catch (err) {
+            console.error(`❌ Error clearing sessionStorage key "${key}":`, err);
+            reject(err);
+        }
+    });
+}

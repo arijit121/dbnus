@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         historyPatched = path;
         // console.log(`Route changed: ${historyPatched}`);
-
+        routeHistory = JSON.parse(sessionStorage.getItem('routeHistory') || "[]");
         // ✅ Manage routeHistory
         if (event && event.type === "popstate") {
             routeHistory.pop(); // Back navigation

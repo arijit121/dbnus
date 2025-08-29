@@ -10,6 +10,7 @@ import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
 import '../../modules/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
 import '../../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway.dart'
     deferred as web_view_payment_gateway;
+import '../../service/JsService/provider/js_provider.dart';
 import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../service/context_service.dart';
 import '../../widget/error_route_widget.dart' deferred as error_route_widget;
@@ -58,17 +59,12 @@ class CustomRoute {
           pathParameters: pathParameters,
           extra: extra);
     } else {
+      await JsProvider().clearSessionStorageKey("routeHistory");
       RouterManager routerManager = RouterManager.getInstance;
-      int historyIndex = await CustomRouterWeb().historyIndex();
-      if (historyIndex != 0) {
-        CustomRouterWeb().numBack(historyIndex);
-      }
-      Future.delayed(Duration(milliseconds: historyIndex * 10), () {
-        routerManager.router.replaceNamed(name,
-            queryParameters: queryParameters,
-            pathParameters: pathParameters,
-            extra: extra);
-      });
+      routerManager.router.goNamed(name,
+          queryParameters: queryParameters,
+          pathParameters: pathParameters,
+          extra: extra);
     }
   }
 
@@ -79,14 +75,9 @@ class CustomRoute {
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.go(location, extra: extra);
     } else {
+      await JsProvider().clearSessionStorageKey("routeHistory");
       RouterManager routerManager = RouterManager.getInstance;
-      int historyIndex = await CustomRouterWeb().historyIndex();
-      if (historyIndex != 0) {
-        CustomRouterWeb().numBack(historyIndex);
-      }
-      Future.delayed(Duration(milliseconds: historyIndex * 10), () {
-        routerManager.router.replace(location, extra: extra);
-      });
+      routerManager.router.go(location, extra: extra);
     }
   }
 
