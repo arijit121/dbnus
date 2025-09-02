@@ -315,7 +315,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     _mainController = widget.controller ?? TextEditingController();
 
     _mainController.addListener(_syncFromMainController);
-    _autofill();
+    // _autofill();
     // Listen for paste on first box
     /*_focusNodes[0].addListener(() async {
       if (_hasCompleted) return;
@@ -427,9 +427,9 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
     return key?.toString() ?? 'pin_code_form_field';
   }
 
-  Future<void> _autofill() async {
+  /*Future<void> _autofill() async {
     if (widget.autoFill == true) {
-      /* /// Clear the clipboard Web
+      *//* /// Clear the clipboard Web
       if (kIsWeb) {
         await Clipboard.setData(const ClipboardData(text: ''));
       }
@@ -444,7 +444,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             _pasted(pasted);
           }
         }
-      } */
+      } *//*
 
       if (kIsWeb) {
         await js_provider.loadLibrary();
@@ -462,7 +462,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
         });
       }
     }
-  }
+  }*/
 
   Future<void> _pasted(String pasted) async {
     for (int j = 0; j < widget.length; j++) {
