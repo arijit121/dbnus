@@ -367,7 +367,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
       _pasted(value);
       return;
     }
-    if (value.length == 2 && index == widget.length - 1) {
+    if (value.length >= 2) {
       _fieldControllers[index].text = value[1];
       _requestFocus(index);
     } else if (value.length == 1 && index == widget.length - 1) {
@@ -429,7 +429,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
 
   /*Future<void> _autofill() async {
     if (widget.autoFill == true) {
-      *//* /// Clear the clipboard Web
+      */ /* /// Clear the clipboard Web
       if (kIsWeb) {
         await Clipboard.setData(const ClipboardData(text: ''));
       }
@@ -444,7 +444,7 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
             _pasted(pasted);
           }
         }
-      } *//*
+      } */ /*
 
       if (kIsWeb) {
         await js_provider.loadLibrary();
