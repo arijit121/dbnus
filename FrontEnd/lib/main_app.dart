@@ -95,7 +95,6 @@ Future<void> main() async {
   await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
@@ -114,6 +113,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
       BackButtonInterceptor.add(myInterceptor);
       await FirebaseService.generateToken();
       await AppUpdater.startUpdate();
