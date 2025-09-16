@@ -526,8 +526,18 @@ class _PinCodeFormFieldState extends State<PinCodeFormField> {
 
         return SizedBox(
           width: widget.fieldWidth,
-          child: Semantics(
-            label: "${_extractKeyName(widget.uniqueKey)}_$index",
+          child: KeyboardListener(
+            focusNode: FocusNode(), // give it its own node
+            onKeyEvent: (event) {
+              if (event is KeyDownEvent &&
+                  event.logicalKey == LogicalKeyboardKey.backspace &&
+                  _fieldControllers[index].text.isEmpty &&
+                  index > 0) {
+                Future.delayed(Duration.zero, () {
+                  _requestFocus(index - 1);
+                });
+              }
+            },
             child: TextField(
               key: Key("${_extractKeyName(widget.uniqueKey)}_$index"),
               cursorColor: ColorConst.primaryDark,
