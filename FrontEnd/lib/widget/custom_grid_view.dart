@@ -1,10 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../service/value_handler.dart';
-import 'smooth_scroll.dart';
-
-/// A custom [GridView] widget that allows for flexible configuration
+import '../service/value_handleruration
 /// of the grid's layout and behavior.
 ///
 /// The [CustomGridView] widget provides a simple and reusable way to
@@ -74,8 +70,43 @@ class CustomGridView extends StatelessWidget {
     required this.children,
     this.rowCrossAxisAlignment = CrossAxisAlignment.start,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
-  })  : itemCount = null,
-        builder = null;
+  });
+
+  /// The [ScrollController] to control the grid's scrolling behavior.
+  final ScrollController? controller;
+
+  /// The number of columns in the grid.
+  final int crossAxisCount;
+
+  /// The amount of space between columns.
+  final double crossAxisSpacing;
+
+  /// The separatorBuilder is the widget which separate the row.
+  final IndexedWidgetBuilder separatorBuilder;
+
+  /// The physics to use for the grid's scroll view.
+  final ScrollPhysics? physics;
+
+  /// Whether the grid should shrink-wrap its content.
+  ///
+  /// Defaults to `false`.
+  final bool shrinkWrap;
+
+  /// The padding around the grid.
+  final EdgeInsetsGeometry? padding;
+
+  /// The widgets to display in the grid.
+  final List<Widget> children;
+
+  /// How the children should be aligned in the cross axis within each row.
+  ///
+  /// Defaults to [CrossAxisAlignment.start].
+  final CrossAxisAlignment rowCrossAxisAlignment;
+
+  /// Determines how the keyboard is dismissed during scrolling.
+  ///
+  /// Defaults to [ScrollViewKeyboardDismissBehavior.manual].
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
 
   /// Creates a [CustomGridView] with a specified item count and builder function.
   ///
@@ -92,98 +123,57 @@ class CustomGridView extends StatelessWidget {
   ///   },
   /// );
   /// ```
-  const CustomGridView.count({
-    super.key,
-    this.controller,
-    required this.crossAxisCount,
-    required this.itemCount,
-    required this.builder,
-    this.crossAxisSpacing = 0,
-    required this.separatorBuilder,
-    this.physics,
-    this.shrinkWrap = false,
-    this.padding,
-    this.rowCrossAxisAlignment = CrossAxisAlignment.start,
-    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
-  }) : children = null;
-
-  /// The [ScrollController] to control the grid's scrolling behavior.
-  final ScrollController? controller;
-
-  /// The number of columns in the grid.
-  final int crossAxisCount;
-
-  /// The amount of space between columns.
-  final double crossAxisSpacing;
-
-  /// The separatorBuilder is the widget which separate the row.
-  final IndexedWidgetBuilder separatorBuilder;
-
-  /// ItemCount for [CustomGridView.count)].
-  final int? itemCount;
-
-  /// The builder is the widget for[CustomGridView.count)].
-  final IndexedWidgetBuilder? builder;
-
-  /// The physics to use for the grid's scroll view.
-  final ScrollPhysics? physics;
-
-  /// Whether the grid should shrink-wrap its content.
-  ///
-  /// Defaults to `false`.
-  final bool shrinkWrap;
-
-  /// The padding around the grid.
-  final EdgeInsetsGeometry? padding;
-
-  /// The widgets to display in the grid.
-  final List<Widget>? children;
-
-  /// How the children should be aligned in the cross axis within each row.
-  ///
-  /// Defaults to [CrossAxisAlignment.start].
-  final CrossAxisAlignment rowCrossAxisAlignment;
-
-  /// Determines how the keyboard is dismissed during scrolling.
-  ///
-  /// Defaults to [ScrollViewKeyboardDismissBehavior.manual].
-  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  static Widget count({
+    Key? key,
+    ScrollController? controller,
+    required int crossAxisCount,
+    required double crossAxisSpacing,
+    required IndexedWidgetBuilder separatorBuilder,
+    ScrollPhysics? physics,
+    bool shrinkWrap = false,
+    EdgeInsetsGeometry? padding,
+    required int itemCount,
+    required IndexedWidgetBuilder builder,
+    CrossAxisAlignment rowCrossAxisAlignment = CrossAxisAlignment.start,
+    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
+        ScrollViewKeyboardDismissBehavior.manual,
+  }) {
+    return _CustomGridView(
+      key: key,
+      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
+          ? crossAxisCount
+          : 1,
+      crossAxisSpacing: crossAxisSpacing,
+      separatorBuilder: separatorBuilder,
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      controller: controller,
+      itemCount: itemCount,
+      builder: builder,
+      padding: padding,
+      rowCrossAxisAlignment: rowCrossAxisAlignment,
+      keyboardDismissBehavior: keyboardDismissBehavior,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return children != null
-        ? _CustomGridView(
-            key: key,
-            crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
-                ? crossAxisCount
-                : 1,
-            crossAxisSpacing: crossAxisSpacing,
-            separatorBuilder: separatorBuilder,
-            physics: physics,
-            shrinkWrap: shrinkWrap,
-            controller: controller,
-            itemCount: children!.length,
-            padding: padding,
-            rowCrossAxisAlignment: rowCrossAxisAlignment,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-            children: children,
-          )
-        : _CustomGridView(
-            key: key,
-            crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
-                ? crossAxisCount
-                : 1,
-            crossAxisSpacing: crossAxisSpacing,
-            separatorBuilder: separatorBuilder,
-            physics: physics,
-            shrinkWrap: shrinkWrap,
-            controller: controller,
-            itemCount: itemCount!,
-            builder: builder,
-            padding: padding,
-            rowCrossAxisAlignment: rowCrossAxisAlignment,
-            keyboardDismissBehavior: keyboardDismissBehavior,
-          );
+    return _CustomGridView(
+      key: key,
+      crossAxisCount: ValueHandler.isNonZeroNumericValue(crossAxisCount)
+          ? crossAxisCount
+          : 1,
+      crossAxisSpacing: crossAxisSpacing,
+      separatorBuilder: separatorBuilder,
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      controller: controller,
+      itemCount: children.length,
+      padding: padding,
+      rowCrossAxisAlignment: rowCrossAxisAlignment,
+      keyboardDismissBehavior: keyboardDismissBehavior,
+      children: children,
+    );
   }
 }
 

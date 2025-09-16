@@ -22,7 +22,6 @@ import '../../../router/custom_router/custom_route.dart';
 import '../../../service/Localization/utils/localization_utils.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
-import '../../../service/open_service.dart';
 import '../../../utils/pop_up_items.dart';
 import '../../../utils/text_utils.dart';
 import '../../../widget/carousel_slider.dart';

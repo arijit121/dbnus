@@ -1,8 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:js_interop';
+
 import 'package:dbnus/extension/spacing.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../../../const/color_const.dart';
 import '../../../../../data/model/razorpay_merchant_details.dart';
 import '../../../../../data/model/user_model.dart';
@@ -10,12 +13,10 @@ import '../../../../../extension/logger_extension.dart';
 import '../../../../../service/JsService/library/js_library.dart';
 import '../../../../../service/JsService/provider/js_provider.dart';
 import '../../../../../service/context_service.dart';
-import '../../../../../service/value_handler.dart';
 import '../../../../../storage/user_preference.dart';
 import '../../../../../utils/text_utils.dart';
 import '../../../../../widget/custom_text.dart';
 import '../../../../../widget/loading_widget.dart';
-import 'package:flutter/foundation.dart';
 
 class RayzorPay extends StatefulWidget {
   const RayzorPay({super.key, required this.razorpayMerchantDetails});

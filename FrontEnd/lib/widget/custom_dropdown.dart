@@ -2,7 +2,6 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../const/color_const.dart';
-import '../extension/hex_color.dart';
 import '../service/value_handler.dart';
 import '../utils/screen_utils.dart';
 import 'custom_button.dart';
