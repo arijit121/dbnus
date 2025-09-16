@@ -12,7 +12,7 @@ import '../../modules/payment_gateway/module/web_view_payment_gateway/ui/web_vie
     deferred as web_view_payment_gateway;
 import '../../service/JsService/provider/js_provider.dart';
 import '../../service/context_service.dart';
-import '../../service/crash/ui/crash_ui.dart' deferred as crash_uir.dart';
+import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../router_name.dart';
 import 'web/custom_router_web.dart';
 
@@ -153,3 +153,27 @@ class CustomRoute {
     }
   }
 }
+
+/* class SeoObserver extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    SeoHandler().setCanonicalLink();
+    if (route.settings.name == RouteName.initialView) {
+      SeoHandler().homeHooterSeo();
+    } else {
+      SeoHandler().removeFooterSeoContainer();
+    }
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+    SeoHandler().setCanonicalLink();
+    if (previousRoute?.settings.name == RouteName.initialView) {
+      SeoHandler().homeHooterSeo();
+    } else {
+      SeoHandler().removeFooterSeoContainer();
+    }
+  }
+} */

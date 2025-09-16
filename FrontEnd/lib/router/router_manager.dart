@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/model/route_model.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
@@ -12,7 +11,7 @@ import '../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_p
     deferred as web_view_payment_gateway_status;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
-import '../service/value_handler
+import '../widget/error_route_widget.dart' deferred as error_route_widget;
 import 'router_name.dart';
 
 class RouterManager {
@@ -30,7 +29,7 @@ class RouterManager {
 
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
-    observers: <NavigatorObserver>[observer, if (kIsWeb) SeoObserver()],
+    observers: <NavigatorObserver>[observer],
     routes: <RouteBase>[
       GoRoute(
         name: RouteName.initialView,
@@ -288,29 +287,5 @@ class RouterManager {
         );
       },
     );
-  }
-}
-
-class SeoObserver extends NavigatorObserver {
-  @override
-  void didPush(Route route, Route? previousRoute) {
-    super.didPush(route, previousRoute);
-    SeoHandler().setCanonicalLink();
-    if (route.settings.name == RouteName.initialView) {
-      SeoHandler().homeHooterSeo();
-    } else {
-      SeoHandler().removeFooterSeoContainer();
-    }
-  }
-
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    super.didPop(route, previousRoute);
-    SeoHandler().setCanonicalLink();
-    if (previousRoute?.settings.name == RouteName.initialView) {
-      SeoHandler().homeHooterSeo();
-    } else {
-      SeoHandler().removeFooterSeoContainer();
-    }
   }
 }
