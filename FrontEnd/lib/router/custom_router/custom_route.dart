@@ -49,7 +49,7 @@ class CustomRoute {
 
   static Future<void> secBack() async {
     await back();
-    if (CustomRoute.currentRoute() != RouteName.initialView) {
+    if (currentRoute() != RouteName.initialView) {
       await back();
     }
   }
