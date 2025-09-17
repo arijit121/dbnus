@@ -25,20 +25,25 @@ class CustomRoute {
   static Future<void> back<T extends Object?>([T? result]) async {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
-    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
-      RouterManager.getInstance.routeHistory.removeLast();
-    }
-    if (kIsWeb) {
-      bool canBack = await CustomRouterWeb().canBack();
-      canBack
-          ? CustomRouterWeb().back()
-          : clearAndNavigateName(RouteName.initialView);
-    } else {
-      if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop(result ?? 1);
-      } else {
-        clearAndNavigateName(RouteName.initialView);
+    try {
+      if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+        RouterManager.getInstance.routeHistory.removeLast();
       }
+      if (kIsWeb) {
+        bool canBack = await CustomRouterWeb().canBack();
+        canBack
+            ? CustomRouterWeb().back()
+            : clearAndNavigateName(RouteName.initialView);
+      } else {
+        if (RouterManager.getInstance.router.canPop() == true) {
+          RouterManager.getInstance.router.pop(result ?? 1);
+        } else {
+          clearAndNavigateName(RouteName.initialView);
+        }
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      clearAndNavigateName(RouteName.initialView);
     }
   }
 
