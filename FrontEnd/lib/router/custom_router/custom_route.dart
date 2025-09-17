@@ -44,7 +44,9 @@ class CustomRoute {
 
   static void secBack() {
     back();
-    back();
+    if (CustomRoute.currentRoute() == RouteName.initialView) {
+      back();
+    }
   }
 
   static Future<void> clearAndNavigateName(String name,
