@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../service/value_handler.dart';
-import 'smooth_scroll.dart';
 
 /// A custom [GridView] widget that allows for flexible configuration
 /// of the grid's layout and behavior.

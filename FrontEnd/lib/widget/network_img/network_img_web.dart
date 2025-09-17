@@ -1,12 +1,13 @@
+import 'dart:js_interop';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
-import 'package:web/web.dart';
+
 import '../../const/assects_const.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
-import 'dart:js_interop';
 
 class NetworkImg extends StatelessWidget {
   const NetworkImg(

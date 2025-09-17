@@ -11,8 +11,8 @@ import '../../modules/payment_gateway/module/web_view_payment_gateway/model/web_
 import '../../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway.dart'
     deferred as web_view_payment_gateway;
 import '../../service/JsService/provider/js_provider.dart';
-import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../service/context_service.dart';
+import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../widget/error_route_widget.dart' deferred as error_route_widget;
 import '../router_manager.dart';
 import '../router_name.dart';

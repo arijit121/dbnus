@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 import '../../../extension/logger_extension.dart';
-
 import '../../../service/value_handler.dart' deferred as value_handler;
 import '../../../storage/local_preferences.dart';
 import '../../api_client/imp/api_repo_imp.dart' deferred as api_repo_imp;

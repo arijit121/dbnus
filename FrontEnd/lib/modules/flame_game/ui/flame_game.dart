@@ -1,8 +1,6 @@
 import 'package:dbnus/utils/screen_utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flame/game.dart';
-
 import '../widget/scrolling_background_game.dart';
 
 class FlameGame extends StatelessWidget {
