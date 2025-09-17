@@ -49,9 +49,7 @@ class CustomRoute {
 
   static Future<void> secBack() async {
     await back();
-    if (currentRoute() != RouteName.initialView) {
-      await back();
-    }
+    await back();
   }
 
   static Future<void> clearAndNavigateName(String name,
