@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
@@ -8,11 +7,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:package_info_plus/package_info_plus.dart'
     deferred as package_info_plus;
 import 'package:uuid/uuid.dart' deferred as uuid;
-
 import '../data/api_client/imp/api_repo_imp.dart' deferred as api_repo_imp;
 import '../data/api_client/repo/api_repo.dart' deferred as api_repo;
 import '../data/connection/connection_status.dart'
     deferred as connection_status;
+
 // import '../data/model/api_return_model.dart';
 import '../data/connection/utils/connection_utils.dart'
     deferred as connection_utils;
@@ -20,6 +19,7 @@ import '../extension/logger_extension.dart';
 import '../service/JsService/provider/js_provider.dart' deferred as js_provider;
 import '../service/value_handler.dart' deferred as value_handler;
 import '../storage/local_preferences.dart' deferred as local_preferences;
+
 import '../utils/screen_utils.dart';
 
 class AppConfig {

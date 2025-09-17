@@ -1,12 +1,11 @@
 import 'dart:async';
+import '../library/js_library.dart';
 // import 'dart:js' deferred as js;
 // import 'dart:js_util' deferred as js_util;
 import 'dart:js_interop';
-
-import 'package:flutter/foundation.dart';
+import 'dart:js_interop_unsafe';
 import 'package:web/web.dart' as web;
-
-import '../library/js_library.dart';
+import 'package:flutter/foundation.dart';
 // import '../../value_handler.dart';
 
 class JSHelper {

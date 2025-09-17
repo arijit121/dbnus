@@ -4,7 +4,6 @@ import 'package:dbnus/storage/local_preferences.dart'
     deferred as local_preferences;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../enum/language_enum.dart';
 import '../bloc/localization_bloc.dart';
 

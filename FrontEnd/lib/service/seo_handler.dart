@@ -1,4 +1,4 @@
-
+import '../utils/text_utils.dart';
 // import 'package:universal_html/html.dart' as html;
 
 class SeoHandler {

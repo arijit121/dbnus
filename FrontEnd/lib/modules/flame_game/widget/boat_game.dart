@@ -1,9 +1,11 @@
 import 'package:dbnus/utils/screen_utils.dart';
-import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/components.dart';
+import 'package:flame_svg/flame_svg.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
+import 'package:flame/events.dart';
 
 import '../../../const/color_const.dart';
 

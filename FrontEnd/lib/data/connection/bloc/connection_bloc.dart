@@ -1,11 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
 import '../../../service/value_handler.dart' deferred as value_handler;
 import '../connection_status.dart';
 import '../utils/connection_utils.dart' deferred as connection_utils;
 
 part 'connection_event.dart';
+
 part 'connection_state.dart';
 
 class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {

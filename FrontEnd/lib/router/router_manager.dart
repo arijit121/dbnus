@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data/model/route_model.dart';
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
@@ -11,6 +12,9 @@ import '../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_p
     deferred as web_view_payment_gateway_status;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
+import '../service/seo_handler.dart';
+import '../service/value_handler.dart';
+import '../utils/text_utils.dart';
 import '../widget/error_route_widget.dart' deferred as error_route_widget;
 import 'router_name.dart';
 
@@ -27,9 +31,33 @@ class RouterManager {
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
+  List<RouteModel> routeHistory = [];
+  int maxHistorySize = 20;
+
+  /// Add route to history
+  void _addRoute(GoRouterState route) {
+    RouteModel data = RouteModel(
+        name: route.name,
+        path: route.path,
+        uri: route.uri,
+        pathParameters: route.pathParameters,
+        queryParameters: route.uri.queryParameters,
+        extra: route.extra);
+    // Avoid duplicates if the same route is pushed consecutively
+    if ((routeHistory.isEmpty || routeHistory.last.uri != data.uri) &&
+        ValueHandler.isTextNotEmptyOrNull(data.uri)) {
+      routeHistory.add(data);
+
+      // Maintain max history size
+      if (routeHistory.length > maxHistorySize) {
+        routeHistory.removeAt(0);
+      }
+    }
+  }
+
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
-    observers: <NavigatorObserver>[observer],
+    observers: <NavigatorObserver>[observer, if (kIsWeb) RouteObserver()],
     routes: <RouteBase>[
       GoRoute(
         name: RouteName.initialView,
@@ -40,7 +68,7 @@ class RouterManager {
         //   );
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return slideTransition(
+          return _slideTransition(
             landing.LandingUi(key: Key("0"), index: 0),
           );
         },
@@ -59,7 +87,7 @@ class RouterManager {
         //   );
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return slideTransition(
+          return _slideTransition(
             landing.LandingUi(
               key: Key(
                   "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.leaderBoard)}"),
@@ -83,7 +111,7 @@ class RouterManager {
         //   );
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return slideTransition(
+          return _slideTransition(
             landing.LandingUi(
               key: Key(
                   "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.order)}"),
@@ -107,7 +135,7 @@ class RouterManager {
         //   );
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return slideTransition(
+          return _slideTransition(
             landing.LandingUi(
               key: Key(
                   "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.games)}"),
@@ -131,7 +159,7 @@ class RouterManager {
         //   );
         // },
         pageBuilder: (BuildContext context, GoRouterState state) {
-          return slideTransition(
+          return _slideTransition(
             landing.LandingUi(
               key: Key(
                   "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.massage)}"),
@@ -258,12 +286,13 @@ class RouterManager {
     ],
     errorBuilder: (context, state) => error_route_widget.ErrorRouteWidget(),
     redirect: (BuildContext context, GoRouterState state) async {
+      getInstance._addRoute(state);
       await error_route_widget.loadLibrary();
       return null;
     },
   );
 
-  static CustomTransitionPage<void> slideTransition(Widget screen) {
+  static CustomTransitionPage<void> _slideTransition(Widget screen) {
     return CustomTransitionPage<void>(
       child: screen,
       transitionDuration: const Duration(milliseconds: 800), // Adjust as needed
@@ -287,5 +316,63 @@ class RouterManager {
         );
       },
     );
+  }
+
+  static CustomTransitionPage<void> _fadeTransition(Widget screen) {
+    return CustomTransitionPage<void>(
+        child: screen,
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          if (kIsWeb) {
+            return child; // No transition on web
+          }
+          return FadeTransition(
+            opacity: CurveTween(curve: Curves.easeIn).animate(animation),
+            child: child,
+          );
+        });
+  }
+}
+
+class RouteObserver extends NavigatorObserver {
+  Future<void> _sendScreenView(PageRoute<dynamic> route) async {
+    var screenName = route.settings.name;
+    if (screenName != null) {
+      // your code goes here
+    }
+  }
+
+  Future<void> _seoObserver(PageRoute<dynamic> route) async {
+    // await web_meta_handler.loadLibrary();
+    // web_meta_handler.WebSeoHandler.setCanonicalLink(html.window.location.href);
+    // if (route.settings.name == RouteName.initialView) {
+    //   web_meta_handler.WebSeoHandler.homeFooterSeo();
+    // } else {
+    //   web_meta_handler.WebSeoHandler.removeFooterSeoContainer();
+    // }
+  }
+
+  /// Remove the last route from history
+  void _removeLastRoute() {
+    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+      RouterManager.getInstance.routeHistory.removeLast();
+    }
+  }
+
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    if (route is PageRoute) {
+      _sendScreenView(route);
+    }
+  }
+
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+    if (previousRoute is PageRoute && route is PageRoute) {
+      _sendScreenView(previousRoute);
+    }
+    _removeLastRoute();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../router/custom_router/web/custom_router_web.dart';
 import '../../../../../widget/loading_widget.dart';
 import '../model/web_view_payment_gateway_model.dart';

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:dbnus/widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
 import '../const/color_const.dart';
 import '../data/api_client/repo/api_repo.dart';
 import '../extension/logger_extension.dart';

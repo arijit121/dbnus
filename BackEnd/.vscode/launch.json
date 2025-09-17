@@ -13,6 +13,23 @@
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
-        }
+        },
+            {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug TS with Nodemon",
+      "runtimeExecutable": "nodemon",
+      "runtimeArgs": [
+        "--exec",
+        "node --experimental-network-inspection -r ts-node/register"
+      ],
+      "program": "${workspaceFolder}/src/index.ts",
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
+      }
+    }
     ]
 }

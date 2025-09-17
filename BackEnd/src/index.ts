@@ -24,12 +24,12 @@ app.use(express.json());
 
 // Initialize the Firebase Admin SDK
 const serviceAccount = JSON.parse(
-  readFileSync('dbnus-df986-firebase-adminsdk-mygbi-ae401389da.json', 'utf8')
+  readFileSync('sastasundar-8f573-firebase-adminsdk-tso7w-58816df954.json', 'utf8')
 );
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://dbnus-df986-default-rtdb.firebaseio.com"
+  databaseURL: "https://sastasundar-8f573-default-rtdb.firebaseio.com"
 });
 
 /* Define a route for the root path ("/")
@@ -71,5 +71,5 @@ app.post("/fcm-send", async (req: Request, res: Response) => {
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(port, () => {
-  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, {tag:"server"});
+  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, { tag: "server" });
 });
