@@ -47,10 +47,10 @@ class CustomRoute {
     }
   }
 
-  static void secBack() {
-    back();
+  static Future<void> secBack() async {
+    await back();
     if (CustomRoute.currentRoute() == RouteName.initialView) {
-      back();
+      await back();
     }
   }
 
