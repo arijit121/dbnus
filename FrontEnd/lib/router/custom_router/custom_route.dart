@@ -33,17 +33,17 @@ class CustomRoute {
         bool canBack = await CustomRouterWeb().canBack();
         canBack
             ? CustomRouterWeb().back()
-            : clearAndNavigateName(RouteName.initialView);
+            : await clearAndNavigateName(RouteName.initialView);
       } else {
         if (RouterManager.getInstance.router.canPop() == true) {
           RouterManager.getInstance.router.pop(result ?? 1);
         } else {
-          clearAndNavigateName(RouteName.initialView);
+          await clearAndNavigateName(RouteName.initialView);
         }
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-      clearAndNavigateName(RouteName.initialView);
+      await clearAndNavigateName(RouteName.initialView);
     }
   }
 
