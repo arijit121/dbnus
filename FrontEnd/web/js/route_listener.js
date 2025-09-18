@@ -154,6 +154,10 @@ document.addEventListener("DOMContentLoaded", function () {
             setData({ containerId: "web-loader", file: "design/default-loader.html" });
             // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
         }
+        else if (path === "/bio-data") {
+            setData({ containerId: "web-loader", file: "design/bio-data-loader.html" });
+            // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
+        }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
         //     setData({ containerId: "web-loader", file: "design/dynamic-loader.html", replaceData: { "data": value } });
