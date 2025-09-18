@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../data/model/route_model.dart';
+import '../modules/bio_data/bio_data.dart' deferred as flutter_bio_data;
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
@@ -215,6 +216,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await web_view_payment_gateway_status.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.bioData,
+        path: RouteName.bioData,
+        builder: (BuildContext context, GoRouterState state) {
+          return flutter_bio_data.BioData();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await flutter_bio_data.loadLibrary();
           return null;
         },
       ),

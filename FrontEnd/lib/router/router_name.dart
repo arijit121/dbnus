@@ -10,4 +10,5 @@ class RouteName {
   static const String rayzorPay = "/rayzorpay";
   static const String webViewPaymentGateway = "/web_view_payment_gateway";
   static const String webViewPaymentStatusWeb = "/payment_return";
+  static const String bioData = "/bio-data";
 }
