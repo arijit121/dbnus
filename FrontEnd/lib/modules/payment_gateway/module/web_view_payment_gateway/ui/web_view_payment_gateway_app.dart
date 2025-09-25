@@ -181,34 +181,17 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
       await _controller.goBack();
       return false;
     }
-    return await _showExitConfirmation();
-  }
-
-  Future<bool> _showExitConfirmation() async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Exit Payment'),
-              content: const Text(
-                  'Are you sure you want to exit the payment process?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.red,
-                  ),
-                  child: const Text('Exit'),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
+    bool isCancel = false;
+    await PopUpItems.materialPopup(
+        title: "Exit Payment",
+        content: "Are you sure you want to exit the payment process?",
+        cancelBtnPresses: () {
+          isCancel = false;
+        },
+        okBtnPressed: () {
+          isCancel = true;
+        });
+    return isCancel;
   }
 
   Widget _buildErrorWidget() {
@@ -292,14 +275,22 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, val) async {
+        if (didPop) return; // system back already handled
+        bool shouldPop = await _onWillPop();
+        if (context.mounted && shouldPop) {
+          Navigator.pop(context);
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           leading: CustomIconButton(
             onPressed: () async {
-              if (await _onWillPop()) {
+              bool shouldPop = await _onWillPop();
+              if (context.mounted && shouldPop) {
                 Navigator.pop(context);
               }
             },
