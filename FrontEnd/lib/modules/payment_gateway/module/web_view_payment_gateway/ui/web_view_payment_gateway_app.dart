@@ -45,7 +45,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
         onMessageReceived: (JavaScriptMessage message) {
           final String url = message.message;
           AppLog.i("JS called checkoutUpiIntent with $url", tag: "JSChannel");
-          _handleUpiPayment(url); // use your existing UPI handler
+          _handleExternalApp(url); // use your existing UPI handler
         },
       )
       ..addJavaScriptChannel(
@@ -61,7 +61,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
             if (decoded["message"] == "Invoke PSP app") {
               final deeplink = decoded["deeplink"];
               if (deeplink != null) {
-                _handleUpiPayment(deeplink); // your existing Dart handler
+                _handleExternalApp(deeplink); // your existing Dart handler
               }
             }
           } catch (e) {
@@ -123,7 +123,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
 
   NavigationDecision _handleNavigationRequest(String uri) {
     if (uri.contains("upi://pay")) {
-      _handleUpiPayment(uri);
+      _handleExternalApp(uri);
       return NavigationDecision.prevent;
     } else if (!uri.startsWith("http") &&
         !uri.startsWith("https") &&
@@ -136,35 +136,24 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
     return NavigationDecision.navigate;
   }
 
-  Future<void> _handleUpiPayment(String uri) async {
-    try {
-      bool? result = await OpenService.openUrl(
-          uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
-      if (result != true) {
-        PopUpItems.toastMessage(
-            "Looks like there's no UPI app available on your device.",
-            ColorConst.red);
-      }
-    } catch (e) {
-      AppLog.e('UPI Payment Error', error: e);
-      PopUpItems.toastMessage(
-          "Failed to open UPI app. Please try again.", ColorConst.red);
-    }
-  }
-
   Future<void> _handleExternalApp(String uri) async {
     try {
       bool? result = await OpenService.openUrl(
           uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
       if (result != true) {
         PopUpItems.toastMessage(
-            "Couldn't open the requested app. Please try again or install a supported application.",
+            uri.contains("upi://pay")
+                ? "Looks like there's no UPI app available on your device."
+                : "Couldn't open the requested app. Please try again or install a supported application.",
             ColorConst.red);
       }
     } catch (e) {
       AppLog.e('External App Error', error: e);
       PopUpItems.toastMessage(
-          "Failed to open external app. Please try again.", ColorConst.red);
+          uri.contains("upi://pay")
+              ? "Failed to open UPI app. Please try again."
+              : "Failed to open external app. Please try again.",
+          ColorConst.red);
     }
   }
 
