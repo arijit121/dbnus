@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -14,17 +15,236 @@ import '../../../../../widget/custom_button.dart';
 import '../../../../../widget/custom_text.dart';
 import '../model/web_view_payment_gateway_model.dart';
 
-class WebViewPaymentGateway extends StatefulWidget {
+class WebViewPaymentGateway extends StatelessWidget {
   const WebViewPaymentGateway(
       {super.key, required this.webViewPaymentGatewayModel});
 
   final WebViewPaymentGatewayModel webViewPaymentGatewayModel;
 
   @override
-  State<WebViewPaymentGateway> createState() => _WebViewPaymentGatewayState();
+  Widget build(BuildContext context) {
+    return InAppWebViewPaymentGateway(
+      webViewPaymentGatewayModel: webViewPaymentGatewayModel,
+    );
+  }
 }
 
-class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
+class InAppWebViewPaymentGateway extends StatefulWidget {
+  const InAppWebViewPaymentGateway(
+      {super.key, required this.webViewPaymentGatewayModel});
+
+  final WebViewPaymentGatewayModel webViewPaymentGatewayModel;
+
+  @override
+  State<InAppWebViewPaymentGateway> createState() =>
+      _InAppWebViewPaymentGatewayState();
+}
+
+class _InAppWebViewPaymentGatewayState
+    extends State<InAppWebViewPaymentGateway> {
+  InAppWebViewController? _controller;
+
+  void _onUrlChange(
+      {required String uri,
+      bool? flagError,
+      required WebViewPaymentGatewayModel webViewPaymentGatewayModel}) {
+    if (uri.contains(webViewPaymentGatewayModel.redirectLink)) {
+      Navigator.of(CurrentContext().context)
+          .pop({"PayMent_STATUS": "TXN_SUCCESS"});
+    } else if (ValueHandler.isTextNotEmptyOrNull(
+            webViewPaymentGatewayModel.failedRedirectLink) &&
+        uri.contains(webViewPaymentGatewayModel.failedRedirectLink ?? "")) {
+      Navigator.of(CurrentContext().context)
+          .pop({"PayMent_STATUS": "TXN_FAILED"});
+    } else if (flagError == true) {
+      Navigator.of(CurrentContext().context)
+          .pop({"PayMent_STATUS": "TXN_ERROR"});
+    }
+  }
+
+  Future<void> _handleExternalApp(String uri) async {
+    try {
+      bool? result = await OpenService.openUrl(
+          uri: Uri.parse(uri), mode: LaunchMode.externalApplication);
+      if (result != true) {
+        PopUpItems.toastMessage(
+            uri.contains("upi://pay")
+                ? "Looks like there's no UPI app available on your device."
+                : "Couldn't open the requested app. Please try again or install a supported application.",
+            ColorConst.red);
+      }
+    } catch (e) {
+      AppLog.e(e.toString(), error: e, tag: "External App Error");
+      PopUpItems.toastMessage(
+          uri.contains("upi://pay")
+              ? "Failed to open UPI app. Please try again."
+              : "Failed to open external app. Please try again.",
+          ColorConst.red);
+    }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (await _controller?.canGoBack() == true) {
+      await _controller?.goBack();
+      return false;
+    }
+    bool isCancel = false;
+    await PopUpItems.materialPopup(
+        title: "Exit Payment",
+        content: "Are you sure you want to exit the payment process?",
+        cancelBtnPresses: () {
+          isCancel = false;
+        },
+        okBtnPressed: () {
+          isCancel = true;
+        });
+    return isCancel;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, val) async {
+          if (didPop) return; // system back already handled
+          bool shouldPop = await _onWillPop();
+          if (context.mounted && shouldPop) {
+            Navigator.pop(context);
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            leading: CustomIconButton(
+              onPressed: () async {
+                bool shouldPop = await _onWillPop();
+                if (context.mounted && shouldPop) {
+                  Navigator.pop(context);
+                }
+              },
+              icon: const Icon(Icons.arrow_back_sharp),
+              color: ColorConst.primaryDark,
+            ),
+            title: CustomTextEnum(
+              widget.webViewPaymentGatewayModel.title ?? "Payment Gateway",
+              color: ColorConst.primaryDark,
+              styleType: CustomTextStyleType.subHeading3,
+            ),
+          ),
+          body: SafeArea(
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(
+                  url: WebUri(widget.webViewPaymentGatewayModel.paymentLink)),
+              initialSettings: InAppWebViewSettings(
+                clearSessionCache: true,
+                clearCache: true,
+                cacheEnabled: false,
+                javaScriptCanOpenWindowsAutomatically: true,
+                javaScriptEnabled: true,
+                allowFileAccessFromFileURLs: true,
+                allowUniversalAccessFromFileURLs: true,
+                domStorageEnabled: true,
+                useShouldInterceptRequest: true,
+                mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+                // iframeAllow: "web-share API; payment",
+                // iframeAllowFullscreen: true,
+                // iframeCsp:
+                //     "default-src 'self' https://trusted.com; script-src 'self';",
+                // iframeSandbox: "allow-same-origin allow-scripts allow-forms",
+                // iframeName: "SSPaymentIframe",
+                // iframeReferrerPolicy: ReferrerPolicy.NO_REFERRER,
+              ),
+              onWebViewCreated: (controller) {
+                // checkoutUpiIntent channel (Android)
+                controller.addJavaScriptHandler(
+                  handlerName: "checkoutUpiIntent",
+                  callback: (args) {
+                    if (args.isNotEmpty) {
+                      final url = args.first.toString();
+                      AppLog.i("JS called checkoutUpiIntent with $url",
+                          tag: "JSChannel");
+                      _handleExternalApp(url);
+                    }
+                    return {"status": "ok"};
+                  },
+                );
+
+                // sendSignalToNative channel (iOS)
+                controller.addJavaScriptHandler(
+                  handlerName: "sendSignalToNative",
+                  callback: (args) {
+                    try {
+                      if (args.isEmpty) {
+                        return {"status": "error", "message": "No data"};
+                      }
+
+                      final data = args.first.toString();
+                      AppLog.i("Received from JS: $data", tag: "JSChannel");
+
+                      final decoded = jsonDecode(data);
+
+                      if (decoded["message"] == "Invoke PSP app") {
+                        final deeplink = decoded["deeplink"];
+                        if (deeplink != null) {
+                          _handleExternalApp(deeplink);
+                        }
+                      }
+                      return {"status": "ok"};
+                    } catch (e) {
+                      AppLog.e("JSChannel parsing error", error: e);
+                      return {"status": "error", "message": e.toString()};
+                    }
+                  },
+                );
+                _controller = controller;
+                _controller?.reload();
+              },
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                String uri = navigationAction.request.url.toString();
+                AppLog.i(uri, tag: "ShouldOverrideUrlLoading");
+                if (uri.startsWith("upi://pay")) {
+                  _handleExternalApp(uri);
+                  return NavigationActionPolicy.CANCEL;
+                } else if (!uri.startsWith("http") &&
+                    !uri.startsWith("about:")) {
+                  _handleExternalApp(uri);
+                  return NavigationActionPolicy.CANCEL;
+                }
+
+                return NavigationActionPolicy.ALLOW;
+              },
+              onLoadStop: (controller, uri) {
+                AppLog.i(uri, tag: "OnLoadStop");
+                if (ValueHandler.isTextNotEmptyOrNull(uri)) {
+                  AppLog.i(uri, tag: "UrlChange");
+                  _onUrlChange(
+                      uri: uri.toString(),
+                      webViewPaymentGatewayModel:
+                          widget.webViewPaymentGatewayModel);
+                }
+              },
+              onReceivedError: (controller, request, error) {
+                AppLog.e(request.toString(), error: error);
+              },
+            ),
+          ),
+        ));
+  }
+}
+
+class FlutterWebViewPaymentGateway extends StatefulWidget {
+  const FlutterWebViewPaymentGateway(
+      {super.key, required this.webViewPaymentGatewayModel});
+
+  final WebViewPaymentGatewayModel webViewPaymentGatewayModel;
+
+  @override
+  State<FlutterWebViewPaymentGateway> createState() =>
+      _FlutterWebViewPaymentGatewayState();
+}
+
+class _FlutterWebViewPaymentGatewayState
+    extends State<FlutterWebViewPaymentGateway> {
   late WebViewController _controller;
   bool _isLoading = true;
   String _currentUrl = '';
