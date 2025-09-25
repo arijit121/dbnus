@@ -1,5 +1,6 @@
 class WebViewPaymentGatewayModel {
   String paymentLink;
+  String? title;
   String redirectLink;
   String transactionId;
   String? payType;
@@ -9,6 +10,7 @@ class WebViewPaymentGatewayModel {
 
   WebViewPaymentGatewayModel(
       {required this.paymentLink,
+      this.title,
       required this.redirectLink,
       required this.transactionId,
       this.payType,
@@ -19,6 +21,7 @@ class WebViewPaymentGatewayModel {
   factory WebViewPaymentGatewayModel.fromJson(Map<String, dynamic> json) {
     return WebViewPaymentGatewayModel(
       paymentLink: json['paymentLink'],
+      title: json['title'],
       redirectLink: json['redirectLink'],
       transactionId: json['transactionId'],
       payType: json['payType'],
@@ -31,6 +34,7 @@ class WebViewPaymentGatewayModel {
   Map<String, dynamic> toJson() {
     return {
       'paymentLink': paymentLink,
+      'title': title,
       'redirectLink': redirectLink,
       'transactionId': transactionId,
       'payType': payType,

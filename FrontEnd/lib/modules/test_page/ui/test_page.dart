@@ -6,6 +6,7 @@ import 'package:dbnus/router/router_name.dart';
 import 'package:dbnus/service/Localization/extension/localization_ext.dart';
 import 'package:dbnus/service/file_picker.dart';
 import 'package:dbnus/utils/screen_utils.dart';
+import 'package:dbnus/widget/custom_text_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,7 @@ import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/smooth_scroll.dart';
 import '../../../widget/youtube_video_player.dart';
+import '../../payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -40,6 +42,10 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   ValueNotifier<int> counter = ValueNotifier(0);
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _midController = TextEditingController();
+  final TextEditingController _orderIdController = TextEditingController();
+  final TextEditingController _txnTokenController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +252,45 @@ class _TestPageState extends State<TestPage> {
                     Colors.blue,
                   ]),
                   child: const CustomText("Razorpay")),
+              20.ph,
+              CustomTextFormField(
+                controller: _amountController,
+                title: 'Amount',
+              ),
+              20.ph,
+              CustomTextFormField(
+                controller: _midController,
+                title: 'MID',
+              ),
+              20.ph,
+              CustomTextFormField(
+                controller: _orderIdController,
+                title: 'Order ID',
+              ),
+              20.ph,
+              CustomTextFormField(
+                title: 'Txn Token',
+                controller: _txnTokenController,
+              ),
+              20.ph,
+              CustomGOEButton(
+                  width: 200,
+                  onPressed: () async {
+                    CustomRoute.pushNamed(
+                      name: RouteName.webViewPaymentGateway,
+                      arguments: WebViewPaymentGatewayModel(
+                        paymentLink:
+                            'https://res.retailershakti.com/rs_live/msiteflutter/msite/static/paytm_view.html?amount=${_amountController.text}&mid=${_midController.text}&orderId=${_orderIdController.text}&txnToken=${_txnTokenController.text}',
+                        redirectLink:
+                            'https://www.retailershakti.com/retailCart/payment',
+                        transactionId: _orderIdController.text,
+                        title: "Paytm",
+                      ),
+                    );
+                  },
+                  backGroundColor: Colors.blue,
+                  child: const CustomText("Paytm WebViewPaymentGateway",
+                      color: Colors.white)),
               20.ph,
               CustomGOEButton(
                   width: 160,

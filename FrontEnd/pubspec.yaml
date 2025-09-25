@@ -93,6 +93,7 @@ dependencies:
   flutter_widget_from_html: ^0.17.1
   # dyte_uikit: ^0.7.0
   flutter_inappwebview: ^6.1.5
+  webview_flutter: ^4.13.0
   cupertino_icons: ^1.0.8
   cached_network_image: ^3.4.1
   flame: ^1.32.0
