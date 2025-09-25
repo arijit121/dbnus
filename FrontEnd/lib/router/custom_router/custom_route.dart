@@ -131,19 +131,20 @@ class CustomRoute {
   }
 
   static Future pushNamed({required String name, dynamic arguments}) async {
+    RouterManager.getInstance.routeHistory
+        .add(RouteModel(name: name, uri: Uri.parse(name)));
     final route = await CustomRoute._getRoute(name: name, arguments: arguments);
-    return await Navigator.push(CurrentContext().context, route);
+    await Navigator.push(CurrentContext().context, route);
+    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+      RouterManager.getInstance.routeHistory.removeLast();
+    }
+    return;
   }
 
   static String? currentRoute() {
     try {
-      final RouteMatch lastMatch = RouterManager
-          .getInstance.router.routerDelegate.currentConfiguration.last;
-      final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
-          ? lastMatch.matches
-          : RouterManager
-              .getInstance.router.routerDelegate.currentConfiguration;
-      final String location = matchList.uri.toString();
+      final String location =
+          RouterManager.getInstance.routeHistory.last.uri.toString();
       return location;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
