@@ -65,7 +65,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
               }
             }
           } catch (e) {
-            AppLog.e("JSChannel parsing error", error: e);
+            AppLog.e(e.toString(), error: e, tag: "JSChannel parsing error");
           }
         },
       )
@@ -73,48 +73,43 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
       ..clearCache()
       ..clearLocalStorage()
       ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            AppLog.i('Loading progress: $progress%', tag: "WebViewProgress");
-          },
-          onPageStarted: (String url) {
-            setState(() {
-              _isLoading = true;
-              _currentUrl = url;
-              _hasError = false;
-            });
-            AppLog.i(url, tag: "PageStarted");
-          },
-          onPageFinished: (String url) {
-            setState(() {
-              _isLoading = false;
-            });
-            AppLog.i(url, tag: "OnPageFinished");
-            if (ValueHandler.isTextNotEmptyOrNull(url)) {
-              AppLog.i(url, tag: "UrlChange");
-              _onUrlChange(
-                  uri: url,
-                  webViewPaymentGatewayModel:
-                      widget.webViewPaymentGatewayModel);
-            }
-          },
-          onWebResourceError: (error) {
-            setState(() {
-              _hasError = true;
-              _errorMessage = error.description;
-            });
-            AppLog.e('WebView Error: ${error.description}', error: error);
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            String uri = request.url;
-            AppLog.i(uri, tag: "NavigationRequest");
+        NavigationDelegate(onProgress: (int progress) {
+          AppLog.i('Loading progress: $progress%', tag: "WebViewProgress");
+        }, onPageStarted: (String url) {
+          setState(() {
+            _isLoading = true;
+            _currentUrl = url;
+            _hasError = false;
+          });
+          AppLog.i(url, tag: "PageStarted");
+        }, onPageFinished: (String url) {
+          setState(() {
+            _isLoading = false;
+          });
+          AppLog.i(url, tag: "OnPageFinished");
+          if (ValueHandler.isTextNotEmptyOrNull(url)) {
+            AppLog.i(url, tag: "UrlChange");
+            _onUrlChange(
+                uri: url,
+                webViewPaymentGatewayModel: widget.webViewPaymentGatewayModel);
+          }
+        }, onWebResourceError: (error) {
+          setState(() {
+            _hasError = true;
+            _errorMessage = error.description;
+          });
+          AppLog.e(error.description, error: error, tag: "WebView Error");
+        }, onNavigationRequest: (NavigationRequest request) {
+          String uri = request.url;
+          AppLog.i(uri, tag: "NavigationRequest");
 
-            return _handleNavigationRequest(uri);
-          },
-          onHttpError: (HttpResponseError error) {
-            AppLog.e('HTTP Error: ${error.response?.statusCode}', error: error);
-          },
-        ),
+          return _handleNavigationRequest(uri);
+        }, onHttpError: (HttpResponseError error) {
+          AppLog.e('${error.response?.statusCode}',
+              error: error, tag: "HTTP Error");
+        }, onSslAuthError: (SslAuthError error) {
+          AppLog.e(error.toString(), error: error, tag: "SslAuth Error");
+        }),
       )
       ..setUserAgent(
           'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36')
@@ -148,7 +143,7 @@ class _WebViewPaymentGatewayState extends State<WebViewPaymentGateway> {
             ColorConst.red);
       }
     } catch (e) {
-      AppLog.e('External App Error', error: e);
+      AppLog.e(e.toString(), error: e, tag: "External App Error");
       PopUpItems.toastMessage(
           uri.contains("upi://pay")
               ? "Failed to open UPI app. Please try again."
