@@ -133,8 +133,8 @@ class _InAppWebViewPaymentGatewayState
           ),
           body: SafeArea(
             child: InAppWebView(
-              initialUrlRequest: URLRequest(
-                  url: WebUri(widget.webViewPaymentGatewayModel.paymentLink)),
+              initialUrlRequest:
+                  URLRequest(url: WebUri("https://www.google.com")),
               initialSettings: InAppWebViewSettings(
                 clearSessionCache: true,
                 clearCache: true,
@@ -197,7 +197,6 @@ class _InAppWebViewPaymentGatewayState
                   },
                 );
                 _controller = controller;
-                _controller?.reload();
               },
               shouldOverrideUrlLoading: (controller, navigationAction) async {
                 String uri = navigationAction.request.url.toString();
