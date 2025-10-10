@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { CustomConsole } from "./utils/custom_console";
 import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
+import axios from "axios";
 
 /*
  * Load up and parse configuration details from
@@ -65,6 +66,28 @@ app.post("/fcm-send", async (req: Request, res: Response) => {
   }
   catch (e) {
     res.send({ "error": `${e}` });
+  }
+});
+
+app.get("/autocomplete", async (req: Request, res: Response) => {
+  const { input, country } = req.query;
+
+  if (!input) {
+    return res.status(400).json({ error: "Missing 'input' query parameter" });
+  }
+
+  try {
+    const params = new URLSearchParams({
+      input: input as string,
+      key: "AIzaSyCgpehkvboNjg0FX_f7OjLczZ-SxwtvXYk",
+      ...(country ? { components: `country:${country}` } : {}),
+    });
+
+    const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?${params.toString()}`);
+    res.json(data);
+  } catch (err) {
+    console.error("Error fetching autocomplete:", err);
+    res.status(500).json({ error: "Failed to fetch from Google Places API" });
   }
 });
 
