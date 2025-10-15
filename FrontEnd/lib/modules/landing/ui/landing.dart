@@ -94,6 +94,7 @@ class _LandingUiState extends State<LandingUi> {
             LandingBloc()..add(ChangeIndex(index: widget.index)),
         child: BlocBuilder<LandingBloc, LandingState>(
           builder: (context, state) {
+            final bloc = context.read<LandingBloc>();
             return Scaffold(
               key: _scaffoldKey,
               drawer: widthState != WidthState.narrow
