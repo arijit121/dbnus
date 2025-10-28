@@ -210,9 +210,15 @@ class BodyData<T> {
         bodyTypeStatus: BodyTypeStatus.rawText, value: '''${body ?? ""}''');
   }
 
-  static formData({FormData? formData}) {
+  static formData(
+      {Map<String, String>? fields,
+      List<CustomMultipartFile>? customMultipartFiles}) {
     return BodyData<FormData?>(
-        bodyTypeStatus: BodyTypeStatus.formData, value: formData);
+        bodyTypeStatus: BodyTypeStatus.formData,
+        value: fields != null || customMultipartFiles != null
+            ? FormData(
+                fields: fields, customMultipartFiles: customMultipartFiles)
+            : null);
   }
 
   @override
