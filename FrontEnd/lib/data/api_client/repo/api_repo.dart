@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import '../../model/api_return_model.dart';
@@ -17,6 +18,18 @@ abstract class ApiRepo {
       Map<String, dynamic>? queryParameters,
       Map<String, String>? headers,
       required String tag});
+
+  Future<StreamSubscription?> callSse({
+    required String tag,
+    required String uri,
+    required Method method,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    BodyData? bodyData,
+    required void Function(ApiReturnModel)? onData,
+    void Function()? onDone,
+    void Function(Object, StackTrace)? onError,
+  });
 }
 
 class ApiEngine {
