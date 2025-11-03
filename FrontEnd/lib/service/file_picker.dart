@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart'
-    deferred as flutter_image_compress;
+deferred as flutter_image_compress;
 import 'package:image_picker/image_picker.dart' deferred as image_picker;
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
 import 'package:permission_handler/permission_handler.dart';
@@ -18,6 +18,7 @@ import '../extension/logger_extension.dart';
 import '../extension/spacing.dart';
 import '../service/context_service.dart';
 import '../utils/pop_up_items.dart';
+import '../utils/screen_utils.dart';
 import '../widget/custom_text.dart';
 import '../widget/loading_widget.dart';
 import 'JsService/provider/js_provider.dart' deferred as js_provider;
@@ -141,7 +142,7 @@ class CustomFilePicker {
       await image_picker.loadLibrary();
       final picker = image_picker.ImagePicker();
       final image =
-          await picker.pickImage(source: image_picker.ImageSource.camera);
+      await picker.pickImage(source: image_picker.ImageSource.camera);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -183,7 +184,7 @@ class CustomFilePicker {
       await image_picker.loadLibrary();
       final picker = image_picker.ImagePicker();
       final image =
-          await picker.pickImage(source: image_picker.ImageSource.gallery);
+      await picker.pickImage(source: image_picker.ImageSource.gallery);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -231,16 +232,16 @@ class CustomFilePicker {
         tag = 2;
       }
       BuildContext context = CurrentContext().context;
-
+      double paddingBottom = ScreenUtils.paddingBottom();
       if (context.mounted) {
         String? result = await showModalBottomSheet<String>(
           backgroundColor: Colors.white,
           context: context,
           builder: (BuildContext context) {
             return Container(
-              height: 156,
-              padding:
-                  const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 8),
+              height: 156 + paddingBottom,
+              padding: EdgeInsets.only(
+                  top: 16, left: 8, right: 8, bottom: 8 + paddingBottom),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -379,20 +380,24 @@ class CustomFilePicker {
       }
 
       Uint8List compressedJpegBytes =
-          await flutter_image_compress.FlutterImageCompress.compressWithList(
-              file.bytes!,
-              minWidth: width,
-              minHeight: height,
-              quality: 100,
-              format: flutter_image_compress.CompressFormat.jpeg);
-      String? extension = file.name?.split(".").last;
-      String? name = file.name?.split(".$extension").first;
+      await flutter_image_compress.FlutterImageCompress.compressWithList(
+          file.bytes!,
+          minWidth: width,
+          minHeight: height,
+          quality: 100,
+          format: flutter_image_compress.CompressFormat.jpeg);
+      String? extension = file.name
+          ?.split(".")
+          .last;
+      String? name = file.name
+          ?.split(".$extension")
+          .first;
       name = "${name ?? ""}_compressed.jpg";
       if (kIsWeb) {
         customFile = CustomFile(bytes: compressedJpegBytes, name: name);
       } else {
         final Directory tempDir =
-            await path_provider.getApplicationCacheDirectory();
+        await path_provider.getApplicationCacheDirectory();
         // Ensure the directory exists, if not create it
         if (!await tempDir.exists()) {
           await tempDir.create(recursive: true);
@@ -423,7 +428,7 @@ class CustomFilePicker {
         await PopUpItems.cupertinoPopup(
           title: "$name permission Required",
           content:
-              "$name access is permanently denied. Please enable it in settings to use this feature.",
+          "$name access is permanently denied. Please enable it in settings to use this feature.",
           cancelBtnPresses: () {},
           okBtnPressed: () async {
             await openAppSettings();
