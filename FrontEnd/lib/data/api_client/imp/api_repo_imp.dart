@@ -7,6 +7,7 @@ import 'package:http_parser/http_parser.dart' deferred as http_parser;
 import 'package:mime/mime.dart' deferred as mime;
 
 import '../../../extension/logger_extension.dart';
+import '../../../service/value_handler.dart';
 import '../../model/api_return_model.dart';
 import '../repo/api_repo.dart';
 
@@ -275,6 +276,7 @@ class ApiRepoImp extends ApiRepo {
                   : request)
               .send()
               .timeout(timeout());
+      String? event;
       StreamSubscription? streamSubscription;
       streamSubscription = response.stream
           .transform(utf8.decoder)
@@ -286,8 +288,28 @@ class ApiRepoImp extends ApiRepo {
               tag: "$tag Response time",
               "${DateTime.now().difference(requestTime)} HH:MM:SS ",
               time: DateTime.now());
-          onData?.call(ApiReturnModel(
-              statusCode: response.statusCode, responseString: data));
+          if (data.startsWith("data:")) {
+            String value = data;
+            value = value.replaceAll("data:", "");
+            value = value.trim();
+            Map<String, dynamic> body = {
+              "event": event,
+              "data": json.decode(value),
+            };
+            body.removeWhere(
+                (key, value) => !ValueHandler.isTextNotEmptyOrNull(value));
+            onData?.call(
+              ApiReturnModel(
+                statusCode: response.statusCode,
+                responseString: json.encode(body),
+              ),
+            );
+            event = null;
+          } else if (data.startsWith("event:")) {
+            event = data;
+            event = event?.replaceAll("event:", "");
+            event = event?.trim();
+          }
         },
         onError: (e, s) {
           AppLog.e(e, time: DateTime.now(), stackTrace: s);
