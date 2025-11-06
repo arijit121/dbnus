@@ -88,15 +88,15 @@ class AppLog {
   static String _getPriorityText(int priority) {
     switch (priority) {
       case _INFO:
-        return "💡 INFO   | ";
+        return "💡 INFO    | ";
       case _DEBUG:
-        return "🛠️  DEBUG  | ";
+        return "🛠️  DEBUG   | ";
       case _ERROR:
-        return "⛔ ERROR  | ";
+        return "⛔ ERROR   | ";
       case _WARN:
-        return "🚧 WARN   | ";
+        return "🚧 WARN    | ";
       case _Failed:
-        return "🚫 Failed | ";
+        return "🚫 Failed  | ";
       case _VERBOSE:
       default:
         return "✒️  VERBOSE | ";
