@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:hive/hive.dart';
-
+import 'package:hive_ce/hive.dart';
 // import 'package:localstore/localstore.dart';
 
 import '../../../data/model/service_model.dart';
@@ -90,13 +89,15 @@ class LocalCartRepo {
       if (collection == null) {
         await _init();
       }
-      final productBox = await collection?.openBox<Map>(name);
-      Map<String, Map>? value = await productBox?.getAllValues();
+      final serviceBox = await collection?.openBox<CartServiceModel>(
+        name,
+        fromJson: (json) => CartServiceModel.fromJson(json),
+      );
+      Map<String, CartServiceModel>? value = await serviceBox?.getAllValues();
 
       if (value?.isNotEmpty == true) {
         value?.forEach((key, v) {
-          String value = json.encode(v);
-          resultList.add(CartServiceModel.fromJson(json.decode(value)));
+          resultList.add(v);
         });
       }
 
@@ -105,22 +106,6 @@ class LocalCartRepo {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return [];
     }
-    // try {
-    //   final db = Localstore.instance;
-    //   Iterable<MapEntry<String, dynamic>>? json =
-    //       (await db.collection(path).get())?.entries;
-    //   List<CartServiceModel> serviceList = <CartServiceModel>[];
-    //   if (json?.isNotEmpty == true) {
-    //     json?.forEach((v) {
-    //       serviceList
-    //           .add(CartServiceModel.fromJson(v.value as Map<String, dynamic>));
-    //     });
-    //   }
-    //   return serviceList;
-    // } catch (e, stacktrace) {
-    //   AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-    //   return [];
-    // }
   }
 
   List<Services> getAssociatedService({ServiceModel? serviceModel}) {
@@ -129,17 +114,10 @@ class LocalCartRepo {
       serviceModel?.services?.forEach((element) {
         services.add(element);
       });
-      // if (serviceModel?.services?.isNotEmpty == true) {
-      //   services.addAll(serviceModel?.services?.iterator as Iterable<Services>);
-      // }
+
       serviceModel?.packageServices?.forEach((element) {
         services.add(element);
       });
-
-      // if (serviceModel?.packageServices?.isNotEmpty == true) {
-      //   services.addAll(
-      //       serviceModel?.packageServices?.iterator as Iterable<Services>);
-      // }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -151,9 +129,11 @@ class LocalCartRepo {
     if (collection == null) {
       await _init();
     }
-    final productBox = await collection?.openBox<Map>(name);
-    await productBox?.put(serviceModel.serviceId ?? "",
-        json.decode(json.encode(serviceModel.toJson()).toString()));
+    final serviceBox = await collection?.openBox<CartServiceModel>(
+      name,
+      fromJson: (json) => CartServiceModel.fromJson(json),
+    );
+    await serviceBox?.put(serviceModel.serviceId ?? "", serviceModel);
   }
 
   Future<void> addServiceListToCart(
@@ -161,17 +141,18 @@ class LocalCartRepo {
     if (collection == null) {
       await _init();
     }
-    final productBox = await collection?.openBox<Map>(name);
-    // await productBox?.put(serviceModel.serviceId ?? "",
-    //     json.decode(json.encode(serviceModel.toJson()).toString()));
+    final serviceBox = await collection?.openBox<CartServiceModel>(
+      name,
+      fromJson: (json) => CartServiceModel.fromJson(json),
+    );
 
     // Speed up write actions with transactions
     await collection?.transaction(
       () async {
         for (var serviceModel in serviceModelList) {
-          await productBox?.put(
+          await serviceBox?.put(
             serviceModel.serviceId ?? "", // Use serviceId as the key
-            serviceModel.toJson(), // Serialize model to JSON
+            serviceModel, // Serialize model to JSON
           );
         }
       },
@@ -184,15 +165,21 @@ class LocalCartRepo {
     if (collection == null) {
       await _init();
     }
-    final productBox = await collection?.openBox<Map>(name);
-    await productBox?.delete(serviceId);
+    final serviceBox = await collection?.openBox<CartServiceModel>(
+      name,
+      fromJson: (json) => CartServiceModel.fromJson(json),
+    );
+    await serviceBox?.delete(serviceId);
   }
 
   Future<void> clearCart() async {
     if (collection == null) {
       await _init();
     }
-    final productBox = await collection?.openBox<Map>(name);
-    await productBox?.clear();
+    final serviceBox = await collection?.openBox<CartServiceModel>(
+      name,
+      fromJson: (json) => CartServiceModel.fromJson(json),
+    );
+    await serviceBox?.clear();
   }
 }

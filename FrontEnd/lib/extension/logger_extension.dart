@@ -90,7 +90,7 @@ class AppLog {
       case _INFO:
         return "💡 INFO   | ";
       case _DEBUG:
-        return "🛠️ DEBUG  | ";
+        return "🛠️  DEBUG  | ";
       case _ERROR:
         return "⛔ ERROR  | ";
       case _WARN:
@@ -99,7 +99,7 @@ class AppLog {
         return "🚫 Failed | ";
       case _VERBOSE:
       default:
-        return "✒️";
+        return "✒️  VERBOSE | ";
     }
   }
 
