@@ -145,11 +145,15 @@ class CustomGOEButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine the effective background color and gradient when disabled
-    final Color? effectiveBackgroundColor =
-        onPressed == null && (backGroundColor != null || gradient != null)
-            ? disableBackGroundColor ??
-                Colors.grey.shade200 // Disabled background color
-            : backGroundColor;
+    final Color? effectiveBackgroundColor = onPressed == null &&
+            (backGroundColor != null || gradient != null)
+        ? disableBackGroundColor ??
+            (backGroundColor != null
+                ? backGroundColor?.withAlpha(60)
+                : gradient != null
+                    ? ColorExe.mixColors(gradient?.colors ?? [])?.withAlpha(60)
+                    : Colors.grey.shade400) // Disabled background color
+        : backGroundColor;
     final Gradient? effectiveGradient = onPressed == null ? null : gradient;
 
     final Color? effectiveBorderColor = onPressed == null && borderColor != null
@@ -158,8 +162,10 @@ class CustomGOEButton extends StatelessWidget {
 
     // Determine splash, highlight, and hover colors based on background or gradient
     Color? sHlHColor = effectiveGradient != null
-        ? ColorExe.mixColors(effectiveGradient.colors)?.withOpacity(0.3)
-        : effectiveBackgroundColor ?? effectiveBorderColor?.withOpacity(0.075);
+        ? ColorExe.mixColors(effectiveGradient.colors)
+            ?.withAlpha((0.3 * 255).toInt())
+        : effectiveBackgroundColor ??
+            effectiveBorderColor?.withAlpha((0.075 * 255).toInt());
 
     final Color? splashColor =
         sHlHColor != null ? ColorExe.darken(sHlHColor, 0.05) : null;
