@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         else if (path === "/bio-data") {
             setData({ containerId: "web-loader", file: "design/bio-data-loader.html" });
-            // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
+            setData({ containerId: "web-seo-content", file: "seo/bio-data.html" });
         }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
