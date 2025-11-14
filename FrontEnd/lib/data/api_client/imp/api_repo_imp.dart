@@ -294,7 +294,9 @@ class ApiRepoImp extends ApiRepo {
             value = value.trim();
             Map<String, dynamic> body = {
               "event": event,
-              "data": json.decode(value),
+              "data": ValueHandler.canBeJsonDecoded(value)
+                  ? json.decode(value)
+                  : value,
             };
             body.removeWhere(
                 (key, value) => !ValueHandler.isTextNotEmptyOrNull(value));
