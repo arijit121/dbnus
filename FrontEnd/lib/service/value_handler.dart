@@ -361,4 +361,13 @@ class ValueHandler {
 
   static String frontCapitalize(String s) =>
       s[0].toUpperCase() + s.substring(1);
+
+  static bool canBeJsonDecoded(String value) {
+    try {
+      json.decode(value);
+      return true; // Valid JSON
+    } catch (e) {
+      return false; // Invalid JSON
+    }
+  }
 }
