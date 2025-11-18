@@ -64,11 +64,7 @@ Future<void> main() async {
     };
   });
 
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) async {
-    runApp(const MyWebApp());
-  });
+  runApp(const MyWebApp());
 }
 
 class MyWebApp extends StatefulWidget {
