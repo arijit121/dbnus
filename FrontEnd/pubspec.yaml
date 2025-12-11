@@ -145,3 +145,7 @@ flutter:
     - assets/store/
     - assets/sound/
     - assets/js/
+
+flutter_intl:
+  enabled: true
+  arb-dir: lib/service/Localization/l10n
