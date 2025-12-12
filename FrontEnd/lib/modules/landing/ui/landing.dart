@@ -11,7 +11,7 @@ import '../../../widget/custom_button.dart';
 import '../../../widget/init_widget.dart';
 import '../bloc/landing_bloc.dart';
 import '../utils/landing_utils.dart';
-import '../widget/landing_widget_nav_rail.dart';
+import '../widget/landing_widget.dart';
 
 class LandingUi extends StatefulWidget {
   const LandingUi({super.key, required this.index});
