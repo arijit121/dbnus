@@ -20,7 +20,7 @@ import 'router/custom_router/custom_route.dart';
 import 'router/router_manager.dart';
 import 'router/router_name.dart';
 import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/l10n/app_localizations.dart';
+import 'service/Localization/app_localizations/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
 import 'service/app_updater.dart';
 import 'service/crash/utils/crash_utils.dart';
@@ -180,12 +180,7 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             locale: localizationState.locale.value,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: LocalizationUtils.supportedLocales,
             title: TextUtils.appTitle,
             themeMode: ThemeMode.system,

@@ -16,7 +16,7 @@ import 'firebase_options.dart' deferred as firebase_options;
 import 'router/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart' deferred as url_strategy;
 import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/l10n/app_localizations.dart';
+import 'service/Localization/app_localizations/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
 import 'service/crash/utils/crash_utils.dart' deferred as crash_utils;
 import 'service/firebase_service.dart' deferred as firebase_service;
@@ -117,12 +117,7 @@ class _MyWebAppState extends State<MyWebApp> {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             locale: localizationState.locale.value,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: LocalizationUtils.supportedLocales,
             title: TextUtils.appTitle,
             scrollBehavior: const MaterialScrollBehavior().copyWith(
