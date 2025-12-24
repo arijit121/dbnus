@@ -7,6 +7,12 @@ class LocalizationState extends Equatable {
     required this.locale,
   });
 
+  factory LocalizationState.initial() {
+    return LocalizationState(
+        locale: DynamicBlocData.init(
+            value: LocalizationUtils.supportedLocales.first));
+  }
+
   LocalizationState copyWith({DynamicBlocData<Locale>? locale}) {
     return LocalizationState(
       locale: locale ?? this.locale,

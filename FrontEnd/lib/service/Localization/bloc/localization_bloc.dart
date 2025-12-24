@@ -6,13 +6,11 @@ import '../../../data/bloc_data_model/dynamic_data.dart';
 import '../utils/localization_utils.dart';
 
 part 'localization_event.dart';
+
 part 'localization_state.dart';
 
 class LocalizationBloc extends Bloc<LocalizationEvent, LocalizationState> {
-  LocalizationBloc()
-      : super(LocalizationState(
-            locale: DynamicBlocData.init(
-                value: LocalizationUtils.supportedLocales.first))) {
+  LocalizationBloc() : super(LocalizationState.initial()) {
     on<LocalizationEvent>((event, emit) async {
       if (event is InitLocalization) {
         Locale? local = await LocalizationUtils.getFromStore();
