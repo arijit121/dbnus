@@ -2,9 +2,9 @@ import 'package:dbnus/data/model/custom_notification_model.dart';
 import 'package:dbnus/extension/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+
+// import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../const/api_url_const.dart';
 import '../../../const/color_const.dart';
@@ -46,26 +46,23 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () {
-              DownloadHandler().download(
+              DownloadHandler.download(
                   downloadUrl:
-                      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                      "https://file-examples.com/storage/fe6146b54768752f9a08cf7/2017/10/file-example_PDF_1MB.pdf");
             },
-            gradient: const LinearGradient(colors: [
-              ColorConst.red,
-              Colors.blue,
-            ]),
+            backGroundColor: Colors.blue.shade300,
             child: const CustomText("Download")),
         20.ph,
         CustomGOEButton(
             onPressed: () async {
               notificationId =
-                  await NotificationHandler().showUpdateFlutterNotification(
+                  await NotificationHandler.showUpdateFlutterNotification(
                 CustomNotificationModel(
                   title: "Silent Notification4",
                   message: "test",
                   bigText:
                       "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
-                  imageUrl: ApiUrlConst.testImgUrl,
+                  imageUrl: ApiUrlConst.testImgUrl(),
                   // actionURL: "http://localhost:6906/leader_board",
                   sound: "slow_spring_board",
                 ),
@@ -79,13 +76,13 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () {
-              NotificationHandler().showUpdateFlutterNotification(
+              NotificationHandler.showUpdateFlutterNotification(
                 CustomNotificationModel(
                   title: "Silent Notification update",
                   message: "test ${notificationId}",
                   bigText:
                       "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>",
-                  imageUrl: ApiUrlConst.testImgUrl,
+                  imageUrl: ApiUrlConst.testImgUrl(),
                   // actionURL: "http://localhost:6906/leader_board",
                   sound: "slow_spring_board",
                 ),
@@ -100,8 +97,8 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () async {
-              String? value = await JsProvider()
-                  .loadJsAndPassValueWithCallbackAsync(
+              String? value =
+                  await JsProvider.loadJsAndPassValueWithCallbackAsync(
                       value: "testvdshvhfvsfhvs");
               AppLog.i(value);
             },
@@ -113,7 +110,7 @@ class _UiTempState extends State<UiTemp> {
         20.ph,
         CustomGOEButton(
             onPressed: () async {
-              await JsProvider().changeUrl(path: "/test");
+              await JsProvider.changeUrl(path: "/test");
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -124,7 +121,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 160,
             onPressed: () async {
-              CustomFilePicker().customFilePicker();
+              CustomFilePicker.customFilePicker();
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -184,7 +181,16 @@ class _UiTempState extends State<UiTemp> {
               return boolNotifier.value
                   ? Padding(
                       padding: const EdgeInsets.only(top: 20),
-                      child: PinCodeTextField(
+                      child: PinCodeFormField(
+                        controller: _pinController,
+                        length: 5,
+                        autoFocus: true,
+                        autoFill: true,
+                        onCompleted: (value) {
+                          AppLog.i(_pinController.text,tag: "OnCompleted");
+                        },
+                      )
+                      /*PinCodeTextField(
                         textStyle: customizeTextStyle(
                             fontColor: ColorConst.primaryDark),
                         cursorColor: ColorConst.primaryDark,
@@ -220,7 +226,7 @@ class _UiTempState extends State<UiTemp> {
                         onCompleted: (value) {
                           AppLog.i(_pinController.text);
                         },
-                      )
+                      )*/
                       // PinCodeTextField(
                       //   length: 5,
                       //   appContext: context,
@@ -237,7 +243,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 160,
             onPressed: () async {
-              PopUpItems().customMsgDialog(
+              PopUpItems.customMsgDialog(
                   title: "Success",
                   content: "Thank you, transaction complete.",
                   type: DialogType.success);
@@ -248,7 +254,11 @@ class _UiTempState extends State<UiTemp> {
               color: Colors.white,
             )),
         20.ph,
-        const CustomTextFormField(),
+        CustomTextFormField(fieldHeight: 200),
+        20.ph,
+        CustomTextFormField(),
+        20.ph,
+        CustomTextFormField(maxLines: 1),
         20.ph,
         CustomDropdownMenuFormField<String>(
             hintText: "Please choose val",
@@ -281,15 +291,14 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
-              OpenService()
-                  .openAddressInMap(address: 'Kolkata', direction: true);
+              OpenService.openAddressInMap(address: 'Kolkata', direction: true);
             }),
         20.ph,
         CustomIconButton(
             color: ColorConst.primaryDark,
             icon: Icon(Icons.map),
             onPressed: () {
-              OpenService().openCoordinatesInMap(
+              OpenService.openCoordinatesInMap(
                 latitude: 22.5354273,
                 longitude: 88.3473527,
               );
@@ -298,7 +307,7 @@ class _UiTempState extends State<UiTemp> {
         CustomGOEButton(
             width: 200,
             onPressed: () async {
-              CustomRoute().clearAndNavigate(RouteName.leaderBoard);
+              CustomRoute.clearAndNavigateName(RouteName.leaderBoard);
             },
             gradient: const LinearGradient(colors: [
               ColorConst.red,
@@ -323,8 +332,8 @@ class _UiTempState extends State<UiTemp> {
             color: ColorConst.primaryDark,
             icon: Icon(Icons.add_box),
             onPressed: () {
-              PopUpItems()
-                  .toastMessage("Show tost msg..", ColorConst.primaryDark);
+              PopUpItems.toastMessage(
+                  "Show tost msg..", ColorConst.primaryDark);
             }),
       ],
     );

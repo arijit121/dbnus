@@ -28,17 +28,15 @@ class CustomNetWorkImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 0), // Apply radius
-      child: NetworkImg(
-        url: url,
-        width: width,
-        height: height,
-        fit: fit,
-        color: color,
-        errorWidget: errorWidget,
-        loadingWidget: loadingWidget,
-      ),
+    return NetworkImg(
+      url: url,
+      width: width,
+      height: height,
+      radius: radius,
+      fit: fit,
+      color: color,
+      errorWidget: errorWidget,
+      loadingWidget: loadingWidget,
     );
   }
 }

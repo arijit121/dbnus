@@ -45,3 +45,4 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+/lib/service/Localization/app_localizations/

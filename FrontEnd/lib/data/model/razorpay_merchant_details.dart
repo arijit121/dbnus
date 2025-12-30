@@ -31,19 +31,19 @@ class RazorpayMerchantDetails {
       this.razorpayKey});
 
   RazorpayMerchantDetails.fromJson(Map<String, dynamic> json) {
-    amount = ValueHandler().stringify(json['amount']);
-    amountDue = ValueHandler().stringify(json['amount_due']);
-    amountPaid = ValueHandler().stringify(json['amount_paid']);
-    attempts = ValueHandler().stringify(json['attempts']);
-    createdAt = ValueHandler().stringify(json['created_at']);
-    currency = ValueHandler().stringify(json['currency']);
-    entity = ValueHandler().stringify(json['entity']);
-    id = ValueHandler().stringify(json['id']);
-    offerId = ValueHandler().stringify(json['offer_id']);
-    receipt = ValueHandler().stringify(json['receipt']);
-    status = ValueHandler().stringify(json['status']);
-    httpCode = ValueHandler().stringify(json['http_code']);
-    razorpayKey = ValueHandler().stringify(json['razorpay_key']);
+    amount = ValueHandler.stringify(json['amount']);
+    amountDue = ValueHandler.stringify(json['amount_due']);
+    amountPaid = ValueHandler.stringify(json['amount_paid']);
+    attempts = ValueHandler.stringify(json['attempts']);
+    createdAt = ValueHandler.stringify(json['created_at']);
+    currency = ValueHandler.stringify(json['currency']);
+    entity = ValueHandler.stringify(json['entity']);
+    id = ValueHandler.stringify(json['id']);
+    offerId = ValueHandler.stringify(json['offer_id']);
+    receipt = ValueHandler.stringify(json['receipt']);
+    status = ValueHandler.stringify(json['status']);
+    httpCode = ValueHandler.stringify(json['http_code']);
+    razorpayKey = ValueHandler.stringify(json['razorpay_key']);
   }
 
   Map<String, dynamic> toJson() {

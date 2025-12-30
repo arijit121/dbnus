@@ -2,8 +2,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:universal_html/html.dart' as html;
 
+import '../data/model/route_model.dart';
+import '../modules/bio_data/bio_data.dart' deferred as flutter_bio_data;
 import '../modules/landing/ui/landing.dart' deferred as landing;
 import '../modules/landing/utils/landing_utils.dart';
 import '../modules/order_details/ui/order_details.dart'
@@ -12,8 +13,7 @@ import '../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_p
     deferred as web_view_payment_gateway_status;
 import '../modules/settings/ui/settings.dart' deferred as settings;
 import '../service/crash/ui/crash_ui.dart' deferred as crash;
-import '../service/seo_handler.dart';
-import '../utils/text_utils.dart';
+import '../service/value_handler.dart';
 import '../widget/error_route_widget.dart' deferred as error_route_widget;
 import 'router_name.dart';
 
@@ -30,16 +30,45 @@ class RouterManager {
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
 
+  List<RouteModel> routeHistory = [];
+  int maxHistorySize = 20;
+
+  /// Add route to history
+  void _addRoute(GoRouterState route) {
+    RouteModel data = RouteModel(
+        name: route.name,
+        path: route.path,
+        uri: route.uri,
+        pathParameters: route.pathParameters,
+        queryParameters: route.uri.queryParameters,
+        extra: route.extra);
+    // Avoid duplicates if the same route is pushed consecutively
+    if ((routeHistory.isEmpty || routeHistory.last.uri != data.uri) &&
+        ValueHandler.isTextNotEmptyOrNull(data.uri)) {
+      routeHistory.add(data);
+
+      // Maintain max history size
+      if (routeHistory.length > maxHistorySize) {
+        routeHistory.removeAt(0);
+      }
+    }
+  }
+
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
-    observers: <NavigatorObserver>[observer, if (kIsWeb) SeoObserver()],
+    observers: <NavigatorObserver>[observer, if (kIsWeb) RouteObserver()],
     routes: <RouteBase>[
       GoRoute(
         name: RouteName.initialView,
         path: RouteName.initialView,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: 0,
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: 0,
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _slideTransition(
+            landing.LandingUi(key: Key("0"), index: 0),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -50,10 +79,20 @@ class RouterManager {
       GoRoute(
         name: RouteName.leaderBoard,
         path: RouteName.leaderBoard,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation.indexWhere(
-                (element) => element.action == RouteName.leaderBoard),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation.indexWhere(
+        //         (element) => element.action == RouteName.leaderBoard),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _slideTransition(
+            landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.leaderBoard)}"),
+              index: LandingUtils.listNavigation.indexWhere(
+                  (element) => element.action == RouteName.leaderBoard),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -64,10 +103,20 @@ class RouterManager {
       GoRoute(
         name: RouteName.order,
         path: RouteName.order,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.order),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.order),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _slideTransition(
+            landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.order)}"),
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.order),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -78,10 +127,20 @@ class RouterManager {
       GoRoute(
         name: RouteName.games,
         path: RouteName.games,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.games),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.games),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _slideTransition(
+            landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.games)}"),
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.games),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -92,10 +151,20 @@ class RouterManager {
       GoRoute(
         name: RouteName.massage,
         path: RouteName.massage,
-        builder: (BuildContext context, GoRouterState state) {
-          return landing.LandingUi(
-            index: LandingUtils.listNavigation
-                .indexWhere((element) => element.action == RouteName.massage),
+        // builder: (BuildContext context, GoRouterState state) {
+        //   return landing.LandingUi(
+        //     index: LandingUtils.listNavigation
+        //         .indexWhere((element) => element.action == RouteName.massage),
+        //   );
+        // },
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return _slideTransition(
+            landing.LandingUi(
+              key: Key(
+                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.massage)}"),
+              index: LandingUtils.listNavigation
+                  .indexWhere((element) => element.action == RouteName.massage),
+            ),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
@@ -147,6 +216,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await web_view_payment_gateway_status.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.bioData,
+        path: RouteName.bioData,
+        builder: (BuildContext context, GoRouterState state) {
+          return flutter_bio_data.BioData();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await flutter_bio_data.loadLibrary();
           return null;
         },
       ),
@@ -216,32 +296,93 @@ class RouterManager {
     ],
     errorBuilder: (context, state) => error_route_widget.ErrorRouteWidget(),
     redirect: (BuildContext context, GoRouterState state) async {
+      getInstance._addRoute(state);
       await error_route_widget.loadLibrary();
       return null;
     },
   );
+
+  static CustomTransitionPage<void> _slideTransition(Widget screen) {
+    return CustomTransitionPage<void>(
+      child: screen,
+      transitionDuration: const Duration(milliseconds: 800), // Adjust as needed
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (kIsWeb) {
+          return child; // No transition on web
+        }
+
+        const begin = Offset(1.0, 0.0); // Start offscreen (right)
+        const end = Offset(0.0, 0.0); // End at the center (screen)
+        final tween = Tween(begin: begin, end: end);
+        final curveTween =
+            CurveTween(curve: Curves.easeOutExpo); // Fast to slow
+
+        return SlideTransition(
+          position: tween.animate(CurvedAnimation(
+            parent: animation,
+            curve: curveTween.curve,
+          )),
+          child: child,
+        );
+      },
+    );
+  }
+
+  static CustomTransitionPage<void> _fadeTransition(Widget screen) {
+    return CustomTransitionPage<void>(
+        child: screen,
+        transitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          if (kIsWeb) {
+            return child; // No transition on web
+          }
+          return FadeTransition(
+            opacity: CurveTween(curve: Curves.easeIn).animate(animation),
+            child: child,
+          );
+        });
+  }
 }
 
-class SeoObserver extends NavigatorObserver {
+class RouteObserver extends NavigatorObserver {
+  Future<void> _sendScreenView(PageRoute<dynamic> route) async {
+    var screenName = route.settings.name;
+    if (screenName != null) {
+      // your code goes here
+    }
+  }
+
+  Future<void> _seoObserver(PageRoute<dynamic> route) async {
+    // await web_meta_handler.loadLibrary();
+    // web_meta_handler.WebSeoHandler.setCanonicalLink(html.window.location.href);
+    // if (route.settings.name == RouteName.initialView) {
+    //   web_meta_handler.WebSeoHandler.homeFooterSeo();
+    // } else {
+    //   web_meta_handler.WebSeoHandler.removeFooterSeoContainer();
+    // }
+  }
+
+  /// Remove the last route from history
+  void _removeLastRoute() {
+    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+      RouterManager.getInstance.routeHistory.removeLast();
+    }
+  }
+
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
-    SeoHandler().setCanonicalLink();
-    if (route.settings.name == RouteName.initialView) {
-      SeoHandler().homeHooterSeo();
-    } else {
-      SeoHandler().removeFooterSeoContainer();
+    if (route is PageRoute) {
+      _sendScreenView(route);
     }
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
     super.didPop(route, previousRoute);
-    SeoHandler().setCanonicalLink();
-    if (previousRoute?.settings.name == RouteName.initialView) {
-      SeoHandler().homeHooterSeo();
-    } else {
-      SeoHandler().removeFooterSeoContainer();
+    if (previousRoute is PageRoute && route is PageRoute) {
+      _sendScreenView(previousRoute);
     }
+    _removeLastRoute();
   }
 }

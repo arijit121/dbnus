@@ -24,27 +24,22 @@
     <title>Test des</title>
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="main.dart.js" as="script">
+    <link rel="preload" href="main.dart.wasm" as="script">
     <link rel="stylesheet" href="style/styles.css" media="print" onload="this.onload=null;this.removeAttribute('media');">
 
     <!-- Preconnect for Faster External Requests -->
     <link rel="preconnect" href="https://www.gstatic.com">
 
-    <!--script-->
-    <!--Lightweight version of the jQuery library, used to simplify HTML manipulation, event handling, and animations in web development, with reduced file size for faster loading.-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
-
-    <!-- flutter_inappwebview-->
-    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
-        defer></script>
 </head>
 
 <body>
     <script>
         {{flutter_service_worker_version}}
     </script>
-    <div id="web-initial-loader" style="display: none;"></div>
-    <script src="js/loader.js" ></script>
+    <div id="web-loader" style="display: none;"></div>
+    <div id="web-seo-content" style="display: none;"></div>
+    <script src="js/route_listener.js" defer></script>
+    <script src="js/dynamic_js_loader.js" defer></script>
     <script src="flutter_bootstrap.js" async>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {

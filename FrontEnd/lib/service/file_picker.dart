@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart'
-    deferred as flutter_image_compress;
+deferred as flutter_image_compress;
 import 'package:image_picker/image_picker.dart' deferred as image_picker;
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
 import 'package:permission_handler/permission_handler.dart';
@@ -18,16 +18,16 @@ import '../extension/logger_extension.dart';
 import '../extension/spacing.dart';
 import '../service/context_service.dart';
 import '../utils/pop_up_items.dart';
+import '../utils/screen_utils.dart';
 import '../widget/custom_text.dart';
 import '../widget/loading_widget.dart';
 import 'JsService/provider/js_provider.dart' deferred as js_provider;
 
 class CustomFilePicker {
-  final int _maxFileSize = 5;
-  final String _notJpgErrorMsg =
-      "Invalid file format. Please select an image in JPG format";
+  static const int _maxFileSize = 5;
 
-  Future<CustomFile?> pickSingleFile({List<String>? allowedExtensions}) async {
+  static Future<CustomFile?> pickSingleFile(
+      {List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
@@ -50,7 +50,7 @@ class CustomFilePicker {
         int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
         if (!allowedExtensionsFinal.contains(platformFile.extension)) {
-          PopUpItems().toastMessage("Invalid file type.", ColorConst.red,
+          PopUpItems.toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
         } else if (platformFile.extension == 'jpg' ||
             platformFile.extension == 'jpeg') {
@@ -75,7 +75,7 @@ class CustomFilePicker {
             );
           }
         } else if (sizeInMb > _maxFileSize) {
-          PopUpItems().toastMessage(
+          PopUpItems.toastMessage(
               "File limit exceeded. Please try again by uploading a file of size 5 MB or less.",
               Colors.red,
               durationSeconds: 4);
@@ -96,7 +96,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<List<CustomFile>?> pickMultipleFile(
+  static Future<List<CustomFile>?> pickMultipleFile(
       {List<String>? allowedExtensions}) async {
     try {
       if (!kIsWeb && Platform.isIOS) {
@@ -132,7 +132,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> cameraPicker() async {
+  static Future<CustomFile?> cameraPicker() async {
     try {
       final permissionStatus = await _fileManagerPermission(
           permission: Permission.camera, name: 'Camera');
@@ -142,7 +142,7 @@ class CustomFilePicker {
       await image_picker.loadLibrary();
       final picker = image_picker.ImagePicker();
       final image =
-          await picker.pickImage(source: image_picker.ImageSource.camera);
+      await picker.pickImage(source: image_picker.ImageSource.camera);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -172,7 +172,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> galleryPicker() async {
+  static Future<CustomFile?> galleryPicker() async {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
@@ -184,7 +184,7 @@ class CustomFilePicker {
       await image_picker.loadLibrary();
       final picker = image_picker.ImagePicker();
       final image =
-          await picker.pickImage(source: image_picker.ImageSource.gallery);
+      await picker.pickImage(source: image_picker.ImageSource.gallery);
       int sizeInBytes = (await image?.length()) ?? 0;
       double sizeInMb = sizeInBytes / (1024 * 1024);
       if (image != null) {
@@ -214,7 +214,8 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> customFilePicker({bool? noDocs, bool? noCamera}) async {
+  static Future<CustomFile?> customFilePicker(
+      {bool? noDocs, bool? noCamera}) async {
     int tag = 3;
     try {
       FocusManager.instance.primaryFocus?.unfocus();
@@ -231,15 +232,16 @@ class CustomFilePicker {
         tag = 2;
       }
       BuildContext context = CurrentContext().context;
-
+      double paddingBottom = ScreenUtils.paddingBottom();
       if (context.mounted) {
         String? result = await showModalBottomSheet<String>(
           backgroundColor: Colors.white,
           context: context,
           builder: (BuildContext context) {
             return Container(
-              height: 150,
-              padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+              height: 156 + paddingBottom,
+              padding: EdgeInsets.only(
+                  top: 16, left: 8, right: 8, bottom: 8 + paddingBottom),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -334,9 +336,9 @@ class CustomFilePicker {
           },
         );
         if (result == "Camera") {
-          return cameraPicker();
+          return await cameraPicker();
         } else if (result == "Gallery") {
-          return galleryPicker();
+          return await galleryPicker();
         } else if (result == "Folder") {
           return await pickSingleFile(
               allowedExtensions: noDocs == true ? ['jpeg', 'jpg'] : null);
@@ -348,7 +350,7 @@ class CustomFilePicker {
     return null;
   }
 
-  Future<CustomFile?> _compressAndResizeImage(CustomFile file) async {
+  static Future<CustomFile?> _compressAndResizeImage(CustomFile file) async {
     showLoading();
     CustomFile? customFile;
     try {
@@ -358,7 +360,7 @@ class CustomFilePicker {
         path_provider.loadLibrary(),
       ]);
 
-      await js_provider.JsProvider().loadJs(
+      await js_provider.JsProvider.loadJs(
           jsPath: "https://cdn.jsdelivr.net/npm/pica@9.0.1/dist/pica.min.js");
       file.bytes ??= await File(file.path!).readAsBytes();
       ui.Image image = await decodeImageFromList(file.bytes!);
@@ -378,20 +380,24 @@ class CustomFilePicker {
       }
 
       Uint8List compressedJpegBytes =
-          await flutter_image_compress.FlutterImageCompress.compressWithList(
-              file.bytes!,
-              minWidth: width,
-              minHeight: height,
-              quality: 100,
-              format: flutter_image_compress.CompressFormat.jpeg);
-      String? extension = file.name?.split(".").last;
-      String? name = file.name?.split(".$extension").first;
+      await flutter_image_compress.FlutterImageCompress.compressWithList(
+          file.bytes!,
+          minWidth: width,
+          minHeight: height,
+          quality: 100,
+          format: flutter_image_compress.CompressFormat.jpeg);
+      String? extension = file.name
+          ?.split(".")
+          .last;
+      String? name = file.name
+          ?.split(".$extension")
+          .first;
       name = "${name ?? ""}_compressed.jpg";
       if (kIsWeb) {
         customFile = CustomFile(bytes: compressedJpegBytes, name: name);
       } else {
         final Directory tempDir =
-            await path_provider.getApplicationCacheDirectory();
+        await path_provider.getApplicationCacheDirectory();
         // Ensure the directory exists, if not create it
         if (!await tempDir.exists()) {
           await tempDir.create(recursive: true);
@@ -412,24 +418,24 @@ class CustomFilePicker {
     return customFile;
   }
 
-  Future<PermissionStatus> _fileManagerPermission(
+  static Future<PermissionStatus> _fileManagerPermission(
       {required Permission permission, required String name}) async {
     final permissionStatus = await permission.request();
     if (!permissionStatus.isGranted) {
       final currentStatus = await permission.status;
       bool permanentlyDenied = currentStatus.isPermanentlyDenied;
       if (permanentlyDenied) {
-        await PopUpItems().cupertinoPopup(
+        await PopUpItems.cupertinoPopup(
           title: "$name permission Required",
           content:
-              "$name access is permanently denied. Please enable it in settings to use this feature.",
+          "$name access is permanently denied. Please enable it in settings to use this feature.",
           cancelBtnPresses: () {},
           okBtnPressed: () async {
             await openAppSettings();
           },
         );
       } else {
-        PopUpItems().toastMessage(
+        PopUpItems.toastMessage(
           "$name access is required to use this feature. Please grant permission to continue.",
           ColorConst.baseHexColor,
           durationSeconds: 3,

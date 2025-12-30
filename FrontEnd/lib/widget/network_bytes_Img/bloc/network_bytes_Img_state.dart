@@ -6,6 +6,14 @@ class NetworkBytesImgState {
   bool? isError;
 
   NetworkBytesImgState({this.bytes, required this.isLoaded, this.isError});
+
+  NetworkBytesImgState copyWith(
+      {Uint8List? bytes, bool? isLoaded, bool? isError}) {
+    return NetworkBytesImgState(
+        bytes: bytes ?? this.bytes,
+        isLoaded: isLoaded ?? this.isLoaded,
+        isError: isError ?? this.isError);
+  }
 }
 
 class NetWorkImageWebInitial extends NetworkBytesImgState {

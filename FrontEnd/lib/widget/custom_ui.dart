@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../const/color_const.dart';
 import 'custom_text.dart';
@@ -111,7 +109,7 @@ class KeyValueWidget extends StatelessWidget {
   final String keyName;
   final String value;
   final double? size;
-  final Color color;
+  final Color? color;
 
   const KeyValueWidget({
     super.key,
@@ -119,7 +117,7 @@ class KeyValueWidget extends StatelessWidget {
     this.fontWeight,
     required this.value,
     this.size,
-    this.color = ColorConst.primaryDark,
+    this.color,
   });
 
   @override
@@ -131,7 +129,7 @@ class KeyValueWidget extends StatelessWidget {
             color: color, size: size ?? 16, fontWeight: fontWeight),
         CustomText(
           value,
-          color: color,
+          color: color ?? ColorConst.primaryDark,
           size: size ?? 16,
           fontWeight: fontWeight ?? FontWeight.w500,
         ),

@@ -16,7 +16,8 @@ import '../widget/custom_text.dart';
 import '../widget/custom_text_formfield.dart';
 
 class PopUpItems {
-  void toastMessage(String message, Color color, {int? durationSeconds}) {
+  static void toastMessage(String message, Color color,
+      {int? durationSeconds}) {
     SnackBar snackBar = SnackBar(
       duration: Duration(seconds: durationSeconds ?? 2),
       content: ToastMassage(
@@ -31,7 +32,7 @@ class PopUpItems {
     ScaffoldMessenger.of(CurrentContext().context).showSnackBar(snackBar);
   }
 
-  Future<DateTime?> buildMaterialDatePicker(
+  static Future<DateTime?> buildMaterialDatePicker(
       {DateTime? initDate, DateTime? startDate, DateTime? endDate}) async {
     final DateTime? picked = await showDatePicker(
       context: CurrentContext().context,
@@ -51,14 +52,14 @@ class PopUpItems {
     return picked;
   }
 
-  Future<String?> emailPicker() {
+  static Future<String?> emailPicker() {
     return Navigator.of(CurrentContext().context).push(
       PageRouteBuilder(
           opaque: false, pageBuilder: (_, __, ___) => const EmailPicker()),
     );
   }
 
-  Future<void> cupertinoPopup({
+  static Future<void> cupertinoPopup({
     String? title,
     void Function()? cancelBtnPresses,
     void Function()? okBtnPressed,
@@ -74,7 +75,7 @@ class PopUpItems {
         child: CupertinoAlertDialog(
           title: title != null ? CustomText(title, size: 14) : null,
           content: content != null
-              ? ValueHandler().isHtml(content)
+              ? ValueHandler.isHtml(content)
                   ? CustomHtmlText(content,
                       color: ColorConst.primaryDark, size: 14)
                   : CustomText(content, color: ColorConst.primaryDark, size: 14)
@@ -111,31 +112,114 @@ class PopUpItems {
     }
   }
 
-  Future<void> customMsgDialog(
+  static Future<void> materialPopup({
+    String? title,
+    required void Function()? cancelBtnPresses,
+    required void Function()? okBtnPressed,
+    String? content,
+    String? cancelBtnText,
+    String? okBtnText,
+  }) async {
+    String? result = await showDialog<String>(
+      context: CurrentContext().context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.white,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (ValueHandler.isTextNotEmptyOrNull(title)) ...[
+              CustomTextEnum(
+                title!,
+                color: ColorConst.primaryDark,
+                styleType: CustomTextStyleType.subHeading1,
+              ),
+              8.ph,
+            ],
+            if (ValueHandler.isTextNotEmptyOrNull(content)) ...[
+              Flexible(
+                child: SingleChildScrollView(
+                  child: ValueHandler.isHtml(content!)
+                      ? CustomHtmlText(content,
+                          color: ColorConst.primaryDark, size: 14)
+                      : CustomText(
+                          content,
+                          color: ColorConst.primaryDark,
+                          size: 14,
+                        ),
+                ),
+              ),
+            ],
+            24.ph,
+            CustomGOEButton(
+              radius: 8,
+              width: double.infinity,
+              height: 44,
+              backGroundColor: ColorConst.primaryDark,
+              onPressed: () {
+                Navigator.pop(context, "Yes");
+              },
+              child: CustomTextEnum(
+                okBtnText ?? "Ok",
+                color: Colors.white,
+                styleType: CustomTextStyleType.body1,
+              ),
+            ),
+            if (cancelBtnPresses != null) ...[
+              12.ph,
+              CustomGOEButton(
+                borderColor: ColorConst.lineGrey,
+                radius: 8,
+                width: double.infinity,
+                height: 42,
+                backGroundColor: Colors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: CustomTextEnum(cancelBtnText ?? "Cancel",
+                    color: ColorConst.primaryDark,
+                    styleType: CustomTextStyleType.body1),
+              )
+            ],
+          ],
+        ),
+      ),
+    );
+    if (result == "Yes") {
+      if (okBtnPressed != null) {
+        okBtnPressed();
+      }
+    } else {
+      if (cancelBtnPresses != null) {
+        cancelBtnPresses();
+      }
+    }
+  }
+
+  static Future<void> customMsgDialog(
       {String? title,
       String? content,
       DialogType? type,
       CrossAxisAlignment contentCrossAxisAlignment =
           CrossAxisAlignment.center}) async {
-    IconData? icon;
+    Widget? icon;
     Color? iconButtonColor;
     if (type != null) {
       switch (type) {
         case DialogType.success:
-          icon = Icons.check_circle;
           iconButtonColor = Colors.green;
+          icon = Icon(Icons.check_circle, color: iconButtonColor, size: 48);
           break;
         case DialogType.error:
-          icon = Icons.error;
           iconButtonColor = Colors.red;
+          icon = Icon(Icons.error, color: iconButtonColor, size: 48);
           break;
         case DialogType.warning:
-          icon = Icons.warning;
           iconButtonColor = Colors.amber;
+          icon = Icon(Icons.warning, color: iconButtonColor, size: 48);
           break;
         case DialogType.info:
-          icon = Icons.info;
           iconButtonColor = Colors.blue;
+          icon = Icon(Icons.info, color: iconButtonColor, size: 48);
           break;
       }
     }
@@ -144,43 +228,51 @@ class PopUpItems {
       context: CurrentContext().context,
       builder: (BuildContext context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: title != null
-            ? CustomText(
-                title,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: contentCrossAxisAlignment,
+          children: [
+            if (icon != null) ...[
+              icon,
+              if (content != null || title != null) 16.ph,
+            ],
+            if (ValueHandler.isTextNotEmptyOrNull(title)) ...[
+              CustomTextEnum(
+                title!,
                 color: ColorConst.primaryDark,
-                size: 16,
-              )
-            : null,
-        content: content != null || icon != null
-            ? Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: contentCrossAxisAlignment,
-                children: [
-                  if (icon != null)
-                    Icon(icon, color: iconButtonColor, size: 60.0),
-                  if (content != null && icon != null) 12.ph,
-                  if (content != null)
-                    ValueHandler().isHtml(content)
-                        ? CustomHtmlText(content,
-                            color: ColorConst.primaryDark, size: 14)
-                        : CustomText(content,
-                            color: ColorConst.primaryDark,
-                            size: 14,
-                            textAlign: TextAlign.start),
-                ],
-              )
-            : null,
-        actions: <Widget>[
-          CustomGOEButton(
-            width: 72,
-            radius: 8,
-            backGroundColor: iconButtonColor ?? Colors.blueAccent,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: CustomText(TextUtils.ok, color: Colors.white, size: 16),
-          ),
-        ],
+                styleType: CustomTextStyleType.subHeading1,
+              ),
+              if (content != null) 8.ph,
+            ],
+            if (content != null)
+              Flexible(
+                child: SingleChildScrollView(
+                  child: ValueHandler.isHtml(content)
+                      ? CustomHtmlText(content,
+                          color: ColorConst.primaryDark, size: 14)
+                      : CustomText(content,
+                          color: ColorConst.primaryDark,
+                          size: 14,
+                          textAlign: TextAlign.start),
+                ),
+              ),
+            24.ph,
+            CustomGOEButton(
+              radius: 8,
+              width: double.infinity,
+              height: 44,
+              backGroundColor: iconButtonColor ?? Colors.blueAccent,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: CustomTextEnum(
+                TextUtils.ok,
+                color: Colors.white,
+                styleType: CustomTextStyleType.body1,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -278,7 +370,7 @@ class _EmailPickerState extends State<EmailPicker> {
                           hintText: TextUtils.enter_email,
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
-                          validator: Validator().emailValidator)),
+                          validator: Validator.emailValidator)),
                   10.ph,
                   CustomGOEButton(
                       width: 80,

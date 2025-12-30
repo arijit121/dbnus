@@ -3,28 +3,26 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart' deferred as crypto;
 import 'package:encrypt/encrypt.dart' deferred as encrypt;
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../config/app_config.dart' deferred as app_config;
 import '../extension/logger_extension.dart';
-import '../service/context_service.dart';
 
 class ValueHandler {
-  int generateTimestamp() {
+  static int generateTimestamp() {
     final now = DateTime.now();
     return now.millisecondsSinceEpoch;
   }
 
-  DateTime? dateTimeFromTimestamp({required int? timestamp}) {
-    if (ValueHandler().isNonZeroNumericValue(timestamp)) {
+  static DateTime? dateTimeFromTimestamp({required int? timestamp}) {
+    if (ValueHandler.isNonZeroNumericValue(timestamp)) {
       DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp! * 1000);
       return date;
     }
     return null;
   }
 
-  String? stringify(var value) {
+  static String? stringify(var value) {
     try {
       if (value == null || value.toString().toLowerCase() == "null") {
         return null;
@@ -37,7 +35,7 @@ class ValueHandler {
     return null;
   }
 
-  int? intify(var value) {
+  static int? intify(var value) {
     try {
       if (value == null ||
           value.toString().toLowerCase() == "null" ||
@@ -52,7 +50,7 @@ class ValueHandler {
     return null;
   }
 
-  num? numify(var value) {
+  static num? numify(var value) {
     try {
       if (value == null ||
           value.toString().toLowerCase() == "null" ||
@@ -67,25 +65,26 @@ class ValueHandler {
     return null;
   }
 
-  bool? boolify(dynamic value) {
+  static bool? boolify(dynamic value) {
     if (value is bool) return value;
     if (value is num) return value == 1;
     if (value == null) return null;
 
     String str = value.toString().toLowerCase().trim();
-    if (isTextNotEmptyOrNull(str)) {
+    if (ValueHandler.isTextNotEmptyOrNull(str)) {
       return (str == "true" || str == "1");
     }
     return null;
   }
 
-  String dateTimeFormatter({required DateTime dateTime, String? newPattern}) {
+  static String dateTimeFormatter(
+      {required DateTime dateTime, String? newPattern}) {
     String date = DateFormat(newPattern ?? "yyyy-MM-dd").format(dateTime);
     return date;
   }
 
   /// Fri, 12 may 2023
-  String? dateTimeEEEDMMMYYYY({String? dateTime}) {
+  static String? dateTimeEEEDMMMYYYY({String? dateTime}) {
     try {
       if (dateTime?.isNotEmpty == true) {
         String date =
@@ -99,7 +98,7 @@ class ValueHandler {
   }
 
   ///  12 may 2023
-  String? dateTimeEEEDMMMYYYY2({String? dateTime}) {
+  static String? dateTimeEEEDMMMYYYY2({String? dateTime}) {
     try {
       if (dateTime?.isNotEmpty == true) {
         String date =
@@ -113,12 +112,12 @@ class ValueHandler {
   }
 
   /// 9th Sept, 2021
-  String? dateTimeDthMMMYYYY({String? dateTime}) {
+  static String? dateTimeDthMMMYYYY({String? dateTime}) {
     try {
       if (dateTime?.isNotEmpty == true) {
         DateTime tempDateTime = DateTime.parse(dateTime!);
         String date = DateFormat("MMMM, yyyy").format(tempDateTime);
-        return "${tempDateTime.day}${_getDayOfMonthSuffix(tempDateTime.day)} $date";
+        return "${tempDateTime.day}${ValueHandler._getDayOfMonthSuffix(tempDateTime.day)} $date";
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -126,7 +125,7 @@ class ValueHandler {
     return null;
   }
 
-  String _getDayOfMonthSuffix(int dayNum) {
+  static String _getDayOfMonthSuffix(int dayNum) {
     if (!(dayNum >= 1 && dayNum <= 31)) {
       throw Exception('Invalid day of month');
     }
@@ -147,7 +146,7 @@ class ValueHandler {
     }
   }
 
-  Duration dateTimeCompare(
+  static Duration dateTimeCompare(
       {required String? dateTime, DateTime? compareWithDate}) {
     try {
       if (dateTime?.isNotEmpty == true) {
@@ -161,22 +160,25 @@ class ValueHandler {
     return const Duration();
   }
 
-  String? timeOfDayParser({String? timeOfDayString}) {
+  static String? timeOfDayParser({String? timeOfDayString}) {
     try {
-      if (timeOfDayString != null) {
-        TimeOfDay timeOfDay = TimeOfDay(
-            hour: int.parse(timeOfDayString.split(":")[0]),
-            minute: int.parse(timeOfDayString.split(":")[1]));
-        timeOfDay.toString();
-        return timeOfDay.format(CurrentContext().context);
+      if (timeOfDayString == null || timeOfDayString.trim().isEmpty) {
+        return null;
       }
+
+      // Parse the 24-hour format input
+      DateTime parsedTime =
+          DateFormat.Hm().parse(timeOfDayString); // e.g., "10:30"
+
+      // Format to 12-hour format with AM/PM
+      return DateFormat.jm().format(parsedTime); // e.g., "10:30 AM"
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return null;
   }
 
-  DateTime? stringToDateTime({String? dateTime, String? pattern}) {
+  static DateTime? stringToDateTime({String? dateTime, String? pattern}) {
     try {
       if (dateTime != null) {
         return DateFormat(pattern ?? "yyyy-MM-dd").parse(dateTime);
@@ -187,14 +189,15 @@ class ValueHandler {
     return null;
   }
 
-  String skey = "SSSK#08#@93@*(-**SSSK@9.#@92@";
+  static String skey = "SSSK#08#@93@*(-**SSSK@9.#@92@";
 
-  Future<String?> customEncryption({required String value}) async {
+  static Future<String?> customEncryption({required String value}) async {
     try {
-      String encodedKey = base64Url.encode(utf8.encode(skey)).substring(0, 32);
+      String encodedKey =
+          base64Url.encode(utf8.encode(ValueHandler.skey)).substring(0, 32);
       await encrypt.loadLibrary();
       final key = encrypt.Key.fromUtf8(encodedKey);
-      final iv = encrypt.IV.fromUtf8(skey.substring(0, 16));
+      final iv = encrypt.IV.fromUtf8(ValueHandler.skey.substring(0, 16));
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encrypted = encrypter.encrypt(value, iv: iv);
       return encrypted.base64;
@@ -204,12 +207,14 @@ class ValueHandler {
     return null;
   }
 
-  Future<String?> customDecryption({required String encodedValue}) async {
+  static Future<String?> customDecryption(
+      {required String encodedValue}) async {
     try {
-      String encodedKey = base64Url.encode(utf8.encode(skey)).substring(0, 32);
+      String encodedKey =
+          base64Url.encode(utf8.encode(ValueHandler.skey)).substring(0, 32);
       await encrypt.loadLibrary();
       final key = encrypt.Key.fromUtf8(encodedKey);
-      final iv = encrypt.IV.fromUtf8(skey.substring(0, 16));
+      final iv = encrypt.IV.fromUtf8(ValueHandler.skey.substring(0, 16));
       final encrypter = encrypt.Encrypter(encrypt.AES(key));
       final encrypted = encrypt.Encrypted.fromBase64(encodedValue);
       final decrypted = encrypter.decrypt(encrypted, iv: iv);
@@ -220,7 +225,7 @@ class ValueHandler {
     return null;
   }
 
-  String? stringDateTimeFormatter(
+  static String? stringDateTimeFormatter(
       {required String dateTime, String? newPattern}) {
     try {
       var date1 = DateTime.parse(dateTime);
@@ -232,7 +237,7 @@ class ValueHandler {
     return null;
   }
 
-  bool isTextNotEmptyOrNull(dynamic src) {
+  static bool isTextNotEmptyOrNull(dynamic src) {
     var value = src != null &&
         src.toString().isNotEmpty &&
         src != "null" &&
@@ -242,21 +247,21 @@ class ValueHandler {
     return value;
   }
 
-  setNullTextToZero(src) {
-    return isTextNotEmptyOrNull(src) ? src : 0;
+  static setNullTextToZero(src) {
+    return ValueHandler.isTextNotEmptyOrNull(src) ? src : 0;
   }
 
-  String setNullTextToBlank(final String input) {
-    return !isTextNotEmptyOrNull(input) ? "" : input;
+  static String setNullTextToBlank(final String input) {
+    return !ValueHandler.isTextNotEmptyOrNull(input) ? "" : input;
   }
 
-  String? setNullBlankTextToNullAbleString(final String? input) {
-    return !isTextNotEmptyOrNull(input) ? null : input;
+  static String? setNullBlankTextToNullAbleString(final String? input) {
+    return !ValueHandler.isTextNotEmptyOrNull(input) ? null : input;
   }
 
-  bool isNonZeroNumericValue(dynamic txt) {
-    String? res = stringify(txt);
-    if (isTextNotEmptyOrNull(res)) {
+  static bool isNonZeroNumericValue(dynamic txt) {
+    String? res = ValueHandler.stringify(txt);
+    if (ValueHandler.isTextNotEmptyOrNull(res)) {
       try {
         return num.parse(res!) > 0;
       } catch (e) {
@@ -266,20 +271,20 @@ class ValueHandler {
     return false;
   }
 
-  double dp({required double val, required int places}) {
+  static double dp({required double val, required int places}) {
     String temp = val.toStringAsFixed(places);
     return double.parse(temp);
   }
 
-  String stringToBase64({required String value}) {
+  static String stringToBase64({required String value}) {
     return base64Encode(utf8.encode(value));
   }
 
-  String base64ToString({required String encoded}) {
+  static String base64ToString({required String encoded}) {
     return utf8.decode(base64Decode(encoded));
   }
 
-  String uriEncodeForm({required Map<String, dynamic> body}) {
+  static String uriEncodeForm({required Map<String, dynamic> body}) {
     List parts = [];
     body.forEach((key, value) {
       parts.add('$key=${value ?? ""}');
@@ -288,7 +293,7 @@ class ValueHandler {
     return formData;
   }
 
-  Future<Map<String, String>> httpPost(
+  static Future<Map<String, String>> httpPost(
       {required String accessToken,
       required String postXml,
       String? tag}) async {
@@ -297,7 +302,7 @@ class ValueHandler {
     AppLog.i(postXml, tag: "${tag ?? ""} PostXml");
     AppLog.i(accessToken, tag: "${tag ?? ""} AccessToken");
 
-    String base64Xml = encryptXmlRequest(postXml);
+    String base64Xml = ValueHandler.encryptXmlRequest(postXml);
     var rng = Random();
     int randomHash = rng.nextInt(90000000) + 10000000;
 
@@ -312,12 +317,12 @@ class ValueHandler {
     postParams["HTTP_RANDOM_HASH"] = randomHash.toString();
     /*to manage static access token 13-06-2018*/
     postParams["VersionCode"] =
-        await app_config.AppConfig().getAppVersionCode();
+        await app_config.AppConfig().getAppVersionCode() ?? "";
 
     return postParams;
   }
 
-  String encryptXmlRequest(String input) {
+  static String encryptXmlRequest(String input) {
     if (input.isEmpty) return "";
     try {
       String urlEncodedData = Uri.encodeComponent(input);
@@ -329,12 +334,12 @@ class ValueHandler {
     }
   }
 
-  bool isHtml(String text) {
+  static bool isHtml(String text) {
     final RegExp htmlRegExp = RegExp(r'<[^>]*>');
     return htmlRegExp.hasMatch(text);
   }
 
-  String parseHtmlToText(String htmlString) {
+  static String parseHtmlToText(String htmlString) {
     return htmlString.replaceAll(RegExp(r'<[^>]*>'), '').trim();
   }
 
@@ -354,5 +359,15 @@ class ValueHandler {
   //   return '$digest';
   // }
 
-  String frontCapitalize(String s) => s[0].toUpperCase() + s.substring(1);
+  static String frontCapitalize(String s) =>
+      s[0].toUpperCase() + s.substring(1);
+
+  static bool canBeJsonDecoded(String value) {
+    try {
+      json.decode(value);
+      return true; // Valid JSON
+    } catch (e) {
+      return false; // Invalid JSON
+    }
+  }
 }

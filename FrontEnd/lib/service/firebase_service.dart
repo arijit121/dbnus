@@ -9,7 +9,7 @@ import '../extension/logger_extension.dart';
 import 'redirect_engine.dart' deferred as redirect_engine;
 
 class FirebaseService {
-  Future<void> generateToken() async {
+  static Future<void> generateToken() async {
     try {
       await Future.wait([
         firebase_messaging.loadLibrary(),
@@ -29,7 +29,7 @@ class FirebaseService {
     }
   }
 
-  Future<void> getInitialMessage() async {
+  static Future<void> getInitialMessage() async {
     try {
       await Future.wait(
           [firebase_messaging.loadLibrary(), redirect_engine.loadLibrary()]);
@@ -41,20 +41,20 @@ class FirebaseService {
 
       if (initialMessage != null) {
         if (initialMessage.data.containsKey("ActionURL")) {
-          redirect_engine.RedirectEngine().redirectRoutes(
+          redirect_engine.RedirectEngine.redirectRoutes(
             redirectUrl: Uri.parse(initialMessage.data["ActionURL"]),
             delayedSeconds: 4,
           );
         }
 
-        // PopUpItems().toastMessage(initialMessage.data["ActionURL"], blue);
+        // PopUpItems.toastMessage(initialMessage.data["ActionURL"], blue);
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
 
-  Future<void> logEvent({
+  static Future<void> logEvent({
     required String name,
     Map<String, Object>? parameters,
     AnalyticsCallOptions? callOptions,
@@ -68,14 +68,14 @@ class FirebaseService {
     }
   }
 
-  Future<void> setAnalyticsCollectionEnabled() async {
+  static Future<void> setAnalyticsCollectionEnabled() async {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     await analytics.setAnalyticsCollectionEnabled(true);
     FirebaseAnalyticsObserver(analytics: analytics);
     await analytics.setConsent(analyticsStorageConsentGranted: true);
   }
 
-  void showNotification(RemoteMessage message) {
+  static void showNotification(RemoteMessage message) {
     var massagePayload = {
       'Title': message.data['title'],
       'Message': message.data['message'],
@@ -87,7 +87,21 @@ class FirebaseService {
 
     CustomNotificationModel customNotificationModel =
         CustomNotificationModel.fromJson(massagePayload);
-    NotificationHandler()
-        .showUpdateFlutterNotification(customNotificationModel);
+    NotificationHandler.showUpdateFlutterNotification(customNotificationModel,
+        notificationId:
+            FirebaseService._extractUniqueIdAsInt(message.messageId ?? ""));
+  }
+
+  static int? _extractUniqueIdAsInt(String input) {
+    final regex = RegExp(r'0:(\d+)%');
+    final match = regex.firstMatch(input);
+    if (match != null) {
+      final fullId = match.group(1)!;
+      final shortened = fullId.length > 9
+          ? fullId.substring(fullId.length - 9) // take last 9 digits
+          : fullId;
+      return int.tryParse(shortened);
+    }
+    return null;
   }
 }

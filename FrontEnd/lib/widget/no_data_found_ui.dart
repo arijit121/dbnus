@@ -34,9 +34,7 @@ class NoDataFound extends StatelessWidget {
               path: AssetsConst.noRecordFound,
               width: width - 20,
               height: height -
-                  (80 +
-                      44 +
-                      (ValueHandler().isTextNotEmptyOrNull(msg) ? 20 : 0)),
+                  (80 + 44 + (ValueHandler.isTextNotEmptyOrNull(msg) ? 20 : 0)),
             ),
             const CustomText(
               "No record found",
@@ -45,7 +43,7 @@ class NoDataFound extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
             30.ph,
-            if (ValueHandler().isTextNotEmptyOrNull(msg))
+            if (ValueHandler.isTextNotEmptyOrNull(msg))
               CustomText(msg ?? "", color: Colors.blue, size: 20),
           ],
         ),

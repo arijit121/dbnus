@@ -5,6 +5,8 @@ import 'package:dbnus/extension/spacing.dart';
 import 'package:dbnus/router/router_name.dart';
 import 'package:dbnus/service/Localization/extension/localization_ext.dart';
 import 'package:dbnus/service/file_picker.dart';
+import 'package:dbnus/utils/screen_utils.dart';
+import 'package:dbnus/widget/custom_text_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,9 +15,11 @@ import '../../../config/app_config.dart';
 import '../../../const/api_url_const.dart';
 import '../../../const/color_const.dart';
 import '../../../data/model/forward_geocoding.dart';
+import '../../../data/model/razorpay_merchant_details.dart';
 import '../../../data/model/reverse_geocoding.dart';
 import '../../../extension/logger_extension.dart';
 import '../../../flavors.dart';
+import '../../../router/custom_router/custom_route.dart';
 import '../../../service/Localization/utils/localization_utils.dart';
 import '../../../service/download_handler.dart';
 import '../../../service/geocoding.dart';
@@ -25,6 +29,9 @@ import '../../../widget/carousel_slider.dart';
 import '../../../widget/custom_button.dart';
 import '../../../widget/custom_image.dart';
 import '../../../widget/custom_text.dart';
+import '../../../widget/smooth_scroll.dart';
+import '../../../widget/youtube_video_player.dart';
+import '../../payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -35,20 +42,22 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   ValueNotifier<int> counter = ValueNotifier(0);
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _midController = TextEditingController();
+  final TextEditingController _orderIdController = TextEditingController();
+  final TextEditingController _txnTokenController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
-          child: ListView(
+          child: SmoothScroll(
             primary: false,
             children: [
-              20.ph,
               CustomTextEnum(
                 F.title,
                 styleType: CustomTextStyleType.body2,
-                color: ColorConst.primaryDark,
               ),
               20.ph,
               CustomTextEnum(
@@ -82,12 +91,13 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   boxShadow: [
-                    BoxShadow(color: Colors.red, blurRadius: 1, spreadRadius: 0.5
+                    BoxShadow(
+                        color: Colors.red, blurRadius: 1, spreadRadius: 0.5
                         // offset: Offset(4, 8), // Shadow position
                         ),
                   ],
                   onPressed: () {
-                    LocalizationUtils().changeLanguage(
+                    LocalizationUtils.changeLanguage(
                         locale: LocalizationUtils.supportedLocales[Random()
                             .nextInt(
                                 LocalizationUtils.supportedLocales.length)]);
@@ -96,7 +106,6 @@ class _TestPageState extends State<TestPage> {
                   //   ColorConst.red,
                   //   Colors.blue,
                   // ]),
-                  backGroundColor: Colors.white,
                   borderColor: Colors.blue,
                   child: const CustomText("Change language")),
               20.ph,
@@ -126,7 +135,7 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () {
-                    DownloadHandler().download(
+                    DownloadHandler.download(
                         downloadUrl:
                             "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucoseFasting.pdf");
                   },
@@ -138,31 +147,7 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () {
-                    DownloadHandler().download(
-                        downloadUrl:
-                            "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/GlucosePP.pdf");
-                  },
-                  gradient: const LinearGradient(colors: [
-                    ColorConst.red,
-                    Colors.blue,
-                  ]),
-                  child: const CustomText("GlucosePP")),
-              20.ph,
-              CustomGOEButton(
-                  onPressed: () {
-                    DownloadHandler().download(
-                        downloadUrl:
-                            "https://res.genupathlabs.com/genu_path_lab/live/customer_V2/sample_report/LipidProfile.pdf");
-                  },
-                  gradient: const LinearGradient(colors: [
-                    ColorConst.red,
-                    Colors.blue,
-                  ]),
-                  child: const CustomText("LipidProfile")),
-              20.ph,
-              CustomGOEButton(
-                  onPressed: () {
-                    DownloadHandler().download(
+                    DownloadHandler.download(
                         downloadUrl:
                             "http://65.0.139.63:5001/api/admin/invoices/676f20131e1add0f4b4b2a58/pdf",
                         headers: {
@@ -190,8 +175,8 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () async {
-                    ForwardGeocoding? forwardGeocoding = await Geocoding()
-                        .forwardGeocoding(
+                    ForwardGeocoding? forwardGeocoding =
+                        await Geocoding.forwardGeocoding(
                             address:
                                 "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India");
                     AppLog.i(forwardGeocoding?.longitude);
@@ -205,8 +190,8 @@ class _TestPageState extends State<TestPage> {
               20.ph,
               CustomGOEButton(
                   onPressed: () async {
-                    ReverseGeocoding? reverseGeocoding = await Geocoding()
-                        .reverseGeocoding(
+                    ReverseGeocoding? reverseGeocoding =
+                        await Geocoding.reverseGeocoding(
                             latitude: 22.5754, longitude: 88.4798);
                     AppLog.i(reverseGeocoding?.displayName);
                   },
@@ -221,7 +206,7 @@ class _TestPageState extends State<TestPage> {
                   onPressed: () async {
                     String? deviceId = await AppConfig().getDeviceId();
                     AppLog.i(deviceId);
-                    PopUpItems().toastMessage(deviceId ?? "", Colors.green);
+                    PopUpItems.toastMessage(deviceId ?? "", Colors.green);
                   },
                   gradient: const LinearGradient(colors: [
                     ColorConst.red,
@@ -246,7 +231,7 @@ class _TestPageState extends State<TestPage> {
                   width: 200,
                   onPressed: () async {
                     CustomFile? customFile =
-                        await CustomFilePicker().customFilePicker();
+                        await CustomFilePicker.customFilePicker();
                     AppLog.i(customFile?.name, tag: "CustomFile");
                   },
                   gradient: const LinearGradient(colors: [
@@ -255,172 +240,62 @@ class _TestPageState extends State<TestPage> {
                   ]),
                   child: const CustomText("File Pick")),
               20.ph,
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      PopUpItems()
-                          .toastMessage("On Tap", ColorConst.baseHexColor);
-                    },
-                    child: CustomNetWorkImageView(
-                      url: ApiUrlConst.testImgUrl,
-                      radius: 8,
-                      height: 200,
-                      width: 120,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl + "lfmbldmfbl",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
+              CustomGOEButton(
+                  width: 200,
+                  onPressed: () async {
+                    CustomRoute.pushNamed(
+                        name: RouteName.rayzorPay,
+                        arguments: RazorpayMerchantDetails());
+                  },
+                  gradient: const LinearGradient(colors: [
+                    ColorConst.red,
+                    Colors.blue,
+                  ]),
+                  child: const CustomText("Razorpay")),
+              20.ph,
+              CustomTextFormField(
+                controller: _amountController,
+                title: 'Amount',
               ),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
+              CustomTextFormField(
+                controller: _midController,
+                title: 'MID',
               ),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
+              CustomTextFormField(
+                controller: _orderIdController,
+                title: 'Order ID',
               ),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
+              CustomTextFormField(
+                title: 'Txn Token',
+                controller: _txnTokenController,
               ),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
+              CustomGOEButton(
+                  width: 200,
+                  onPressed: () async {
+                    CustomRoute.pushNamed(
+                      name: RouteName.webViewPaymentGateway,
+                      arguments: WebViewPaymentGatewayModel(
+                        paymentLink:
+                            'https://res.retailershakti.com/rs_live/msiteflutter/msite/static/paytm_view.html?amount=${_amountController.text}&mid=${_midController.text}&orderId=${_orderIdController.text}&txnToken=${_txnTokenController.text}',
+                        redirectLink:
+                            'https://www.retailershakti.com/retailCart/payment',
+                        transactionId: _orderIdController.text,
+                        title: "Paytm",
+                      ),
+                    );
+                  },
+                  backGroundColor: Colors.blue,
+                  child: const CustomText("Paytm WebViewPaymentGateway",
+                      color: Colors.white)),
               20.ph,
               CustomGOEButton(
                   width: 160,
                   onPressed: () async {
-                    PopUpItems().customMsgDialog(
+                    PopUpItems.customMsgDialog(
                         title: "Success",
                         content: "Thank you, transaction complete.",
                         type: DialogType.success);
@@ -431,576 +306,94 @@ class _TestPageState extends State<TestPage> {
                     color: Colors.white,
                   )),
               20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
+              YoutubeVideoPlayer(
+                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                height: 200,
               ),
               20.ph,
               Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              20.ph,
-              Row(
-                children: [
-                  CustomNetWorkImageView(
-                    url: ApiUrlConst.testImgUrl,
-                    radius: 8,
-                    height: 100,
-                    width: 120,
-                    fit: BoxFit.fill,
-                  ),
-                  CustomNetWorkImageView(
-                    url:
-                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                    radius: 8,
-                    height: 100,
-                    //  width: 120,
-                    fit: BoxFit.fitHeight,
-                  ),
                   InkWell(
                     onTap: () {
-                      PopUpItems()
-                          .toastMessage("On Tap", ColorConst.baseHexColor);
+                      PopUpItems.toastMessage(
+                          "On Tap", ColorConst.baseHexColor);
                     },
                     child: CustomNetWorkImageView(
-                      url:
-                          "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
+                      url: ApiUrlConst.testImgUrl(),
                       radius: 8,
-                      // height: 100,
+                      height: 200,
                       width: 120,
-                      fit: BoxFit.fitWidth,
-                      color: ColorConst.primaryDark,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  CustomNetWorkImageView(
+                    url: "${ApiUrlConst.testImgUrl()}lfmbldmfbl",
+                    radius: 8,
+                    height: 100,
+                    width: 120,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomNetWorkImageView(
+                    url: ApiUrlConst.testImgUrl(),
+                    radius: 8,
+                    height: 100,
+                    width: 120,
+                    fit: BoxFit.fill,
+                  ),
+                  CustomNetWorkImageView(
+                    url:
+                        "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
+                    radius: 8,
+                    height: 100,
+                    width: 120,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ],
@@ -1010,9 +403,9 @@ class _TestPageState extends State<TestPage> {
                 radius: 8,
                 autoScrollDuration: Duration(seconds: 4),
                 imageList: List.generate(5, (int index) {
-                  return index == 4
-                      ? "https://picsum.photos/1080/512.jpg"
-                      : ApiUrlConst.testImgUrl;
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
                 }),
                 onTap: (index) {
                   kIsWeb
@@ -1020,6 +413,76 @@ class _TestPageState extends State<TestPage> {
                       : context.pushNamed(RouteName.games);
                 },
                 height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CarouselSlider(
+                radius: 8,
+                autoScrollDuration: Duration(seconds: 4),
+                imageList: List.generate(5, (int index) {
+                  return index == 2
+                      ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
+                      : ApiUrlConst.testImgUrl();
+                }),
+                onTap: (index) {
+                  kIsWeb
+                      ? context.goNamed(RouteName.games)
+                      : context.pushNamed(RouteName.games);
+                },
+                height: 400,
+              ),
+              20.ph,
+              Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomNetWorkImageView(
+                      url: ApiUrlConst.testImgUrl(),
+                      radius: 8,
+                      height: ScreenUtils.nw() / 2,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+              20.ph,
+              CustomNetWorkImageView(
+                url: ApiUrlConst.testImgUrl(
+                    aspectRatio: ScreenUtils.nw() / (ScreenUtils.nw() / 2)),
+                radius: 8,
+                height: ScreenUtils.nw() / 2,
+                fit: BoxFit.fill,
               ),
               20.ph,
             ],

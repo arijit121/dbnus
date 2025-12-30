@@ -1,13 +1,13 @@
+import 'dart:js_interop';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
-import 'package:web/web.dart';
 
 import '../../const/assects_const.dart';
 import '../../extension/logger_extension.dart';
 import '../../service/value_handler.dart';
-import 'dart:js' show allowInterop;
 
 class NetworkImg extends StatelessWidget {
   const NetworkImg(
@@ -15,77 +15,83 @@ class NetworkImg extends StatelessWidget {
       required this.url,
       this.height,
       this.width,
+      this.radius,
       this.fit,
       this.color,
       this.errorWidget,
       this.loadingWidget});
 
   final String url;
-  final double? height;
-  final double? width;
+  final double? height, width, radius;
   final BoxFit? fit;
   final Color? color;
   final Widget? loadingWidget, errorWidget;
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url,
-      width: width != 0.0 ? width : null,
-      height: height != 0.0 ? height : null,
-      fit: fit,
-      color: color,
-      progressIndicatorBuilder: (context, url, downloadProgress) {
-        return loadingWidget ??
-            Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              child: Container(
-                width: width,
-                height: height,
-                color: Colors.white, // Shimmer background color
-              ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius ?? 0),
+      child: CachedNetworkImage(
+        imageUrl: url,
+        width: width != 0.0 ? width : null,
+        height: height != 0.0 ? height : null,
+        fit: fit,
+        color: color,
+        progressIndicatorBuilder: (context, url, downloadProgress) {
+          return loadingWidget ??
+              Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                child: Container(
+                  width: width,
+                  height: height,
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Shimmer background color
+                    borderRadius: BorderRadius.circular(radius ?? 0),
+                  ),
+                ),
+              );
+        },
+        errorWidget: (_, __, ___) {
+          return LayoutBuilder(builder: (context, BoxConstraints constraints) {
+            double calculatedWidth = width ??
+                (constraints.minWidth != 0
+                    ? constraints.minWidth
+                    : constraints.maxWidth != double.infinity
+                        ? constraints.maxWidth
+                        : 0);
+            double calculatedHeight = height ??
+                (constraints.minHeight != 0
+                    ? constraints.minHeight
+                    : constraints.maxHeight != double.infinity
+                        ? constraints.maxHeight
+                        : 0);
+            return _CorsNetworkImg(
+              key: Key("$constraints"),
+              url: url,
+              width: calculatedWidth != 0 ? calculatedWidth : null,
+              height: calculatedHeight != 0 ? calculatedHeight : null,
+              fit: fit,
+              color: color,
+              errorWidget: errorWidget,
             );
-      },
-      errorWidget: (_, __, ___) {
-        return LayoutBuilder(builder: (context, BoxConstraints constraints) {
-          double calculatedWidth = width ??
-              (constraints.minWidth != 0
-                  ? constraints.minWidth
-                  : constraints.maxWidth != double.infinity
-                      ? constraints.maxWidth
-                      : 0);
-          double calculatedHeight = height ??
-              (constraints.minHeight != 0
-                  ? constraints.minHeight
-                  : constraints.maxHeight != double.infinity
-                      ? constraints.maxHeight
-                      : 0);
-          return _CorsNetworkImg(
-            key: Key("$constraints"),
-            url: url,
-            width: calculatedWidth != 0 ? calculatedWidth : null,
-            height: calculatedHeight != 0 ? calculatedHeight : null,
+          });
+          // Image.asset(
+          //   AssetsConst.dbnusNoImageLogo,
+          //   width: width,
+          //   height: height,
+          // );
+        },
+        imageBuilder: (context, imageProvider) {
+          return Image(
+            image: imageProvider,
+            width: width,
+            height: height,
             fit: fit,
             color: color,
-            errorWidget: errorWidget,
           );
-        });
-        // Image.asset(
-        //   AssetsConst.dbnusNoImageLogo,
-        //   width: width,
-        //   height: height,
-        // );
-      },
-      imageBuilder: (context, imageProvider) {
-        return Image(
-          image: imageProvider,
-          width: width,
-          height: height,
-          fit: fit,
-          color: color,
-        );
-      },
+        },
+      ),
     );
   }
 }
@@ -139,7 +145,7 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
     return ValueListenableBuilder<bool>(
       valueListenable: errorFound,
       builder: (BuildContext context, bool value, _) {
-        return value || !ValueHandler().isTextNotEmptyOrNull(widget.url)
+        return value || !ValueHandler.isTextNotEmptyOrNull(widget.url)
             ? widget.errorWidget ??
                 Image.asset(
                   AssetsConst.dbnusNoImageLogo,
@@ -177,11 +183,11 @@ class _CorsNetworkImgState extends State<_CorsNetworkImg> {
                           imageElement.style.objectFit =
                               _getObjectFit(widget.fit);
                           imageElement.draggable = false;
-                          imageElement.onerror = allowInterop((Event event) {
+                          imageElement.onerror = (JSAny? event) {
                             errorFound.value = true;
 
                             AppLog.e(widget.url, tag: "Failed to load image");
-                          }) as OnErrorEventHandler;
+                          }.toJS;
 
                           // Apply CSS color filter if color is provided
                           if (widget.color != null) {

@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
 
+import '../config/app_config.dart';
 import '../service/value_handler.dart' deferred as value_handler;
 import 'local_preferences.dart' deferred as local_preferences;
 
@@ -47,8 +48,10 @@ class SsHive {
       storePath =
           "${(await path_provider.getApplicationDocumentsDirectory()).path}/hive_box";
     }
+    String appVersion = (await AppConfig().getAppVersion()) ?? "1.0.0";
+    String appVersionCode = (await AppConfig().getAppVersionCode()) ?? "1";
     BoxCollection collection = await BoxCollection.open(
-      _collectionName,
+      "$_collectionName-$appVersion-$appVersionCode",
       _boxNames,
       path: storePath,
       key: HiveAesCipher(key),
@@ -62,7 +65,7 @@ class SsHive {
     final localPreferences = local_preferences.LocalPreferences();
     String? encryptionKey = await localPreferences.getString(
         key: local_preferences.LocalPreferences.hiveEncryptionKey);
-    if (value_handler.ValueHandler().isTextNotEmptyOrNull(encryptionKey)) {
+    if (value_handler.ValueHandler.isTextNotEmptyOrNull(encryptionKey)) {
       var key = base64Url.decode(encryptionKey ?? "");
       return key;
     } else {

@@ -9,7 +9,7 @@ function paytm(txnToken, orderId, amount, mid) {
 
         const script = document.createElement('script');
         script.id = 'paytm-script';  // Give an ID to the script to avoid loading it multiple times
-        script.src = 'https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/sastas46579384879393.js';
+        script.src = 'https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/' + mid + '.js';
         script.type = 'application/javascript';
         script.crossOrigin = 'anonymous';
 
@@ -91,3 +91,5 @@ async function _onScriptLoad(txnToken, orderId, amount, mid) {
     return result;
 }
 
+// ✅ Expose to Flutter
+window._initiatePaytm = paytm;

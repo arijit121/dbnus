@@ -13,13 +13,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'const/theme_const.dart';
+import 'data/connection/bloc/connection_bloc.dart';
 import 'extension/logger_extension.dart';
 import 'firebase_options.dart';
 import 'router/custom_router/custom_route.dart';
 import 'router/router_manager.dart';
 import 'router/router_name.dart';
 import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/l10n/app_localizations.dart';
+import 'service/Localization/app_localizations/app_localizations.dart';
 import 'service/Localization/utils/localization_utils.dart';
 import 'service/app_updater.dart';
 import 'service/crash/utils/crash_utils.dart';
@@ -34,7 +35,7 @@ import 'utils/text_utils.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseService().showNotification(message);
+  FirebaseService.showNotification(message);
   AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
@@ -46,18 +47,18 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    FirebaseService().showNotification(message);
+    FirebaseService.showNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
-      RedirectEngine().redirectRoutes(
+      RedirectEngine.redirectRoutes(
         redirectUrl: Uri.parse(event.data["ActionURL"]),
         delayedSeconds: 4,
       );
     }
   });
 
-  CrashUtils().setValue(value: false);
+  CrashUtils.setValue(value: false);
   FlutterError.onError = (errorDetails) {
     if (errorDetails.library?.contains("widgets library") == true) {
       AppLog.e("${errorDetails.exception}",
@@ -65,7 +66,7 @@ Future<void> main() async {
       if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       }
-      CrashUtils().navigateToCrashPage({
+      CrashUtils.navigateToCrashPage({
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
@@ -88,12 +89,12 @@ Future<void> main() async {
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  await FirebaseService().getInitialMessage();
-  await FirebaseService().setAnalyticsCollectionEnabled();
-  await NotificationHandler().requestPermissions();
-  await NotificationHandler().initiateNotification();
+  await FirebaseService.getInitialMessage();
+  await FirebaseService.setAnalyticsCollectionEnabled();
+  await NotificationHandler.requestPermissions();
+  await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
-  SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((_) async {
@@ -112,11 +113,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
       BackButtonInterceptor.add(myInterceptor);
-      await FirebaseService().generateToken();
-      await AppUpdater().startUpdate();
+      await FirebaseService.generateToken();
+      await AppUpdater.startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
-        RedirectEngine().redirectRoutes(redirectUrl: uri);
+        RedirectEngine.redirectRoutes(redirectUrl: uri);
       });
     });
 
@@ -132,10 +134,10 @@ class _MyAppState extends State<MyApp> {
   bool _isExitAppDialogOpen = false;
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    if (CustomRoute().currentRoute() == RouteName.initialView) {
+    if (CustomRoute.currentRoute() == RouteName.initialView) {
       if (!_isExitAppDialogOpen) {
         _isExitAppDialogOpen = true;
-        PopUpItems().cupertinoPopup(
+        PopUpItems.cupertinoPopup(
             cancelBtnPresses: () {
               _isExitAppDialogOpen = false;
             },
@@ -150,7 +152,7 @@ class _MyAppState extends State<MyApp> {
     } else if (RouterManager.getInstance.router.canPop() == true) {
       return false;
     } else {
-      CustomRoute().clearAndNavigate(RouteName.initialView);
+      CustomRoute.clearAndNavigateName(RouteName.initialView);
       return true;
     }
   }
@@ -167,18 +169,18 @@ class _MyAppState extends State<MyApp> {
           create: (BuildContext context) =>
               LocalizationBloc()..add(InitLocalization()),
         ),
+        BlocProvider(
+          lazy: false,
+          create: (BuildContext context) =>
+              ConnectionBloc()..add(InitConnection()),
+        ),
       ],
       child: BlocBuilder<LocalizationBloc, LocalizationState>(
         builder: (context, localizationState) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             locale: localizationState.locale.value,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: LocalizationUtils.supportedLocales,
             title: TextUtils.appTitle,
             themeMode: ThemeMode.system,

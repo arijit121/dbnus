@@ -14,11 +14,14 @@ class NetworkBytesImgBloc
     on<NetworkBytesImgEvent>((event, emit) async {
       if (event is GetData) {
         try {
-          Uint8List bytes = await apiRepo()
-              .urlToByte(url: event.url, timeOut: const Duration(minutes: 5));
-          emit(NetworkBytesImgState(bytes: bytes, isLoaded: true));
+          Uint8List? bytes = await ApiEngine.instance.urlToByte(uri: event.url, tag: 'NetworkBytesImg');
+          if (bytes == null) {
+            emit(state.copyWith(bytes: bytes, isLoaded: true));
+          } else {
+            emit(state.copyWith(isLoaded: false, isError: true));
+          }
         } catch (e) {
-          emit(NetworkBytesImgState(isLoaded: false, isError: true));
+          emit(state.copyWith(isLoaded: false, isError: true));
         }
       }
     });

@@ -51,8 +51,8 @@ class _RayzorPayState extends State<RayzorPay> {
       'order_id': widget.razorpayMerchantDetails.id,
       'key': widget.razorpayMerchantDetails.razorpayKey,
       'currency': widget.razorpayMerchantDetails.currency,
-      'amount': ValueHandler()
-          .numify("${widget.razorpayMerchantDetails.amount ?? 0}"),
+      'amount':
+          ValueHandler.numify("${widget.razorpayMerchantDetails.amount ?? 0}"),
       // 'name': widget.razorpayMerchantDetails.["payment_name"],
       // 'description': widget.razorpayMerchantDetails.d["payment_description"],
       // 'image': widget.razorpayMerchantDetails.["payment_image"],
@@ -86,7 +86,7 @@ class _RayzorPayState extends State<RayzorPay> {
       Navigator.of(context).pop(successReturnBody);
     }
 
-    // PopUpItems()
+    // PopUpItems.
     //     .toastMessage("SUCCESS: " + response.paymentId.toString(), black);
   }
 
@@ -104,7 +104,7 @@ class _RayzorPayState extends State<RayzorPay> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    // PopUpItems().toastMessage(
+    // PopUpItems.toastMessage(
     //     "EXTERNAL_WALLET: " + response.walletName.toString(), black);
   }
 

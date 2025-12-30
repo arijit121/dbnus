@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../l10n/app_localizations.dart';
+import '../app_localizations/app_localizations.dart';
+import '../app_localizations/app_localizations_en.dart';
 
 extension LocalizationExtension on BuildContext {
-  AppLocalizations? get l10n => AppLocalizations.of(this);
+  AppLocalizations get l10n => AppLocalizations.of(this)?? AppLocalizationsEn();
 }

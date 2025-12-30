@@ -1,11 +1,12 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../service/open_service.dart';
 import '../service/value_handler.dart';
+import 'custom_button.dart';
 
 TextStyle customizeTextStyle(
     {FontWeight? fontWeight,
@@ -15,9 +16,11 @@ TextStyle customizeTextStyle(
     Color? decorationColor,
     double? height,
     Color? backgroundColor,
-    String? font}) {
-  return ValueHandler().isTextNotEmptyOrNull(font)
-      ? GoogleFonts.getFont(font!,
+    String? font,
+    FontStyle? fontStyle}) {
+  return ValueHandler.isTextNotEmptyOrNull(font)
+      ? GoogleFonts.getFont(
+          font!,
           decoration: decoration,
           fontWeight: fontWeight,
           wordSpacing: 0,
@@ -25,7 +28,9 @@ TextStyle customizeTextStyle(
           fontSize: fontSize,
           decorationColor: decorationColor,
           height: height,
-          backgroundColor: backgroundColor)
+          backgroundColor: backgroundColor,
+          fontStyle: fontStyle,
+        )
       : GoogleFonts.inter(
           decoration: decoration,
           fontWeight: fontWeight,
@@ -34,7 +39,9 @@ TextStyle customizeTextStyle(
           fontSize: fontSize,
           decorationColor: decorationColor,
           height: height,
-          backgroundColor: backgroundColor);
+          backgroundColor: backgroundColor,
+          fontStyle: fontStyle,
+        );
 }
 
 class CustomText extends StatelessWidget {
@@ -44,11 +51,13 @@ class CustomText extends StatelessWidget {
   final FontWeight? fontWeight;
   final int? maxLines;
   final TextDecoration? decoration;
-  final bool lineGapNeeded;
+  final double? height;
   final TextAlign? textAlign;
   final Color? backGroundColor;
+  final Color? decorationColor;
   final String? font;
   final TextOverflow? overflow;
+  final FontStyle? fontStyle;
 
   const CustomText(
     this.text, {
@@ -58,11 +67,13 @@ class CustomText extends StatelessWidget {
     this.fontWeight,
     this.maxLines,
     this.decoration,
-    this.lineGapNeeded = false,
+    this.decorationColor,
+    this.height,
     this.textAlign,
     this.backGroundColor,
     this.font,
     this.overflow,
+    this.fontStyle,
   });
 
   @override
@@ -76,15 +87,12 @@ class CustomText extends StatelessWidget {
           font: font,
           fontWeight: fontWeight,
           fontSize: size,
+          fontStyle: fontStyle,
           fontColor: color,
-          height: lineGapNeeded == true
-              ? 1.8
-              : kIsWeb
-                  ? 1.2
-                  : 0.0,
+          height: height ?? (kIsWeb ? 1.2 : 0.0),
           decoration: decoration,
           backgroundColor: backGroundColor,
-          decorationColor: color),
+          decorationColor: decorationColor ?? color),
     );
   }
 }
@@ -130,7 +138,7 @@ InlineSpan CustomTextSpan({
   bool? isTextSpan,
 }) {
   assert(!(isTextSpan == true && alignment != null),
-      'alignment is not available in TextSpan');
+      'alignment and seoTag are not available in TextSpan');
 
   return isTextSpan == true
       ? TextSpan(
@@ -149,18 +157,16 @@ InlineSpan CustomTextSpan({
       : WidgetSpan(
           alignment: alignment ?? PlaceholderAlignment.baseline,
           baseline: TextBaseline.alphabetic,
-          child: Text(
+          child: CustomText(
             text,
-            style: customizeTextStyle(
-              font: font,
-              fontWeight: fontWeight,
-              fontSize: size,
-              fontColor: color,
-              decoration: decoration,
-              decorationColor: decorationColor,
-              height: height,
-              backgroundColor: backgroundColor,
-            ),
+            font: font,
+            fontWeight: fontWeight,
+            size: size,
+            color: color,
+            decoration: decoration,
+            decorationColor: decorationColor,
+            height: height,
+            backGroundColor: backgroundColor,
           ),
         );
 }
@@ -247,9 +253,10 @@ class CustomHtmlText extends StatelessWidget {
   final FontWeight? fontWeight;
   final int? maxLines;
   final TextDecoration? decoration;
-  final bool lineGapNeeded;
+  final double? height;
   final Color? backGroundColor;
   final String? font;
+  final CustomWidgetBuilder? customWidgetBuilder;
 
   const CustomHtmlText(
     this.html, {
@@ -259,9 +266,10 @@ class CustomHtmlText extends StatelessWidget {
     this.fontWeight,
     this.maxLines,
     this.decoration,
-    this.lineGapNeeded = false,
+    this.height,
     this.backGroundColor,
     this.font,
+    this.customWidgetBuilder,
   });
 
   @override
@@ -273,18 +281,15 @@ class CustomHtmlText extends StatelessWidget {
           fontWeight: fontWeight,
           fontSize: size,
           fontColor: color,
-          height: lineGapNeeded == true
-              ? 1.8
-              : kIsWeb
-                  ? 1.2
-                  : 0.0,
+          height: height ?? (kIsWeb ? 1.2 : 0.0),
           decoration: decoration,
           backgroundColor: backGroundColor,
           decorationColor: color),
       onTapUrl: (url) async {
-        await OpenService().openUrl(uri: Uri.parse(url));
+        await OpenService.openUrl(uri: Uri.parse(url));
         return true;
       },
+      customWidgetBuilder: customWidgetBuilder,
     );
   }
 }
@@ -390,7 +395,7 @@ class CustomTextEnum extends StatelessWidget {
   final Color? color;
 
   /// Whether additional line spacing is needed.
-  final bool lineGapNeeded;
+  final double? height;
 
   /// Text decoration for underlining, striking, etc.
   final TextDecoration? decoration;
@@ -401,6 +406,9 @@ class CustomTextEnum extends StatelessWidget {
   /// Custom text font.
   final String? font;
 
+  /// FontStyle normal or italic.
+  final FontStyle? fontStyle;
+
   /// Creates a `CustomTextEnumWidget` with flexible styling options.
   const CustomTextEnum(
     this.text, {
@@ -408,10 +416,11 @@ class CustomTextEnum extends StatelessWidget {
     this.maxLines,
     this.textAlign,
     this.color,
-    this.lineGapNeeded = false,
+    this.height,
     this.decoration,
     this.backGroundColor,
     this.font,
+    this.fontStyle,
     super.key,
   });
 
@@ -424,10 +433,75 @@ class CustomTextEnum extends StatelessWidget {
       fontWeight: styleType.fontWeight,
       maxLines: maxLines,
       decoration: decoration,
-      lineGapNeeded: lineGapNeeded,
+      height: height ?? (kIsWeb ? 1.2 : 0.0),
       textAlign: textAlign,
       backGroundColor: backGroundColor,
       font: font,
+      fontStyle: fontStyle,
+    );
+  }
+}
+
+class CustomObscureText extends StatefulWidget {
+  final String text;
+  final String obscureText;
+  final bool initialObscure;
+  final TextStyle style;
+  final Widget obscureIcon;
+  final Widget visibleIcon;
+
+  const CustomObscureText(
+    this.text, {
+    super.key,
+    this.obscureText = "*",
+    this.initialObscure = true,
+    required this.style,
+    this.obscureIcon = const Icon(Icons.visibility_off_outlined),
+    this.visibleIcon = const Icon(Icons.visibility_outlined),
+  });
+
+  @override
+  State<CustomObscureText> createState() => _CustomObscureTextState();
+}
+
+class _CustomObscureTextState extends State<CustomObscureText> {
+  late bool _obscure;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscure = widget.initialObscure;
+  }
+
+  void _toggleObscure() {
+    setState(() {
+      _obscure = !_obscure;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 100),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 8,
+        children: [
+          Flexible(
+            child: Text(
+              _obscure ? widget.obscureText * widget.text.length : widget.text,
+              style: widget.style,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          CustomIconButton(
+            icon: !_obscure ? widget.obscureIcon : widget.visibleIcon,
+            color: widget.style.color,
+            iconSize: widget.style.fontSize,
+            onPressed: _toggleObscure,
+          ),
+        ],
+      ),
     );
   }
 }

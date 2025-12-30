@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/model/razorpay_merchant_details.dart';
+import '../../data/model/route_model.dart';
 import '../../extension/logger_extension.dart';
 import '../../modules/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
     deferred as rayzorpay;
 import '../../modules/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
 import '../../modules/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway.dart'
     deferred as web_view_payment_gateway;
-import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
+import '../../service/JsService/provider/js_provider.dart';
 import '../../service/context_service.dart';
+import '../../service/crash/ui/crash_ui.dart' deferred as crash_ui;
 import '../../widget/error_route_widget.dart' deferred as error_route_widget;
 import '../router_manager.dart';
 import '../router_name.dart';
@@ -20,33 +22,41 @@ class CustomRoute {
   /// Manually navigating back always returns `[1]` as the default value in `[App]`,
   /// ensuring a consistent behavior across the application.
   /// If a `result` is provided, it will be used instead of `[1]` on non-web platforms.
-  void back<T extends Object?>([T? result]) {
+  static Future<void> back<T extends Object?>([T? result]) async {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
-
-    if (kIsWeb) {
-      bool canBack = CustomRouterWeb().canBack();
-      canBack
-          ? CustomRouterWeb().back()
-          : clearAndNavigate(RouteName.initialView);
-    } else {
-      if (RouterManager.getInstance.router.canPop() == true) {
-        RouterManager.getInstance.router.pop(result ?? 1);
-      } else {
-        clearAndNavigate(RouteName.initialView);
+    try {
+      if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+        RouterManager.getInstance.routeHistory.removeLast();
       }
+      if (kIsWeb) {
+        bool canBack = await CustomRouterWeb().canBack();
+        canBack
+            ? CustomRouterWeb().back()
+            : await clearAndNavigateName(RouteName.initialView);
+      } else {
+        if (RouterManager.getInstance.router.canPop() == true) {
+          RouterManager.getInstance.router.pop(result ?? 1);
+        } else {
+          await clearAndNavigateName(RouteName.initialView);
+        }
+      }
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      await clearAndNavigateName(RouteName.initialView);
     }
   }
 
-  void secBack() {
-    back();
-    back();
+  static Future<void> secBack() async {
+    await back();
+    await back();
   }
 
-  void clearAndNavigate(String name,
+  static Future<void> clearAndNavigateName(String name,
       {Map<String, String> pathParameters = const <String, String>{},
       Map<String, dynamic> queryParameters = const <String, dynamic>{},
-      Object? extra}) {
+      Object? extra}) async {
+    RouterManager.getInstance.routeHistory.clear();
     if (!kIsWeb) {
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.goNamed(name,
@@ -54,21 +64,29 @@ class CustomRoute {
           pathParameters: pathParameters,
           extra: extra);
     } else {
+      await JsProvider().clearSessionStorageKey("routeHistory");
       RouterManager routerManager = RouterManager.getInstance;
-      if (CustomRouterWeb().historyIndex() != 0) {
-        CustomRouterWeb().numBack(CustomRouterWeb().historyIndex());
-      }
-      Future.delayed(
-          Duration(milliseconds: CustomRouterWeb().historyIndex() * 10), () {
-        routerManager.router.replaceNamed(name,
-            queryParameters: queryParameters,
-            pathParameters: pathParameters,
-            extra: extra);
-      });
+      routerManager.router.goNamed(name,
+          queryParameters: queryParameters,
+          pathParameters: pathParameters,
+          extra: extra);
     }
   }
 
-  Future<MaterialPageRoute> _getRoute(
+  static Future<void> clearAndNavigateGo(String location,
+      {Object? extra}) async {
+    RouterManager.getInstance.routeHistory.clear();
+    if (!kIsWeb) {
+      RouterManager routerManager = RouterManager.getInstance;
+      routerManager.router.go(location, extra: extra);
+    } else {
+      await JsProvider().clearSessionStorageKey("routeHistory");
+      RouterManager routerManager = RouterManager.getInstance;
+      routerManager.router.go(location, extra: extra);
+    }
+  }
+
+  static Future<MaterialPageRoute> _getRoute(
       {required String name, dynamic arguments}) async {
     switch (name) {
       case RouteName.rayzorPay:
@@ -112,20 +130,21 @@ class CustomRoute {
     }
   }
 
-  Future pushNamed({required String name, dynamic arguments}) async {
-    final route = await _getRoute(name: name, arguments: arguments);
-    return await Navigator.push(CurrentContext().context, route);
+  static Future pushNamed({required String name, dynamic arguments}) async {
+    RouterManager.getInstance.routeHistory
+        .add(RouteModel(name: name, uri: Uri.parse(name)));
+    final route = await CustomRoute._getRoute(name: name, arguments: arguments);
+    await Navigator.push(CurrentContext().context, route);
+    if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+      RouterManager.getInstance.routeHistory.removeLast();
+    }
+    return;
   }
 
-  String? currentRoute() {
+  static String? currentRoute() {
     try {
-      final RouteMatch lastMatch = RouterManager
-          .getInstance.router.routerDelegate.currentConfiguration.last;
-      final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
-          ? lastMatch.matches
-          : RouterManager
-              .getInstance.router.routerDelegate.currentConfiguration;
-      final String location = matchList.uri.toString();
+      final String location =
+          RouterManager.getInstance.routeHistory.last.uri.toString();
       return location;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
@@ -133,7 +152,19 @@ class CustomRoute {
     return null;
   }
 
-  Future<void> navigateNamed(
+  static RouteModel? previousRouteAtIndex({int index = 1}) {
+    try {
+      return RouterManager.getInstance.routeHistory.length >= (1 + index)
+          ? RouterManager.getInstance.routeHistory[
+              RouterManager.getInstance.routeHistory.length - (1 + index)]
+          : null;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future<void> navigateNamed(
     String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},

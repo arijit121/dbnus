@@ -1,7 +1,7 @@
 import 'screen_utils.dart';
 
 class AppUtils {
-  int gridViewCount(
+  static int gridViewCount(
       {required num elementWidth, num? extra, double crossAxisSpacing = 0}) {
     num valExtra = extra ?? 0;
     double screenWidth = ScreenUtils.nw() - valExtra + crossAxisSpacing;
@@ -11,13 +11,13 @@ class AppUtils {
         : 1;
   }
 
-  double gridViewRation(
+  static double gridViewRation(
       {required num elementWidth,
       required num elementHeight,
       num? extra,
       double crossAxisSpacing = 0}) {
     num valExtra = extra ?? 0;
-    int valGridViewCount = gridViewCount(
+    int valGridViewCount = AppUtils.gridViewCount(
         elementWidth: elementWidth,
         extra: extra,
         crossAxisSpacing: crossAxisSpacing);

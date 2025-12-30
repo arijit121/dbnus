@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:dbnus/extension/logger_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:web/web.dart' as web;
 
+import '../../../service/JsService/provider/js_provider.dart';
 import '../../../service/context_service.dart';
+import '../../../service/value_handler.dart';
 import '../../router_manager.dart';
 
 class CustomRouterWeb {
@@ -75,27 +79,32 @@ class CustomRouterWeb {
     web.window.history.go(-2);
   }
 
-  bool canBack() {
+  Future<bool> canBack() async {
     try {
-      return historyIndex() > 0;
+      return await historyIndex() > 0;
     } catch (e, s) {
       AppLog.e(e, stackTrace: s);
     }
     return false;
   }
 
-  int historyIndex() {
+  Future<int> historyIndex() async {
     int index = 0;
-    // try {
-    //   index = web.window.history.state["serialCount"];
-    // } catch (e, s) {
-    //   AppLog.e(e, stackTrace: s);
-    // }
-    if (index == 0) {
-      index = web.window.history.length - 2;
-      if (index <= 0) {
-        index = 1;
+    try {
+      String? routeHistory =
+          await JsProvider().getSessionStorageItem("routeHistory");
+      if (ValueHandler.isTextNotEmptyOrNull(routeHistory)) {
+        String value = json.decode(routeHistory!);
+        value.replaceAll("[", "");
+        value.replaceAll("]", "");
+        value.trim();
+        index = (value.split(",")).length - 1;
+        if (index <= 0) {
+          index = 0;
+        }
       }
+    } catch (e, s) {
+      AppLog.e(e, stackTrace: s);
     }
     return index;
   }

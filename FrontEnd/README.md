@@ -7,9 +7,11 @@ Dbnus App
 flutter build web -t lib/main_web.dart --web-renderer html --no-tree-shake-icons
 flutter build apk -t lib/main_app.dart --no-tree-shake-icons
 flutter build apk --flavor prod -t lib/main_prod.dart
+flutter build appbundle --flavor prod -t lib/main_prod.dart
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="
 --disable-web-security"
+flutter build web -t lib/main_prod.dart --wasm
 ```
 Manual Installation on Windows
 Download the FVM Executable
@@ -100,3 +102,13 @@ headers: {
 
 On Android, set the priority field to high.
 On Apple (iOS & macOS), set the content-available field to true.
+
+
+flutter clean
+flutter build apk --flavor dev -t lib/main_dev.dart
+flutter install --flavor dev
+adb shell pm grant com.dbnus.app.dev android.permission.POST_NOTIFICATIONS
+adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_COARSE_LOCATION
+adb shell pm grant com.dbnus.app.dev android.permission.ACCESS_FINE_LOCATION
+flutter test --flavor dev integration_test/end_to_end_test_dev.dart
+

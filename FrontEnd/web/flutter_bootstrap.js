@@ -12,23 +12,34 @@ function addDelay(delay) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-var web_initial_loader = document.getElementById("web-initial-loader");
+var web_loader = document.getElementById("web-loader");
+
+const assetBase = window.location.origin + "/";
+
+const searchParams = new URLSearchParams(window.location.search);
+const renderer = searchParams.get('renderer');
+
 _flutter.loader.load({
+    config: {
+         renderer: renderer,
+         canvasKitBaseUrl:`${assetBase}canvaskit/`,
+    },
     serviceWorkerSettings: {
         serviceWorkerVersion: {{flutter_service_worker_version}},
     },
     onEntrypointLoaded: async function (engineInitializer) {
 
-        let appRunner = await engineInitializer.initializeEngine();
-
+        let appRunner = await engineInitializer.initializeEngine({assetBase: assetBase});
 
         await appRunner.runApp();
+
+        window.flutterAssetBase = assetBase;
 
         // Add a delay using the addDelay function.
         await addDelay(10000);
 
-        if (web_initial_loader) {
-            web_initial_loader.remove();
+        if (web_loader) {
+            web_loader.remove();
         }
     }
 });

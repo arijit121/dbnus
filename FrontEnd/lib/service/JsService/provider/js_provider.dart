@@ -2,7 +2,7 @@ import '../../../extension/logger_extension.dart';
 import '../helper/js_helper.dart';
 
 class JsProvider {
-  JSHelper jsHelper = JSHelper();
+  static final JSHelper jsHelper = JSHelper();
 
   // Future getCurrentUrlElementByIdFun(String iframeId) async {
   //   return await jsHelper.getCurrentUrlElementByIdFun(iframeId);
@@ -28,7 +28,7 @@ class JsProvider {
   //   await jsHelper.setVolume(volume);
   // }
 
-  Future<String?> loadJsAndPassValueWithCallbackAsync(
+  static Future<String?> loadJsAndPassValueWithCallbackAsync(
       {required String value}) async {
     String jsPath = "assets/js/test_process_value.js";
     try {
@@ -43,7 +43,7 @@ class JsProvider {
     return null;
   }
 
-  Future<void> changeUrl({required String path}) async {
+  static Future<void> changeUrl({required String path}) async {
     try {
       String jsPath = "assets/js/change_url.js";
       await jsHelper.loadJs(
@@ -53,7 +53,7 @@ class JsProvider {
     }
   }
 
-  Future<String?> getDeviceId() async {
+  static Future<String?> getDeviceId() async {
     String jsPath = "assets/js/device_id.js";
     try {
       return await jsHelper.loadJs<String>(
@@ -66,7 +66,23 @@ class JsProvider {
     return null;
   }
 
-  Future paytm(
+  static Future<String?> download(
+      {required String url,
+      required String filename,
+      Map<String, dynamic>? headers}) async {
+    String jsPath = "assets/js/download.js";
+    try {
+      return await jsHelper.loadJs<String>(
+          jsPath: jsPath,
+          jsFunctionName: 'download',
+          jsFunctionArgs: [url, filename, headers]);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future paytm(
       {required String txnToken,
       required String orderId,
       required String amount,
@@ -83,7 +99,7 @@ class JsProvider {
     }
   }
 
-  Future<void> submitForm(
+  static Future<void> submitForm(
       {required String actionUrl,
       required String obj,
       required String id}) async {
@@ -98,15 +114,60 @@ class JsProvider {
     }
   }
 
-  Future<void> loadJs({required String jsPath}) async {
+  Future<String?> getWebOtp() async {
+    String jsPath = "assets/js/webotp.js";
     try {
-      await jsHelper.loadJs(jsPath: jsPath);
+      return await jsHelper.loadJs<String>(
+          jsPath: jsPath,
+          jsFunctionName: 'getOtpCodeFunction',
+          usePromise: true);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future<void> loadJs({required String jsPath, String? id}) async {
+    try {
+      await jsHelper.loadJs(jsPath: jsPath, id: id);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
   }
 
-  String getUserAgent() {
+  Future<String?> getSessionStorageItem(String key) async {
+    try {
+      String jsPath = "assets/js/storage-utils.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getSessionStorageItem',
+        jsFunctionArgs: [key],
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  Future<bool?> clearSessionStorageKey(String key) async {
+    try {
+      String jsPath = "assets/js/storage-utils.js";
+      final result = await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        jsFunctionName: 'clearSessionStorageKey',
+        jsFunctionArgs: [key],
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static String getUserAgent() {
     return jsHelper.getUserAgent();
   }
 }

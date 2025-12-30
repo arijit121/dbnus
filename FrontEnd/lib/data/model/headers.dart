@@ -76,7 +76,8 @@ class Headers {
     data['App-Version-Code'] = appVersionCode;
 
     data.removeWhere((key, value) => value == null);
-
-    return data.map((key, value) => MapEntry(key, (value ?? "").toString()));
+    Map<String, String> result =
+        data.map((key, value) => MapEntry(key, (value ?? "").toString()));
+    return result;
   }
 }

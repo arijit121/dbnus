@@ -12,6 +12,8 @@ class LocalPreferences {
   static const String hiveEncryptionKey = "HiveEncryptionKey";
   static const String localizationKey = "LocalizationKey";
   static const String webTryCatchPaymentData = "WebTryCatchPaymentData";
+  static const String ssIpV4 = "SSIpV4";
+  static const String ssIpV6 = "SSIpV6";
 
   Future<void> setBool({required String key, required bool value}) async {
     try {

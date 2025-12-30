@@ -11,6 +11,13 @@ class LandingState extends Equatable {
     required this.page,
   });
 
+  factory LandingState.initial() {
+    return LandingState(
+        bannerData: DynamicBlocData<LandingBannerResponse>.init(),
+        pageIndex: DynamicBlocData.init(),
+        page: DynamicBlocData.init());
+  }
+
   LandingState copyWith(
       {DynamicBlocData<LandingBannerResponse>? bannerData,
       DynamicBlocData<int>? pageIndex,

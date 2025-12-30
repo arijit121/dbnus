@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { CustomConsole } from "./utils/custom_console";
 import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
+import axios from "axios";
 
 /*
  * Load up and parse configuration details from
@@ -24,12 +25,12 @@ app.use(express.json());
 
 // Initialize the Firebase Admin SDK
 const serviceAccount = JSON.parse(
-  readFileSync('dbnus-df986-firebase-adminsdk-mygbi-ae401389da.json', 'utf8')
+  readFileSync('sastasundar-8f573-firebase-adminsdk-tso7w-58816df954.json', 'utf8')
 );
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://dbnus-df986-default-rtdb.firebaseio.com"
+  databaseURL: "https://sastasundar-8f573-default-rtdb.firebaseio.com"
 });
 
 /* Define a route for the root path ("/")
@@ -68,8 +69,30 @@ app.post("/fcm-send", async (req: Request, res: Response) => {
   }
 });
 
+app.get("/autocomplete", async (req: Request, res: Response) => {
+  const { input, country } = req.query;
+
+  if (!input) {
+    return res.status(400).json({ error: "Missing 'input' query parameter" });
+  }
+
+  try {
+    const params = new URLSearchParams({
+      input: input as string,
+      key: "AIzaSyCgpehkvboNjg0FX_f7OjLczZ-SxwtvXYk",
+      ...(country ? { components: `country:${country}` } : {}),
+    });
+
+    const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?${params.toString()}`);
+    res.json(data);
+  } catch (err) {
+    console.error("Error fetching autocomplete:", err);
+    res.status(500).json({ error: "Failed to fetch from Google Places API" });
+  }
+});
+
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(port, () => {
-  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, {tag:"server"});
+  CustomConsole.infoLog(`Server is running at http://localhost:${port}`, { tag: "server" });
 });
