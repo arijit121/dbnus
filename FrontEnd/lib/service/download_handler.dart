@@ -57,7 +57,7 @@ class DownloadHandler {
         }*/
       } else {
         await pop_up_items.loadLibrary();
-        pop_up_items.PopUpItems().toastMessage("Downloading ...", Colors.blueAccent);
+        pop_up_items.PopUpItems.toastMessage("Downloading ...", Colors.blueAccent);
 
         if (inGroup == true) {
           // Use .download to start a download and wait for it to complete
