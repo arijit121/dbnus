@@ -491,16 +491,6 @@ class _DropdownMenuFormField<T> extends FormField<T> {
                     ),
                     isDense: true,
                   ),
-                  dropdownMenuTheme: const DropdownMenuThemeData(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 16,
-                      ),
-                      isDense: true,
-                    ),
-                  ),
                 ),
                 child: DropdownMenu<T>(
                   key: key,
