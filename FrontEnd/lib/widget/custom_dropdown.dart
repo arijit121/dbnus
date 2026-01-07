@@ -386,6 +386,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ))),
           inputDecorationTheme: InputDecorationTheme(
+            isDense: true,
             errorStyle: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
