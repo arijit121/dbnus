@@ -1,20 +1,30 @@
 import 'package:equatable/equatable.dart';
 
-//ignore: must_be_immutable
-class DynamicBlocData<T> extends Equatable{
-  Status status;
-  T? value;
-  String? message;
-  Object? error;
+class DynamicBlocData<T> extends Equatable {
+  final Status status;
+  final T? value;
+  final String? message;
+  final Object? error;
 
-  DynamicBlocData.init({this.value}) : status = Status.init;
+  const DynamicBlocData.init({this.value})
+      : status = Status.init,
+        message = null,
+        error = null;
 
-  DynamicBlocData.loading() : status = Status.loading;
+  const DynamicBlocData.loading()
+      : status = Status.loading,
+        value = null,
+        message = null,
+        error = null;
 
-  DynamicBlocData.success({required this.value}) : status = Status.success;
+  const DynamicBlocData.success({required this.value})
+      : status = Status.success,
+        message = null,
+        error = null;
 
-  DynamicBlocData.error({this.error,this.message}) : status = Status.error;
-
+  const DynamicBlocData.error({this.error, this.message})
+      : status = Status.error,
+        value = null;
 
   @override
   String toString() {
