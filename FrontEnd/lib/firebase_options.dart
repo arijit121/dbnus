@@ -56,17 +56,18 @@ class DefaultFirebaseOptions {
     appId: '1:783534429855:android:3cef16b71551f7a6e6f4aa',
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
-    storageBucket: 'dbnus-df986.appspot.com',
+    databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
+    storageBucket: 'dbnus-df986.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAxw1WbItbE1GEOJWiI8yCTLQ3sFQ93llA',
-    appId: '1:783534429855:ios:7003b2b4c3048f9de6f4aa',
+    appId: '1:783534429855:ios:e6e5b4e3be87d740e6f4aa',
     messagingSenderId: '783534429855',
     projectId: 'dbnus-df986',
     databaseURL: 'https://dbnus-df986-default-rtdb.firebaseio.com',
     storageBucket: 'dbnus-df986.firebasestorage.app',
-    iosBundleId: 'com.dbnus.app',
+    iosBundleId: 'com.dbnus.app.stg',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

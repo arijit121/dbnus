@@ -12,13 +12,11 @@ import '../repo/landing_repo.dart';
 import '../utils/landing_utils.dart';
 
 part 'landing_event.dart';
+
 part 'landing_state.dart';
 
 class LandingBloc extends Bloc<LandingEvent, LandingState> {
-  LandingBloc()
-      : super(LandingState(
-            bannerData: DynamicBlocData<LandingBannerResponse>.init(),
-            pageIndex: DynamicBlocData.init(), page: DynamicBlocData.init())) {
+  LandingBloc() : super(LandingState.initial()) {
     ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
     on<LandingEvent>((event, emit) async {
       if (event is InitiateSplash) {
@@ -46,7 +44,7 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
       } else if (event is ChangeIndex) {
         emit(state.copyWith(pageIndex: DynamicBlocData.loading()));
         NavigationModel navigation =
-        LandingUtils.listNavigation.elementAt(event.index);
+            LandingUtils.listNavigation.elementAt(event.index);
         Widget ui = await LandingUtils().getUi(action: navigation.action);
         emit(state.copyWith(
             pageIndex: DynamicBlocData.success(value: event.index),

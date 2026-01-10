@@ -481,29 +481,41 @@ class _DropdownMenuFormField<T> extends FormField<T> {
                 onSelected?.call(value);
               }
 
-              return DropdownMenu<T>(
-                key: key,
-                enabled: enabled,
-                width: width,
-                menuHeight: menuHeight,
-                leadingIcon: leadingIcon,
-                trailingIcon: trailingIcon,
-                label: label,
-                hintText: hintText,
-                helperText: helperText,
-                errorText: state.errorText,
-                selectedTrailingIcon: selectedTrailingIcon,
-                enableFilter: enableFilter,
-                enableSearch: enableSearch,
-                textStyle: textStyle,
-                inputDecorationTheme: inputDecorationTheme,
-                menuStyle: menuStyle,
-                controller: controller,
-                initialSelection: state.value,
-                onSelected: onSelectedHandler,
-                requestFocusOnTap: requestFocusOnTap,
-                expandedInsets: expandedInsets,
-                dropdownMenuEntries: dropdownMenuEntries,
+              return Theme(
+                data: ThemeData(
+                  inputDecorationTheme: const InputDecorationTheme(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 16,
+                    ),
+                    isDense: true,
+                  ),
+                ),
+                child: DropdownMenu<T>(
+                  key: key,
+                  enabled: enabled,
+                  width: width,
+                  menuHeight: menuHeight,
+                  leadingIcon: leadingIcon,
+                  trailingIcon: trailingIcon,
+                  label: label,
+                  hintText: hintText,
+                  helperText: helperText,
+                  errorText: state.errorText,
+                  selectedTrailingIcon: selectedTrailingIcon,
+                  enableFilter: enableFilter,
+                  enableSearch: enableSearch,
+                  textStyle: textStyle,
+                  inputDecorationTheme: inputDecorationTheme,
+                  menuStyle: menuStyle,
+                  controller: controller,
+                  initialSelection: state.value,
+                  onSelected: onSelectedHandler,
+                  requestFocusOnTap: requestFocusOnTap,
+                  expandedInsets: expandedInsets,
+                  dropdownMenuEntries: dropdownMenuEntries,
+                ),
               );
             });
 

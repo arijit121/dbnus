@@ -27,8 +27,7 @@ class DownloadHandler {
     try {
       if (kIsWeb) {
         Uri uri = urlQueryParameters?.isNotEmpty == true
-            ? Uri.parse(downloadUrl)
-                .replace(queryParameters: urlQueryParameters)
+            ? Uri.parse(downloadUrl).replace(queryParameters: urlQueryParameters)
             : Uri.parse(downloadUrl);
         await JsProvider.download(
             url: uri.toString(),
@@ -58,37 +57,37 @@ class DownloadHandler {
         }*/
       } else {
         await pop_up_items.loadLibrary();
-        pop_up_items.PopUpItems.toastMessage(
-            "Downloading ...", Colors.blueAccent);
+        pop_up_items.PopUpItems.toastMessage("Downloading ...", Colors.blueAccent);
+
         if (inGroup == true) {
           // Use .download to start a download and wait for it to complete
           // define the download task (subset of parameters shown)
           await FileDownloader().enqueue(DownloadTask(
-            filename:
-                '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
+            filename: '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
             url: downloadUrl,
             directory: await downloadPath(),
             updates: Updates.statusAndProgress,
-            retries: 7,
+            retries: 1,
             // request status and progress updates
             group: _group,
             headers: headers,
             urlQueryParameters: urlQueryParameters,
+            baseDirectory: BaseDirectory.root,
           ));
           // Use .download to start a download and wait for it to complete
         } else {
           // Start download, and wait for result. Show progress and status changes
           // while downloading
           final result = await FileDownloader().download(DownloadTask(
-            filename:
-                '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
+            filename: '${DateTime.now()}_${fileName ?? downloadUrl.split("/").last}',
             url: downloadUrl,
             directory: await downloadPath(),
             updates: Updates.statusAndProgress,
             // request status and progress updates
-            retries: 5,
+            retries: 0,
             headers: headers,
             urlQueryParameters: urlQueryParameters,
+            baseDirectory: BaseDirectory.root,
           ));
           // Act on the result
           switch (result.status) {
@@ -118,10 +117,9 @@ class DownloadHandler {
   Future<void> config() async {
     await app_config.loadLibrary();
     FileDownloader()
-        .registerCallbacks(taskNotificationTapCallback:
-            (Task task, NotificationType notificationType) async {
-          AppLog.i(
-              'Tapped notification $notificationType for taskId ${task.taskId}');
+        .registerCallbacks(
+            taskNotificationTapCallback: (Task task, NotificationType notificationType) async {
+          AppLog.i('Tapped notification $notificationType for taskId ${task.taskId}');
           String filePath = await task.filePath();
           AppLog.i(filePath, tag: "FilePath");
           await open_service.loadLibrary();
@@ -132,30 +130,28 @@ class DownloadHandler {
             // which uses 'enqueue' and a default group
             running: const TaskNotification('Download {filename}',
                 'File: {filename} - {progress} - speed {networkSpeed} and {timeRemaining} remaining'),
-            complete: const TaskNotification(
-                '{displayName} download {filename}', 'Download complete'),
-            error: const TaskNotification(
-                'Download {filename}', 'Download failed'),
-            paused: const TaskNotification(
-                'Download {filename}', 'Paused with metadata {metadata}'),
+            complete:
+                const TaskNotification('{displayName} download {filename}', 'Download complete'),
+            error: const TaskNotification('Download {filename}', 'Download failed'),
+            paused:
+                const TaskNotification('Download {filename}', 'Paused with metadata {metadata}'),
             progressBar: true)
         .configureNotificationForGroup(
           _group, // refers to the Task.group field
-          running: const TaskNotification(
-              '{numFinished} out of {numTotal}', 'Progress = {progress}'),
+          running:
+              const TaskNotification('{numFinished} out of {numTotal}', 'Progress = {progress}'),
           complete: const TaskNotification('Done!', 'Loaded {numTotal} files'),
-          error:
-              const TaskNotification('Error', '{numFailed}/{numTotal} failed'),
+          error: const TaskNotification('Error', '{numFailed}/{numTotal} failed'),
           progressBar: false,
           groupNotificationId:
               '${await app_config.AppConfig().getAppPackageName()}_background_download',
         )
         .configureNotification(
+            running: TaskNotification('Downloading', 'file: {filename}'),
             // for the 'Download & Open' dog picture
             // which uses 'download' which is not the .defaultGroup
             // but the .await group so won't use the above config
-            complete: const TaskNotification(
-                'Download {filename}', 'Download complete'),
+            complete: const TaskNotification('Download {filename}', 'Download complete'),
             progressBar: true,
             tapOpensFile: true);
 
@@ -195,20 +191,11 @@ class DownloadHandler {
       await path_provider.loadLibrary();
       String directoryPath;
       if (Platform.isIOS) {
-        directoryPath =
-            (await path_provider.getApplicationDocumentsDirectory()).path;
+        directoryPath = (await path_provider.getApplicationDocumentsDirectory()).path;
       } else if (Platform.isAndroid) {
-        directoryPath = "/storage/emulated/0/Download";
-
-        bool dirDownloadExists = await Directory(directoryPath).exists();
-        if (dirDownloadExists) {
-          directoryPath = "/storage/emulated/0/Download";
-        } else {
-          directoryPath = "/storage/emulated/0/Downloads";
-        }
+        directoryPath = (await path_provider.getExternalStorageDirectory())?.path ?? "";
       } else {
-        directoryPath =
-            (await path_provider.getDownloadsDirectory())?.path ?? "";
+        directoryPath = (await path_provider.getDownloadsDirectory())?.path ?? "";
       }
       bool dirDownloadExists = await Directory(directoryPath).exists();
       if (!dirDownloadExists) {

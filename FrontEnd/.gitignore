@@ -5,9 +5,11 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
@@ -45,6 +47,4 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
-/lib/service/Localization/l10n/app_localizations.dart
-/lib/service/Localization/l10n/app_localizations_en.dart
-/lib/service/Localization/l10n/app_localizations_es.dart
+/lib/service/Localization/app_localizations/
