@@ -14,7 +14,6 @@ import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
 import 'package:dbnus/core/extensions/logger_extension.dart';
 import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
 import 'package:dbnus/navigation/router_manager.dart';
-import 'router/url_strategy/url_strategy.dart' deferred as url_strategy;
 import 'package:dbnus/core/services/Localization/bloc/localization_bloc.dart';
 import 'package:dbnus/core/services/Localization/app_localizations/app_localizations.dart';
 import 'package:dbnus/core/services/Localization/utils/localization_utils.dart';
@@ -24,6 +23,8 @@ import 'package:dbnus/core/services/firebase_service.dart'
     deferred as firebase_service;
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/core/utils/text_utils.dart';
+
+import 'navigation/url_strategy/src/non_web/url_strategy.dart' deferred as url_strategy;
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {

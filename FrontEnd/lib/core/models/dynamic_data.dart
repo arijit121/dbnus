@@ -1,35 +1,43 @@
-enum Status { init, loading, success, error }
+import 'package:equatable/equatable.dart';
 
-class DynamicBlocData<T> {
+class DynamicBlocData<T> extends Equatable {
   final Status status;
   final T? value;
   final String? message;
-  final String? error;
+  final Object? error;
 
-  const DynamicBlocData({
-    required this.status,
-    this.value,
-    this.message,
-    this.error,
-  });
+  const DynamicBlocData.init({this.value})
+      : status = Status.init,
+        message = null,
+        error = null;
 
-  factory DynamicBlocData.init({T? value}) {
-    return DynamicBlocData(status: Status.init, value: value);
+  const DynamicBlocData.loading()
+      : status = Status.loading,
+        value = null,
+        message = null,
+        error = null;
+
+  const DynamicBlocData.success({required this.value})
+      : status = Status.success,
+        message = null,
+        error = null;
+
+  const DynamicBlocData.error({this.error, this.message})
+      : status = Status.error,
+        value = null;
+
+  @override
+  String toString() {
+    return "Status : $status \n Message : $message \n Data : $value";
   }
 
-  factory DynamicBlocData.loading() {
-    return DynamicBlocData(status: Status.loading);
-  }
+  @override
+  List<Object?> get props => [status];
+}
 
-  factory DynamicBlocData.success({T? value}) {
-    return DynamicBlocData(status: Status.success, value: value);
-  }
-
-  factory DynamicBlocData.error({String? message, String? error}) {
-    return DynamicBlocData(
-      status: Status.error,
-      message: message ?? error,
-      error: error ?? message,
-    );
-  }
+enum Status {
+  init,
+  loading,
+  success,
+  error,
 }
