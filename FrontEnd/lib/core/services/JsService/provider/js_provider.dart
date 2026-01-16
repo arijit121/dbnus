@@ -170,4 +170,8 @@ class JsProvider {
   static String getUserAgent() {
     return jsHelper.getUserAgent();
   }
+
+    static bool isMobile() {
+    return jsHelper.isMobile();
+  }
 }

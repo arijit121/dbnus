@@ -174,4 +174,14 @@ class JSHelper {
   String getUserAgent() {
     return web.window.navigator.userAgent;
   }
+
+    bool isMobile() {
+    final userAgent = web.window.navigator.userAgent.toLowerCase();
+
+    return userAgent.contains('android') ||
+        userAgent.contains('iphone') ||
+        userAgent.contains('ipad') ||
+        userAgent.contains('ipod') ||
+        userAgent.contains('mobile');
+  }
 }

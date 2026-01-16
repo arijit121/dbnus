@@ -31,6 +31,7 @@ class ApiConfig {
         appConfig.getNetworkInfo(),
         appConfig.getWifiIpV4(),
         appConfig.getWifiIpV6(),
+        appConfig.getAppType(),
       ]);
 
       final appVersion = results[0];
@@ -41,10 +42,11 @@ class ApiConfig {
       final networkInfo = results[5];
       final deviceIpV4 = results[6];
       final deviceIpV6 = results[7];
+      final appType = results[8];
 
       final headers = Headers(
         contentType: contentType?.value,
-        appType: appConfig.getAppType(),
+        appType: appType,
         appVersion: appVersion,
         appVersionCode: appVersionCode,
         deviceId: deviceId,
@@ -72,12 +74,17 @@ class ApiConfig {
     // bool? warehouseID,
     // bool? isLab,
   }) async {
-    await Future.wait([
-      app_config.loadLibrary(),
+    await app_config.loadLibrary();
+    final results = await Future.wait([
+      app_config.AppConfig().getAppType(),
+      app_config.AppConfig().getAppVersion(),
     ]);
+    final appType = results[0];
+    final appVersion = results[1];
+
     Params appTypeVersionParam = Params(
-      appType: app_config.AppConfig().getAppType(),
-      appVersion: await app_config.AppConfig().getAppVersion(),
+      appType: appType,
+      appVersion: appVersion,
     );
     Map<String, dynamic> json = appTypeVersionParam.toJson();
     json.removeWhere((key, value) => value == null);

@@ -11,4 +11,8 @@ class JSHelper {
   String getUserAgent() {
     return "";
   }
+
+  bool isMobile() {
+    return false;
+  }
 }

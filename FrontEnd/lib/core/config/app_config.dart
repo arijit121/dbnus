@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
 import 'package:geolocator/geolocator.dart';
 import 'package:package_info_plus/package_info_plus.dart'
@@ -26,6 +27,8 @@ import 'package:dbnus/core/services/value_handler.dart'
 import 'package:dbnus/core/storage/local_preferences.dart'
     deferred as local_preferences;
 import 'package:dbnus/core/utils/screen_utils.dart';
+
+import '../services/context_service.dart';
 
 class AppConfig {
   Future<String?> getAppVersion() async {
@@ -89,24 +92,72 @@ class AppConfig {
 
   Future<String?> getUserAgent() async {
     try {
-      await js_provider.loadLibrary();
-      return js_provider.JsProvider.getUserAgent();
+      if (!kIsWeb) {
+        final appName = await getAppPackageName();
+        final appVersionName = await getAppVersion();
+        final appVersionCode = await getAppVersionCode();
+        final osName = getOsName();
+        final osVersion = await getDeviceOsInfo();
+        final deviceName = await getDeviceName();
+
+        final deviceInfo = device_info_plus.DeviceInfoPlugin();
+        String deviceManufacturer = '';
+        String deviceModel = '';
+
+        if (Platform.isAndroid) {
+          final androidInfo = await deviceInfo.androidInfo;
+          deviceManufacturer = androidInfo.manufacturer;
+          deviceModel = androidInfo.model;
+        } else if (Platform.isIOS) {
+          final iosInfo = await deviceInfo.iosInfo;
+          deviceManufacturer = 'Apple';
+          deviceModel = iosInfo.model;
+        } else if (Platform.isMacOS) {
+          final macOsInfo = await deviceInfo.macOsInfo;
+          deviceManufacturer = 'Apple';
+          deviceModel = macOsInfo.model;
+        } else if (Platform.isWindows) {
+          final windowsInfo = await deviceInfo.windowsInfo;
+          deviceManufacturer = 'PC';
+          deviceModel = windowsInfo.productName;
+        } else if (Platform.isLinux) {
+          final linuxInfo = await deviceInfo.linuxInfo;
+          deviceManufacturer = 'Linux';
+          deviceModel = linuxInfo.name;
+        }
+
+        final deviceResolution = '${getDeviceWidth()}x${getDeviceHeight()}';
+        final devicePixelRatio =
+            View.of(CurrentContext().context).devicePixelRatio;
+
+        return '$appName/$appVersionName '
+            '($osName $osVersion; $deviceName; build:$appVersionCode) '
+            'oem/$deviceManufacturer '
+            'model/$deviceModel '
+            'screen/$deviceResolution/$devicePixelRatio';
+      } else {
+        await js_provider.loadLibrary();
+        return js_provider.JsProvider.getUserAgent();
+      }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return null;
     }
   }
 
-  String? getAppType() {
+
+  Future<String?> getAppType() async {
+    ///web, msite, android, ios
     try {
       if (kIsWeb) {
-        return "M";
+        await js_provider.loadLibrary();
+        if (js_provider.JsProvider.isMobile()) {
+          return "msite";
+        } else {
+          return "web";
+        }
       } else {
-        return Platform.isAndroid
-            ? "N"
-            : Platform.isIOS
-                ? "I"
-                : "";
+        return Platform.operatingSystem;
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
