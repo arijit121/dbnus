@@ -1,4 +1,4 @@
-import 'package:dbnus/service/JsService/provider/js_provider.dart'
+import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:firebase_performance/firebase_performance.dart'
@@ -9,19 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'const/theme_const.dart';
-import 'data/connection/bloc/connection_bloc.dart';
-import 'extension/logger_extension.dart';
-import 'firebase_options.dart' deferred as firebase_options;
-import 'router/router_manager.dart';
+import 'package:dbnus/core/constants/theme_const.dart';
+import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
+import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
+import 'package:dbnus/navigation/router_manager.dart';
 import 'router/url_strategy/url_strategy.dart' deferred as url_strategy;
-import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/app_localizations/app_localizations.dart';
-import 'service/Localization/utils/localization_utils.dart';
-import 'service/crash/utils/crash_utils.dart' deferred as crash_utils;
-import 'service/firebase_service.dart' deferred as firebase_service;
-import 'storage/localCart/bloc/local_cart_bloc.dart';
-import 'utils/text_utils.dart';
+import 'package:dbnus/core/services/Localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/services/Localization/app_localizations/app_localizations.dart';
+import 'package:dbnus/core/services/Localization/utils/localization_utils.dart';
+import 'package:dbnus/core/services/crash/utils/crash_utils.dart'
+    deferred as crash_utils;
+import 'package:dbnus/core/services/firebase_service.dart'
+    deferred as firebase_service;
+import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
+import 'package:dbnus/core/utils/text_utils.dart';
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {

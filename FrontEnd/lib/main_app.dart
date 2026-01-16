@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:dbnus/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,27 +11,25 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'const/theme_const.dart';
-import 'data/connection/bloc/connection_bloc.dart';
-import 'extension/logger_extension.dart';
-import 'firebase_options.dart';
-import 'router/custom_router/custom_route.dart';
-import 'router/router_manager.dart';
-import 'router/router_name.dart';
-import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/app_localizations/app_localizations.dart';
-import 'service/Localization/utils/localization_utils.dart';
-import 'service/app_updater.dart';
-import 'service/crash/utils/crash_utils.dart';
-import 'service/download_handler.dart';
-import 'service/firebase_service.dart';
-import 'service/notification_handler.dart';
-import 'service/redirect_engine.dart';
-import 'storage/localCart/bloc/local_cart_bloc.dart';
-import 'utils/pop_up_items.dart';
-import 'utils/text_utils.dart';
+import 'package:dbnus/core/constants/theme_const.dart';
+import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
+import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/navigation/custom_router/custom_route.dart';
+import 'package:dbnus/navigation/router_manager.dart';
+import 'package:dbnus/navigation/router_name.dart';
+import 'package:dbnus/core/services/Localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/services/Localization/app_localizations/app_localizations.dart';
+import 'package:dbnus/core/services/Localization/utils/localization_utils.dart';
+import 'package:dbnus/core/services/app_updater.dart';
+import 'package:dbnus/core/services/crash/utils/crash_utils.dart';
+import 'package:dbnus/core/services/download_handler.dart';
+import 'package:dbnus/core/services/firebase_service.dart';
+import 'package:dbnus/core/services/notification_handler.dart';
+import 'package:dbnus/core/services/redirect_engine.dart';
+import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
+import 'package:dbnus/core/utils/pop_up_items.dart';
+import 'package:dbnus/core/utils/text_utils.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
