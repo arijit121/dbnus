@@ -6,8 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:dbnus/core/models/route_model.dart';
 import 'package:dbnus/features/bio_data/bio_data.dart'
     deferred as flutter_bio_data;
-import 'package:dbnus/features/landing/ui/landing.dart' deferred as landing;
-import 'package:dbnus/features/landing/utils/landing_utils.dart';
+import 'package:dbnus/features/landing/presentation/pages/landing.dart'
+    deferred as landing;
+import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
 import 'package:dbnus/features/order_details/ui/order_details.dart'
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway_status.dart'

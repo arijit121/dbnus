@@ -9,9 +9,12 @@ import 'package:dbnus/core/utils/screen_utils.dart';
 import 'package:dbnus/core/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/utils/init_widget.dart';
-import 'package:dbnus/features/landing/bloc/landing_bloc.dart';
-import 'package:dbnus/features/landing/utils/landing_utils.dart';
-import 'package:dbnus/features/landing/widget/landing_widget.dart';
+import 'package:dbnus/features/landing/presentation/bloc/landing_bloc.dart';
+import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
+import 'package:dbnus/features/landing/presentation/widgets/landing_widget.dart';
+import 'package:dbnus/features/landing/data/datasources/landing_remote_data_source.dart';
+import 'package:dbnus/features/landing/data/repositories/landing_repository_impl.dart';
+import 'package:dbnus/features/landing/domain/usecases/get_splash_banner_usecase.dart';
 
 class LandingUi extends StatefulWidget {
   const LandingUi({super.key, required this.index});
@@ -90,8 +93,13 @@ class _LandingUiState extends State<LandingUi> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(builder: (context, widthState) {
       return BlocProvider(
-        create: (context) =>
-            LandingBloc()..add(ChangeIndex(index: widget.index)),
+        create: (context) => LandingBloc(
+          getSplashBannerUseCase: GetSplashBannerUseCase(
+            LandingRepositoryImpl(
+              remoteDataSource: LandingRemoteDataSourceImpl(),
+            ),
+          ),
+        )..add(ChangeIndex(index: widget.index)),
         child: BlocBuilder<LandingBloc, LandingState>(
           builder: (context, state) {
             final bloc = context.read<LandingBloc>();

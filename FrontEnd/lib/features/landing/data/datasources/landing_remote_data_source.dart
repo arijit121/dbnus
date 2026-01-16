@@ -1,14 +1,16 @@
 import 'dart:convert';
-
 import 'package:dbnus/core/config/api_config.dart';
 import 'package:dbnus/core/constants/api_url_const.dart';
 import 'package:dbnus/core/network/api_client/imp/api_repo_imp.dart';
 import 'package:dbnus/core/network/api_client/repo/api_repo.dart';
 import 'package:dbnus/core/network/models/api_return_model.dart';
 import 'package:dbnus/core/extensions/logger_extension.dart';
-import 'package:dbnus/features/landing/model/landing_banner_response.dart';
+import 'package:dbnus/features/landing/data/models/landing_banner_response.dart';
 
-class LandingRepo {
+import 'landing_data_source.dart';
+
+class LandingRemoteDataSourceImpl implements LandingDataSource {
+  @override
   Future<LandingBannerResponse?> getSplashBanner() async {
     try {
       Map<String, String> headers = await ApiConfig.getHeaders();

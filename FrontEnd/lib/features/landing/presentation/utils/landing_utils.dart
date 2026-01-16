@@ -14,25 +14,25 @@ import 'package:dbnus/features/reorderable_list/ui/my_reorderable_list.dart'
 import 'package:dbnus/features/test_page/ui/test_page.dart'
     deferred as test_page;
 import 'package:dbnus/features/ui_temp/ui/ui_temp.dart' deferred as ui_temp;
-import 'package:dbnus/features/landing/model/navigation_model.dart';
+import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 
 class LandingUtils {
-  static List<NavigationModel> listNavigation = [
-    NavigationModel(
+  static List<NavigationOption> listNavigation = [
+    NavigationOption(
         title: TextUtils.dashboard,
         icon: AssetsConst.dashboardIcon,
         action: RouteName.initialView),
-    NavigationModel(
+    NavigationOption(
         title: TextUtils.leaderBoard,
         icon: AssetsConst.leaderBoard,
         action: RouteName.leaderBoard),
-    NavigationModel(
+    NavigationOption(
         title: TextUtils.order,
         icon: AssetsConst.shoppingCart,
         action: RouteName.order),
-    NavigationModel(
+    NavigationOption(
         title: TextUtils.game, icon: AssetsConst.game, action: RouteName.games),
-    NavigationModel(
+    NavigationOption(
         title: TextUtils.logout,
         icon: AssetsConst.signOut,
         action: TextUtils.logout),

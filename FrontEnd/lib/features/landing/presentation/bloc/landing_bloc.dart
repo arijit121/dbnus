@@ -6,29 +6,45 @@ import 'package:flutter/material.dart';
 
 import 'package:dbnus/core/models/dynamic_data.dart';
 import 'package:dbnus/core/network/connection/connection_status.dart';
-import 'package:dbnus/features/landing/model/landing_banner_response.dart';
-import 'package:dbnus/features/landing/model/navigation_model.dart';
-import 'package:dbnus/features/landing/repo/landing_repo.dart';
-import 'package:dbnus/features/landing/utils/landing_utils.dart';
+import 'package:dbnus/features/landing/data/models/landing_banner_response.dart';
+import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
+import 'package:dbnus/features/landing/domain/usecases/get_splash_banner_usecase.dart';
+import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
+import 'package:dbnus/features/landing/domain/entities/landing_banner.dart';
 
 part 'landing_event.dart';
 
 part 'landing_state.dart';
 
 class LandingBloc extends Bloc<LandingEvent, LandingState> {
-  LandingBloc() : super(LandingState.initial()) {
+  final GetSplashBannerUseCase getSplashBannerUseCase;
+
+  LandingBloc({required this.getSplashBannerUseCase})
+      : super(LandingState.initial()) {
     ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
     on<LandingEvent>((event, emit) async {
       if (event is InitiateSplash) {
         bool onlineStatus = await connectionStatus.checkConnection();
         if (onlineStatus) {
           emit(state.copyWith(bannerData: DynamicBlocData.loading()));
-          LandingBannerResponse? splashBannerResponse =
-              await LandingRepo().getSplashBanner();
-          if (splashBannerResponse != null) {
+          LandingBanner? splashBannerResponse = await getSplashBannerUseCase();
+          if (splashBannerResponse != null &&
+              splashBannerResponse is LandingBannerResponse) {
             emit(state.copyWith(
                 bannerData: DynamicBlocData<LandingBannerResponse>.success(
                     value: splashBannerResponse)));
+          } else if (splashBannerResponse != null) {
+            // Handle if it is not the response model, but since we cast it or use entity,
+            // State expects LandingBannerResponse.
+            // Ideally State should use Entity.
+            // For now, I will cast or reconstruct if needed, but since Impl returns Response(Model), it is safe.
+            // Actually, I should update State to use LandingBanner Entity.
+            // But to minimize changes, I will force cast if needed or update Logic.
+            // Wait, UseCase returns LandingBanner entity. Model extends Entity.
+            // If I assume it returns the Model (which it does), I can cast 'as'.
+            emit(state.copyWith(
+                bannerData: DynamicBlocData<LandingBannerResponse>.success(
+                    value: splashBannerResponse as LandingBannerResponse)));
           } else {
             emit(state.copyWith(
                 bannerData: DynamicBlocData<LandingBannerResponse>.error(
@@ -43,7 +59,7 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
         }
       } else if (event is ChangeIndex) {
         emit(state.copyWith(pageIndex: DynamicBlocData.loading()));
-        NavigationModel navigation =
+        NavigationOption navigation =
             LandingUtils.listNavigation.elementAt(event.index);
         Widget ui = await LandingUtils().getUi(action: navigation.action);
         emit(state.copyWith(

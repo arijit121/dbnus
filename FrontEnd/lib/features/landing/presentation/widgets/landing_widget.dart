@@ -7,8 +7,8 @@ import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/utils/custom_ui.dart';
-import 'package:dbnus/features/landing/model/navigation_model.dart';
-import 'package:dbnus/features/landing/utils/landing_utils.dart';
+import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
+import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
 
 class DrawerNavigationRail extends StatefulWidget {
   const DrawerNavigationRail(
@@ -87,7 +87,7 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
                             ),
                           ...List.generate(LandingUtils.listNavigation.length,
                               (index) {
-                            NavigationModel navigationBarModel =
+                            NavigationOption navigationBarModel =
                                 LandingUtils.listNavigation.elementAt(index);
                             return InkWell(
                               onTap: () {
@@ -157,7 +157,7 @@ class _DrawerNavigationRailWidget extends StatelessWidget {
 
   final bool? showTitle;
   final Color? color;
-  final NavigationModel navigationBarModel;
+  final NavigationOption navigationBarModel;
 
   @override
   Widget build(BuildContext context) {
