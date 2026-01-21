@@ -17,19 +17,26 @@ import 'package:dbnus/shared/ui/atoms/inputs/custom_text_formfield.dart';
 
 class PopUpItems {
   static void toastMessage(String message, Color color,
-      {int? durationSeconds}) {
+      {int? durationSeconds,
+      ScaffoldMessengerState? scaffoldState,
+      EdgeInsetsGeometry? padding}) {
     SnackBar snackBar = SnackBar(
       duration: Duration(seconds: durationSeconds ?? 2),
-      content: ToastMassage(
-        message: message,
-        color: color,
+      content: Padding(
+        padding: padding ?? EdgeInsets.zero,
+        child: ToastMassage(
+          message: message,
+          color: color,
+        ),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(5),
     );
-    ScaffoldMessenger.of(CurrentContext().context).showSnackBar(snackBar);
+    ScaffoldMessengerState scaffoldMessengerState =
+        scaffoldState ?? ScaffoldMessenger.of(CurrentContext().context);
+    scaffoldMessengerState.showSnackBar(snackBar);
   }
 
   static Future<DateTime?> buildMaterialDatePicker(
