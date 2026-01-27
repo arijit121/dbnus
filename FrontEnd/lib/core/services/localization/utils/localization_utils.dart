@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:dbnus/core/enums/language_enum.dart';
-import 'package:dbnus/core/services/Localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/services/localization/bloc/localization_bloc.dart';
 
 class LocalizationUtils {
   static List<Locale> supportedLocales =

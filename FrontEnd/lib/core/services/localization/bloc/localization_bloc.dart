@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/core/models/dynamic_data.dart';
-import 'package:dbnus/core/services/Localization/utils/localization_utils.dart';
+import 'package:dbnus/core/services/localization/utils/localization_utils.dart';
 
 part 'localization_event.dart';
 
