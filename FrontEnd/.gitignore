@@ -48,7 +48,10 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
-/lib/core/services/localization/app_localizations/
+/lib/core/localization/app_localizations/
 
 # Firebase
 .firebase/
+
+# User requested
+lib/core/localization/app_localizations
