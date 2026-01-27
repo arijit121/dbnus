@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 
 class DashHorizontalDivider extends StatelessWidget {
   const DashHorizontalDivider(

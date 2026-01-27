@@ -5,12 +5,12 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/context_service.dart';
 import 'package:dbnus/core/services/open_service.dart';
 import 'package:dbnus/core/services/value_handler.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';

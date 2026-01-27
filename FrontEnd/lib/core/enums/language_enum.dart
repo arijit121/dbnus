@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 enum LanguageEnum {
   english('1', "English", Locale("en")),

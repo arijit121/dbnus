@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 class CustomContainer extends StatelessWidget {

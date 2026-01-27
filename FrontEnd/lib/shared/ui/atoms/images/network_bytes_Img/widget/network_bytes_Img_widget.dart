@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/network_bytes_Img/bloc/network_bytes_Img_bloc.dart';
 
 class NetworkBytesImage extends StatelessWidget {

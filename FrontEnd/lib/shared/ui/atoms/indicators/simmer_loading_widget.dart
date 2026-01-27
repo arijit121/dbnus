@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 const _shimmerGradient = LinearGradient(

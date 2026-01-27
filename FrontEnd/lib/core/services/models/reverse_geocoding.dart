@@ -1,4 +1,4 @@
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 class ReverseGeocoding {
   int? placeId;

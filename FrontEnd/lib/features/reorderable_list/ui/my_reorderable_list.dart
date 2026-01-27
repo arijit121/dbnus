@@ -1,12 +1,12 @@
 import 'dart:ui';
 
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/core/storage/localCart/model/cart_service_model.dart';

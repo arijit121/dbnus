@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:web/web.dart' as web;
 
-import 'package:dbnus/core/constants/assects_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/value_handler.dart';
 
 class NetworkImg extends StatelessWidget {

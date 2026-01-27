@@ -2,19 +2,19 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:js_interop';
 
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
 import 'package:dbnus/core/models/user_model.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/JsService/library/js_library.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
 import 'package:dbnus/core/services/context_service.dart';
 import 'package:dbnus/core/storage/user_preference.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 

@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart'
     deferred as shared_preferences;
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 class LocalPreferences {
   static const String intoPageVisitedKey = "IntoPageVisited";

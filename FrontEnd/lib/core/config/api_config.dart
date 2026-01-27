@@ -1,6 +1,6 @@
 import 'package:dbnus/core/models/app_type_version_param.dart';
 import 'package:dbnus/core/network/models/headers.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/config/app_config.dart' deferred as app_config;
 
 class ApiConfig {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/navigation/router_name.dart';
 
 class CrashUtils {

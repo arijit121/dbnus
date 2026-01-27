@@ -1,9 +1,9 @@
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/value_handler.dart';
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/organisms/grids/custom_grid_view.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';

@@ -7,8 +7,8 @@ import 'package:path_provider/path_provider.dart' deferred as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:dbnus/core/config/app_config.dart' deferred as app_config;
-import 'package:dbnus/core/extensions/logger_extension.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart' deferred as pop_up_items;
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart' deferred as pop_up_items;
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
 import 'package:dbnus/core/services/open_service.dart' deferred as open_service;
 

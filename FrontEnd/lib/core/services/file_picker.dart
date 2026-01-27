@@ -12,13 +12,13 @@ import 'package:image_picker/image_picker.dart' deferred as image_picker;
 import 'package:path_provider/path_provider.dart' deferred as path_provider;
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/models/custom_file.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/core/services/context_service.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart';
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart'

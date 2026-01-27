@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 
 // The game class that handles background scrolling.
 class SingleScrollBackgroundGame extends FlameGame {

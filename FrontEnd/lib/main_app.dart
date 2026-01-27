@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:dbnus/core/constants/theme_const.dart';
+import 'package:dbnus/shared/constants/theme_const.dart';
 import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';
@@ -28,8 +28,8 @@ import 'package:dbnus/core/services/firebase_service.dart';
 import 'package:dbnus/core/services/notification_handler.dart';
 import 'package:dbnus/core/services/redirect_engine.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

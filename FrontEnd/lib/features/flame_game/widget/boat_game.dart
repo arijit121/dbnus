@@ -1,11 +1,11 @@
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 
 class BoatGame extends FlameGame with TapDetector {
   BoatGame({

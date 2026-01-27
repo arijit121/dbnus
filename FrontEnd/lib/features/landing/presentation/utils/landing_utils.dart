@@ -1,12 +1,12 @@
-import 'package:dbnus/core/constants/assects_const.dart';
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/features/flame_game/ui/flame_game.dart'
     deferred as flame_game;
 import 'package:dbnus/features/reorderable_list/ui/my_reorderable_list.dart'

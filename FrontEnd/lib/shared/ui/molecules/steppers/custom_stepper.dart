@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 
 class CustomVerticalStepper extends StatelessWidget {
   final List<CustomStepperContent>? customStepperContent;

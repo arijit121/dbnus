@@ -1,4 +1,4 @@
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/features/flame_game/widget/scrolling_background_game.dart';

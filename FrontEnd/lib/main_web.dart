@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:dbnus/core/constants/theme_const.dart';
+import 'package:dbnus/shared/constants/theme_const.dart';
 import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/core/services/Localization/bloc/localization_bloc.dart';
@@ -22,7 +22,7 @@ import 'package:dbnus/core/services/crash/utils/crash_utils.dart'
 import 'package:dbnus/core/services/firebase_service.dart'
     deferred as firebase_service;
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 
 import 'navigation/url_strategy/src/non_web/url_strategy.dart' deferred as url_strategy;
 

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart' deferred as http_parser;
 import 'package:mime/mime.dart' deferred as mime;
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/core/network/models/api_return_model.dart';
 import 'package:dbnus/core/network/api_client/repo/api_repo.dart';

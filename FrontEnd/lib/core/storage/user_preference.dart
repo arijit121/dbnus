@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dbnus/core/models/user_model.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/storage/local_preferences.dart'
     deferred as local_preferences;
 

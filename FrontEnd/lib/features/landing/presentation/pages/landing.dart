@@ -1,12 +1,12 @@
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
-import 'package:dbnus/core/utils/screen_utils.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/utils/init_widget.dart';
 import 'package:dbnus/features/landing/presentation/bloc/landing_bloc.dart';

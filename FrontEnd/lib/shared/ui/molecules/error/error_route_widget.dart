@@ -1,11 +1,11 @@
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/assects_const.dart';
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/navigation/router_name.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';

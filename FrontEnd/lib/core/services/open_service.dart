@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/shared/ui/organisms/file_viewers/pdf_viewer_widget.dart'
     deferred as pdf_viewer_widget;
 import 'package:dbnus/core/services/context_service.dart';

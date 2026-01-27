@@ -7,9 +7,9 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/core/services/context_service.dart';

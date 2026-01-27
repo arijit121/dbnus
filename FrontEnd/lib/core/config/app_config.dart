@@ -19,14 +19,14 @@ import 'package:dbnus/core/network/connection/connection_status.dart'
 // import 'package:dbnus/core/network/models/api_return_model.dart';
 import 'package:dbnus/core/network/connection/utils/connection_utils.dart'
     deferred as connection_utils;
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:dbnus/core/services/value_handler.dart'
     deferred as value_handler;
 import 'package:dbnus/core/storage/local_preferences.dart'
     deferred as local_preferences;
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 
 import '../services/context_service.dart';
 

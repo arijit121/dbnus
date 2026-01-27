@@ -1,30 +1,30 @@
 import 'dart:math';
 
 import 'package:dbnus/core/models/custom_file.dart';
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/core/services/Localization/extension/localization_ext.dart';
 import 'package:dbnus/core/services/file_picker.dart';
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:dbnus/shared/ui/atoms/inputs/custom_text_formfield.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dbnus/core/config/app_config.dart';
-import 'package:dbnus/core/constants/api_url_const.dart';
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/api_url_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/models/forward_geocoding.dart';
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
 import 'package:dbnus/core/services/models/reverse_geocoding.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/flavors.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/core/services/Localization/utils/localization_utils.dart';
 import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/geocoding.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/organisms/carousels/carousel_slider.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';

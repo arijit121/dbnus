@@ -1,14 +1,14 @@
 import 'package:dbnus/core/models/custom_notification_model.dart';
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:dbnus/core/constants/api_url_const.dart';
-import 'package:dbnus/core/constants/color_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/constants/api_url_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
@@ -16,7 +16,7 @@ import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/file_picker.dart';
 import 'package:dbnus/core/services/notification_handler.dart';
 import 'package:dbnus/core/services/open_service.dart';
-import 'package:dbnus/core/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/molecules/dropdowns/custom_dropdown.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';

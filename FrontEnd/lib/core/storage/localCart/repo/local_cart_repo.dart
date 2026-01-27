@@ -4,7 +4,7 @@ import 'package:hive_ce/hive.dart';
 // import 'package:localstore/localstore.dart';
 
 import 'package:dbnus/core/models/service_model.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/storage/ss_hive.dart';
 import 'package:dbnus/core/storage/localCart/model/cart_service_model.dart';
 

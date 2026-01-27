@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:dbnus/core/constants/assects_const.dart';
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/network_img/network_img.dart';
 
 class CustomNetWorkImageView extends StatelessWidget {

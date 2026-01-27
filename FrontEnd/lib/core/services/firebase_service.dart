@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart'
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:dbnus/core/models/custom_notification_model.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/redirect_engine.dart'
     deferred as redirect_engine;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:dbnus/core/constants/api_url_const.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/constants/api_url_const.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';

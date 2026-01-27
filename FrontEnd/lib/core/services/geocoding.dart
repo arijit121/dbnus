@@ -5,7 +5,7 @@ import 'package:dbnus/core/network/api_client/repo/api_repo.dart';
 import 'package:dbnus/core/network/models/api_return_model.dart';
 import 'package:dbnus/core/services/models/forward_geocoding.dart';
 import 'package:dbnus/core/services/models/reverse_geocoding.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 class Geocoding {
   static const String _reverseGeocode =

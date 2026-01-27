@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:dbnus/core/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 class NetworkImg extends StatelessWidget {
   const NetworkImg(

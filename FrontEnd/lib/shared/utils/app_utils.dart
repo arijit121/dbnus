@@ -1,4 +1,4 @@
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 
 class AppUtils {
   static int gridViewCount(

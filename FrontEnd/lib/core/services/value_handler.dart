@@ -6,7 +6,7 @@ import 'package:encrypt/encrypt.dart' deferred as encrypt;
 import 'package:intl/intl.dart';
 
 import 'package:dbnus/core/config/app_config.dart' deferred as app_config;
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 class ValueHandler {
   static int generateTimestamp() {

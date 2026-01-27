@@ -1,4 +1,4 @@
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/models/service_model.dart';
 
 class ServiceDetailsModel {

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
 import 'package:dbnus/core/models/route_model.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/features/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
     deferred as rayzorpay;
 import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';

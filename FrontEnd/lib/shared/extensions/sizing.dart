@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:dbnus/core/services/context_service.dart';
-import 'package:dbnus/core/utils/screen_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 
 extension Sizing on num {
   double get fs =>

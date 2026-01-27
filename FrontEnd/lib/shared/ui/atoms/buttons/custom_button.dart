@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/models/service_model.dart';
-import 'package:dbnus/core/extensions/color_exe.dart';
+import 'package:dbnus/shared/extensions/color_exe.dart';
 import 'package:dbnus/core/services/redirect_engine.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/core/storage/localCart/model/cart_service_model.dart';
 import 'package:dbnus/core/storage/localCart/repo/local_cart_repo.dart';
-import 'package:dbnus/core/utils/text_utils.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 class CustomTextButton extends StatelessWidget {

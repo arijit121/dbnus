@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dbnus/core/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/core/models/custom_file.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
@@ -8,7 +8,7 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/utils/custom_ui.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 
 class FileView extends StatelessWidget {
   const FileView({

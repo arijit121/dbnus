@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 class AudioService {
   // Private constructor for singleton

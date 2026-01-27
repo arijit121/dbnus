@@ -4,9 +4,9 @@ import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import 'package:dbnus/core/constants/color_const.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/network/api_client/repo/api_repo.dart';
-import 'package:dbnus/core/extensions/logger_extension.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';

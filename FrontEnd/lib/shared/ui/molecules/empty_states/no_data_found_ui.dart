@@ -1,8 +1,8 @@
-import 'package:dbnus/core/extensions/spacing.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:dbnus/core/constants/assects_const.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
