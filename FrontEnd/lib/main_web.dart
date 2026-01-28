@@ -14,9 +14,9 @@ import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
 import 'package:dbnus/navigation/router_manager.dart';
-import 'package:dbnus/core/services/localization/bloc/localization_bloc.dart';
-import 'package:dbnus/core/services/localization/app_localizations/app_localizations.dart';
-import 'package:dbnus/core/services/localization/utils/localization_utils.dart';
+import 'package:dbnus/core/localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/localization/app_localizations/app_localizations.dart';
+import 'package:dbnus/core/localization/utils/localization_utils.dart';
 import 'package:dbnus/core/services/crash/utils/crash_utils.dart'
     deferred as crash_utils;
 import 'package:dbnus/core/services/firebase_service.dart'
