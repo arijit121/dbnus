@@ -5,10 +5,12 @@ import 'package:dbnus/core/models/custom_file.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:dbnus/shared/ui/utils/custom_ui.dart';
+import 'package:dbnus/shared/ui/atoms/text/key_value_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
+
+import '../../atoms/decorations/custom_container.dart';
 
 class FileView extends StatelessWidget {
   const FileView({

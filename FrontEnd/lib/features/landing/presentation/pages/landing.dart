@@ -8,7 +8,7 @@ import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
-import 'package:dbnus/shared/ui/utils/init_widget.dart';
+import 'package:dbnus/shared/ui/atoms/decorations/init_widget.dart';
 import 'package:dbnus/features/landing/presentation/bloc/landing_bloc.dart';
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
 import 'package:dbnus/features/landing/presentation/widgets/landing_widget.dart';

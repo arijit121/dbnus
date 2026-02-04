@@ -6,9 +6,11 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:dbnus/shared/ui/utils/custom_ui.dart';
+import 'package:dbnus/shared/ui/atoms/text/key_value_widget.dart';
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
+
+import '../../../../shared/ui/atoms/decorations/custom_container.dart';
 
 class DrawerNavigationRail extends StatefulWidget {
   const DrawerNavigationRail(
