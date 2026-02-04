@@ -120,6 +120,13 @@ class DownloadHandler {
 
   Future<void> config() async {
     await app_config.loadLibrary();
+    await FileDownloader().configure(globalConfig: [
+      (Config.requestTimeout, const Duration(seconds: 100)),
+    ], androidConfig: [
+      (Config.useCacheDir, Config.whenAble),
+    ], iOSConfig: [
+      (Config.localize, {'Cancel': 'StopIt'}),
+    ]).then((result) => AppLog.i('$result', tag: "Configuration result"));
     FileDownloader()
         .registerCallbacks(taskNotificationTapCallback:
             (Task task, NotificationType notificationType) async {
