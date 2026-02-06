@@ -61,3 +61,7 @@ void showLoading() {
     barrierDismissible: false,
   );
 }
+
+void hideLoading() {
+  Navigator.pop(CurrentContext().context);
+}
