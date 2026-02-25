@@ -24,7 +24,22 @@ class _PagedScrollRefreshWidgetState extends State<PagedScrollRefreshWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollInfo) {
+        widget.onScroll?.call();
+        final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
+        final currentScrollPosition = scrollInfo.metrics.pixels;
+
+        if (maxScrollExtent > 0 &&
+            currentScrollPosition >= (maxScrollExtent / 4) &&
+            currentScrollPosition > _previousScrollPosition) {
+          widget.paginate?.call();
+        }
+
+        _previousScrollPosition = currentScrollPosition;
+        return true;
+      },
+      child: RefreshIndicator(
         color: ColorConst.baseHexColor,
         backgroundColor: Colors.white,
         onRefresh: () async {
@@ -32,22 +47,8 @@ class _PagedScrollRefreshWidgetState extends State<PagedScrollRefreshWidget> {
             widget.onRefresh?.call();
           }
         },
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollInfo) {
-            widget.onScroll?.call();
-            final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
-            final currentScrollPosition = scrollInfo.metrics.pixels;
-
-            if (maxScrollExtent > 0 &&
-                currentScrollPosition >= (maxScrollExtent / 4) &&
-                currentScrollPosition > _previousScrollPosition) {
-              widget.paginate?.call();
-            }
-
-            _previousScrollPosition = currentScrollPosition;
-            return true;
-          },
-          child: widget.child,
-        ));
+        child: widget.child,
+      ),
+    );
   }
 }
