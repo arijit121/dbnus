@@ -9,6 +9,7 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText;
+  final String obscuringCharacter;
   final String? Function(String?)? validator;
   final String? title;
   final String? label;
@@ -24,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onChanged;
   final FocusNode? focusNode;
   final void Function(String)? onFieldSubmitted;
+  final void Function()? onTapOutside;
   final int? maxLines;
   final EdgeInsets scrollPadding;
   final bool autofocus;
@@ -32,11 +34,18 @@ class CustomTextFormField extends StatelessWidget {
   final BorderRadius borderRadius;
   final TextInputAction? textInputAction;
   final double? fieldHeight;
+  final bool obscureText;
+  final bool? filled;
+  final Color? fillColor;
+  final Color? borderColor;
+  final Color? selectedBorderColor;
+  final Color? titleColor;
 
   const CustomTextFormField({
     super.key,
     this.controller,
     this.hintText,
+    this.obscuringCharacter = '•',
     this.validator,
     this.title,
     this.label,
@@ -52,6 +61,7 @@ class CustomTextFormField extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.onFieldSubmitted,
+    this.onTapOutside,
     this.maxLines,
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.autofocus = false,
@@ -60,6 +70,12 @@ class CustomTextFormField extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
     this.textInputAction = TextInputAction.done,
     this.fieldHeight,
+    this.obscureText = false,
+    this.filled = true,
+    this.fillColor = Colors.white,
+    this.borderColor,
+    this.selectedBorderColor,
+    this.titleColor,
   }) : assert(
           fieldHeight == null || maxLines == null,
           'maxLines must be null when fieldHeight is not null or zero.',
@@ -74,7 +90,7 @@ class CustomTextFormField extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
             child: CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
-                color: ColorConst.primaryDark,
+                color: titleColor ?? ColorConst.primaryDark,
                 size: 14,
                 fontWeight: FontWeight.w400),
           ),
@@ -83,6 +99,10 @@ class CustomTextFormField extends StatelessWidget {
               ? fieldHeight
               : null,
           child: TextFormField(
+              obscuringCharacter: obscuringCharacter,
+              onTapOutside: (_) {
+                onTapOutside?.call();
+              },
               textInputAction: textInputAction,
               autofocus: autofocus,
               cursorColor: ColorConst.primaryDark,
@@ -107,6 +127,7 @@ class CustomTextFormField extends StatelessWidget {
                   ? true
                   : false,
               textAlign: textAlign ?? TextAlign.start,
+              obscureText: obscureText,
               style: customizeTextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -120,6 +141,9 @@ class CustomTextFormField extends StatelessWidget {
                     ? '${label ?? ""}${isRequired == true ? " *" : ""}'
                     : null,
                 hintText: hintText,
+                hintMaxLines: maxLines,
+                filled: filled,
+                fillColor: fillColor,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 errorStyle: customizeTextStyle(
@@ -140,8 +164,8 @@ class CustomTextFormField extends StatelessWidget {
                     fontColor: ColorConst.baseHexColor),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: borderRadius,
-                  borderSide: const BorderSide(
-                    color: Colors.blue,
+                  borderSide: BorderSide(
+                    color: selectedBorderColor ?? Colors.blue,
                     width: 1,
                   ),
                 ),
@@ -155,7 +179,7 @@ class CustomTextFormField extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(
                   borderRadius: borderRadius,
                   borderSide: BorderSide(
-                    color: ColorConst.grey,
+                    color: borderColor ?? ColorConst.grey,
                     width: 1,
                   ),
                 ),
