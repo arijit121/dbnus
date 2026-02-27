@@ -91,7 +91,7 @@ class LocalCartButtonWidget extends StatelessWidget {
                             fontWeight: FontWeight.w600),
                         const Spacer(),
                         CustomGOEButton(
-                            radius: 10,
+                            borderRadius: BorderRadius.circular(10),
                             backGroundColor: ColorConst.green,
                             child: CustomText(TextUtils.go_to_cart,
                                 color: Colors.white, size: 14),

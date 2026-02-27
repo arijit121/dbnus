@@ -158,7 +158,7 @@ class PopUpItems {
             ],
             24.ph,
             CustomGOEButton(
-              radius: 8,
+              borderRadius: BorderRadius.circular(8),
               width: double.infinity,
               height: 44,
               backGroundColor: ColorConst.primaryDark,
@@ -175,7 +175,7 @@ class PopUpItems {
               12.ph,
               CustomGOEButton(
                 borderColor: ColorConst.lineGrey,
-                radius: 8,
+                borderRadius: BorderRadius.circular(8),
                 width: double.infinity,
                 height: 42,
                 backGroundColor: Colors.white,
@@ -265,7 +265,7 @@ class PopUpItems {
               ),
             24.ph,
             CustomGOEButton(
-              radius: 8,
+              borderRadius: BorderRadius.circular(8),
               width: double.infinity,
               height: 44,
               backGroundColor: iconButtonColor ?? Colors.blueAccent,
@@ -381,7 +381,7 @@ class _EmailPickerState extends State<EmailPicker> {
                   10.ph,
                   CustomGOEButton(
                       width: 80,
-                      radius: 10,
+                      borderRadius: BorderRadius.circular(10),
                       backGroundColor: Colors.blueAccent,
                       child: CustomText(TextUtils.ok,
                           color: Colors.white, size: 20),

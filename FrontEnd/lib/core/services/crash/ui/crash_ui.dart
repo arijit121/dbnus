@@ -60,7 +60,7 @@ class CrashUi extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: CustomGOEButton(
                     backGroundColor: Colors.blue,
-                    radius: 8,
+                    borderRadius: BorderRadius.circular(8),
                     width: double.infinity,
                     onPressed: () async {
                       await CrashUtils.setValue(value: false);

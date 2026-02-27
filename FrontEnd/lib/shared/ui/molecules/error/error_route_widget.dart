@@ -53,7 +53,7 @@ class ErrorRouteWidget extends StatelessWidget {
               ),
               12.ph,
               CustomGOEButton(
-                radius: 6,
+                borderRadius: BorderRadius.circular(6),
                 backGroundColor: Colors.blueAccent,
                 onPressed: () {
                   CustomRoute.clearAndNavigateName(RouteName.initialView);

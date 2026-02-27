@@ -107,8 +107,8 @@ class CustomIconButton extends StatelessWidget {
 /// Specifies the color of the button's border (optional).
 /// [backGroundColor]
 /// Sets the background color of the button (optional, overridden by gradient if provided).
-/// [radius]
-/// Defines the corner radius of the button (defaults to 16 if not specified).
+/// [borderRadius]
+/// Defines the corner borderRadius of the button (defaults to 16 if not specified).
 /// [size]
 /// Sets the minimum width and height of the button (defaults to Size(88, 36)).
 /// [gradient]
@@ -124,7 +124,7 @@ class CustomGOEButton extends StatelessWidget {
       this.disableBorderColor,
       this.backGroundColor,
       this.disableBackGroundColor,
-      this.radius,
+      this.borderRadius,
       this.width = 88,
       this.height = 36,
       this.gradient,
@@ -137,7 +137,8 @@ class CustomGOEButton extends StatelessWidget {
   final Color? disableBorderColor;
   final Color? backGroundColor;
   final Color? disableBackGroundColor;
-  final double? radius, width, height;
+  final BorderRadiusGeometry? borderRadius;
+  final double? width, height;
   final Gradient? gradient;
   final EdgeInsetsGeometry? padding;
   final List<BoxShadow>? boxShadow;
@@ -182,7 +183,7 @@ class CustomGOEButton extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius ?? 16),
+        borderRadius: borderRadius ?? BorderRadius.circular(16),
         boxShadow: boxShadow,
         border: effectiveBorderColor != null
             ? Border.all(
@@ -197,12 +198,12 @@ class CustomGOEButton extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
             gradient: effectiveGradient,
-            borderRadius: BorderRadius.circular(radius ?? 16),
+            borderRadius: borderRadius ?? BorderRadius.circular(16),
             color: effectiveGradient == null ? effectiveBackgroundColor : null,
           ),
           child: InkWell(
             customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius ?? 16),
+              borderRadius: borderRadius ?? BorderRadius.circular(16),
             ),
             onTap: onPressed,
             // Disable onTap if disabled
@@ -215,7 +216,7 @@ class CustomGOEButton extends StatelessWidget {
               alignment: Alignment.center,
               padding: padding,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(radius ?? 16)),
+                  borderRadius: borderRadius ?? BorderRadius.circular(16)),
               child: child,
             ),
           ),
@@ -385,7 +386,7 @@ Widget customCartButton(
                         serviceId: serviceModel?.serviceId ?? ""));
                   },
                   backGroundColor: ColorConst.red,
-                  radius: 5,
+                  borderRadius: BorderRadius.circular(5),
                   child: CustomText(TextUtils.remove,
                       color: Colors.white,
                       size: 14,
@@ -414,7 +415,7 @@ Widget customCartButton(
                         }
                       },
                       backGroundColor: ColorConst.green,
-                      radius: 5,
+                      borderRadius: BorderRadius.circular(5),
                       child: CustomText(TextUtils.book_now,
                           color: Colors.white,
                           size: 14,
