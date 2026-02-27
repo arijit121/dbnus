@@ -330,29 +330,37 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final Widget? prefix, suffix;
   final T? value;
   final String? Function(T?)? validator;
-  final AutovalidateMode? autoValidateMode;
+  final AutovalidateMode autoValidateMode;
+  final double? height;
   final Widget? label;
+  final double? menuHeight;
+  final bool enableFilter;
   final BorderRadius borderRadius;
 
-  const CustomDropdownMenuFormField({
-    super.key,
-    required this.onChanged,
-    required this.items,
-    this.hintText,
-    this.prefix,
-    this.suffix,
-    this.value,
-    this.validator,
-    this.autoValidateMode = AutovalidateMode.onUserInteraction,
-    this.label,
-    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
-  });
+  const CustomDropdownMenuFormField(
+      {super.key,
+      required this.onChanged,
+      required this.items,
+      this.hintText,
+      this.prefix,
+      this.suffix,
+      this.value,
+      this.validator,
+      this.autoValidateMode = AutovalidateMode.onUserInteraction,
+      this.height,
+      this.label,
+      this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+      this.menuHeight,
+      this.enableFilter = false});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       return _DropdownMenuFormField<T?>(
+          enableFilter: enableFilter,
+          requestFocusOnTap: enableFilter,
+          menuHeight: menuHeight,
           label: label,
           validator: validator,
           autovalidateMode: autoValidateMode,
@@ -388,6 +396,9 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ))),
           inputDecorationTheme: InputDecorationTheme(
+            constraints: height != null
+                ? BoxConstraints.tight(Size.fromHeight(height!))
+                : null,
             errorStyle: customizeTextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
@@ -483,41 +494,51 @@ class _DropdownMenuFormField<T> extends FormField<T> {
                 onSelected?.call(value);
               }
 
-              return Theme(
-                data: ThemeData(
-                  inputDecorationTheme: const InputDecorationTheme(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 16,
-                    ),
-                    isDense: true,
+              InputDecorationTheme? localInputDecorationTheme =
+                  inputDecorationTheme;
+              if (state.errorText != null) {
+                localInputDecorationTheme = localInputDecorationTheme?.copyWith(
+                  focusedBorder: inputDecorationTheme?.focusedErrorBorder,
+                  enabledBorder: inputDecorationTheme?.errorBorder,
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4,
+                children: [
+                  DropdownMenu<T>(
+                    key: key,
+                    enabled: enabled,
+                    width: width,
+                    menuHeight: menuHeight,
+                    leadingIcon: leadingIcon,
+                    trailingIcon: trailingIcon,
+                    label: label,
+                    hintText: hintText,
+                    helperText: helperText,
+                    selectedTrailingIcon: selectedTrailingIcon,
+                    enableFilter: enableFilter,
+                    enableSearch: enableSearch,
+                    textStyle: textStyle,
+                    inputDecorationTheme: localInputDecorationTheme,
+                    menuStyle: menuStyle,
+                    controller: controller,
+                    initialSelection: state.value,
+                    onSelected: onSelectedHandler,
+                    requestFocusOnTap: requestFocusOnTap,
+                    expandedInsets: expandedInsets,
+                    dropdownMenuEntries: dropdownMenuEntries,
                   ),
-                ),
-                child: DropdownMenu<T>(
-                  key: key,
-                  enabled: enabled,
-                  width: width,
-                  menuHeight: menuHeight,
-                  leadingIcon: leadingIcon,
-                  trailingIcon: trailingIcon,
-                  label: label,
-                  hintText: hintText,
-                  helperText: helperText,
-                  errorText: state.errorText,
-                  selectedTrailingIcon: selectedTrailingIcon,
-                  enableFilter: enableFilter,
-                  enableSearch: enableSearch,
-                  textStyle: textStyle,
-                  inputDecorationTheme: inputDecorationTheme,
-                  menuStyle: menuStyle,
-                  controller: controller,
-                  initialSelection: state.value,
-                  onSelected: onSelectedHandler,
-                  requestFocusOnTap: requestFocusOnTap,
-                  expandedInsets: expandedInsets,
-                  dropdownMenuEntries: dropdownMenuEntries,
-                ),
+                  if (state.errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        state.errorText!,
+                        style: inputDecorationTheme?.errorStyle,
+                      ),
+                    ),
+                ],
               );
             });
 
@@ -532,12 +553,6 @@ class _DropdownMenuFormField<T> extends FormField<T> {
 class _DropdownMenuFormFieldState<T> extends FormFieldState<T> {
   _DropdownMenuFormField<T> get _dropdownMenuFormField =>
       widget as _DropdownMenuFormField<T>;
-
-  @override
-  void didChange(T? value) {
-    super.didChange(value);
-    // _dropdownMenuFormField.onSelected!(value);
-  }
 
   @override
   void didUpdateWidget(_DropdownMenuFormField<T> oldWidget) {
@@ -582,7 +597,7 @@ class CustomDropDownFormField<T> extends StatelessWidget {
     return DropdownButtonFormField<T>(
       isExpanded: true,
       dropdownColor: Colors.white,
-      value: value,
+      initialValue: value,
       items: List.generate(
           items.length,
           (index) => DropdownMenuItem<T>(
