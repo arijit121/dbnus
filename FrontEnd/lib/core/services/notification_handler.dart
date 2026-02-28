@@ -117,7 +117,7 @@ class NotificationHandler {
     );
 
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) {
         selectNotificationStream.add(notificationResponse.payload);
@@ -232,16 +232,16 @@ class NotificationHandler {
                 ValueHandler.isTextNotEmptyOrNull(notificationModel.sound),
             presentAlert: !isNotificationActive,
             presentBadge: !isNotificationActive);
-    final NotificationDetails notificationDetailsImage = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       iOS: darwinNotificationDetailsImage,
     );
 
     await flutterLocalNotificationsPlugin.show(
-        tempNotificationId,
-        notificationModel.title ?? "",
-        ValueHandler.parseHtmlToText(
+        id: tempNotificationId,
+        title: notificationModel.title ?? "",
+        body: ValueHandler.parseHtmlToText(
             notificationModel.bigText ?? notificationModel.message ?? ""),
-        notificationDetailsImage,
+        notificationDetails: notificationDetails,
         payload: notificationModel.actionURL);
     return tempNotificationId;
   }
@@ -344,10 +344,10 @@ class NotificationHandler {
         NotificationDetails(android: androidNotificationDetails);
 
     await flutterLocalNotificationsPlugin.show(
-        tempNotificationId,
-        notificationModel.title ?? "",
-        notificationModel.message ?? "",
-        notificationDetails,
+        id: tempNotificationId,
+        title: notificationModel.title ?? "",
+        body: notificationModel.message ?? "",
+        notificationDetails: notificationDetails,
         payload: notificationModel.actionURL);
     return tempNotificationId;
   }
