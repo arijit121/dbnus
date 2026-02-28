@@ -101,7 +101,8 @@ class BioData extends StatelessWidget {
                 onPressed: () {
                   OpenService.share(
                       shareParams: ShareParams(
-                          text: "https://dbnus-df986.web.app/bio-data",
+                          uri:
+                              Uri.parse("https://dbnus-df986.web.app/bio-data"),
                           title: "Arijit Sarkar - Flutter Developer"));
                 },
               ),
