@@ -814,7 +814,7 @@ class TextUtils {
   static const String recommended_health_package = "Recommended Health Package";
 
   // ignore: non_constant_identifier_names
-  static const String appTitle = "Test Des";
+  static const String appTitle = "Dbnus";
 
   // ignore: non_constant_identifier_names
   static const String provide_email =
