@@ -13,7 +13,7 @@ import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
+import 'package:dbnus/features/payment_gateway/data/models/web_view_payment_gateway_model.dart';
 
 class WebViewPaymentGateway extends StatelessWidget {
   const WebViewPaymentGateway(

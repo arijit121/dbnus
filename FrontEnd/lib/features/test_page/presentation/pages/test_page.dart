@@ -31,7 +31,7 @@ import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/organisms/scrolls/smooth_scroll.dart';
 import 'package:dbnus/shared/ui/organisms/video/youtube_video_player.dart';
-import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
+import 'package:dbnus/features/payment_gateway/data/models/web_view_payment_gateway_model.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});

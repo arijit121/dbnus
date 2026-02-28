@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
 import 'package:dbnus/core/models/route_model.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
-import 'package:dbnus/features/payment_gateway/module/rayzorpay/ui/rayzorpay.dart'
+import 'package:dbnus/features/payment_gateway/presentation/pages/rayzorpay/rayzorpay.dart'
     deferred as rayzorpay;
-import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/model/web_view_payment_gateway_model.dart';
-import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway.dart'
+import 'package:dbnus/features/payment_gateway/data/models/web_view_payment_gateway_model.dart';
+import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway/web_view_payment_gateway.dart'
     deferred as web_view_payment_gateway;
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
 import 'package:dbnus/core/services/context_service.dart';

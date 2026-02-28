@@ -122,7 +122,7 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
                                                 const BorderRadius.all(
                                                     Radius.circular(12)),
                                             height: 44,
-                                            width: 172,
+                                            width: 173,
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 22, vertical: 6),
                                             color: ColorConst.baseHexColor,
