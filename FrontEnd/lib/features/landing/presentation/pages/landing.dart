@@ -8,6 +8,7 @@ import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/shared/utils/screen_utils.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/decorations/init_widget.dart';
 import 'package:dbnus/features/landing/presentation/bloc/landing_bloc.dart';
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
@@ -29,7 +30,7 @@ class _LandingUiState extends State<LandingUi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Widget _narrowUiBody({required LandingState state}) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: state.page.value ?? Center(child: InitWidget()),
       );
 
@@ -43,10 +44,9 @@ class _LandingUiState extends State<LandingUi> {
                     context: context,
                     selectedIndex: state.pageIndex.value);
               }),
-          8.pw,
           Flexible(
               child: Padding(
-            padding: const EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
             child: state.page.value ?? Center(child: InitWidget()),
           )),
           8.pw,
@@ -65,13 +65,11 @@ class _LandingUiState extends State<LandingUi> {
                     context: context,
                     selectedIndex: state.pageIndex.value);
               }),
-          8.pw,
           Flexible(
               child: Padding(
-            padding: const EdgeInsets.only(top: 18),
+            padding: const EdgeInsets.only(top: 16, left: 20, right: 20),
             child: state.page.value ?? Center(child: InitWidget()),
           )),
-          8.pw,
         ],
       );
 
@@ -105,23 +103,29 @@ class _LandingUiState extends State<LandingUi> {
             final bloc = context.read<LandingBloc>();
             return Scaffold(
               key: _scaffoldKey,
+              backgroundColor: ColorConst.scaffoldBg,
               drawer: widthState != WidthState.narrow
                   ? null
-                  : SafeArea(
-                      child: DrawerNavigationRail(
-                          selectedIndex: state.pageIndex.value,
-                          withTitle: true,
-                          chooseIndex: (int value) {
-                            Navigator.of(context).pop();
-                            _onChooseIndex(
-                                index: value,
-                                context: context,
-                                selectedIndex: state.pageIndex.value);
-                          }),
+                  : Drawer(
+                      width: 200,
+                      backgroundColor: ColorConst.sidebarBg,
+                      child: SafeArea(
+                        child: DrawerNavigationRail(
+                            selectedIndex: state.pageIndex.value,
+                            withTitle: true,
+                            chooseIndex: (int value) {
+                              Navigator.of(context).pop();
+                              _onChooseIndex(
+                                  index: value,
+                                  context: context,
+                                  selectedIndex: state.pageIndex.value);
+                            }),
+                      ),
                     ),
               appBar: widthState != WidthState.narrow
                   ? null
                   : AppBar(
+                      backgroundColor: ColorConst.scaffoldBg,
                       leading: CustomIconButton(
                         padding: EdgeInsets.all(16),
                         color: ColorConst.primaryDark,
@@ -131,6 +135,13 @@ class _LandingUiState extends State<LandingUi> {
                         },
                         icon: Icon(FeatherIcons.menu),
                       ),
+                      title: CustomText(
+                        'Dbnus',
+                        fontWeight: FontWeight.w700,
+                        size: 20,
+                        color: ColorConst.primaryDark,
+                      ),
+                      centerTitle: false,
                       elevation: 0,
                       shadowColor: Colors.transparent,
                     ),

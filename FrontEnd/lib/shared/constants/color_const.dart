@@ -17,4 +17,8 @@ class ColorConst {
   static const Color lightBlue = Color(0xFF3C8DD8);
   static const Color deepBlue = Color(0xFF0B3857);
   static const Color violate = Color(0xFF4E69F4);
+  static const Color scaffoldBg = Color(0xFFF5F6FA);
+  static const Color sidebarBg = Color(0xFF1A1D2E);
+  static const Color cardBg = Color(0xFFFFFFFF);
+  static const Color sidebarSelected = Color(0xFF6C63FF);
 }

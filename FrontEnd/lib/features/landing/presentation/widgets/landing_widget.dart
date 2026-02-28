@@ -6,11 +6,8 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:dbnus/shared/ui/atoms/text/key_value_widget.dart';
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
-
-import '../../../../shared/ui/atoms/decorations/custom_container.dart';
 
 class DrawerNavigationRail extends StatefulWidget {
   const DrawerNavigationRail(
@@ -34,115 +31,167 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      duration: Duration(milliseconds: 120),
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
       child: ValueListenableBuilder(
           valueListenable: _tag,
           builder: (_, __, ___) {
             return widget.expanded == true && !_tag.value
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 8.0, left: 8),
-                        child: CustomIconButton(
-                          iconSize: 24,
-                          color: ColorConst.primaryDark,
-                          padding: EdgeInsets.all(8),
-                          icon: Icon(FeatherIcons.sidebar),
-                          onPressed: () {
-                            _tag.value = true;
-                          },
+                ? Container(
+                    decoration: BoxDecoration(
+                      color: ColorConst.sidebarBg,
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 16.0, bottom: 8.0, left: 8, right: 8),
+                          child: CustomIconButton(
+                            iconSize: 24,
+                            color: Colors.white70,
+                            padding: EdgeInsets.all(8),
+                            icon: Icon(FeatherIcons.sidebar),
+                            onPressed: () {
+                              _tag.value = true;
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 : Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
+                        horizontal: 12, vertical: 16),
                     decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          ColorConst.sidebarBg,
+                          Color(0xFF252A3A),
+                        ],
+                      ),
                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(16.0)),
-                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: ColorConst.grey,
-                          blurRadius: 4.0,
+                          color: Colors.black26,
+                          blurRadius: 8.0,
                           spreadRadius: 1.0,
+                          offset: Offset(2, 0),
                         ),
                       ],
                     ),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Brand header
                           if (widget.expanded == true)
                             Padding(
-                              padding: const EdgeInsets.only(bottom: 20),
-                              child: CustomIconButton(
-                                iconSize: 24,
-                                color: ColorConst.primaryDark,
-                                padding: EdgeInsets.zero,
-                                icon: Icon(FeatherIcons.sidebar),
-                                onPressed: () {
-                                  _tag.value = false;
-                                },
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 36,
+                                    width: 36,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          ColorConst.sidebarSelected,
+                                          ColorConst.violate,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: CustomText(
+                                        "D",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                  10.pw,
+                                  CustomText(
+                                    "Dbnus",
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    size: 20,
+                                  ),
+                                  8.pw,
+                                  CustomIconButton(
+                                    iconSize: 22,
+                                    color: Colors.white54,
+                                    padding: EdgeInsets.all(4),
+                                    icon: Icon(FeatherIcons.sidebar),
+                                    onPressed: () {
+                                      _tag.value = false;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          else if (widget.expanded != true)
+                            SizedBox.shrink(),
+
+                          // Divider
+                          if (widget.withTitle == true)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Divider(
+                                color: Colors.white12,
+                                height: 1,
                               ),
                             ),
+
+                          12.ph,
+
+                          // Navigation items
                           ...List.generate(LandingUtils.listNavigation.length,
                               (index) {
                             NavigationOption navigationBarModel =
                                 LandingUtils.listNavigation.elementAt(index);
+                            bool isSelected = index == widget.selectedIndex;
                             return InkWell(
+                              borderRadius: BorderRadius.circular(12),
                               onTap: () {
                                 widget.chooseIndex(index);
                               },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  if (index == widget.selectedIndex)
-                                    widget.withTitle != true
-                                        ? CustomContainer(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(12)),
-                                            height: 44,
-                                            width: 44,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 6, vertical: 6),
-                                            color: ColorConst.baseHexColor,
-                                            child: _DrawerNavigationRailWidget(
-                                              showTitle:
-                                                  widget.withTitle == true,
-                                              color: Colors.white,
-                                              navigationBarModel:
-                                                  navigationBarModel,
-                                            ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 200),
+                                  curve: Curves.easeInOut,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: isSelected
+                                        ? ColorConst.sidebarSelected
+                                            .withValues(alpha: 0.2)
+                                        : Colors.transparent,
+                                    border: isSelected
+                                        ? Border.all(
+                                            color: ColorConst.sidebarSelected
+                                                .withValues(alpha: 0.4),
+                                            width: 1,
                                           )
-                                        : CustomContainer(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(12)),
-                                            height: 44,
-                                            width: 173,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 22, vertical: 6),
-                                            color: ColorConst.baseHexColor,
-                                            child: _DrawerNavigationRailWidget(
-                                              showTitle:
-                                                  widget.withTitle == true,
-                                              color: Colors.white,
-                                              navigationBarModel:
-                                                  navigationBarModel,
-                                            ),
-                                          )
-                                  else
-                                    _DrawerNavigationRailWidget(
-                                      showTitle: widget.withTitle == true,
-                                      navigationBarModel: navigationBarModel,
-                                    ),
-                                  if (index !=
-                                      (LandingUtils.listNavigation.length - 1))
-                                    30.ph,
-                                ],
+                                        : null,
+                                  ),
+                                  padding: widget.withTitle == true
+                                      ? const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 10)
+                                      : const EdgeInsets.all(10),
+                                  child: _DrawerNavigationRailWidget(
+                                    showTitle: widget.withTitle == true,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.white60,
+                                    navigationBarModel: navigationBarModel,
+                                  ),
+                                ),
                               ),
                             );
                           }),
@@ -171,32 +220,33 @@ class _DrawerNavigationRailWidget extends StatelessWidget {
             ? navigationBarModel.icon.contains(".svg")
                 ? CustomSvgNetworkImageView(
                     url: navigationBarModel.icon,
-                    height: 32,
-                    color: color ?? ColorConst.redGrey,
+                    height: 24,
+                    color: color ?? Colors.white60,
                   )
                 : CustomNetWorkImageView(
                     url: navigationBarModel.icon,
-                    height: 32,
-                    color: color ?? ColorConst.redGrey,
+                    height: 24,
+                    color: color ?? Colors.white60,
                   )
             : navigationBarModel.icon.contains(".svg")
                 ? CustomSvgAssetImageView(
                     path: navigationBarModel.icon,
-                    height: 32,
-                    color: color ?? ColorConst.redGrey,
+                    height: 24,
+                    color: color ?? Colors.white60,
                   )
                 : CustomAssetImageView(
                     path: navigationBarModel.icon,
-                    height: 32,
-                    color: color ?? ColorConst.redGrey,
+                    height: 24,
+                    color: color ?? Colors.white60,
                   ),
         if (showTitle == true)
           Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: const EdgeInsets.only(left: 12.0),
             child: CustomText(
                 LandingUtils.getTranslatedTitle(
                     context, navigationBarModel.title),
-                color: color ?? ColorConst.primaryDark),
+                color: color ?? Colors.white60,
+                fontWeight: FontWeight.w500),
           )
       ],
     );
