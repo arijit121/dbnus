@@ -10,7 +10,7 @@ class ApiUrlConst {
           : "https://www.googleapis.com/";
 
   static String books = "${baseUrl}books/v1/volumes";
-  static String hostUrl = "https://www.google.com";
+  static String hostUrl = "https://dbnus-df986.web.app";
 
   static String testImgUrl({num aspectRatio = 1}) {
     int width = Random().nextInt(2160) + 512;
