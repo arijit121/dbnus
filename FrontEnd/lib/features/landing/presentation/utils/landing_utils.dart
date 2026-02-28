@@ -11,7 +11,7 @@ import 'package:dbnus/features/flame_game/presentation/pages/flame_game.dart'
     deferred as flame_game;
 import 'package:dbnus/features/reorderable_list/presentation/pages/my_reorderable_list.dart'
     deferred as my_reorderable_list;
-import 'package:dbnus/features/test_page/presentation/pages/test_page.dart'
+import 'package:dbnus/features/dashboard/presentation/pages/dashboard.dart'
     deferred as test_page;
 import 'package:dbnus/features/ui_temp/presentation/pages/ui_temp.dart'
     deferred as ui_temp;
@@ -45,7 +45,7 @@ class LandingUtils {
     switch (action) {
       case RouteName.initialView:
         await test_page.loadLibrary();
-        return test_page.TestPage();
+        return test_page.DashBoardPage();
 
       case RouteName.leaderBoard:
         await my_reorderable_list.loadLibrary();

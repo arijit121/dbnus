@@ -33,14 +33,14 @@ import 'package:dbnus/shared/ui/organisms/scrolls/smooth_scroll.dart';
 import 'package:dbnus/shared/ui/organisms/video/youtube_video_player.dart';
 import 'package:dbnus/features/payment_gateway/data/models/web_view_payment_gateway_model.dart';
 
-class TestPage extends StatefulWidget {
-  const TestPage({super.key});
+class DashBoardPage extends StatefulWidget {
+  const DashBoardPage({super.key});
 
   @override
-  State<TestPage> createState() => _TestPageState();
+  State<DashBoardPage> createState() => _DashBoardPageState();
 }
 
-class _TestPageState extends State<TestPage> {
+class _DashBoardPageState extends State<DashBoardPage> {
   ValueNotifier<int> counter = ValueNotifier(0);
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _midController = TextEditingController();
