@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:dbnus/shared/utils/screen_utils.dart';
 
+
 // The game class that handles background scrolling.
 class SingleScrollBackgroundGame extends FlameGame {
   SingleScrollBackgroundGame({required this.widthState});
