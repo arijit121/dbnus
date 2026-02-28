@@ -282,17 +282,40 @@ class BioData extends StatelessWidget {
             const SizedBox(height: 16),
             _buildContactRow(Icons.location_on, 'Kolkata, India'),
             const SizedBox(height: 12),
-            _buildContactRow(Icons.phone, '+91 89189 51655'),
+            _buildContactRow(
+              Icons.phone,
+              '+91 89189 51655',
+              onTap: () {
+                OpenService.openUrl(uri: Uri.parse('tel:+918918951655'));
+              },
+            ),
             const SizedBox(height: 12),
-            _buildContactRow(Icons.email, 'ruarijitsarkar@gmail.com'),
+            _buildContactRow(
+              Icons.email,
+              'ruarijitsarkar@gmail.com',
+              onTap: () {
+                OpenService.openUrl(
+                    uri: Uri.parse('mailto:ruarijitsarkar@gmail.com'));
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildContactRow(
+              Icons.link,
+              'linkedin.com/in/arijit-sarkar-...',
+              onTap: () {
+                OpenService.openUrl(
+                    uri: Uri.parse(
+                        'https://www.linkedin.com/in/arijit-sarkar-53b822184/'));
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildContactRow(IconData icon, String text) {
-    return Row(
+  Widget _buildContactRow(IconData icon, String text, {VoidCallback? onTap}) {
+    Widget rowItem = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Icon(
@@ -312,6 +335,15 @@ class BioData extends StatelessWidget {
         ),
       ],
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: rowItem,
+      );
+    }
+
+    return rowItem;
   }
 
   Widget _buildEducationCard() {

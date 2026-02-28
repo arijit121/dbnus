@@ -9,11 +9,11 @@ import 'package:dbnus/features/bio_data/bio_data.dart'
 import 'package:dbnus/features/landing/presentation/pages/landing.dart'
     deferred as landing;
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
-import 'package:dbnus/features/order_details/ui/order_details.dart'
+import 'package:dbnus/features/order_details/presentation/pages/order_details.dart'
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/module/web_view_payment_gateway/ui/web_view_payment_gateway_status.dart'
     deferred as web_view_payment_gateway_status;
-import 'package:dbnus/features/settings/ui/settings.dart' deferred as settings;
+import 'package:dbnus/features/settings/presentation/pages/settings.dart' deferred as settings;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
