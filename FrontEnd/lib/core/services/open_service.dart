@@ -75,8 +75,9 @@ class OpenService {
     await open_file.OpenFile.open(filePath);
   }
 
-  static Future<ShareResultStatus> share({required String text}) async {
-    final result = await Share.share(text);
+  static Future<ShareResultStatus> share(
+      {required ShareParams shareParams}) async {
+    final result = await SharePlus.instance.share(shareParams);
     return result.status;
   }
 

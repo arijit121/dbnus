@@ -7,6 +7,7 @@ import 'package:dbnus/core/services/open_service.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BioData extends StatelessWidget {
   const BioData({super.key});
@@ -97,7 +98,12 @@ class BioData extends StatelessWidget {
                 icon: const Icon(FeatherIcons.share2),
                 color: Colors.white70,
                 iconSize: 20,
-                onPressed: () {},
+                onPressed: () {
+                  OpenService.share(
+                      shareParams: ShareParams(
+                          text: "https://dbnus-df986.web.app/bio-data",
+                          title: "Arijit Sarkar - Flutter Developer"));
+                },
               ),
             ],
           ),
