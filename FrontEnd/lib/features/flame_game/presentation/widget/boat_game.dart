@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 
-
-
 class BoatGame extends FlameGame with TapDetector {
   BoatGame({
     required this.widthState,
