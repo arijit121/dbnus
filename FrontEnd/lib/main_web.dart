@@ -24,7 +24,7 @@ import 'package:dbnus/core/services/firebase_service.dart'
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 
-import 'navigation/url_strategy/src/non_web/url_strategy.dart' deferred as url_strategy;
+import 'navigation/url_strategy/url_strategy.dart' deferred as url_strategy;
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
