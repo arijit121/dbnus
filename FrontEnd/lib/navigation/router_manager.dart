@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:dbnus/core/models/route_model.dart';
-import 'package:dbnus/features/bio_data/bio_data.dart'
+import 'package:dbnus/features/bio_data/presentation/pages/bio_data.dart'
     deferred as flutter_bio_data;
 import 'package:dbnus/features/landing/presentation/pages/landing.dart'
     deferred as landing;
