@@ -193,7 +193,9 @@ class _DrawerNavigationRailWidget extends StatelessWidget {
         if (showTitle == true)
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: CustomText(navigationBarModel.title,
+            child: CustomText(
+                LandingUtils.getTranslatedTitle(
+                    context, navigationBarModel.title),
                 color: color ?? ColorConst.primaryDark),
           )
       ],

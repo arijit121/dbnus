@@ -71,5 +71,10 @@
     }
   },
 
-  "otp": "Otp"
+  "otp": "Otp",
+
+  "dashboard": "Dashboard",
+  "leader_board": "LeaderBoard",
+  "order": "Order",
+  "game": "Game"
 }

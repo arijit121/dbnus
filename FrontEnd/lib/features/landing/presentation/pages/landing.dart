@@ -79,12 +79,12 @@ class _LandingUiState extends State<LandingUi> {
       {required int index,
       required int? selectedIndex,
       required BuildContext context}) {
-    if (LandingUtils.listNavigation.elementAt(index).action ==
-        TextUtils.logout) {
+    String action = LandingUtils.listNavigation.elementAt(index).action;
+    if (action == TextUtils.logout) {
       AppLog.i("Log out");
     } else {
       if (index != selectedIndex) {
-        LandingUtils.redirect(index);
+        LandingUtils.redirect(action);
       }
     }
   }

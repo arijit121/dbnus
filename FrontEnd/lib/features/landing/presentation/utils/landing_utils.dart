@@ -13,8 +13,11 @@ import 'package:dbnus/features/reorderable_list/presentation/pages/my_reorderabl
     deferred as my_reorderable_list;
 import 'package:dbnus/features/test_page/presentation/pages/test_page.dart'
     deferred as test_page;
-import 'package:dbnus/features/ui_temp/presentation/pages/ui_temp.dart' deferred as ui_temp;
+import 'package:dbnus/features/ui_temp/presentation/pages/ui_temp.dart'
+    deferred as ui_temp;
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
+
+import '../../../../core/localization/extension/localization_ext.dart';
 
 class LandingUtils {
   static List<NavigationOption> listNavigation = [
@@ -61,10 +64,26 @@ class LandingUtils {
     }
   }
 
-  static void redirect(int index) {
+  static String getTranslatedTitle(BuildContext context, String title) {
+    final l10n = context.l10n;
+    switch (title) {
+      case TextUtils.dashboard:
+        return l10n.dashboard;
+      case TextUtils.leaderBoard:
+        return l10n.leader_board;
+      case TextUtils.order:
+        return l10n.order;
+      case TextUtils.game:
+        return l10n.game;
+      case TextUtils.logout:
+        return l10n.logout;
+      default:
+        return title;
+    }
+  }
+
+  static void redirect(String action) {
     GoRouter router = RouterManager.getInstance.router;
-    kIsWeb
-        ? router.goNamed(listNavigation.elementAt(index).action)
-        : router.replaceNamed(listNavigation.elementAt(index).action);
+    kIsWeb ? router.goNamed(action) : router.replaceNamed(action);
   }
 }

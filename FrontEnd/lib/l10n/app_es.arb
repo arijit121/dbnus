@@ -71,5 +71,10 @@
     }
   },
 
-  "otp": "Otp"
+  "otp": "Otp",
+
+  "dashboard": "Tablero",
+  "leader_board": "Tabla de Clasificación",
+  "order": "Pedido",
+  "game": "Juego"
 }
