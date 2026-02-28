@@ -11,9 +11,7 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/core/storage/localCart/model/cart_service_model.dart';
-import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:dbnus/shared/ui/organisms/scrolls/smooth_scroll.dart';
 
 class LeaderBoard extends StatefulWidget {
   const LeaderBoard({super.key});
