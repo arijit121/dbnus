@@ -13,14 +13,14 @@ import 'package:dbnus/core/storage/localCart/model/cart_service_model.dart';
 import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
-class MyReOrderAbleList extends StatefulWidget {
-  const MyReOrderAbleList({super.key});
+class LeaderBoard extends StatefulWidget {
+  const LeaderBoard({super.key});
 
   @override
-  State<MyReOrderAbleList> createState() => _MyReOrderAbleListState();
+  State<LeaderBoard> createState() => _LeaderBoardState();
 }
 
-class _MyReOrderAbleListState extends State<MyReOrderAbleList> {
+class _LeaderBoardState extends State<LeaderBoard> {
   List<String> items = List.generate(5, (index) => 'Item ${index + 1}');
 
   @override

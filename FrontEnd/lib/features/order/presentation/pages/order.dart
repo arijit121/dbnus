@@ -22,14 +22,14 @@ import 'package:dbnus/shared/ui/molecules/dropdowns/custom_dropdown.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/inputs/custom_text_formfield.dart';
 
-class UiTemp extends StatefulWidget {
-  const UiTemp({super.key});
+class Order extends StatefulWidget {
+  const Order({super.key});
 
   @override
-  State<UiTemp> createState() => _UiTempState();
+  State<Order> createState() => _OrderState();
 }
 
-class _UiTempState extends State<UiTemp> {
+class _OrderState extends State<Order> {
   final TextEditingController _pinController = TextEditingController();
   final ValueNotifier<bool> boolNotifier = ValueNotifier<bool>(true);
   final ValueNotifier<bool> clearPin = ValueNotifier<bool>(false);

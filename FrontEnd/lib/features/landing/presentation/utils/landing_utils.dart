@@ -9,11 +9,11 @@ import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 import 'package:dbnus/features/flame_game/presentation/pages/flame_game.dart'
     deferred as flame_game;
-import 'package:dbnus/features/reorderable_list/presentation/pages/my_reorderable_list.dart'
+import 'package:dbnus/features/leader_board/presentation/pages/leader_board.dart'
     deferred as my_reorderable_list;
 import 'package:dbnus/features/dashboard/presentation/pages/dashboard.dart'
     deferred as test_page;
-import 'package:dbnus/features/ui_temp/presentation/pages/ui_temp.dart'
+import 'package:dbnus/features/order/presentation/pages/order.dart'
     deferred as ui_temp;
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 
@@ -49,11 +49,11 @@ class LandingUtils {
 
       case RouteName.leaderBoard:
         await my_reorderable_list.loadLibrary();
-        return my_reorderable_list.MyReOrderAbleList();
+        return my_reorderable_list.LeaderBoard();
 
       case RouteName.order:
         await ui_temp.loadLibrary();
-        return ui_temp.UiTemp();
+        return ui_temp.Order();
 
       case RouteName.games:
         await flame_game.loadLibrary();
