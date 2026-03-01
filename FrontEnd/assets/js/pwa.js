@@ -1,13 +1,28 @@
-let deferredPrompt = null;
-let newServiceWorker = null;
+/* ===================================================
+   PWA Helper – cross-platform (iOS, Android, Desktop)
+   Returns boolean from promptInstall on all platforms.
+   =================================================== */
+
+/* ---------------------------
+   EARLY CAPTURE
+---------------------------- */
+
+if (typeof window.__pwa_deferred_prompt === 'undefined') {
+    window.__pwa_deferred_prompt = null;
+}
+
+window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    window.__pwa_deferred_prompt = e;
+    console.log('[PWA] beforeinstallprompt captured');
+});
 
 /* ---------------------------
    PLATFORM DETECTION
 ---------------------------- */
 
 function getPlatform() {
-    const ua = navigator.userAgent.toLowerCase();
-
+    var ua = navigator.userAgent.toLowerCase();
     if (/iphone|ipad|ipod/.test(ua)) return "ios";
     if (/android/.test(ua)) return "android";
     if (/windows/.test(ua)) return "windows";
@@ -16,35 +31,216 @@ function getPlatform() {
     return "unknown";
 }
 
-function isIOS() {
-    return /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+function _detectPlatformInfo() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isIOS = /iphone|ipad|ipod/.test(ua);
+    var isAndroid = /android/.test(ua);
+    var isDesktop = /windows|macintosh|linux/.test(ua);
+
+    var platform = isIOS ? "ios" : isAndroid ? "android" : isDesktop ? "desktop" : "unknown";
+
+    var isSafari = /safari/.test(ua) && !/chrome|crios|fxios|edgios|opios/.test(ua);
+    var isChrome = /chrome/.test(ua) && !/edg|opr/.test(ua);
+    var isEdge = /edg/.test(ua);
+    var isFirefox = /firefox|fxios/.test(ua);
+    var isOpera = /opr|opera/.test(ua);
+    var isSamsungBrowser = /samsungbrowser/.test(ua);
+
+    var browser = isSafari ? "safari"
+        : isChrome ? "chrome"
+            : isEdge ? "edge"
+                : isFirefox ? "firefox"
+                    : isOpera ? "opera"
+                        : isSamsungBrowser ? "samsung"
+                            : "other";
+
+    return { platform: platform, browser: browser, isIOS: isIOS, isAndroid: isAndroid, isDesktop: isDesktop };
 }
 
 function isAppInstalled() {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isIOSStandalone = window.navigator.standalone === true;
+    var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    var isIOSStandalone = window.navigator.standalone === true;
     return isStandalone || isIOSStandalone;
 }
 
 /* ---------------------------
-   INSTALL PROMPT HANDLING
+   INSTALL INSTRUCTION DIALOG
+   Works on ALL platforms as
+   a universal fallback.
 ---------------------------- */
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-});
+function _getInstallSteps(info) {
+    var steps = [];
+
+    if (info.isIOS) {
+        // iOS
+        if (info.browser !== 'safari') {
+            steps.push({ icon: '🌐', text: 'Open this website in <b>Safari</b> browser' });
+        }
+        steps.push({ icon: '📤', text: 'Tap the <b>Share</b> button <span style="font-size:18px">⬆</span> at the bottom' });
+        steps.push({ icon: '📱', text: 'Scroll down and tap <b>"Add to Home Screen"</b>' });
+        steps.push({ icon: '✅', text: 'Tap <b>"Add"</b> in the top-right corner' });
+
+    } else if (info.isAndroid) {
+        // Android
+        if (info.browser === 'chrome') {
+            steps.push({ icon: '⋮', text: 'Tap the <b>three-dot menu</b> (⋮) in the top-right' });
+            steps.push({ icon: '📲', text: 'Tap <b>"Install app"</b> or <b>"Add to Home screen"</b>' });
+            steps.push({ icon: '✅', text: 'Tap <b>"Install"</b> to confirm' });
+        } else if (info.browser === 'samsung') {
+            steps.push({ icon: '☰', text: 'Tap the <b>menu icon</b> (☰) at the bottom' });
+            steps.push({ icon: '📲', text: 'Tap <b>"Add page to"</b> → <b>"Home screen"</b>' });
+            steps.push({ icon: '✅', text: 'Tap <b>"Add"</b> to confirm' });
+        } else if (info.browser === 'firefox') {
+            steps.push({ icon: '⋮', text: 'Tap the <b>three-dot menu</b> (⋮)' });
+            steps.push({ icon: '📲', text: 'Tap <b>"Install"</b>' });
+            steps.push({ icon: '✅', text: 'Tap <b>"Add"</b> to confirm' });
+        } else {
+            steps.push({ icon: '⋮', text: 'Open your <b>browser menu</b>' });
+            steps.push({ icon: '📲', text: 'Look for <b>"Install"</b> or <b>"Add to Home screen"</b>' });
+            steps.push({ icon: '✅', text: 'Confirm the installation' });
+        }
+
+    } else {
+        // Desktop (Windows / Mac / Linux)
+        if (info.browser === 'chrome') {
+            steps.push({ icon: '📥', text: 'Click the <b>Install icon</b> (⊕) in the <b>address bar</b> (right side)' });
+            steps.push({ icon: '✅', text: 'Click <b>"Install"</b> in the popup to confirm' });
+        } else if (info.browser === 'edge') {
+            steps.push({ icon: '📥', text: 'Click the <b>App available icon</b> (⊕) in the <b>address bar</b>' });
+            steps.push({ icon: '✅', text: 'Click <b>"Install"</b> to confirm' });
+        } else if (info.browser === 'opera') {
+            steps.push({ icon: '📥', text: 'Click the <b>install icon</b> in the <b>address bar</b>' });
+            steps.push({ icon: '✅', text: 'Click <b>"Install"</b> to confirm' });
+        } else {
+            steps.push({ icon: '🌐', text: 'Open this site in <b>Google Chrome</b> or <b>Microsoft Edge</b>' });
+            steps.push({ icon: '📥', text: 'Click the <b>Install icon</b> (⊕) in the address bar' });
+            steps.push({ icon: '✅', text: 'Click <b>"Install"</b> to confirm' });
+        }
+    }
+
+    return steps;
+}
+
+function _showInstallDialog(info) {
+    return new Promise(function (resolve) {
+        var steps = _getInstallSteps(info);
+
+        // Build steps HTML
+        var stepsHtml = '';
+        for (var i = 0; i < steps.length; i++) {
+            stepsHtml += '<div style="display:flex;align-items:center;gap:12px;padding:14px 0;' +
+                (i < steps.length - 1 ? 'border-bottom:1px solid rgba(255,255,255,0.08);' : '') + '">' +
+                '<div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">' + steps[i].icon + '</div>' +
+                '<div style="font-size:14px;color:rgba(255,255,255,0.9);line-height:1.4;"><span style="color:rgba(255,255,255,0.5);font-size:12px;margin-right:4px;">' + (i + 1) + '.</span> ' + steps[i].text + '</div>' +
+                '</div>';
+        }
+
+        // Subtitle
+        var subtitle = info.isIOS
+            ? 'Follow these steps to add to your home screen'
+            : info.isAndroid
+                ? 'Follow these steps to install the app'
+                : 'Follow these steps to install the app on your computer';
+
+        // Create overlay
+        var overlay = document.createElement('div');
+        overlay.id = '__pwa_install_overlay';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:' + (info.isDesktop ? 'center' : 'flex-end') + ';justify-content:center;padding:16px;animation:__pwa_fadeIn 0.25s ease;';
+
+        // Dialog card
+        var dialog = document.createElement('div');
+        dialog.style.cssText = 'width:100%;max-width:400px;background:linear-gradient(145deg,#1c1c1e,#2c2c2e);border-radius:20px;padding:24px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:__pwa_slideUp 0.3s ease;';
+        dialog.innerHTML =
+            '<div style="text-align:center;margin-bottom:20px;">' +
+            '  <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;">📲</div>' +
+            '  <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">Install App</div>' +
+            '  <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;">' + subtitle + '</div>' +
+            '</div>' +
+            '<div style="background:rgba(255,255,255,0.05);border-radius:14px;padding:4px 16px;margin-bottom:20px;">' + stepsHtml + '</div>' +
+            '<button id="__pwa_close_btn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:-0.2px;transition:opacity 0.2s;">Got it</button>';
+
+        overlay.appendChild(dialog);
+
+        // Inject keyframes
+        var styleEl = document.createElement('style');
+        styleEl.id = '__pwa_install_style';
+        styleEl.textContent =
+            '@keyframes __pwa_fadeIn{from{opacity:0}to{opacity:1}}' +
+            '@keyframes __pwa_slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}' +
+            '@keyframes __pwa_slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(100px);opacity:0}}';
+        document.head.appendChild(styleEl);
+        document.body.appendChild(overlay);
+
+        // Close handler — check install status after dialog close
+        function closeDialog() {
+            dialog.style.animation = '__pwa_slideDown 0.25s ease forwards';
+            overlay.style.animation = '__pwa_fadeIn 0.25s ease reverse forwards';
+
+            setTimeout(function () {
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                var s = document.getElementById('__pwa_install_style');
+                if (s) s.parentNode.removeChild(s);
+
+                // Check if user actually installed
+                var nowStandalone = window.matchMedia('(display-mode: standalone)').matches;
+                var nowIOSStandalone = window.navigator.standalone === true;
+                resolve(nowStandalone || nowIOSStandalone);
+            }, 280);
+        }
+
+        document.getElementById('__pwa_close_btn').addEventListener('click', closeDialog);
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) closeDialog();
+        });
+    });
+}
+
+/* ---------------------------
+   INSTALL PROMPT (all platforms)
+
+   Returns Promise<boolean>:
+     true  – installed
+     false – not installed / dismissed
+---------------------------- */
 
 function promptInstall() {
-    if (!deferredPrompt) return false;
+    return new Promise(function (resolve) {
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        var isIOSStandalone = window.navigator.standalone === true;
+        var installed = isStandalone || isIOSStandalone;
 
-    deferredPrompt.prompt();
+        // Already installed
+        if (installed) {
+            console.log('[PWA] Already installed');
+            resolve(false);
+            return;
+        }
 
-    deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
+        var info = _detectPlatformInfo();
+
+        // Try native prompt first (Android / Desktop Chromium)
+        var prompt = window.__pwa_deferred_prompt;
+        if (prompt && !info.isIOS) {
+            prompt.prompt();
+            prompt.userChoice
+                .then(function (choiceResult) {
+                    console.log('[PWA] User choice:', choiceResult.outcome);
+                    window.__pwa_deferred_prompt = null;
+                    resolve(choiceResult.outcome === 'accepted');
+                })
+                .catch(function (err) {
+                    console.error('[PWA] Prompt error:', err);
+                    window.__pwa_deferred_prompt = null;
+                    // Fallback to dialog
+                    _showInstallDialog(info).then(resolve);
+                });
+            return;
+        }
+
+        // Fallback: show instruction dialog for ALL platforms
+        _showInstallDialog(info).then(resolve);
     });
-
-    return true;
 }
 
 /* ---------------------------
@@ -52,73 +248,66 @@ function promptInstall() {
 ---------------------------- */
 
 function getPWAStatus() {
-    const ua = navigator.userAgent.toLowerCase();
-    const isIOS = /iphone|ipad|ipod/.test(ua);
-    const isAndroid = /android/.test(ua);
-    const isDesktop = /windows|macintosh|linux/.test(ua);
+    return new Promise(function (resolve) {
+        var info = _detectPlatformInfo();
 
-    const platform = isIOS
-        ? "ios"
-        : isAndroid
-            ? "android"
-            : isDesktop
-                ? "desktop"
-                : "unknown";
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        var isIOSStandalone = window.navigator.standalone === true;
+        var installed = isStandalone || isIOSStandalone;
 
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isIOSStandalone = window.navigator.standalone === true;
-    const installed = isStandalone || isIOSStandalone;
+        // canInstall is true on all platforms when not installed
+        // (we always have a fallback dialog)
+        var canInstall = !installed;
 
-    let canInstall = false;
-    let showIOSInstructions = false;
-    let iosInstructions = null;
-
-    if (platform === "ios") {
-        showIOSInstructions = !installed;
-
-        if (!installed) {
-            iosInstructions = {
-                step1: "Tap the Share button (square with arrow).",
-                step2: "Scroll down and tap 'Add to Home Screen'.",
-                step3: "Tap 'Add' to install the app."
-            };
+        var iosInstructions = null;
+        if (info.isIOS && !installed) {
+            if (info.browser === 'safari') {
+                iosInstructions = {
+                    step1: "Tap the Share button (square with an arrow) at the bottom of Safari.",
+                    step2: "Scroll down and tap 'Add to Home Screen'.",
+                    step3: "Tap 'Add' in the top-right corner to install."
+                };
+            } else {
+                iosInstructions = {
+                    step1: "Open this website in Safari browser.",
+                    step2: "Tap the Share button (square with an arrow).",
+                    step3: "Scroll down and tap 'Add to Home Screen'.",
+                    step4: "Tap 'Add' to install."
+                };
+            }
         }
-    } else {
-        canInstall = deferredPrompt !== null && !installed;
-    }
 
-    const result = {
-        platform: platform,
-        isInstalled: installed,
-        canInstall: canInstall,
-        showIOSInstructions: showIOSInstructions,
-        iosInstructions: iosInstructions
-    };
+        var result = {
+            platform: info.platform,
+            isInstalled: installed,
+            canInstall: canInstall,
+            iosInstructions: iosInstructions
+        };
 
-    return JSON.stringify(result);
+        resolve(JSON.stringify(result));
+    });
 }
 
 /* ---------------------------
-   UPDATE DETECTION (Flutter)
+   UPDATE DETECTION
 ---------------------------- */
+
+var newServiceWorker = null;
 
 function initUpdateDetector() {
     if (!('serviceWorker' in navigator)) return;
 
     navigator.serviceWorker.register('flutter_service_worker.js')
-        .then((registration) => {
-
-            // Detect new service worker
-            registration.onupdatefound = () => {
+        .then(function (registration) {
+            registration.onupdatefound = function () {
                 newServiceWorker = registration.installing;
 
-                newServiceWorker.onstatechange = () => {
+                newServiceWorker.onstatechange = function () {
                     if (
                         newServiceWorker.state === 'installed' &&
                         navigator.serviceWorker.controller
                     ) {
-                        console.log("New update available");
-
+                        console.log('[PWA] New update available');
                         if (window.updateAvailable) {
                             window.updateAvailable();
                         }
@@ -128,13 +317,12 @@ function initUpdateDetector() {
         });
 }
 
-// Force activate new version
 function updateApp() {
     if (!newServiceWorker) return false;
 
     newServiceWorker.postMessage({ action: 'skipWaiting' });
 
-    newServiceWorker.addEventListener('statechange', () => {
+    newServiceWorker.addEventListener('statechange', function () {
         if (newServiceWorker.state === 'activated') {
             window.location.reload();
         }
@@ -147,9 +335,9 @@ function updateApp() {
    INSTALL COMPLETE EVENT
 ---------------------------- */
 
-window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-
+window.addEventListener('appinstalled', function () {
+    window.__pwa_deferred_prompt = null;
+    console.log('[PWA] App installed successfully');
     if (window.appInstalled) {
         window.appInstalled();
     }
