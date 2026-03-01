@@ -23,6 +23,10 @@ import 'package:dbnus/features/flame_game/presentation/pages/snake_game.dart'
     deferred as snake_game;
 import 'package:dbnus/features/flame_game/presentation/pages/reaction_time_game.dart'
     deferred as reaction_time;
+import 'package:dbnus/features/flame_game/presentation/pages/space_shooter_game.dart'
+    deferred as space_shooter;
+import 'package:dbnus/features/flame_game/presentation/pages/brick_breaker_game.dart'
+    deferred as brick_breaker;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -283,6 +287,28 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await reaction_time.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.spaceShooter,
+        path: RouteName.spaceShooter,
+        builder: (BuildContext context, GoRouterState state) {
+          return space_shooter.SpaceShooterPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await space_shooter.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.brickBreaker,
+        path: RouteName.brickBreaker,
+        builder: (BuildContext context, GoRouterState state) {
+          return brick_breaker.BrickBreakerPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await brick_breaker.loadLibrary();
           return null;
         },
       ),

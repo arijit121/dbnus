@@ -96,7 +96,7 @@ class FlameGame extends StatelessWidget {
                 const Icon(FeatherIcons.grid,
                     color: Color(0xFF6C63FF), size: 14),
                 6.pw,
-                const CustomText('4',
+                const CustomText('6',
                     color: Color(0xFF6C63FF),
                     fontWeight: FontWeight.w700,
                     size: 14),
@@ -150,6 +150,20 @@ class FlameGame extends StatelessWidget {
         icon: Icons.flash_on_rounded,
         gradient: [const Color(0xFFFFE66D), const Color(0xFFF38181)],
         routeName: RouteName.reactionTime,
+      ),
+      _GameEntry(
+        title: 'Space Shooter',
+        subtitle: 'Destroy asteroids!',
+        icon: Icons.rocket_launch_rounded,
+        gradient: [const Color(0xFF8E44AD), const Color(0xFF6C3483)],
+        routeName: RouteName.spaceShooter,
+      ),
+      _GameEntry(
+        title: 'Brick Breaker',
+        subtitle: 'Break all bricks!',
+        icon: Icons.sports_tennis_rounded,
+        gradient: [const Color(0xFF2980B9), const Color(0xFF1A5276)],
+        routeName: RouteName.brickBreaker,
       ),
     ];
 

@@ -15,4 +15,6 @@ class RouteName {
   static const String colorMatch = "/color-match";
   static const String snakeGame = "/snake-game";
   static const String reactionTime = "/reaction-time";
+  static const String spaceShooter = "/space-shooter";
+  static const String brickBreaker = "/brick-breaker";
 }
