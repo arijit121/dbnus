@@ -30,11 +30,11 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
   ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
 
   void _init(Init event, Emitter<LandingState> emit) async {
-    AppLog.i("PWA Status", tag: "PWA Status");
+    /* AppLog.i("PWA Status", tag: "PWA Status");
     final pwaStatus = await JsProvider.getPWAStatus();
     AppLog.i(pwaStatus, tag: "PWA Status");
     final installPWA = await JsProvider.installPWA();
-    AppLog.i(installPWA, tag: "PWA Status");
+    AppLog.i(installPWA, tag: "PWA Status"); */
   }
 
   void _getSplashBanner(GetSplashData event, Emitter<LandingState> emit) async {

@@ -92,6 +92,7 @@ class _MyWebAppState extends State<MyWebApp> {
       await js_provider.JsProvider.loadJs(
           jsPath:
               "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
+      await js_provider.JsProvider.installPWA();
     });
     super.initState();
   }
