@@ -1,3 +1,28 @@
+function setLocalStorageItem(key, value) {
+    return new Promise((resolve, reject) => {
+        try {
+            localStorage.setItem(key, value);
+            resolve(true);
+        } catch (err) {
+            console.error(`❌ Error setting localStorage key "${key}":`, err);
+            reject(err);
+        }
+    });
+}
+
+function setSessionStorageItem(key, value) {
+    return new Promise((resolve, reject) => {
+        try {
+            sessionStorage.setItem(key, value);
+            resolve(true);
+        } catch (err) {
+            console.error(`❌ Error setting sessionStorage key "${key}":`, err);
+            reject(err);
+        }
+    });
+}
+
+
 function getLocalStorageItem(key) {
     return new Promise((resolve, reject) => {
         try {
