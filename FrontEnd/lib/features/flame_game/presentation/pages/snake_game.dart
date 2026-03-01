@@ -5,6 +5,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/buttons/custom_button.dart';
 
 enum Direction { up, down, left, right }
 
@@ -165,8 +166,9 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
               16.ph,
               Expanded(child: _buildGameBoard()),
               if (gameOver) _buildGameOverBanner(),
-              _buildControls(),
-              16.ph,
+              8.ph,
+              _buildDPad(),
+              8.ph,
             ],
           ),
         ),
@@ -259,7 +261,7 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
     );
   }
 
-  Widget _buildControls() {
+  /*Widget _buildControls() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(children: [
@@ -311,16 +313,34 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         _buildDPad(),
       ]),
     );
-  }
+  }*/
 
   Widget _buildDPad() {
     return SizedBox(
-      height: 130,
-      child: Column(children: [
+      height: 142,
+      child: Column(spacing: 8, children: [
         _dBtn(Icons.keyboard_arrow_up, Direction.up),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Row(spacing: 8, mainAxisAlignment: MainAxisAlignment.center, children: [
           _dBtn(Icons.keyboard_arrow_left, Direction.left),
-          const SizedBox(width: 48, height: 42),
+          GestureDetector(
+              onTap: isPlaying ? _pauseGame : _startGame,
+              child: Container(
+                width: 48,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2A2A4A),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFF3A3A5A)),
+                ),
+                child: Icon(
+                    gameOver
+                        ? Icons.refresh
+                        : isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 20),
+              )),
           _dBtn(Icons.keyboard_arrow_right, Direction.right),
         ]),
         _dBtn(Icons.keyboard_arrow_down, Direction.down),
