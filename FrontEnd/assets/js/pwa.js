@@ -146,29 +146,39 @@ function _showInstallDialog(info) {
         // Create overlay
         var overlay = document.createElement('div');
         overlay.id = '__pwa_install_overlay';
-        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:' + (info.isDesktop ? 'center' : 'flex-end') + ';justify-content:center;padding:16px;animation:__pwa_fadeIn 0.25s ease;';
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;animation:__pwa_fadeIn 0.25s ease;-webkit-overflow-scrolling:touch;';
 
         // Dialog card
         var dialog = document.createElement('div');
-        dialog.style.cssText = 'width:100%;max-width:400px;background:linear-gradient(145deg,#1c1c1e,#2c2c2e);border-radius:20px;padding:24px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:__pwa_slideUp 0.3s ease;';
+        dialog.id = '__pwa_install_dialog';
+        dialog.style.cssText = 'width:100%;max-width:400px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;background:linear-gradient(145deg,#1c1c1e,#2c2c2e);border-radius:20px;padding:24px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);box-sizing:border-box;animation:__pwa_slideUp 0.3s ease;-webkit-overflow-scrolling:touch;';
         dialog.innerHTML =
-            '<div style="text-align:center;margin-bottom:20px;">' +
-            '  <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;">📲</div>' +
-            '  <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">Install App</div>' +
-            '  <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;">' + subtitle + '</div>' +
+            '<div style="text-align:center;margin-bottom:16px;">' +
+            '  <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;">📲</div>' +
+            '  <div style="font-size:17px;font-weight:700;letter-spacing:-0.3px;">Install App</div>' +
+            '  <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;">' + subtitle + '</div>' +
             '</div>' +
-            '<div style="background:rgba(255,255,255,0.05);border-radius:14px;padding:4px 16px;margin-bottom:20px;">' + stepsHtml + '</div>' +
-            '<button id="__pwa_close_btn" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:-0.2px;transition:opacity 0.2s;">Got it</button>';
+            '<div style="background:rgba(255,255,255,0.05);border-radius:14px;padding:4px 14px;margin-bottom:16px;">' + stepsHtml + '</div>' +
+            '<div style="padding-bottom:env(safe-area-inset-bottom,0px);">' +
+            '  <button id="__pwa_close_btn" style="width:100%;padding:12px;border:none;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:-0.2px;transition:opacity 0.2s;-webkit-tap-highlight-color:transparent;">Got it</button>' +
+            '</div>';
 
         overlay.appendChild(dialog);
 
-        // Inject keyframes
+        // Inject keyframes + responsive styles
         var styleEl = document.createElement('style');
         styleEl.id = '__pwa_install_style';
         styleEl.textContent =
             '@keyframes __pwa_fadeIn{from{opacity:0}to{opacity:1}}' +
             '@keyframes __pwa_slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}' +
-            '@keyframes __pwa_slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(100px);opacity:0}}';
+            '@keyframes __pwa_slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(100px);opacity:0}}' +
+            '@media(max-width:480px){' +
+            '  #__pwa_install_overlay{padding:8px!important;align-items:flex-end!important;}' +
+            '  #__pwa_install_dialog{padding:20px 16px!important;border-radius:20px 20px 0 0!important;max-height:85vh!important;max-height:85dvh!important;}' +
+            '}' +
+            '@media(max-height:500px){' +
+            '  #__pwa_install_dialog{padding:16px 14px!important;max-height:calc(100vh - 16px)!important;max-height:calc(100dvh - 16px)!important;}' +
+            '}';
         document.head.appendChild(styleEl);
         document.body.appendChild(overlay);
 
