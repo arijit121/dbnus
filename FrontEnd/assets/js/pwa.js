@@ -64,6 +64,89 @@ function isAppInstalled() {
 }
 
 /* ---------------------------
+   INCOGNITO / PRIVATE BROWSING
+   DETECTION
+---------------------------- */
+
+function _detectPrivateBrowsing() {
+    return new Promise(function (resolve) {
+        // --- Chrome / Edge / Opera (Chromium-based) ---
+        // In incognito, storage quota is significantly limited (~120MB vs several GB)
+        if (navigator.storage && navigator.storage.estimate) {
+            navigator.storage.estimate().then(function (estimate) {
+                // Quota under 200MB strongly suggests incognito
+                if (estimate.quota && estimate.quota < 200 * 1024 * 1024) {
+                    resolve(true);
+                    return;
+                }
+                resolve(false);
+            }).catch(function () {
+                resolve(false);
+            });
+            return;
+        }
+
+        // --- Safari (all versions) ---
+        // In private mode, Safari limits storage and may throw on write
+        if (window.safari !== undefined || /safari/.test(navigator.userAgent.toLowerCase())) {
+            try {
+                var testKey = '__pwa_private_test__';
+                window.localStorage.setItem(testKey, '1');
+                window.localStorage.removeItem(testKey);
+
+                // Safari 15+: check if IndexedDB is restricted
+                if (window.indexedDB) {
+                    var dbReq = window.indexedDB.open('__pwa_private_test_db__');
+                    dbReq.onerror = function () {
+                        resolve(true);
+                    };
+                    dbReq.onsuccess = function () {
+                        dbReq.result.close();
+                        window.indexedDB.deleteDatabase('__pwa_private_test_db__');
+                        resolve(false);
+                    };
+                    return;
+                }
+
+                resolve(false);
+            } catch (e) {
+                resolve(true);
+            }
+            return;
+        }
+
+        // --- Firefox ---
+        // In private mode, IndexedDB open throws or is restricted
+        if (window.indexedDB) {
+            try {
+                var db = window.indexedDB.open('__pwa_private_test_db__');
+                db.onerror = function () {
+                    resolve(true);
+                };
+                db.onsuccess = function () {
+                    db.result.close();
+                    window.indexedDB.deleteDatabase('__pwa_private_test_db__');
+                    resolve(false);
+                };
+            } catch (e) {
+                resolve(true);
+            }
+            return;
+        }
+
+        resolve(false);
+    });
+}
+
+/**
+ * Public function: returns Promise<boolean>
+ * true = likely incognito/private browsing
+ */
+function isPrivateBrowsing() {
+    return _detectPrivateBrowsing();
+}
+
+/* ---------------------------
    INSTALL INSTRUCTION DIALOG
    Works on ALL platforms as
    a universal fallback.
@@ -229,27 +312,35 @@ function promptInstall() {
 
         var info = _detectPlatformInfo();
 
-        // Try native prompt first (Android / Desktop Chromium)
-        var prompt = window.__pwa_deferred_prompt;
-        if (prompt && !info.isIOS) {
-            prompt.prompt();
-            prompt.userChoice
-                .then(function (choiceResult) {
-                    console.log('[PWA] User choice:', choiceResult.outcome);
-                    window.__pwa_deferred_prompt = null;
-                    resolve(choiceResult.outcome === 'accepted');
-                })
-                .catch(function (err) {
-                    console.error('[PWA] Prompt error:', err);
-                    window.__pwa_deferred_prompt = null;
-                    // Fallback to dialog
-                    _showInstallDialog(info).then(resolve);
-                });
-            return;
-        }
+        // Check if private/incognito — can't install in private mode
+        _detectPrivateBrowsing().then(function (isPrivate) {
+            if (isPrivate) {
+                resolve(false);
+                return;
+            }
 
-        // Fallback: show instruction dialog for ALL platforms
-        _showInstallDialog(info).then(resolve);
+            // Try native prompt first (Android / Desktop Chromium)
+            var prompt = window.__pwa_deferred_prompt;
+            if (prompt && !info.isIOS) {
+                prompt.prompt();
+                prompt.userChoice
+                    .then(function (choiceResult) {
+                        console.log('[PWA] User choice:', choiceResult.outcome);
+                        window.__pwa_deferred_prompt = null;
+                        resolve(choiceResult.outcome === 'accepted');
+                    })
+                    .catch(function (err) {
+                        console.error('[PWA] Prompt error:', err);
+                        window.__pwa_deferred_prompt = null;
+                        // Fallback to dialog
+                        _showInstallDialog(info).then(resolve);
+                    });
+                return;
+            }
+
+            // Fallback: show instruction dialog for ALL platforms
+            _showInstallDialog(info).then(resolve);
+        });
     });
 }
 
@@ -287,14 +378,18 @@ function getPWAStatus() {
             }
         }
 
-        var result = {
-            platform: info.platform,
-            isInstalled: installed,
-            canInstall: canInstall,
-            iosInstructions: iosInstructions
-        };
+        // Detect private/incognito browsing
+        _detectPrivateBrowsing().then(function (isPrivate) {
+            var result = {
+                platform: info.platform,
+                isInstalled: installed,
+                canInstall: canInstall && !isPrivate,
+                isPrivateBrowsing: isPrivate,
+                iosInstructions: iosInstructions
+            };
 
-        resolve(JSON.stringify(result));
+            resolve(JSON.stringify(result));
+        });
     });
 }
 
