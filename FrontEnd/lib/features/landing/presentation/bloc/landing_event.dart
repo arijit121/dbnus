@@ -7,7 +7,9 @@ sealed class LandingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class InitiateSplash extends LandingEvent {}
+class Init extends LandingEvent {}
+
+class GetSplashData extends LandingEvent {}
 
 class ChangeIndex extends LandingEvent {
   const ChangeIndex({required this.index});

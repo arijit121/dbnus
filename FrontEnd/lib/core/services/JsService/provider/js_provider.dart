@@ -171,7 +171,52 @@ class JsProvider {
     return jsHelper.getUserAgent();
   }
 
-    static bool isMobile() {
+  static bool isMobile() {
     return jsHelper.isMobile();
+  }
+
+  /// ```
+  ///
+  /// {
+  ///  "platform": "ios",
+  ///  "isInstalled": false,
+  ///  "canInstall": false,
+  ///  "showIOSInstructions": true,
+  ///  "iosInstructions": {
+  ///    "step1": "...",
+  ///    "step2": "...",
+  ///    "step3": "..."
+  ///  }
+  ///}
+  ///
+  /// ```
+  static Future<String?> getPWAStatus() async {
+    try {
+      String jsPath = "assets/js/pwa.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getPWAStatus',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future<bool?> installPWA() async {
+    try {
+      String jsPath = "assets/js/pwa.js";
+      final result = await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        jsFunctionName: 'promptInstall',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 }

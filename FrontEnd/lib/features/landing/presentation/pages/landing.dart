@@ -91,13 +91,16 @@ class _LandingUiState extends State<LandingUi> {
   Widget build(BuildContext context) {
     return ResponsiveBuilder(builder: (context, widthState) {
       return BlocProvider(
+        lazy: false,
         create: (context) => LandingBloc(
           getSplashBannerUseCase: GetSplashBannerUseCase(
             LandingRepositoryImpl(
               remoteDataSource: LandingRemoteDataSourceImpl(),
             ),
           ),
-        )..add(ChangeIndex(index: widget.index)),
+        )
+          ..add(ChangeIndex(index: widget.index))
+          ..add(Init()),
         child: BlocBuilder<LandingBloc, LandingState>(
           builder: (context, state) {
             final bloc = context.read<LandingBloc>();

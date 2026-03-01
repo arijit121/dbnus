@@ -161,10 +161,12 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalCartBloc()..add(InItLocalCartEvent()),
         ),
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalizationBloc()..add(InitLocalization()),
         ),
