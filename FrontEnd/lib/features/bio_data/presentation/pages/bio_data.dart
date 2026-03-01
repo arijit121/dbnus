@@ -163,7 +163,7 @@ class BioData extends StatelessWidget {
                 Icon(FeatherIcons.code, size: 14, color: Colors.white70),
                 8.pw,
                 const CustomText(
-                  "Flutter Developer  •  3+ Years",
+                  "Flutter Developer  •  4+ Years",
                   color: Colors.white70,
                   size: 12,
                   fontWeight: FontWeight.w600,
@@ -233,7 +233,7 @@ class BioData extends StatelessWidget {
         _buildSectionTitle(FeatherIcons.user, "Profile", ColorConst.lightBlue),
         _buildCard(
           child: const CustomText(
-            'Skilled Flutter developer with 3+ years exp. Specialize in BLOC, Provider, GetX. Proficient in Dart, UI/UX, location tracking, & payment integration (PhonePe, Paytm, etc.). Dedicated to excellence & innovation.',
+            'Skilled Flutter developer with 4+ years exp. Specialize in MVVM, BLOC, Provider, GetX. Proficient in Dart, UI/UX, Socket.IO, push notifications, deep linking, localization, location tracking, & payment integration (PhonePe, Paytm, etc.). Experienced with Agile methodology & CI/CD (Codemagic). Dedicated to excellence & innovation.',
             size: 14,
             color: ColorConst.secondaryDark,
           ),
@@ -565,6 +565,13 @@ class BioData extends StatelessWidget {
               _skillChip('Node.js', 'Expert', ColorConst.deepGreen),
               _skillChip('Git', 'Expert', ColorConst.red),
               _skillChip('MS Office', 'Expert', Color(0xFFE67E22)),
+              _skillChip('MVVM', 'Expert', Color(0xFF2980B9)),
+              _skillChip('Agile', 'Expert', Color(0xFF27AE60)),
+              _skillChip('Socket.IO', 'Skillful', Color(0xFF010101)),
+              _skillChip('CI/CD (Codemagic)', 'Skillful', Color(0xFFFC6D26)),
+              _skillChip('Push Notification', 'Skillful', Color(0xFFE74C3C)),
+              _skillChip('Localization', 'Skillful', Color(0xFF1ABC9C)),
+              _skillChip('Deep Link', 'Skillful', Color(0xFF3498DB)),
               _skillChip('JavaScript', 'Skillful', ColorConst.violate),
               _skillChip('Java', 'Skillful', ColorConst.primaryDark),
               _skillChip('MySQL', 'Skillful', Color(0xFF16A085)),
