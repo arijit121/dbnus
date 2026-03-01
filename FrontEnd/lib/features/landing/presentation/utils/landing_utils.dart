@@ -37,7 +37,7 @@ class LandingUtils {
         title: TextUtils.game, icon: AssetsConst.game, action: RouteName.games),
     NavigationOption(
         title: TextUtils.bioData,
-        icon: AssetsConst.callIcon,
+        icon: AssetsConst.shieldIcon,
         action: RouteName.bioData),
   ];
 
