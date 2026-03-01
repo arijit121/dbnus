@@ -15,6 +15,14 @@ import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payme
     deferred as web_view_payment_gateway_status;
 import 'package:dbnus/features/settings/presentation/pages/settings.dart'
     deferred as settings;
+import 'package:dbnus/features/flame_game/presentation/pages/tic_tac_toe_game.dart'
+    deferred as tic_tac_toe;
+import 'package:dbnus/features/flame_game/presentation/pages/color_match_game.dart'
+    deferred as color_match;
+import 'package:dbnus/features/flame_game/presentation/pages/snake_game.dart'
+    deferred as snake_game;
+import 'package:dbnus/features/flame_game/presentation/pages/reaction_time_game.dart'
+    deferred as reaction_time;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -231,6 +239,50 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await flutter_bio_data.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.ticTacToe,
+        path: RouteName.ticTacToe,
+        builder: (BuildContext context, GoRouterState state) {
+          return tic_tac_toe.TicTacToePage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await tic_tac_toe.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.colorMatch,
+        path: RouteName.colorMatch,
+        builder: (BuildContext context, GoRouterState state) {
+          return color_match.ColorMatchPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await color_match.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.snakeGame,
+        path: RouteName.snakeGame,
+        builder: (BuildContext context, GoRouterState state) {
+          return snake_game.SnakeGamePage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await snake_game.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.reactionTime,
+        path: RouteName.reactionTime,
+        builder: (BuildContext context, GoRouterState state) {
+          return reaction_time.ReactionTimePage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await reaction_time.loadLibrary();
           return null;
         },
       ),

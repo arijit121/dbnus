@@ -11,4 +11,8 @@ class RouteName {
   static const String webViewPaymentGateway = "/web_view_payment_gateway";
   static const String webViewPaymentStatusWeb = "/payment_return";
   static const String bioData = "/bio-data";
+  static const String ticTacToe = "/tic-tac-toe";
+  static const String colorMatch = "/color-match";
+  static const String snakeGame = "/snake-game";
+  static const String reactionTime = "/reaction-time";
 }
