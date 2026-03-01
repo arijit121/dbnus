@@ -76,5 +76,6 @@
   "dashboard": "Dashboard",
   "leader_board": "LeaderBoard",
   "order": "Order",
-  "game": "Game"
+  "game": "Game",
+  "bioData": "Bio Data"
 }

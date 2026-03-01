@@ -76,5 +76,6 @@
   "dashboard": "Tablero",
   "leader_board": "Tabla de Clasificación",
   "order": "Pedido",
-  "game": "Juego"
+  "game": "Juego",
+  "bioData": "Datos Biográficos"
 }

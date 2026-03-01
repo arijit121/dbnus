@@ -61,10 +61,12 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
         emit(state.copyWith(pageIndex: DynamicBlocData.loading()));
         NavigationOption navigation =
             LandingUtils.listNavigation.elementAt(event.index);
-        Widget ui = await LandingUtils().getUi(action: navigation.action);
-        emit(state.copyWith(
-            pageIndex: DynamicBlocData.success(value: event.index),
-            page: DynamicBlocData.success(value: ui)));
+        Widget? ui = await LandingUtils.getUi(action: navigation.action);
+        if (ui != null) {
+          emit(state.copyWith(
+              pageIndex: DynamicBlocData.success(value: event.index),
+              page: DynamicBlocData.success(value: ui)));
+        }
       }
     });
   }

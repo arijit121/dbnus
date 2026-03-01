@@ -76,7 +76,8 @@ class TextUtils {
       "Please Check in terms & condition to proceed.";
 
   // ignore: non_constant_identifier_names
-  static const String set_location_msg = "Please set service location to proceed.";
+  static const String set_location_msg =
+      "Please set service location to proceed.";
 
   // ignore: non_constant_identifier_names
   static const String payment_fail_msg =
@@ -230,7 +231,8 @@ class TextUtils {
   static const String get_started = "Get Started";
 
   // ignore: non_constant_identifier_names
-  static const String need_immediate_medical_help = "Need immediate medical help?";
+  static const String need_immediate_medical_help =
+      "Need immediate medical help?";
 
   // ignore: non_constant_identifier_names
   static const String tap_green_button_to_connect_doctor =
@@ -335,7 +337,8 @@ class TextUtils {
       "Access all your prescriptions from one place";
 
   // ignore: non_constant_identifier_names
-  static const String access_all_bills = "Send bills to your company to save tax.";
+  static const String access_all_bills =
+      "Send bills to your company to save tax.";
 
   // ignore: non_constant_identifier_names
   static const String genu_health_pass = "GENU HEALTH PASS";
@@ -466,10 +469,12 @@ class TextUtils {
   static const String booking_consultation_for = "Booking consultation for";
 
   // ignore: non_constant_identifier_names
-  static const String select_language = "Select preferred language for consultation";
+  static const String select_language =
+      "Select preferred language for consultation";
 
   // ignore: non_constant_identifier_names
-  static const String supercharge_health_checkup = "Supercharge Your Health Checkup!";
+  static const String supercharge_health_checkup =
+      "Supercharge Your Health Checkup!";
 
   // ignore: non_constant_identifier_names
   static const String bill_details = "Bill Details";
@@ -658,7 +663,8 @@ class TextUtils {
   static const String otp = "otp";
 
   // ignore: non_constant_identifier_names
-  static const String longText = "length should be grater than or equals to 20.";
+  static const String longText =
+      "length should be grater than or equals to 20.";
 
   // ignore: non_constant_identifier_names
   static const String sendCode = "Send Code";
@@ -772,7 +778,8 @@ class TextUtils {
   static const String select_patient = "Select Patient";
 
   // ignore: non_constant_identifier_names
-  static const String patient_changed_successfully = "Patient Changed Successfully.";
+  static const String patient_changed_successfully =
+      "Patient Changed Successfully.";
 
   // ignore: non_constant_identifier_names
   static const String patients = "Patients";
@@ -825,7 +832,8 @@ class TextUtils {
       "Select a patient to book consultation for that patient or add a new patient from the option below";
 
   // ignore: non_constant_identifier_names
-  static const String happy_with_genu_path_lab = "Happy with GenuPathLab experience?";
+  static const String happy_with_genu_path_lab =
+      "Happy with GenuPathLab experience?";
 
   // ignore: non_constant_identifier_names
   static const String ongoing_appointment = "Ongoing Appointment";
@@ -927,6 +935,9 @@ class TextUtils {
 
   // ignore: non_constant_identifier_names
   static const String game = "Game";
+
+  // ignore: non_constant_identifier_names
+  static const String bioData = "Bio Data";
 
   // ignore: non_constant_identifier_names
   static const String vital_insights_des =

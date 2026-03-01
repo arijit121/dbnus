@@ -36,12 +36,12 @@ class LandingUtils {
     NavigationOption(
         title: TextUtils.game, icon: AssetsConst.game, action: RouteName.games),
     NavigationOption(
-        title: TextUtils.logout,
-        icon: AssetsConst.signOut,
-        action: TextUtils.logout),
+        title: TextUtils.bioData,
+        icon: AssetsConst.callIcon,
+        action: RouteName.bioData),
   ];
 
-  Future<Widget> getUi({required String action}) async {
+  static Future<Widget?> getUi({required String action}) async {
     switch (action) {
       case RouteName.initialView:
         await test_page.loadLibrary();
@@ -58,10 +58,8 @@ class LandingUtils {
       case RouteName.games:
         await flame_game.loadLibrary();
         return flame_game.FlameGame();
-
-      default:
-        return 0.ph;
     }
+    return null;
   }
 
   static String getTranslatedTitle(BuildContext context, String title) {
@@ -75,15 +73,24 @@ class LandingUtils {
         return l10n.order;
       case TextUtils.game:
         return l10n.game;
-      case TextUtils.logout:
-        return l10n.logout;
+      case TextUtils.bioData:
+        return l10n.bioData;
       default:
         return title;
     }
   }
 
-  static void redirect(String action) {
+  static Future<void> redirect(String action) async {
     GoRouter router = RouterManager.getInstance.router;
-    kIsWeb ? router.goNamed(action) : router.replaceNamed(action);
+    if (kIsWeb) {
+      router.goNamed(action);
+    } else {
+      Widget? ui = await getUi(action: action);
+      if (ui != null) {
+        router.replaceNamed(action);
+      } else {
+        router.pushNamed(action);
+      }
+    }
   }
 }
