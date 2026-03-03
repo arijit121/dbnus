@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
-import 'package:dbnus/features/flame_game/presentation/pages/game_dashboard.dart'
+import 'package:dbnus/features/game/presentation/pages/game_dashboard.dart'
     deferred as game_dashboard;
 import 'package:dbnus/features/leader_board/presentation/pages/leader_board.dart'
     deferred as my_reorderable_list;

@@ -13,17 +13,17 @@ import 'package:dbnus/features/order_details/presentation/pages/order_details.da
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway_status/web_view_payment_gateway_status.dart'
     deferred as web_view_payment_gateway_status;
-import 'package:dbnus/features/flame_game/presentation/pages/tic_tac_toe_game.dart'
+import 'package:dbnus/features/game/presentation/pages/tic_tac_toe_game.dart'
     deferred as tic_tac_toe;
-import 'package:dbnus/features/flame_game/presentation/pages/color_match_game.dart'
+import 'package:dbnus/features/game/presentation/pages/color_match_game.dart'
     deferred as color_match;
-import 'package:dbnus/features/flame_game/presentation/pages/snake_game.dart'
+import 'package:dbnus/features/game/presentation/pages/snake_game.dart'
     deferred as snake_game;
-import 'package:dbnus/features/flame_game/presentation/pages/reaction_time_game.dart'
+import 'package:dbnus/features/game/presentation/pages/reaction_time_game.dart'
     deferred as reaction_time;
-import 'package:dbnus/features/flame_game/presentation/pages/space_shooter_game.dart'
+import 'package:dbnus/features/game/presentation/pages/space_shooter_game.dart'
     deferred as space_shooter;
-import 'package:dbnus/features/flame_game/presentation/pages/brick_breaker_game.dart'
+import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
     deferred as brick_breaker;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
