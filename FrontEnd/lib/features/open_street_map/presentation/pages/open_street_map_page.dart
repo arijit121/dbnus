@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -733,7 +734,7 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
             child: IconButton(
               icon: const Icon(FeatherIcons.arrowLeft, size: 20),
               color: const Color(0xFF5F6368),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => CustomRoute.back(),
             ),
           ),
           Expanded(
