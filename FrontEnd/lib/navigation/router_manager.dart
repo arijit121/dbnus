@@ -13,8 +13,6 @@ import 'package:dbnus/features/order_details/presentation/pages/order_details.da
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway_status/web_view_payment_gateway_status.dart'
     deferred as web_view_payment_gateway_status;
-import 'package:dbnus/features/settings/presentation/pages/settings.dart'
-    deferred as settings;
 import 'package:dbnus/features/flame_game/presentation/pages/tic_tac_toe_game.dart'
     deferred as tic_tac_toe;
 import 'package:dbnus/features/flame_game/presentation/pages/color_match_game.dart'
@@ -202,20 +200,6 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await order_details.loadLibrary();
-          return null;
-        },
-      ),
-      GoRoute(
-        name: RouteName.settings,
-        path: RouteName.settings,
-        builder: (BuildContext context, GoRouterState state) {
-          Map<String, String> queryParameters = state.uri.queryParameters;
-          return settings.Settings(
-            accountSetting: queryParameters["account_setting"] == "true",
-          );
-        },
-        redirect: (BuildContext context, GoRouterState state) async {
-          await settings.loadLibrary();
           return null;
         },
       ),
