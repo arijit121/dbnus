@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:math';
+
+import 'package:dbnus/shared/extensions/logger_extension.dart';
 
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
@@ -14,6 +17,7 @@ import 'package:dbnus/features/open_street_map/domain/entities/route_info.dart';
 import 'package:dbnus/features/open_street_map/domain/entities/search_place.dart';
 import 'package:dbnus/features/open_street_map/domain/usecases/get_route_usecase.dart';
 import 'package:dbnus/features/open_street_map/domain/usecases/search_places_usecase.dart';
+import 'package:dbnus/features/open_street_map/presentation/widget/navigation_overlay.dart';
 import 'package:dbnus/features/open_street_map/presentation/widget/place_details_card.dart';
 import 'package:dbnus/features/open_street_map/presentation/widget/route_info_bar.dart';
 
@@ -38,16 +42,25 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
   // State
   List<SearchPlace> _searchResults = [];
   SearchPlace? _selectedPlace;
-  SearchPlace? _fromPlace;
   LatLng? _fromLocation;
   RouteInfo? _routeInfo;
   bool _isSearching = false;
   bool _isLoadingRoute = false;
   bool _showResults = false;
-  bool _isFromSearch = false; // true = searching for "from", false = "to"
+  bool _isFromSearch = false;
   bool _usingCurrentLocation = false;
   bool _showDirectionsPanel = false;
   Timer? _debounce;
+
+  // Navigation simulation state
+  bool _isNavigating = false;
+  int _navCurrentIndex = 0;
+  LatLng? _navCurrentPosition;
+  double _navRemainingKm = 0;
+  double _navRemainingMin = 0;
+  double _navSpeed = 0;
+  StreamSubscription<Position>? _positionStream;
+  final Distance _distanceCalc = const Distance();
 
   @override
   void initState() {
@@ -65,6 +78,7 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
     _toSearchFocus.dispose();
     _fromSearchFocus.dispose();
     _debounce?.cancel();
+    _positionStream?.cancel();
     super.dispose();
   }
 
@@ -100,7 +114,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
     setState(() {
       _showResults = false;
       if (_isFromSearch) {
-        _fromPlace = place;
         _fromLocation = latLng;
         _usingCurrentLocation = false;
         _fromSearchController.text = place.title;
@@ -109,15 +122,12 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
         _selectedPlace = place;
         _toSearchController.text = place.title;
         _toSearchFocus.unfocus();
-        if (!_showDirectionsPanel) {
-          _routeInfo = null;
-        }
+        if (!_showDirectionsPanel) _routeInfo = null;
       }
     });
 
     _mapController.move(latLng, 15);
 
-    // Auto-calculate if both are set and in directions mode
     if (_showDirectionsPanel &&
         _fromLocation != null &&
         _selectedPlace != null) {
@@ -150,7 +160,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
         }
         return;
       }
-
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
@@ -158,21 +167,15 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
         ),
       );
       final latLng = LatLng(position.latitude, position.longitude);
-
       setState(() {
         _fromLocation = latLng;
         _usingCurrentLocation = true;
-        _fromPlace = null;
         _fromSearchController.text = 'My Location';
         _fromSearchFocus.unfocus();
         _showResults = false;
       });
-
       _mapController.move(latLng, 14);
-
-      if (_showDirectionsPanel && _selectedPlace != null) {
-        _calculateRoute();
-      }
+      if (_showDirectionsPanel && _selectedPlace != null) _calculateRoute();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -205,7 +208,7 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
         _mapController.fitCamera(
           CameraFit.bounds(
             bounds: bounds,
-            padding: const EdgeInsets.fromLTRB(60, 200, 60, 100),
+            padding: const EdgeInsets.fromLTRB(60, 200, 60, 120),
           ),
         );
       }
@@ -217,6 +220,145 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
       _showDirectionsPanel = true;
       _showResults = false;
     });
+  }
+
+  // ── Live GPS Navigation ─────────────────────────────────
+
+  Future<void> _startNavigation() async {
+    if (_routeInfo == null || _routeInfo!.polylinePoints.length < 2) return;
+
+    // Ensure location permission
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text('Location permission needed for navigation')),
+            );
+          }
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Location permission permanently denied')),
+          );
+        }
+        return;
+      }
+    } catch (e) {
+      AppLog.e('Permission error: $e');
+    }
+
+    final points = _routeInfo!.polylinePoints;
+    setState(() {
+      _isNavigating = true;
+      _navCurrentIndex = 0;
+      _navCurrentPosition = points.first;
+      _navRemainingKm = _routeInfo!.distanceKm;
+      _navRemainingMin = _routeInfo!.durationMinutes;
+      _navSpeed = 0;
+      _showDirectionsPanel = false;
+    });
+
+    _mapController.move(points.first, 16);
+
+    // Listen to real GPS position updates
+    _positionStream?.cancel();
+    _positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 5, // update every 5 meters
+      ),
+    ).listen(
+      (Position position) {
+        if (!mounted || !_isNavigating) return;
+        _onPositionUpdate(position);
+      },
+      onError: (e) {
+        AppLog.e('Location stream error: $e');
+      },
+    );
+  }
+
+  void _onPositionUpdate(Position position) {
+    final currentLatLng = LatLng(position.latitude, position.longitude);
+    final points = _routeInfo!.polylinePoints;
+
+    // Find the closest point on the route
+    int closestIndex = _navCurrentIndex;
+    double closestDist = double.infinity;
+    // Search from current index forward to avoid going backward
+    final searchEnd = min(points.length, _navCurrentIndex + 50);
+    for (int i = _navCurrentIndex; i < searchEnd; i++) {
+      final d = _distanceCalc.as(LengthUnit.Meter, currentLatLng, points[i]);
+      if (d < closestDist) {
+        closestDist = d;
+        closestIndex = i;
+      }
+    }
+
+    // Calculate remaining distance from closest point to end
+    double remainingMeters = 0;
+    for (int i = closestIndex; i < points.length - 1; i++) {
+      remainingMeters +=
+          _distanceCalc.as(LengthUnit.Meter, points[i], points[i + 1]);
+    }
+    final remainingKm = remainingMeters / 1000;
+
+    // Speed from GPS (m/s → km/h)
+    final speedKmh = (position.speed >= 0 ? position.speed : 0) * 3.6;
+
+    // ETA based on speed
+    final etaMin =
+        speedKmh > 1 ? (remainingKm / speedKmh) * 60 : _navRemainingMin;
+
+    setState(() {
+      _navCurrentIndex = closestIndex;
+      _navCurrentPosition = currentLatLng;
+      _navRemainingKm = remainingKm;
+      _navRemainingMin = etaMin;
+      _navSpeed = speedKmh;
+    });
+
+    _mapController.move(currentLatLng, 16);
+
+    // Check if arrived (within 50m of destination)
+    final distToDest =
+        _distanceCalc.as(LengthUnit.Meter, currentLatLng, points.last);
+    if (distToDest < 50) {
+      _positionStream?.cancel();
+      setState(() => _isNavigating = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You have arrived at your destination!'),
+          backgroundColor: Color(0xFF34A853),
+        ),
+      );
+    }
+  }
+
+  void _stopNavigation() {
+    _positionStream?.cancel();
+    setState(() {
+      _isNavigating = false;
+      _navCurrentPosition = null;
+      _showDirectionsPanel = true;
+    });
+    if (_routeInfo != null && _routeInfo!.polylinePoints.isNotEmpty) {
+      final bounds = LatLngBounds.fromPoints(_routeInfo!.polylinePoints);
+      _mapController.fitCamera(
+        CameraFit.bounds(
+          bounds: bounds,
+          padding: const EdgeInsets.fromLTRB(60, 200, 60, 120),
+        ),
+      );
+    }
   }
 
   // ── Clear Helpers ───────────────────────────────────────
@@ -240,17 +382,20 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
   }
 
   void _clearRoute() {
+    _positionStream?.cancel();
     setState(() {
       _routeInfo = null;
       _showDirectionsPanel = false;
       _fromLocation = null;
-      _fromPlace = null;
       _usingCurrentLocation = false;
       _fromSearchController.clear();
+      _isNavigating = false;
+      _navCurrentPosition = null;
     });
   }
 
   void _onMapTap(TapPosition tapPosition, LatLng point) {
+    if (_isNavigating) return;
     if (_showResults) setState(() => _showResults = false);
     _toSearchFocus.unfocus();
     _fromSearchFocus.unfocus();
@@ -281,13 +426,27 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
               // Route polyline
               if (_routeInfo != null &&
                   _routeInfo!.polylinePoints.isNotEmpty) ...[
+                // Traveled portion (dimmed)
+                if (_isNavigating && _navCurrentIndex > 0)
+                  PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: _routeInfo!.polylinePoints
+                            .sublist(0, _navCurrentIndex + 1),
+                        strokeWidth: 5,
+                        color: const Color(0xFF4285F4).withValues(alpha: 0.3),
+                      ),
+                    ],
+                  ),
                 // Shadow polyline
                 PolylineLayer(
                   polylines: [
                     Polyline(
-                      points: _routeInfo!.polylinePoints,
+                      points: _isNavigating
+                          ? _routeInfo!.polylinePoints.sublist(_navCurrentIndex)
+                          : _routeInfo!.polylinePoints,
                       strokeWidth: 8,
-                      color: const Color(0xFF4285F4).withValues(alpha: 0.3),
+                      color: const Color(0xFF4285F4).withValues(alpha: 0.25),
                     ),
                   ],
                 ),
@@ -295,7 +454,9 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                 PolylineLayer(
                   polylines: [
                     Polyline(
-                      points: _routeInfo!.polylinePoints,
+                      points: _isNavigating
+                          ? _routeInfo!.polylinePoints.sublist(_navCurrentIndex)
+                          : _routeInfo!.polylinePoints,
                       strokeWidth: 5,
                       color: const Color(0xFF4285F4),
                     ),
@@ -304,8 +465,32 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
               ],
               MarkerLayer(
                 markers: [
+                  // Navigation current position marker
+                  if (_isNavigating && _navCurrentPosition != null)
+                    Marker(
+                      point: _navCurrentPosition!,
+                      width: 44,
+                      height: 44,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF4285F4),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF4285F4)
+                                  .withValues(alpha: 0.5),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(FeatherIcons.navigation2,
+                            color: Colors.white, size: 18),
+                      ),
+                    ),
                   // Origin marker
-                  if (_fromLocation != null)
+                  if (_fromLocation != null && !_isNavigating)
                     Marker(
                       point: _fromLocation!,
                       width: 36,
@@ -331,7 +516,8 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                     ),
                   // Selected / destination marker
                   if (_selectedPlace?.latitude != null &&
-                      _selectedPlace?.longitude != null)
+                      _selectedPlace?.longitude != null &&
+                      !_isNavigating)
                     Marker(
                       point: LatLng(_selectedPlace!.latitude!,
                           _selectedPlace!.longitude!),
@@ -357,7 +543,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                             child: const Icon(FeatherIcons.mapPin,
                                 color: Colors.white, size: 16),
                           ),
-                          // Pin stem
                           Container(
                             width: 2,
                             height: 6,
@@ -411,24 +596,23 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
             ],
           ),
 
-          // ── Top Search Panel ───────────────────────────
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _showDirectionsPanel
-                      ? _buildDirectionsPanel()
-                      : _buildSearchBar(),
-
-                  // Search results dropdown
-                  if (_showResults && _searchResults.isNotEmpty)
-                    _buildSearchResults(),
-                ],
+          // ── Top Search Panel (hidden during navigation) ──
+          if (!_isNavigating)
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _showDirectionsPanel
+                        ? _buildDirectionsPanel()
+                        : _buildSearchBar(),
+                    if (_showResults && _searchResults.isNotEmpty)
+                      _buildSearchResults(),
+                  ],
+                ),
               ),
             ),
-          ),
 
           // ── Loading Route Indicator ────────────────────
           if (_isLoadingRoute)
@@ -473,8 +657,25 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
               ),
             ),
 
-          // ── Route Info Bar ─────────────────────────────
-          if (_routeInfo != null &&
+          // ── Navigation Overlay (during active navigation) ──
+          if (_isNavigating)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: NavigationOverlay(
+                remainingDistanceKm: _navRemainingKm,
+                remainingDurationMin: _navRemainingMin,
+                speedKmh: _navSpeed,
+                currentStep: _navCurrentIndex,
+                totalSteps: _routeInfo?.polylinePoints.length ?? 0,
+                onStop: _stopNavigation,
+              ),
+            ),
+
+          // ── Route Info Bar (with Start button) ─────────
+          if (!_isNavigating &&
+              _routeInfo != null &&
               _routeInfo!.polylinePoints.isNotEmpty &&
               !_isLoadingRoute)
             Positioned(
@@ -485,12 +686,15 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                 distanceKm: _routeInfo!.distanceKm,
                 durationMinutes: _routeInfo!.durationMinutes,
                 onClose: _clearRoute,
+                onStartNavigation: _startNavigation,
               ),
             ),
 
           // ── Place Details Card ─────────────────────────
-          if (_selectedPlace != null &&
+          if (!_isNavigating &&
+              _selectedPlace != null &&
               !_showDirectionsPanel &&
+              _routeInfo == null &&
               !_isLoadingRoute)
             Positioned(
               bottom: 0,
@@ -586,7 +790,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header row
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
             child: Row(
@@ -613,7 +816,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
             child: Row(
               children: [
-                // Green dot (origin)
                 Container(
                   width: 12,
                   height: 12,
@@ -672,7 +874,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
               ],
             ),
           ),
-          // Dots connecting from → to
           Padding(
             padding: const EdgeInsets.only(left: 21.5),
             child: Column(
@@ -682,8 +883,8 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                   width: 3,
                   height: 3,
                   margin: const EdgeInsets.symmetric(vertical: 1.5),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFDADCE0),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFDADCE0),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -695,7 +896,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
             child: Row(
               children: [
-                // Red dot (destination)
                 Container(
                   width: 12,
                   height: 12,
@@ -756,7 +956,6 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
             ),
           ),
           8.ph,
-          // "Use my location" quick action
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: GestureDetector(
