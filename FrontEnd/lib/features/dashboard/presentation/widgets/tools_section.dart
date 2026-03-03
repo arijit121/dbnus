@@ -10,6 +10,8 @@ import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/geocoding.dart';
 import 'package:dbnus/core/services/models/forward_geocoding.dart';
 import 'package:dbnus/core/services/models/reverse_geocoding.dart';
+import 'package:dbnus/navigation/custom_router/custom_route.dart';
+import 'package:dbnus/navigation/router_name.dart';
 
 class ToolsSection extends StatelessWidget {
   const ToolsSection({super.key});
@@ -106,6 +108,16 @@ class ToolsSection extends StatelessWidget {
                   title: "Success",
                   content: "Thank you, transaction complete.",
                   type: DialogType.success);
+            },
+          ),
+          const Divider(height: 1, indent: 56, color: ColorConst.lineGrey),
+          _buildToolTile(
+            icon: FeatherIcons.map,
+            title: "Open Street Map",
+            subtitle: "Explore world landmarks on a map",
+            color: const Color(0xFF2980B9),
+            onTap: () {
+              CustomRoute.navigateNamed(RouteName.openStreetMap);
             },
           ),
         ],

@@ -25,6 +25,8 @@ import 'package:dbnus/features/game/presentation/pages/space_shooter_game.dart'
     deferred as space_shooter;
 import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
     deferred as brick_breaker;
+import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
+    deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -293,6 +295,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await brick_breaker.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.openStreetMap,
+        path: RouteName.openStreetMap,
+        builder: (BuildContext context, GoRouterState state) {
+          return open_street_map.OpenStreetMapPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await open_street_map.loadLibrary();
           return null;
         },
       ),
