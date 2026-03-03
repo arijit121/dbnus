@@ -15,6 +15,7 @@ import 'package:dbnus/core/config/app_config.dart';
 import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
+import 'package:dbnus/shared/ui/organisms/grids/custom_grid_view.dart';
 
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
@@ -86,19 +87,19 @@ class QuickActionsGrid extends StatelessWidget {
 
     return LayoutBuilder(builder: (context, constraints) {
       int crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
-      return GridView.builder(
+      return CustomGridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-          childAspectRatio: 1.6,
-        ),
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 12,
+        separatorBuilder: (context, index) => const SizedBox(height: 12),
         itemCount: actions.length,
-        itemBuilder: (context, index) {
+        builder: (context, index) {
           final action = actions[index];
-          return _buildActionCard(action);
+          return AspectRatio(
+            aspectRatio: 1.6,
+            child: _buildActionCard(action),
+          );
         },
       );
     });
