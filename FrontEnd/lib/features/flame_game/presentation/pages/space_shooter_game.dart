@@ -9,6 +9,8 @@ import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../shared/ui/atoms/text/custom_text.dart';
 
 /// Space Shooter — Tap to destroy falling asteroids before they reach the bottom.
 /// Built with the Flame game engine.
@@ -27,10 +29,11 @@ class SpaceShooterPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => CustomRoute.back(),
         ),
-        title: const Text(
+        title: const CustomText(
           'Space Shooter',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          size: 20,
         ),
       ),
       body: GameWidget.controlled(
@@ -69,38 +72,31 @@ class _GameOverOverlay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('💥', style: TextStyle(fontSize: 48)),
+            const CustomText('💥', size: 48),
             const SizedBox(height: 16),
-            const Text(
+            const CustomText(
               'Game Over',
-              style: TextStyle(
-                  color: Color(0xFFFF6B6B),
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800),
+              color: Color(0xFFFF6B6B),
+              size: 28,
+              fontWeight: FontWeight.w800,
             ),
             const SizedBox(height: 8),
-            Text(
+            CustomText(
               'Score: ${game.score}',
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600),
+              color: Colors.white,
+              size: 20,
+              fontWeight: FontWeight.w600,
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
+            CustomGOEButton(
               onPressed: () {
                 game.restart();
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6C63FF),
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
-              ),
-              child: const Text('Play Again',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+              backGroundColor: const Color(0xFF6C63FF),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              borderRadius: BorderRadius.circular(14),
+              child: const CustomText('Play Again',
+                  color: Colors.white, fontWeight: FontWeight.w700, size: 16),
             ),
           ],
         ),

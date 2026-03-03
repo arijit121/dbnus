@@ -5,6 +5,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/text/custom_text.dart';
 
 class ColorMatchPage extends StatefulWidget {
   const ColorMatchPage({super.key});
@@ -163,13 +164,11 @@ class _ColorMatchPageState extends State<ColorMatchPage>
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => CustomRoute.back(),
         ),
-        title: const Text(
+        title: const CustomText(
           'Memory Match',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          size: 20,
         ),
       ),
       body: SafeArea(
@@ -222,20 +221,16 @@ class _ColorMatchPageState extends State<ColorMatchPage>
           children: [
             Icon(icon, color: const Color(0xFF6C63FF), size: 16),
             4.ph,
-            Text(
+            CustomText(
               value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-              ),
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              size: 14,
             ),
-            Text(
+            CustomText(
               label,
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.5),
-                fontSize: 10,
-              ),
+              color: Colors.white.withValues(alpha: 0.5),
+              size: 10,
             ),
           ],
         ),
@@ -263,15 +258,13 @@ class _ColorMatchPageState extends State<ColorMatchPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('🎉', style: TextStyle(fontSize: 24)),
+          const CustomText('🎉', size: 24),
           12.pw,
-          Text(
+          CustomText(
             'Completed in $_moves moves!',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
-            ),
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+            size: 16,
           ),
         ],
       ),
@@ -423,13 +416,11 @@ class _ColorMatchPageState extends State<ColorMatchPage>
                 children: [
                   Icon(Icons.refresh, color: Colors.white, size: 18),
                   SizedBox(width: 8),
-                  Text(
+                  CustomText(
                     'New Game',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    size: 14,
                   ),
                 ],
               ),

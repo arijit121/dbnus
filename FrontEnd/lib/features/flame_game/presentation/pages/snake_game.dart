@@ -5,7 +5,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../shared/ui/atoms/text/custom_text.dart';
 
 enum Direction { up, down, left, right }
 
@@ -143,11 +143,8 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
             CustomRoute.back();
           },
         ),
-        title: const Text('Snake Game',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 20)),
+        title: const CustomText('Snake Game',
+            color: Colors.white, fontWeight: FontWeight.w700, size: 20),
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -204,12 +201,9 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         child: Column(children: [
           Icon(icon, color: color, size: 18),
           4.ph,
-          Text(value,
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.w800, fontSize: 20)),
-          Text(label,
-              style:
-                  TextStyle(color: color.withValues(alpha: 0.7), fontSize: 11)),
+          CustomText(value,
+              color: color, fontWeight: FontWeight.w800, size: 20),
+          CustomText(label, color: color.withValues(alpha: 0.7), size: 11),
         ]),
       ),
     );
@@ -250,13 +244,10 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text('💀', style: TextStyle(fontSize: 22)),
+        const CustomText('💀', size: 22),
         12.pw,
-        Text('Game Over! Score: $score',
-            style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 16)),
+        CustomText('Game Over! Score: $score',
+            color: Colors.white, fontWeight: FontWeight.w700, size: 16),
       ]),
     );
   }
@@ -294,16 +285,15 @@ class _SnakeGamePageState extends State<SnakeGamePage> {
                       color: Colors.white,
                       size: 20),
                   8.pw,
-                  Text(
+                  CustomText(
                       gameOver
                           ? 'Play Again'
                           : isPlaying
                               ? 'Pause'
                               : 'Start',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15)),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      size: 15),
                 ]),
               ),
             ),

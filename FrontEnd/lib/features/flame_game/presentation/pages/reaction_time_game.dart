@@ -5,6 +5,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/text/custom_text.dart';
 
 enum _GamePhase { waiting, ready, tooEarly, result }
 
@@ -109,11 +110,8 @@ class _ReactionTimePageState extends State<ReactionTimePage> {
             CustomRoute.back();
           },
         ),
-        title: const Text('Reaction Time',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 20)),
+        title: const CustomText('Reaction Time',
+            color: Colors.white, fontWeight: FontWeight.w700, size: 20),
         actions: [
           if (results.isNotEmpty)
             IconButton(
@@ -178,12 +176,9 @@ class _ReactionTimePageState extends State<ReactionTimePage> {
         child: Column(children: [
           Icon(icon, color: color, size: 14),
           2.ph,
-          Text(value,
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.w700, fontSize: 13)),
-          Text(label,
-              style:
-                  TextStyle(color: color.withValues(alpha: 0.6), fontSize: 9)),
+          CustomText(value,
+              color: color, fontWeight: FontWeight.w700, size: 13),
+          CustomText(label, color: color.withValues(alpha: 0.6), size: 9),
         ]),
       ),
     );
@@ -207,15 +202,12 @@ class _ReactionTimePageState extends State<ReactionTimePage> {
           ],
         ),
         child: Center(
-          child: Text(
+          child: CustomText(
             _message,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color:
-                  phase == _GamePhase.waiting ? Colors.white70 : Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: _greenShown ? 32 : 22,
-            ),
+            color: phase == _GamePhase.waiting ? Colors.white70 : Colors.white,
+            fontWeight: FontWeight.w700,
+            size: _greenShown ? 32.0 : 22.0,
           ),
         ),
       ),
@@ -244,9 +236,8 @@ class _ReactionTimePageState extends State<ReactionTimePage> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: color.withValues(alpha: 0.3)),
             ),
-            child: Text('${ms}ms',
-                style: TextStyle(
-                    color: color, fontWeight: FontWeight.w600, fontSize: 12)),
+            child: CustomText('${ms}ms',
+                color: color, fontWeight: FontWeight.w600, size: 12),
           );
         }).toList(),
       ),

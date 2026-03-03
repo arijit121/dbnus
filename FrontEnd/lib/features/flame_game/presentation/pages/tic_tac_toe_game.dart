@@ -5,6 +5,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/text/custom_text.dart';
 
 class TicTacToePage extends StatefulWidget {
   const TicTacToePage({super.key});
@@ -168,13 +169,11 @@ class _TicTacToePageState extends State<TicTacToePage>
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => CustomRoute.back(),
         ),
-        title: const Text(
+        title: const CustomText(
           'Tic Tac Toe',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+          size: 20,
         ),
         actions: [
           IconButton(
@@ -246,22 +245,18 @@ class _TicTacToePageState extends State<TicTacToePage>
         ),
         child: Column(
           children: [
-            Text(
+            CustomText(
               label,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-              ),
+              color: color,
+              fontWeight: FontWeight.w700,
+              size: 16,
             ),
             4.ph,
-            Text(
+            CustomText(
               '$score',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 24,
-              ),
+              color: Colors.white,
+              fontWeight: FontWeight.w800,
+              size: 24,
             ),
           ],
         ),
@@ -293,13 +288,11 @@ class _TicTacToePageState extends State<TicTacToePage>
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
-      child: Text(
+      child: CustomText(
         message,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: 16,
-        ),
+        color: color,
+        fontWeight: FontWeight.w600,
+        size: 16,
       ),
     );
   }
@@ -378,24 +371,13 @@ class _TicTacToePageState extends State<TicTacToePage>
               ? null
               : ScaleTransition(
                   scale: _cellAnimations[index],
-                  child: Text(
+                  child: CustomText(
                     value,
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w800,
-                      color: value == 'X'
-                          ? const Color(0xFF6C63FF)
-                          : const Color(0xFFFF6B6B),
-                      shadows: [
-                        Shadow(
-                          color: (value == 'X'
-                                  ? const Color(0xFF6C63FF)
-                                  : const Color(0xFFFF6B6B))
-                              .withValues(alpha: 0.5),
-                          blurRadius: 20,
-                        ),
-                      ],
-                    ),
+                    size: 40,
+                    fontWeight: FontWeight.w800,
+                    color: value == 'X'
+                        ? const Color(0xFF6C63FF)
+                        : const Color(0xFFFF6B6B),
                   ),
                 ),
         ),
@@ -459,13 +441,11 @@ class _TicTacToePageState extends State<TicTacToePage>
             children: [
               Icon(icon, color: Colors.white, size: 18),
               8.pw,
-              Text(
+              CustomText(
                 label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                size: 14,
               ),
             ],
           ),
