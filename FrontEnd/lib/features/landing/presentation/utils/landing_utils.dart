@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
-import 'package:dbnus/features/flame_game/presentation/pages/flame_game.dart'
-    deferred as flame_game;
+import 'package:dbnus/features/flame_game/presentation/pages/game_dashboard.dart'
+    deferred as game_dashboard;
 import 'package:dbnus/features/leader_board/presentation/pages/leader_board.dart'
     deferred as my_reorderable_list;
 import 'package:dbnus/features/dashboard/presentation/pages/dashboard.dart'
@@ -56,8 +56,8 @@ class LandingUtils {
         return ui_temp.Order();
 
       case RouteName.games:
-        await flame_game.loadLibrary();
-        return flame_game.FlameGame();
+        await game_dashboard.loadLibrary();
+        return game_dashboard.GameDashboard();
     }
     return null;
   }

@@ -6,8 +6,8 @@ import 'package:dbnus/navigation/router_name.dart';
 import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 
-class FlameGame extends StatelessWidget {
-  const FlameGame({super.key});
+class GameDashboard extends StatelessWidget {
+  const GameDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
