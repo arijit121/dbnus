@@ -13,7 +13,6 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? title;
   final String? label;
-  final bool? isRequired;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final Widget? suffix;
@@ -49,7 +48,6 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.title,
     this.label,
-    this.isRequired,
     this.keyboardType,
     this.inputFormatters,
     this.suffix,
@@ -89,7 +87,7 @@ class CustomTextFormField extends StatelessWidget {
         if (title?.isNotEmpty == true)
           Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: CustomText('${title ?? ""}${isRequired == true ? " *" : ""}',
+            child: CustomText(title ?? "",
                 color: titleColor ?? ColorConst.primaryDark,
                 size: 14,
                 fontWeight: FontWeight.w400),
@@ -137,9 +135,7 @@ class CustomTextFormField extends StatelessWidget {
                 counterText: "",
                 prefixIcon: prefix,
                 suffixIcon: suffix,
-                labelText: (label?.isNotEmpty == true)
-                    ? '${label ?? ""}${isRequired == true ? " *" : ""}'
-                    : null,
+                labelText: (label?.isNotEmpty == true) ? label ?? "" : null,
                 hintText: hintText,
                 hintMaxLines: maxLines,
                 filled: filled,
