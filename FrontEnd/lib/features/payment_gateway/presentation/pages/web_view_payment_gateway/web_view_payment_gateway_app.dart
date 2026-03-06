@@ -410,44 +410,46 @@ class _FlutterWebViewPaymentGatewayState
               color: ColorConst.red,
             ),
             const SizedBox(height: 20),
-            const Text(
+            const CustomText(
               'Payment Loading Failed',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              size: 20,
+              fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 10),
-            Text(
+            CustomText(
               _errorMessage.isNotEmpty
                   ? _errorMessage
                   : 'Unable to load payment page. Please check your internet connection.',
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              size: 14,
+              color: Colors.grey,
             ),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton.icon(
+                CustomGOEButton(
                   onPressed: _refreshPage,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Retry'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
+                  backGroundColor: Colors.blue,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.refresh, color: Colors.white),
+                      const SizedBox(width: 8),
+                      const CustomText('Retry', color: Colors.white),
+                    ],
                   ),
                 ),
-                ElevatedButton.icon(
+                CustomGOEButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close),
-                  label: const Text('Cancel'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey,
-                    foregroundColor: Colors.white,
+                  backGroundColor: Colors.grey,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.close, color: Colors.white),
+                      const SizedBox(width: 8),
+                      const CustomText('Cancel', color: Colors.white),
+                    ],
                   ),
                 ),
               ],
@@ -524,12 +526,10 @@ class _FlutterWebViewPaymentGatewayState
                             children: [
                               CircularProgressIndicator(),
                               SizedBox(height: 16),
-                              Text(
+                              CustomText(
                                 'Loading Payment Gateway...',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                size: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ],
                           ),

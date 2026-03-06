@@ -17,4 +17,5 @@ class RouteName {
   static const String reactionTime = "/reaction-time";
   static const String spaceShooter = "/space-shooter";
   static const String brickBreaker = "/brick-breaker";
+  static const String openStreetMap = "/open-street-map";
 }

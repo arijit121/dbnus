@@ -13,20 +13,20 @@ import 'package:dbnus/features/order_details/presentation/pages/order_details.da
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway_status/web_view_payment_gateway_status.dart'
     deferred as web_view_payment_gateway_status;
-import 'package:dbnus/features/settings/presentation/pages/settings.dart'
-    deferred as settings;
-import 'package:dbnus/features/flame_game/presentation/pages/tic_tac_toe_game.dart'
+import 'package:dbnus/features/game/presentation/pages/tic_tac_toe_game.dart'
     deferred as tic_tac_toe;
-import 'package:dbnus/features/flame_game/presentation/pages/color_match_game.dart'
+import 'package:dbnus/features/game/presentation/pages/color_match_game.dart'
     deferred as color_match;
-import 'package:dbnus/features/flame_game/presentation/pages/snake_game.dart'
+import 'package:dbnus/features/game/presentation/pages/snake_game.dart'
     deferred as snake_game;
-import 'package:dbnus/features/flame_game/presentation/pages/reaction_time_game.dart'
+import 'package:dbnus/features/game/presentation/pages/reaction_time_game.dart'
     deferred as reaction_time;
-import 'package:dbnus/features/flame_game/presentation/pages/space_shooter_game.dart'
+import 'package:dbnus/features/game/presentation/pages/space_shooter_game.dart'
     deferred as space_shooter;
-import 'package:dbnus/features/flame_game/presentation/pages/brick_breaker_game.dart'
+import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
     deferred as brick_breaker;
+import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
+    deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -206,20 +206,6 @@ class RouterManager {
         },
       ),
       GoRoute(
-        name: RouteName.settings,
-        path: RouteName.settings,
-        builder: (BuildContext context, GoRouterState state) {
-          Map<String, String> queryParameters = state.uri.queryParameters;
-          return settings.Settings(
-            accountSetting: queryParameters["account_setting"] == "true",
-          );
-        },
-        redirect: (BuildContext context, GoRouterState state) async {
-          await settings.loadLibrary();
-          return null;
-        },
-      ),
-      GoRoute(
         name: RouteName.webViewPaymentStatusWeb,
         path: "${RouteName.webViewPaymentStatusWeb}/:pg_type",
         builder: (BuildContext context, GoRouterState state) {
@@ -309,6 +295,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await brick_breaker.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.openStreetMap,
+        path: RouteName.openStreetMap,
+        builder: (BuildContext context, GoRouterState state) {
+          return open_street_map.OpenStreetMapPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await open_street_map.loadLibrary();
           return null;
         },
       ),

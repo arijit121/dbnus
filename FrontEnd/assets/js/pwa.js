@@ -4,20 +4,6 @@
    =================================================== */
 
 /* ---------------------------
-   EARLY CAPTURE
----------------------------- */
-
-if (typeof window.__pwa_deferred_prompt === 'undefined') {
-    window.__pwa_deferred_prompt = null;
-}
-
-window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    window.__pwa_deferred_prompt = e;
-    console.log('[PWA] beforeinstallprompt captured');
-});
-
-/* ---------------------------
    PLATFORM DETECTION
 ---------------------------- */
 
@@ -57,10 +43,50 @@ function _detectPlatformInfo() {
     return { platform: platform, browser: browser, isIOS: isIOS, isAndroid: isAndroid, isDesktop: isDesktop };
 }
 
-function isAppInstalled() {
-    var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    var isIOSStandalone = window.navigator.standalone === true;
-    return isStandalone || isIOSStandalone;
+function checkIsAppInstalled() {
+    return new Promise(function (resolve) {
+        // Standard checks for currently running in standalone
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        var isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+        var isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
+        var isIOSStandalone = window.navigator.standalone === true;
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var hasStandaloneParam = urlParams.get('mode') === 'standalone' || urlParams.get('standalone') === 'true';
+
+        var currentlyStandalone = isStandalone || isFullscreen || isMinimalUi || isIOSStandalone || hasStandaloneParam;
+
+        if (currentlyStandalone) {
+            localStorage.setItem('__pwa_installed_cached', 'true');
+            resolve(true);
+            return;
+        }
+
+        // Feature detection for installed related apps (works on Chrome/Edge/Android)
+        if ('getInstalledRelatedApps' in navigator) {
+            navigator.getInstalledRelatedApps().then(function (apps) {
+                if (apps && apps.length > 0) {
+                    localStorage.setItem('__pwa_installed_cached', 'true');
+                    resolve(true);
+                } else {
+                    // Check local cache
+                    var cached = localStorage.getItem('__pwa_installed_cached') === 'true';
+                    if (cached) {
+                        resolve(true);
+                        return;
+                    }
+
+                    resolve(false);
+                }
+            }).catch(function () {
+                resolve(localStorage.getItem('__pwa_installed_cached') === 'true');
+            });
+            return;
+        }
+
+        // Fallback for browsers without getInstalledRelatedApps (iOS, Firefox)
+        resolve(localStorage.getItem('__pwa_installed_cached') === 'true');
+    });
 }
 
 /* ---------------------------
@@ -299,46 +325,70 @@ function _showInstallDialog(info) {
 
 function promptInstall() {
     return new Promise(function (resolve) {
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        var isIOSStandalone = window.navigator.standalone === true;
-        var installed = isStandalone || isIOSStandalone;
+        var info = _detectPlatformInfo();
 
-        // Already installed
+        // 1. SYNC EXECUTION FIRST (Crucial for native prompt)
+        // Browsers require prompt.prompt() to be called IMMEDIATELY inside the user gesture.
+        // If we await checkIsAppInstalled() first, the gesture expires and prompt() throws a DOMException.
+        var prompt = window.__pwa_deferred_prompt;
+        if (prompt && !info.isIOS) {
+            try {
+                // In modern Chrome, prompt() returns a Promise.
+                // If the user gesture is invalid, it rejects THIS promise, not just userChoice.
+                var promptPromise = prompt.prompt();
+                if (promptPromise && typeof promptPromise.catch === 'function') {
+                    promptPromise.catch(function (err) {
+                        console.warn('[PWA] Native prompt() blocked by browser:', err.message);
+                        window.__pwa_deferred_prompt = null;
+                        _fallbackFlow(info, resolve);
+                    });
+                }
+
+                prompt.userChoice
+                    .then(function (choiceResult) {
+                        console.log('[PWA] User choice:', choiceResult.outcome);
+                        window.__pwa_deferred_prompt = null;
+
+                        if (choiceResult.outcome === 'accepted') {
+                            localStorage.setItem('__pwa_installed_cached', 'true');
+                            resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    })
+                    .catch(function (err) {
+                        console.error('[PWA] Prompt error:', err);
+                        window.__pwa_deferred_prompt = null;
+                        _fallbackFlow(info, resolve);
+                    });
+                return; // Stop here, native prompt took over
+            } catch (e) {
+                console.error('[PWA] Error calling prompt():', e);
+                window.__pwa_deferred_prompt = null;
+                // Native prompt failed (probably gesture expired or already used), continue to fallback
+            }
+        }
+
+        // 2. ASYNC FALLBACK FLOW
+        _fallbackFlow(info, resolve);
+    });
+}
+
+function _fallbackFlow(info, resolve) {
+    checkIsAppInstalled().then(function (installed) {
         if (installed) {
             console.log('[PWA] Already installed');
             resolve(false);
             return;
         }
 
-        var info = _detectPlatformInfo();
-
-        // Check if private/incognito — can't install in private mode
         _detectPrivateBrowsing().then(function (isPrivate) {
             if (isPrivate) {
+                console.warn('[PWA] Private/Incognito browsing detected — install not available');
                 resolve(false);
                 return;
             }
 
-            // Try native prompt first (Android / Desktop Chromium)
-            var prompt = window.__pwa_deferred_prompt;
-            if (prompt && !info.isIOS) {
-                prompt.prompt();
-                prompt.userChoice
-                    .then(function (choiceResult) {
-                        console.log('[PWA] User choice:', choiceResult.outcome);
-                        window.__pwa_deferred_prompt = null;
-                        resolve(choiceResult.outcome === 'accepted');
-                    })
-                    .catch(function (err) {
-                        console.error('[PWA] Prompt error:', err);
-                        window.__pwa_deferred_prompt = null;
-                        // Fallback to dialog
-                        _showInstallDialog(info).then(resolve);
-                    });
-                return;
-            }
-
-            // Fallback: show instruction dialog for ALL platforms
             _showInstallDialog(info).then(resolve);
         });
     });
@@ -352,43 +402,41 @@ function getPWAStatus() {
     return new Promise(function (resolve) {
         var info = _detectPlatformInfo();
 
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        var isIOSStandalone = window.navigator.standalone === true;
-        var installed = isStandalone || isIOSStandalone;
+        checkIsAppInstalled().then(function (installed) {
+            // canInstall is true on all platforms when not installed
+            // (we always have a fallback dialog)
+            var canInstall = !installed;
 
-        // canInstall is true on all platforms when not installed
-        // (we always have a fallback dialog)
-        var canInstall = !installed;
-
-        var iosInstructions = null;
-        if (info.isIOS && !installed) {
-            if (info.browser === 'safari') {
-                iosInstructions = {
-                    step1: "Tap the Share button (square with an arrow) at the bottom of Safari.",
-                    step2: "Scroll down and tap 'Add to Home Screen'.",
-                    step3: "Tap 'Add' in the top-right corner to install."
-                };
-            } else {
-                iosInstructions = {
-                    step1: "Open this website in Safari browser.",
-                    step2: "Tap the Share button (square with an arrow).",
-                    step3: "Scroll down and tap 'Add to Home Screen'.",
-                    step4: "Tap 'Add' to install."
-                };
+            var iosInstructions = null;
+            if (info.isIOS && !installed) {
+                if (info.browser === 'safari') {
+                    iosInstructions = {
+                        step1: "Tap the Share button (square with an arrow) at the bottom of Safari.",
+                        step2: "Scroll down and tap 'Add to Home Screen'.",
+                        step3: "Tap 'Add' in the top-right corner to install."
+                    };
+                } else {
+                    iosInstructions = {
+                        step1: "Open this website in Safari browser.",
+                        step2: "Tap the Share button (square with an arrow).",
+                        step3: "Scroll down and tap 'Add to Home Screen'.",
+                        step4: "Tap 'Add' to install."
+                    };
+                }
             }
-        }
 
-        // Detect private/incognito browsing
-        _detectPrivateBrowsing().then(function (isPrivate) {
-            var result = {
-                platform: info.platform,
-                isInstalled: installed,
-                canInstall: canInstall && !isPrivate,
-                isPrivateBrowsing: isPrivate,
-                iosInstructions: iosInstructions
-            };
+            // Detect private/incognito browsing
+            _detectPrivateBrowsing().then(function (isPrivate) {
+                var result = {
+                    platform: info.platform,
+                    isInstalled: installed,
+                    canInstall: canInstall && !isPrivate,
+                    isPrivateBrowsing: isPrivate,
+                    iosInstructions: iosInstructions
+                };
 
-            resolve(JSON.stringify(result));
+                resolve(JSON.stringify(result));
+            });
         });
     });
 }

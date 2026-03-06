@@ -96,8 +96,7 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
                                     height: 36,
                                     width: 36,
                                     decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                       gradient: LinearGradient(
                                         colors: [
                                           ColorConst.sidebarSelected,
