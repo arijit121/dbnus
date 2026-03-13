@@ -57,7 +57,7 @@ class MapRemoteDataSourceImpl implements MapDataSource {
         queryParameters: {
           "overview": "full",
           "geometries": "geojson",
-          "steps": "false",
+          "steps": "true",
         },
         method: Method.get,
       );
