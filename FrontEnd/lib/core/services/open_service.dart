@@ -30,7 +30,7 @@ class OpenService {
     }
   }
 
-  Future<void> sendEmail(
+  static Future<void> sendEmail(
       {required String toEmail, String? subject, String? body}) async {
     try {
       final Uri emailLaunchUri = Uri(

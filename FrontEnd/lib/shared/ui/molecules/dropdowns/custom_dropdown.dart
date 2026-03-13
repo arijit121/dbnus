@@ -336,6 +336,12 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final double? menuHeight;
   final bool enableFilter;
   final BorderRadius borderRadius;
+  final Color? fillColor;
+  final bool? filled;
+  final Color? borderColor;
+  final Color? selectedBorderColor;
+  final String? title;
+  final Color? titleColor;
 
   const CustomDropdownMenuFormField(
       {super.key,
@@ -347,114 +353,136 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
       this.value,
       this.validator,
       this.autoValidateMode = AutovalidateMode.onUserInteraction,
-      this.height,
+      this.height = 48,
       this.label,
       this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
       this.menuHeight,
-      this.enableFilter = false});
+      this.enableFilter = false,
+      this.fillColor = Colors.white,
+      this.filled,
+      this.borderColor,
+      this.selectedBorderColor,
+      this.title,
+      this.titleColor});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return _DropdownMenuFormField<T?>(
-          enableFilter: enableFilter,
-          requestFocusOnTap: enableFilter,
-          menuHeight: menuHeight,
-          label: label,
-          validator: validator,
-          autovalidateMode: autoValidateMode,
-          width: constraints.maxWidth,
-          menuStyle: const MenuStyle(
-            backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title?.isNotEmpty == true)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: CustomText(title ?? "",
+                  color: titleColor ?? ColorConst.primaryDark,
+                  size: 14,
+                  fontWeight: FontWeight.w400),
+            ),
+          _DropdownMenuFormField<T?>(
+            enableFilter: enableFilter,
+            requestFocusOnTap: enableFilter,
+            menuHeight: menuHeight,
+            label: label,
+            validator: validator,
+            autovalidateMode: autoValidateMode,
+            width: constraints.maxWidth,
+            menuStyle: const MenuStyle(
+              backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+            ),
+            initialSelection: value,
+            leadingIcon: prefix,
+            trailingIcon: suffix ??
+                Icon(Icons.arrow_drop_down,
+                    size: 24, color: ColorConst.primaryDark),
+            selectedTrailingIcon: suffix != null
+                ? RotatedBox(
+                    quarterTurns: 2,
+                    child: suffix,
+                  )
+                : Icon(Icons.arrow_drop_up,
+                    size: 24, color: ColorConst.primaryDark),
+            hintText: hintText,
+            textStyle: customizeTextStyle(
+                fontColor: ColorConst.primaryDark, fontSize: 16),
+            onSelected: onChanged,
+            dropdownMenuEntries: List.generate(
+                items.length,
+                (index) => DropdownMenuEntry<T?>(
+                    value: items.elementAt(index).value,
+                    label: items.elementAt(index).title ?? "",
+                    labelWidget: CustomText(
+                      items.elementAt(index).title ?? "",
+                      color: ColorConst.primaryDark,
+                      size: 16,
+                      fontWeight: FontWeight.w500,
+                    ))),
+            inputDecorationTheme: InputDecorationTheme(
+              fillColor: fillColor,
+              filled: filled ?? true,
+              constraints: height != null
+                  ? BoxConstraints.tight(Size.fromHeight(height!))
+                  : null,
+              errorStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  fontColor: ColorConst.red),
+              hintStyle: customizeTextStyle(
+                  fontColor: ColorConst.redGrey, fontSize: 16),
+              labelStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  fontColor: ColorConst.blueGrey),
+              floatingLabelStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontColor: ColorConst.primaryDark),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: BorderSide(
+                  color: selectedBorderColor ?? Colors.blue,
+                  width: 1,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: Colors.white,
+                  width: 1,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: BorderSide(
+                  color: borderColor ?? ColorConst.grey,
+                  width: 1,
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  width: 1,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: ColorConst.red,
+                  width: 1,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: ColorConst.red,
+                  width: 1,
+                ),
+              ),
+            ),
           ),
-          initialSelection: value,
-          leadingIcon: prefix,
-          trailingIcon: suffix ??
-              Icon(Icons.arrow_drop_down,
-                  size: 24, color: ColorConst.primaryDark),
-          selectedTrailingIcon: suffix != null
-              ? RotatedBox(
-                  quarterTurns: 2,
-                  child: suffix,
-                )
-              : Icon(Icons.arrow_drop_up,
-                  size: 24, color: ColorConst.primaryDark),
-          hintText: hintText,
-          textStyle: customizeTextStyle(
-              fontColor: ColorConst.primaryDark, fontSize: 16),
-          onSelected: onChanged,
-          dropdownMenuEntries: List.generate(
-              items.length,
-              (index) => DropdownMenuEntry<T?>(
-                  value: items.elementAt(index).value,
-                  label: items.elementAt(index).title ?? "",
-                  labelWidget: CustomText(
-                    items.elementAt(index).title ?? "",
-                    color: ColorConst.primaryDark,
-                    size: 16,
-                    fontWeight: FontWeight.w500,
-                  ))),
-          inputDecorationTheme: InputDecorationTheme(
-            constraints: height != null
-                ? BoxConstraints.tight(Size.fromHeight(height!))
-                : null,
-            errorStyle: customizeTextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                fontColor: ColorConst.red),
-            hintStyle:
-                customizeTextStyle(fontColor: ColorConst.redGrey, fontSize: 16),
-            labelStyle: customizeTextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                fontColor: ColorConst.blueGrey),
-            floatingLabelStyle: customizeTextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                fontColor: ColorConst.primaryDark),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: const BorderSide(
-                color: Colors.blue,
-                width: 1,
-              ),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: const BorderSide(
-                color: Colors.white,
-                width: 1,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: BorderSide(
-                color: ColorConst.grey,
-                width: 1,
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: const BorderSide(
-                width: 1,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: const BorderSide(
-                color: ColorConst.red,
-                width: 1,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: borderRadius,
-              borderSide: const BorderSide(
-                color: ColorConst.red,
-                width: 1,
-              ),
-            ),
-          ));
+        ],
+      );
     });
   }
 }

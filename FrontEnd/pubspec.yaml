@@ -63,6 +63,7 @@ dependencies:
   #  localstore: ^1.3.5
   hive_ce: ^2.15.1
   path_provider: ^2.1.5
+  flutter_secure_storage: ^10.0.0
 
   # Location
   geocoding: ^4.0.0
