@@ -1,19 +1,21 @@
 // src/routes/index.ts
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import express from "express";
+import path from "path";
 import fcmRoutes from "./fcm.routes.js";
 import placesRoutes from "./places.routes.js";
 import userRoutes from "./user.routes.js";
+import uploadRoutes from "./upload.routes.js";
 
 const router = Router();
 
-// Root route
-router.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+// API Routes
+router.use("/users", userRoutes);
+router.use("/places", placesRoutes);
+router.use("/fcm", fcmRoutes);
+router.use("/upload", uploadRoutes); // Mount upload routes
 
-// Feature routes
-router.use(fcmRoutes);
-router.use(placesRoutes);
-router.use(userRoutes);
+// Serve uploaded files statically
+router.use("/uploads", express.static(path.join(__dirname, "../../uploads")));
 
 export default router;
