@@ -41,7 +41,7 @@ const router = Router();
 
 /**
  * @openapi
- * /users:
+ * /users/users:
  *   get:
  *     summary: Returns a list of users
  *     tags: [Users]
@@ -61,7 +61,7 @@ router.get("/users", getAllUsers);
 
 /**
  * @openapi
- * /users/{id}:
+ * /users/users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags: [Users]
@@ -88,7 +88,7 @@ router.get("/users/:id", getUserById);
 
 /**
  * @openapi
- * /users:
+ * /users/users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -122,7 +122,7 @@ router.post("/users", createUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /users/users/{id}:
  *   put:
  *     summary: Update a user by the id
  *     tags: [Users]
@@ -158,7 +158,7 @@ router.put("/users/:id", updateUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /users/users/{id}:
  *   delete:
  *     summary: Delete a user by id
  *     tags: [Users]

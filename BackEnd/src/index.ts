@@ -1,16 +1,9 @@
 // src/index.ts
-import dotenv from "dotenv";
+import "dotenv/config";
 import http from "http";
 import app from "./app.js";
 import { initSocket } from "./config/socket.js";
 import { CustomConsole } from "./utils/custom_console.js";
-
-/*
- * Load up and parse configuration details from
- * the `.env` file to the `process.env`
- * object of Node.js
- */
-dotenv.config();
 
 const server = http.createServer(app);
 

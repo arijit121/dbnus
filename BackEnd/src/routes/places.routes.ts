@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * @openapi
- * /autocomplete:
+ * /places/autocomplete:
  *   get:
  *     summary: Get Google Places autocomplete suggestions
  *     tags: [Places]
