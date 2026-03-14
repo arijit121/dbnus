@@ -45,9 +45,6 @@ const router = Router();
  *                 type: string
  *                 description: URL to open upon interacting with the notification
  *                 example: http://gplab.in/m04oLk
- *               data:
- *                 type: object
- *                 description: Optional custom data payload
  *     responses:
  *       200:
  *         description: Notification sent successfully
