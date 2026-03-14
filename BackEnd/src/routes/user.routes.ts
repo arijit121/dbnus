@@ -23,20 +23,25 @@ const router = Router();
  *         id:
  *           type: string
  *           description: The auto-generated id of the user
+ *           example: "65f4d1101b0f15c589b932ba"
  *         email:
  *           type: string
  *           description: The email of your user
+ *           example: "johndoe@example.com"
  *         name:
  *           type: string
  *           description: The name of your user
+ *           example: "John Doe"
  *         createdAt:
  *           type: string
  *           format: date-time
  *           description: The date the user was added
+ *           example: "2026-03-14T21:33:20.348Z"
  *         updatedAt:
  *           type: string
  *           format: date-time
  *           description: The date the user was last updated
+ *           example: "2026-03-14T21:33:20.348Z"
  */
 
 /**
@@ -51,9 +56,18 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
+ *                   example: Successfully fetched users
  *       500:
  *         description: Server error
  */
@@ -78,7 +92,16 @@ router.get("/users", getAllUsers);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
+ *                   example: Successfully fetched user
  *       404:
  *         description: The user was not found
  *       500:
@@ -112,7 +135,16 @@ router.get("/users/:id", getUserById);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 201
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
+ *                   example: User created successfully
  *       400:
  *         description: Missing required fields
  *       500:
@@ -150,7 +182,16 @@ router.post("/users", createUser);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
  *       500:
  *         description: Server error
  */
@@ -172,6 +213,21 @@ router.put("/users/:id", updateUser);
  *     responses:
  *       200:
  *         description: The user was deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully
  *       500:
  *         description: Server error
  */

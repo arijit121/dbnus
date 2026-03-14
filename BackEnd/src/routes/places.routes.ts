@@ -20,6 +20,28 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Autocomplete suggestions retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       description:
+ *                         type: string
+ *                         example: "New York, NY, USA"
+ *                       place_id:
+ *                         type: string
+ *                         example: "ChIJOwg_06VPwokRYv534QaPC8g"
+ *                 message:
+ *                   type: string
+ *                   example: "Successfully fetched autocomplete suggestions"
  *       400:
  *         description: Missing input parameter
  *       500:

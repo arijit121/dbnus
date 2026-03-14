@@ -48,6 +48,23 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Notification sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status_code:
+ *                   type: integer
+ *                   example: 200
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     messageId:
+ *                       type: string
+ *                       example: "projects/my-project/messages/0:1612...890"
+ *                 message:
+ *                   type: string
+ *                   example: "Successfully sent FCM notification"
  *       500:
  *         description: Error sending notification
  */
