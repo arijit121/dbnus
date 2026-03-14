@@ -10,7 +10,7 @@ import uploadRoutes from "./upload.routes.js";
 const router = Router();
 
 // API Routes
-router.use("/users", userRoutes);
+router.use("/user", userRoutes);
 router.use("/places", placesRoutes);
 router.use("/fcm", fcmRoutes);
 router.use("/upload", uploadRoutes); // Mount upload routes
