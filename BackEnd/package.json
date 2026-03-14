@@ -1,12 +1,12 @@
 {
-  "name": "ts-node-express",
+  "name": "dbnus-backend",
   "version": "1.0.0",
-  "description": "https://blog.logrocket.com/how-to-set-up-node-typescript-express/\r https://github.com/c99rahul/ts-node-express",
+  "description": "Dbnus Backend Server",
   "main": "dist/index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
+    "start": "node dist/src/index.js",
+    "dev": "tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,18 +21,26 @@
   },
   "homepage": "https://github.com/c99rahul/ts-node-express#readme",
   "dependencies": {
+    "@prisma/client": "^6.19.2",
     "axios": "^1.13.6",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
-    "firebase-admin": "^12.6.0"
+    "firebase-admin": "^10.3.0",
+    "mongodb": "^7.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.23",
     "@types/node": "^20.19.20",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "nodemon": "^3.1.4",
+    "prisma": "^6.19.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "type": "commonjs"
