@@ -4,12 +4,12 @@ import 'package:dbnus/features/landing/domain/repositories/landing_repository.da
 import '../datasources/landing_data_source.dart';
 
 class LandingRepositoryImpl implements LandingRepository {
-  final LandingDataSource remoteDataSource;
+  final LandingDataSource dataSource;
 
-  LandingRepositoryImpl({required this.remoteDataSource});
+  LandingRepositoryImpl({required this.dataSource});
 
   @override
   Future<LandingBanner?> getSplashBanner() async {
-    return await remoteDataSource.getSplashBanner();
+    return await dataSource.getSplashBanner();
   }
 }

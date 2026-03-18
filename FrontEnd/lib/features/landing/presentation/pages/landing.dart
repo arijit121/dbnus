@@ -94,7 +94,7 @@ class _LandingUiState extends State<LandingUi> {
         lazy: false,
         create: (context) => LandingBloc(
           repository: LandingRepositoryImpl(
-            remoteDataSource: LandingRemoteDataSourceImpl(),
+            dataSource: LandingRemoteDataSourceImpl(),
           ),
         )
           ..add(ChangeIndex(index: widget.index))

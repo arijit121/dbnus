@@ -48,6 +48,8 @@ class RouterManager {
 
   List<RouteModel> routeHistory = [];
   int maxHistorySize = 20;
+  static GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   /// Add route to history
   void _addRoute(GoRouterState route) {
@@ -72,6 +74,8 @@ class RouterManager {
 
   GoRouter get router => _router;
   final GoRouter _router = GoRouter(
+    navigatorKey: rootNavigatorKey,
+    initialLocation: RouteName.initialView,
     observers: <NavigatorObserver>[observer, if (kIsWeb) RouteObserver()],
     routes: <RouteBase>[
       GoRoute(

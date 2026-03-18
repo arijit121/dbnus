@@ -27,21 +27,39 @@ class CustomRoute {
   static Future<void> back<T extends Object?>([T? result]) async {
     assert(!kIsWeb || result == null,
         'Passing a result is not allowed on the web.');
+
     try {
-      if (RouterManager.getInstance.routeHistory.isNotEmpty) {
-        RouterManager.getInstance.routeHistory.removeLast();
-      }
       if (kIsWeb) {
         bool canBack = await CustomRouterWeb().canBack();
-        canBack
-            ? CustomRouterWeb().back()
-            : await clearAndNavigateName(RouteName.initialView);
-      } else {
-        if (RouterManager.getInstance.router.canPop() == true) {
-          RouterManager.getInstance.router.pop(result ?? 1);
+        if (canBack) {
+          // Remove history only if we are actually moving back
+          if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+            RouterManager.getInstance.routeHistory.removeLast();
+          }
+          CustomRouterWeb().back();
         } else {
           await clearAndNavigateName(RouteName.initialView);
         }
+      } else {
+        final router = RouterManager.getInstance.router;
+        final navState = RouterManager.rootNavigatorKey.currentState;
+
+        // Ensure we don't pop during a frame build (fixes MIUI "jank" pops)
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (router.canPop()) {
+            if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+              RouterManager.getInstance.routeHistory.removeLast();
+            }
+            router.pop(result ?? 1);
+          } else if (navState != null && navState.canPop()) {
+            if (RouterManager.getInstance.routeHistory.isNotEmpty) {
+              RouterManager.getInstance.routeHistory.removeLast();
+            }
+            navState.pop(result ?? 1);
+          } else {
+            await clearAndNavigateName(RouteName.initialView);
+          }
+        });
       }
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
