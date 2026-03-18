@@ -13,14 +13,15 @@ import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
 import 'package:dbnus/features/landing/domain/entities/landing_banner.dart';
 
 import '../../../../core/services/JsService/provider/js_provider.dart';
+import '../../domain/repositories/landing_repository.dart';
 
 part 'landing_event.dart';
 
 part 'landing_state.dart';
 
 class LandingBloc extends Bloc<LandingEvent, LandingState> {
-  final GetSplashBannerUseCase getSplashBannerUseCase;
-  LandingBloc({required this.getSplashBannerUseCase})
+  final LandingRepository repository;
+  LandingBloc({required this.repository})
       : super(LandingState.initial()) {
     on<Init>(_init);
     on<GetSplashData>(_getSplashBanner);
@@ -41,7 +42,7 @@ class LandingBloc extends Bloc<LandingEvent, LandingState> {
     bool onlineStatus = await connectionStatus.checkConnection();
     if (onlineStatus) {
       emit(state.copyWith(bannerData: DynamicBlocData.loading()));
-      LandingBanner? splashBannerResponse = await getSplashBannerUseCase();
+      LandingBanner? splashBannerResponse = await GetSplashBannerUseCase(repository).call();
       if (splashBannerResponse != null &&
           splashBannerResponse is LandingBannerResponse) {
         emit(state.copyWith(

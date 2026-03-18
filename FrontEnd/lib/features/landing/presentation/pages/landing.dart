@@ -93,10 +93,8 @@ class _LandingUiState extends State<LandingUi> {
       return BlocProvider(
         lazy: false,
         create: (context) => LandingBloc(
-          getSplashBannerUseCase: GetSplashBannerUseCase(
-            LandingRepositoryImpl(
-              remoteDataSource: LandingRemoteDataSourceImpl(),
-            ),
+          repository: LandingRepositoryImpl(
+            remoteDataSource: LandingRemoteDataSourceImpl(),
           ),
         )
           ..add(ChangeIndex(index: widget.index))
