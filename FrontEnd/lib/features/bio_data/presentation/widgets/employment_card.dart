@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:feather_icons/feather_icons.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -8,7 +9,8 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'section_title.dart';
 
 class EmploymentCard extends StatelessWidget {
-  const EmploymentCard({super.key});
+  const EmploymentCard({super.key, required this.crossAxisCount});
+  final int crossAxisCount;
 
   @override
   Widget build(BuildContext context) {
@@ -55,106 +57,115 @@ class EmploymentCard extends StatelessWidget {
           title: "Employment History",
           color: const Color(0xFFE67E22),
         ),
-        ...jobs.map(
-          (job) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: ColorConst.cardBg,
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Gradient top bar
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: job.gradient),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(14),
-                        topRight: Radius.circular(14),
+        MasonryGridView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount),
+          children: jobs
+              .map(
+                (job) => Container(
+                  decoration: BoxDecoration(
+                    color: ColorConst.cardBg,
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          job.isCurrent ? FeatherIcons.zap : FeatherIcons.clock,
-                          size: 16,
-                          color: Colors.white,
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Gradient top bar
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                        8.pw,
-                        CustomText(
-                          job.period,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          size: 12,
-                        ),
-                        if (job.isCurrent) ...[
-                          const Spacer(),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: const CustomText(
-                              "Current",
-                              color: Colors.white,
-                              size: 10,
-                              fontWeight: FontWeight.w700,
-                            ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: job.gradient),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(14),
+                            topRight: Radius.circular(14),
                           ),
-                        ],
-                      ],
-                    ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              job.isCurrent
+                                  ? FeatherIcons.zap
+                                  : FeatherIcons.clock,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                            8.pw,
+                            CustomText(
+                              job.period,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              size: 12,
+                            ),
+                            if (job.isCurrent) ...[
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: const CustomText(
+                                  "Current",
+                                  color: Colors.white,
+                                  size: 10,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      // Content
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              job.title,
+                              fontWeight: FontWeight.w700,
+                              size: 15,
+                              color: ColorConst.primaryDark,
+                            ),
+                            4.ph,
+                            CustomText(
+                              job.company,
+                              size: 13,
+                              color: ColorConst.secondaryDark,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            10.ph,
+                            CustomText(
+                              job.description,
+                              size: 13,
+                              color: ColorConst.secondaryDark,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  // Content
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomText(
-                          job.title,
-                          fontWeight: FontWeight.w700,
-                          size: 15,
-                          color: ColorConst.primaryDark,
-                        ),
-                        4.ph,
-                        CustomText(
-                          job.company,
-                          size: 13,
-                          color: ColorConst.secondaryDark,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        10.ph,
-                        CustomText(
-                          job.description,
-                          size: 13,
-                          color: ColorConst.secondaryDark,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
+              )
+              .toList(),
         ),
       ],
     );
