@@ -370,4 +370,19 @@ class ValueHandler {
       return false; // Invalid JSON
     }
   }
+
+  static num? calculateAverage(List<num> numbers) {
+    try {
+      if (numbers.isEmpty) return null; // Handle empty list case
+
+      // Sum all elements using reduce and cast to double for accurate division
+      num sum = numbers.fold<num>(0, (a, b) => a + b);
+
+      if (sum == 0) return null;
+      // Divide the sum by the number of elements
+      return sum / numbers.length;
+    } catch (e) {
+      return null; // Invalid JSON
+    }
+  }
 }

@@ -242,13 +242,20 @@ class CustomCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Checkbox(
+      fillColor:
+      WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return activeColor ?? Colors.blue;
+        }
+        return Colors.white;
+      }),
       checkColor: Colors.white,
-      activeColor: activeColor ?? Colors.blue,
       value: value,
       shape: isRounded == true
           ? const CircleBorder()
           : RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       onChanged: onChanged,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: const VisualDensity(
           horizontal: VisualDensity.minimumDensity,
           vertical: VisualDensity.minimumDensity),
