@@ -332,41 +332,92 @@ function promptInstall() {
         // If we await checkIsAppInstalled() first, the gesture expires and prompt() throws a DOMException.
         var prompt = window.__pwa_deferred_prompt;
         if (prompt && !info.isIOS) {
-            try {
-                // In modern Chrome, prompt() returns a Promise.
-                // If the user gesture is invalid, it rejects THIS promise, not just userChoice.
-                var promptPromise = prompt.prompt();
-                if (promptPromise && typeof promptPromise.catch === 'function') {
-                    promptPromise.catch(function (err) {
-                        console.warn('[PWA] Native prompt() blocked by browser:', err.message);
-                        window.__pwa_deferred_prompt = null;
-                        _fallbackFlow(info, resolve);
-                    });
-                }
+            // Instead of calling prompt immediately (which fails without a user gesture),
+            // show a sleek HTML confirmation dialog. The click on "Install" acts as the user gesture.
 
-                prompt.userChoice
-                    .then(function (choiceResult) {
-                        console.log('[PWA] User choice:', choiceResult.outcome);
-                        window.__pwa_deferred_prompt = null;
+            var overlay = document.createElement('div');
+            overlay.id = '__pwa_confirm_overlay';
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;animation:__pwa_fadeIn 0.25s ease;-webkit-overflow-scrolling:touch;';
 
-                        if (choiceResult.outcome === 'accepted') {
-                            localStorage.setItem('__pwa_installed_cached', 'true');
-                            resolve(true);
-                        } else {
-                            resolve(false);
-                        }
-                    })
-                    .catch(function (err) {
-                        console.error('[PWA] Prompt error:', err);
-                        window.__pwa_deferred_prompt = null;
-                        _fallbackFlow(info, resolve);
-                    });
-                return; // Stop here, native prompt took over
-            } catch (e) {
-                console.error('[PWA] Error calling prompt():', e);
-                window.__pwa_deferred_prompt = null;
-                // Native prompt failed (probably gesture expired or already used), continue to fallback
+            var dialog = document.createElement('div');
+            dialog.id = '__pwa_confirm_dialog';
+            dialog.style.cssText = 'width:100%;max-width:320px;background:linear-gradient(145deg,#1c1c1e,#2c2c2e);border-radius:20px;padding:24px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 20px 60px rgba(0,0,0,0.5);box-sizing:border-box;animation:__pwa_slideUp 0.3s ease;text-align:center;';
+
+            dialog.innerHTML =
+                '<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">📲</div>' +
+                '<div style="font-size:18px;font-weight:700;margin-bottom:8px;letter-spacing:-0.4px;">Install App</div>' +
+                '<div style="font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:24px;line-height:1.4;">Would you like to install this application on your device for a better experience?</div>' +
+                '<div style="display:flex;gap:12px;">' +
+                '  <button id="__pwa_btn_cancel" style="flex:1;padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity 0.2s;">Not Now</button>' +
+                '  <button id="__pwa_btn_install" style="flex:1;padding:12px;border:none;border-radius:14px;background:linear-gradient(135deg,#007AFF,#5856D6);color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity 0.2s;">Install</button>' +
+                '</div>';
+
+            overlay.appendChild(dialog);
+
+            if (!document.getElementById('__pwa_install_style')) {
+                var styleEl = document.createElement('style');
+                styleEl.id = '__pwa_install_style';
+                styleEl.textContent =
+                    '@keyframes __pwa_fadeIn{from{opacity:0}to{opacity:1}}' +
+                    '@keyframes __pwa_slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}' +
+                    '@keyframes __pwa_slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(50px);opacity:0}}';
+                document.head.appendChild(styleEl);
             }
+
+            document.body.appendChild(overlay);
+
+            function closeConfirmDialog() {
+                dialog.style.animation = '__pwa_slideDown 0.25s ease forwards';
+                overlay.style.animation = '__pwa_fadeIn 0.25s ease reverse forwards';
+                setTimeout(function () {
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                }, 280);
+            }
+
+            document.getElementById('__pwa_btn_cancel').addEventListener('click', function () {
+                closeConfirmDialog();
+                resolve(false);
+            });
+
+            document.getElementById('__pwa_btn_install').addEventListener('click', function () {
+                closeConfirmDialog();
+
+                try {
+                    // This is now inside a click event handler! So the gesture is valid.
+                    var promptPromise = prompt.prompt();
+                    if (promptPromise && typeof promptPromise.catch === 'function') {
+                        promptPromise.catch(function (err) {
+                            console.warn('[PWA] Native prompt() blocked by browser:', err.message);
+                            window.__pwa_deferred_prompt = null;
+                            _fallbackFlow(info, resolve);
+                        });
+                    }
+
+                    prompt.userChoice
+                        .then(function (choiceResult) {
+                            console.log('[PWA] User choice:', choiceResult.outcome);
+                            window.__pwa_deferred_prompt = null;
+
+                            if (choiceResult.outcome === 'accepted') {
+                                localStorage.setItem('__pwa_installed_cached', 'true');
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        })
+                        .catch(function (err) {
+                            console.error('[PWA] Prompt error:', err);
+                            window.__pwa_deferred_prompt = null;
+                            _fallbackFlow(info, resolve);
+                        });
+                } catch (e) {
+                    console.error('[PWA] Error calling prompt():', e);
+                    window.__pwa_deferred_prompt = null;
+                    _fallbackFlow(info, resolve);
+                }
+            });
+
+            return; // Wait for user interaction
         }
 
         // 2. ASYNC FALLBACK FLOW
