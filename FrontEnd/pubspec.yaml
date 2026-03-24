@@ -102,6 +102,7 @@ dependencies:
   flame_svg: ^1.11.16
   gif_view: ^1.0.3
   syncfusion_flutter_pdfviewer: ^32.1.21
+  printing: ^5.14.3
   icons_plus: ^5.0.0
   feather_icons: ^1.2.0
 

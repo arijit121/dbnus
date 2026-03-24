@@ -366,6 +366,7 @@ class CustomToggleSwitchButton extends StatelessWidget {
     );
 
     return Switch(
+      padding: EdgeInsets.zero,
       thumbIcon: thumbIcon,
       value: value == true,
       overlayColor: overlayColor,
