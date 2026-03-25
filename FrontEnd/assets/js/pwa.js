@@ -291,8 +291,17 @@ function _showInstallDialog(info) {
         document.head.appendChild(styleEl);
         document.body.appendChild(overlay);
 
+        var visibilityHandler = function() {
+            if (document.hidden) {
+                localStorage.setItem('__pwa_installed_cached', 'true');
+                closeDialog();
+            }
+        };
+        document.addEventListener('visibilitychange', visibilityHandler);
+
         // Close handler — check install status after dialog close
         function closeDialog() {
+            document.removeEventListener('visibilitychange', visibilityHandler);
             dialog.style.animation = '__pwa_slideDown 0.25s ease forwards';
             overlay.style.animation = '__pwa_fadeIn 0.25s ease reverse forwards';
 
