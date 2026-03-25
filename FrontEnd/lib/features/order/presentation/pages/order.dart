@@ -8,6 +8,7 @@ import '../widgets/js_navigation_section.dart';
 import '../widgets/pin_code_section.dart';
 import '../widgets/forms_section.dart';
 import '../widgets/maps_section.dart';
+import '../widgets/printing_section.dart';
 import '../widgets/section_title.dart';
 
 class Order extends StatefulWidget {
@@ -36,6 +37,13 @@ class _OrderState extends State<Order> {
             title: "Notifications & Downloads", icon: FeatherIcons.bell),
         12.ph,
         const NotificationsSection(),
+        24.ph,
+
+        // ── Printing & Documents ────────────────────────────
+        const SectionTitle(
+            title: "Printing Options", icon: FeatherIcons.printer),
+        12.ph,
+        const PrintingSection(),
         24.ph,
 
         // ── JS & Navigation ─────────────────────────────────

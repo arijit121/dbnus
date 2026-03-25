@@ -46,7 +46,7 @@ class _NotificationsSectionState extends State<NotificationsSection> {
             onTap: () {
               DownloadHandler.download(
                   downloadUrl:
-                      "https://file-examples.com/storage/fe6146b54768752f9a08cf7/2017/10/file-example_PDF_1MB.pdf");
+                      "https://file-examples.com/storage/fea01aba4069c2c9293af8d/2017/10/file-example_PDF_1MB.pdf");
             },
           ),
           _buildDivider(),
