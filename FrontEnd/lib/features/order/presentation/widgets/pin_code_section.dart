@@ -109,7 +109,7 @@ class PinCodeSection extends StatelessWidget {
                         child: PinCodeFormField(
                           controller: pinController,
                           length: 5,
-                          autoFocus: true,
+                          autoFocus: false,
                           autoFill: true,
                           onCompleted: (value) {
                             AppLog.i(pinController.text, tag: "OnCompleted");
