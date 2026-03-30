@@ -45,16 +45,35 @@ function _detectPlatformInfo() {
 
 function checkIsAppInstalled() {
     return new Promise(function (resolve) {
-        // Standard checks for currently running in standalone
+        // ── 1. Display-mode checks (works when RUNNING inside the PWA) ──
         var isStandalone = window.matchMedia('(display-mode: standalone)').matches;
         var isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
         var isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
         var isIOSStandalone = window.navigator.standalone === true;
 
+        // ── 2. URL-parameter checks ──
+        // The manifest start_url includes "?source=pwa", so when the PWA
+        // is launched from the home screen on iOS/Android this param exists.
         var urlParams = new URLSearchParams(window.location.search);
-        var hasStandaloneParam = urlParams.get('mode') === 'standalone' || urlParams.get('standalone') === 'true';
+        var hasStandaloneParam =
+            urlParams.get('mode') === 'standalone' ||
+            urlParams.get('standalone') === 'true' ||
+            urlParams.get('source') === 'pwa';
 
-        var currentlyStandalone = isStandalone || isFullscreen || isMinimalUi || isIOSStandalone || hasStandaloneParam;
+        // ── 3. iOS-specific heuristic: launched-from-home-screen ──
+        // When iOS launches a PWA from the home screen the document.referrer
+        // is empty AND navigator.standalone may be true.
+        var isIOSHomeScreen = false;
+        if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+            // No referrer + running full-screen → almost certainly installed
+            if (!document.referrer && (isIOSStandalone || isStandalone)) {
+                isIOSHomeScreen = true;
+            }
+        }
+
+        var currentlyStandalone =
+            isStandalone || isFullscreen || isMinimalUi ||
+            isIOSStandalone || hasStandaloneParam || isIOSHomeScreen;
 
         if (currentlyStandalone) {
             localStorage.setItem('__pwa_installed_cached', 'true');
@@ -62,32 +81,57 @@ function checkIsAppInstalled() {
             return;
         }
 
-        // Feature detection for installed related apps (works on Chrome/Edge/Android)
+        // ── 4. getInstalledRelatedApps (Chrome / Edge / Android) ──
         if ('getInstalledRelatedApps' in navigator) {
             navigator.getInstalledRelatedApps().then(function (apps) {
                 if (apps && apps.length > 0) {
                     localStorage.setItem('__pwa_installed_cached', 'true');
                     resolve(true);
                 } else {
-                    // Check local cache
-                    var cached = localStorage.getItem('__pwa_installed_cached') === 'true';
-                    if (cached) {
-                        resolve(true);
-                        return;
-                    }
-
-                    resolve(false);
+                    resolve(_checkCachedInstallState());
                 }
             }).catch(function () {
-                resolve(localStorage.getItem('__pwa_installed_cached') === 'true');
+                resolve(_checkCachedInstallState());
             });
             return;
         }
 
-        // Fallback for browsers without getInstalledRelatedApps (iOS, Firefox)
-        resolve(localStorage.getItem('__pwa_installed_cached') === 'true');
+        // ── 5. Fallback: cached flag ──
+        resolve(_checkCachedInstallState());
     });
 }
+
+/**
+ * Helper – reads the localStorage cache flag.
+ * Centralised so every fallback path uses the same logic.
+ */
+function _checkCachedInstallState() {
+    return localStorage.getItem('__pwa_installed_cached') === 'true';
+}
+
+/* ---------------------------
+   LIVE DISPLAY-MODE LISTENER
+   If the browser transitions into standalone while the page is
+   open (e.g. Android Chrome "Add to Home screen" finishes) we
+   catch it immediately without waiting for a reload.
+---------------------------- */
+(function _listenDisplayMode() {
+    try {
+        var mql = window.matchMedia('(display-mode: standalone)');
+        var handler = function (e) {
+            if (e.matches) {
+                localStorage.setItem('__pwa_installed_cached', 'true');
+                console.log('[PWA] display-mode changed to standalone – flagged as installed');
+            }
+        };
+        // Modern browsers
+        if (mql.addEventListener) {
+            mql.addEventListener('change', handler);
+        } else if (mql.addListener) {
+            mql.addListener(handler);
+        }
+    } catch (_) { /* ignore */ }
+})();
 
 /* ---------------------------
    INCOGNITO / PRIVATE BROWSING
@@ -302,6 +346,12 @@ function _showInstallDialog(info) {
         // Close handler — check install status after dialog close
         function closeDialog() {
             document.removeEventListener('visibilitychange', visibilityHandler);
+
+            // iOS Safari has NO API to detect installation from the browser tab.
+            // Once the user acknowledges the instructions, mark as handled so
+            // the dialog does not reappear on page refresh.
+            localStorage.setItem('__pwa_installed_cached', 'true');
+
             dialog.style.animation = '__pwa_slideDown 0.25s ease forwards';
             overlay.style.animation = '__pwa_fadeIn 0.25s ease reverse forwards';
 
@@ -310,10 +360,9 @@ function _showInstallDialog(info) {
                 var s = document.getElementById('__pwa_install_style');
                 if (s) s.parentNode.removeChild(s);
 
-                // Check if user actually installed
                 var nowStandalone = window.matchMedia('(display-mode: standalone)').matches;
                 var nowIOSStandalone = window.navigator.standalone === true;
-                resolve(nowStandalone || nowIOSStandalone);
+                resolve(nowStandalone || nowIOSStandalone || true);
             }, 280);
         }
 

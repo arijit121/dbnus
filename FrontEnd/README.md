@@ -12,6 +12,9 @@ flutter run web -t lib/main_web.dart --web-renderer html -d chrome
 flutter run web -t lib/main_web.dart --web-renderer html -d chrome --web-browser-flag="
 --disable-web-security"
 flutter build web -t lib/main_prod.dart --wasm
+flutter clean
+flutter build web -t lib/main_prod.dart
+firebase deploy
 ```
 Manual Installation on Windows
 Download the FVM Executable
