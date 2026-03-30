@@ -33,7 +33,11 @@ class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
   Future<void> init() async {
     videoId = YoutubePlayerController.convertUrlToId(widget.videoUrl);
     _controller = YoutubePlayerController(
-        params: const YoutubePlayerParams(showFullscreenButton: true));
+      params: const YoutubePlayerParams(
+        strictRelatedVideos: true,
+        showVideoAnnotations: false,
+      ),
+    );
 
     await _controller?.cueVideoById(videoId: videoId!); // your YouTube video id
 
@@ -59,6 +63,7 @@ class _YoutubeVideoPlayerState extends State<YoutubeVideoPlayer> {
         ? YoutubePlayer(
             controller: _controller!,
             aspectRatio: aspectRatio,
+            enableFullScreenOnVerticalDrag: false,
           )
         : CustomErrorWidget(width: width, height: height);
   }
