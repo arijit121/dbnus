@@ -14,6 +14,8 @@ import 'package:dbnus/shared/ui/organisms/carousels/carousel_slider.dart';
 import 'package:dbnus/shared/ui/organisms/video/youtube_video_player.dart';
 import 'package:dbnus/navigation/router_name.dart';
 
+import '../../../../shared/ui/organisms/video/youtube_webview_flutter_player.dart';
+
 class MediaSection extends StatelessWidget {
   const MediaSection({super.key});
 
@@ -27,7 +29,7 @@ class MediaSection extends StatelessWidget {
           icon: FeatherIcons.youtube,
           child: Stack(
             children: [
-              const YoutubeVideoPlayer(
+              const YoutubeWebviewFlutterPlayer(
                 videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 height: 220,
               ),

@@ -1,6 +1,9 @@
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import 'package:dbnus/shared/ui/molecules/error/error_widget.dart';
 
@@ -25,7 +28,7 @@ class YoutubeWebviewFlutterPlayer extends StatefulWidget {
 class _YoutubeWebviewFlutterPlayerState
     extends State<YoutubeWebviewFlutterPlayer> {
   String? videoId;
-  late final WebViewController _controller;
+  WebViewController? _controller;
 
   @override
   void initState() {
@@ -33,16 +36,71 @@ class _YoutubeWebviewFlutterPlayerState
     init();
   }
 
-  void init() {
+  Future<void> init() async {
     videoId = _convertUrlToId(widget.videoUrl);
     AppLog.i(videoId, tag: "Video Id");
 
     if (videoId != null) {
-      _controller = WebViewController()
+      late final PlatformWebViewControllerCreationParams params;
+
+      if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+        params = WebKitWebViewControllerCreationParams(
+          allowsInlineMediaPlayback: true,
+          mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+        );
+      } else {
+        params = const PlatformWebViewControllerCreationParams();
+      }
+
+      final controller = WebViewController.fromPlatformCreationParams(params)
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(Colors.transparent)
-        ..loadRequest(Uri.parse(
-            "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"));
+        ..setUserAgent(
+            "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36")
+        ..addJavaScriptChannel(
+          'Webviewtube',
+          onMessageReceived: (JavaScriptMessage message) {
+            AppLog.i(message.message, tag: "Webviewtube");
+          },
+        );
+
+      if (controller.platform is AndroidWebViewController) {
+        (controller.platform as AndroidWebViewController)
+            .setMediaPlaybackRequiresUserGesture(false);
+      } else if (controller.platform is WebKitWebViewController) {
+        (controller.platform as WebKitWebViewController)
+            .setAllowsBackForwardNavigationGestures(false);
+      }
+
+      try {
+        String htmlTemplate =
+            await rootBundle.loadString('assets/store/youtube_player.html');
+
+        String htmlContent = htmlTemplate
+            .replaceAll('{{VIDEO_ID}}', videoId!)
+            .replaceAll('{{ENABLE_CAPTION}}', '0')
+            .replaceAll('{{CAPTION_LANGUAGE}}', 'en')
+            .replaceAll('{{SHOW_CONTROLS}}', '1')
+            .replaceAll('{{ENABLE_FULLSCREEN}}', '0')
+            .replaceAll('{{INTERFACE_LANGUAGE}}', 'en')
+            .replaceAll('{{LOOP}}', '0')
+            .replaceAll('{{PLAYLIST_PARAM}}', '')
+            .replaceAll('{{ORIGIN_PARAM}}', "'origin': 'https://www.youtube-nocookie.com',")
+            .replaceAll('{{START_AT}}', '0')
+            .replaceAll('{{END_AT}}', '0')
+            .replaceAll('{{UPDATE_INTERVAL}}', '1000');
+
+        await controller.loadHtmlString(htmlContent,
+            baseUrl: 'https://www.youtube-nocookie.com/');
+
+        if (mounted) {
+          setState(() {
+            _controller = controller;
+          });
+        }
+      } catch (e) {
+        AppLog.e('Error loading YouTube HTML template: $e');
+      }
     }
   }
 
@@ -82,10 +140,18 @@ class _YoutubeWebviewFlutterPlayerState
       return CustomErrorWidget(width: width, height: height);
     }
 
+    if (_controller == null) {
+      return SizedBox(
+        width: width,
+        height: height,
+        child: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return SizedBox(
       width: width,
       height: height,
-      child: WebViewWidget(controller: _controller),
+      child: WebViewWidget(controller: _controller!),
     );
   }
 }
