@@ -1,4 +1,3 @@
-
 /// For Web
 import 'dart:collection';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
@@ -11,12 +10,14 @@ class YoutubeInAppWebviewPlayer extends StatefulWidget {
   final String videoUrl;
   final double? height;
   final double? width;
+  final bool fullScreen;
 
   const YoutubeInAppWebviewPlayer({
     super.key,
     required this.videoUrl,
     this.height,
     this.width,
+    this.fullScreen = false,
   }) : assert(height != null || width != null,
             'Height or Width must be provided for YoutubeWebviewPlayer');
 
@@ -81,21 +82,19 @@ class _YoutubeInAppWebviewPlayerState extends State<YoutubeInAppWebviewPlayer> {
       child: InAppWebView(
         initialUrlRequest: URLRequest(
           url: WebUri(
-              "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"),
+              "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=${widget.fullScreen ? '1' : '0'}&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"),
         ),
         initialSettings: InAppWebViewSettings(
           userAgent:
               "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
           mediaPlaybackRequiresUserGesture: false,
           allowsInlineMediaPlayback: true,
-          iframeAllowFullscreen: false,
+          iframeAllowFullscreen: widget.fullScreen,
           iframeAllow:
-              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
           useHybridComposition: true,
         ),
       ),
     );
   }
 }
-
-

@@ -33,6 +33,7 @@ class MediaSection extends StatelessWidget {
               const YoutubeInAppWebviewPlayer(
                 videoUrl: "https://www.youtube.com/watch?v=CIfLE0CShbg",
                 height: 220,
+                fullScreen: true,
               ),
               // Play button overlay
               Positioned.fill(

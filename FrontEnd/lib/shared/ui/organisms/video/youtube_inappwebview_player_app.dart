@@ -13,12 +13,14 @@ class YoutubeInAppWebviewPlayer extends StatefulWidget {
   final String videoUrl;
   final double? height;
   final double? width;
+  final bool fullScreen;
 
   const YoutubeInAppWebviewPlayer({
     super.key,
     required this.videoUrl,
     this.height,
     this.width,
+    this.fullScreen = false,
   }) : assert(height != null || width != null,
             'Height or Width must be provided for YoutubeWebviewPlayer');
 
@@ -51,7 +53,7 @@ class _YoutubeInAppWebviewPlayerState extends State<YoutubeInAppWebviewPlayer> {
             .replaceAll('{{ENABLE_CAPTION}}', '0')
             .replaceAll('{{CAPTION_LANGUAGE}}', 'en')
             .replaceAll('{{SHOW_CONTROLS}}', '1')
-            .replaceAll('{{ENABLE_FULLSCREEN}}', '0')
+            .replaceAll('{{ENABLE_FULLSCREEN}}', widget.fullScreen ? '1' : '0')
             .replaceAll('{{INTERFACE_LANGUAGE}}', 'en')
             .replaceAll('{{LOOP}}', '0')
             .replaceAll('{{PLAYLIST_PARAM}}', '')
@@ -131,9 +133,9 @@ class _YoutubeInAppWebviewPlayerState extends State<YoutubeInAppWebviewPlayer> {
               "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
           mediaPlaybackRequiresUserGesture: false,
           allowsInlineMediaPlayback: true,
-          iframeAllowFullscreen: false,
+          iframeAllowFullscreen: widget.fullScreen,
           iframeAllow:
-              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share",
           useHybridComposition: true,
         ),
         onWebViewCreated: (controller) {
