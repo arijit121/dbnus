@@ -1,29 +1,31 @@
-import 'dart:collection';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:dbnus/shared/ui/molecules/error/error_widget.dart';
 
-class YoutubeWebviewPlayer extends StatefulWidget {
+class YoutubeWebviewFlutterPlayer extends StatefulWidget {
   final String videoUrl;
   final double? height;
   final double? width;
 
-  const YoutubeWebviewPlayer({
+  const YoutubeWebviewFlutterPlayer({
     super.key,
     required this.videoUrl,
     this.height,
     this.width,
   }) : assert(height != null || width != null,
-            'Height or Width must be provided for YoutubeWebviewPlayer');
+            'Height or Width must be provided for YoutubeWebviewFlutterPlayer');
 
   @override
-  State<YoutubeWebviewPlayer> createState() => _YoutubeWebviewPlayerState();
+  State<YoutubeWebviewFlutterPlayer> createState() =>
+      _YoutubeWebviewFlutterPlayerState();
 }
 
-class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
+class _YoutubeWebviewFlutterPlayerState
+    extends State<YoutubeWebviewFlutterPlayer> {
   String? videoId;
+  late final WebViewController _controller;
 
   @override
   void initState() {
@@ -34,6 +36,14 @@ class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
   void init() {
     videoId = _convertUrlToId(widget.videoUrl);
     AppLog.i(videoId, tag: "Video Id");
+
+    if (videoId != null) {
+      _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..loadRequest(Uri.parse(
+            "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"));
+    }
   }
 
   String? _convertUrlToId(String url, {bool trimWhitespaces = true}) {
@@ -75,22 +85,7 @@ class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
     return SizedBox(
       width: width,
       height: height,
-      child: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(
-              "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"),
-        ),
-        initialSettings: InAppWebViewSettings(
-          userAgent:
-              "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
-          mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: true,
-          iframeAllowFullscreen: false,
-          iframeAllow:
-              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
-          useHybridComposition: true,
-        ),
-      ),
+      child: WebViewWidget(controller: _controller),
     );
   }
 }
