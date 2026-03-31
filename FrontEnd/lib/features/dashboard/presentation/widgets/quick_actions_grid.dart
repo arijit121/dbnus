@@ -87,8 +87,7 @@ class QuickActionsGrid extends StatelessWidget {
         gradient: const [ColorConst.lightBlue, ColorConst.violate],
         onTap: () async {
           CustomRoute.pushNamed(
-              name: RouteName.rayzorPay,
-              arguments: RazorpayMerchantDetails());
+              name: RouteName.rayzorPay, arguments: RazorpayMerchantDetails());
         },
       ),
     ];
@@ -105,7 +104,7 @@ class QuickActionsGrid extends StatelessWidget {
         builder: (context, index) {
           final action = actions[index];
           return AspectRatio(
-            aspectRatio: 1.5,
+            aspectRatio: 1.25,
             child: _QuickActionCard(action: action),
           );
         },

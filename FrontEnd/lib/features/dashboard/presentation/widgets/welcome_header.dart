@@ -159,9 +159,7 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                     ),
                     child: Center(
                       child: CustomText(
-                        F.title.isNotEmpty
-                            ? F.title[0].toUpperCase()
-                            : "D",
+                        F.title.isNotEmpty ? F.title[0].toUpperCase() : "D",
                         color: Colors.white,
                         size: 20,
                         fontWeight: FontWeight.w700,
@@ -203,8 +201,7 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                   // Counter button
                   ValueListenableBuilder<int>(
                     valueListenable: widget.counter,
-                    builder:
-                        (BuildContext context, int value, Widget? child) {
+                    builder: (BuildContext context, int value, Widget? child) {
                       return _AnimatedCounterButton(
                         value: value,
                         onTap: () {
@@ -224,8 +221,10 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                   color: Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Wrap(
+                  runSpacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       FeatherIcons.calendar,
