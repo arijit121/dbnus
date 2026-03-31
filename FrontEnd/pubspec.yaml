@@ -95,6 +95,8 @@ dependencies:
   # dyte_uikit: ^0.7.0
   flutter_inappwebview: ^6.1.5
   webview_flutter: ^4.13.0
+  webview_flutter_android: ^4.10.15
+  webview_flutter_wkwebview: ^3.24.2
   cupertino_icons: ^1.0.8
   cached_network_image: ^3.4.1
   flame: ^1.32.0
@@ -127,8 +129,6 @@ dependencies:
   youtube_player_iframe: ^5.2.2
   flutter_map: ^8.2.2
   latlong2: ^0.9.1
-  webview_flutter_android: ^4.10.15
-  webview_flutter_wkwebview: ^3.24.2
 
 dev_dependencies:
   flutter_test:
