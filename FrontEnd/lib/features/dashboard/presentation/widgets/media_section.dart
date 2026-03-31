@@ -31,7 +31,7 @@ class MediaSection extends StatelessWidget {
           child: Stack(
             children: [
               const YoutubeInAppWebviewPlayer(
-                videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                videoUrl: "https://www.youtube.com/watch?v=CIfLE0CShbg",
                 height: 220,
               ),
               // Play button overlay
@@ -67,8 +67,7 @@ class MediaSection extends StatelessWidget {
                 height: 180,
                 label: "Gallery",
                 onTap: () {
-                  PopUpItems.toastMessage(
-                      "On Tap", ColorConst.baseHexColor);
+                  PopUpItems.toastMessage("On Tap", ColorConst.baseHexColor);
                 },
               ),
             ),
