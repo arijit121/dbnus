@@ -1,16 +1,18 @@
 import 'dart:collection';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import 'package:dbnus/shared/ui/molecules/error/error_widget.dart';
 
-class YoutubeWebviewPlayer extends StatefulWidget {
+class YoutubeInAppWebviewPlayer extends StatefulWidget {
   final String videoUrl;
   final double? height;
   final double? width;
 
-  const YoutubeWebviewPlayer({
+  const YoutubeInAppWebviewPlayer({
     super.key,
     required this.videoUrl,
     this.height,
@@ -19,11 +21,13 @@ class YoutubeWebviewPlayer extends StatefulWidget {
             'Height or Width must be provided for YoutubeWebviewPlayer');
 
   @override
-  State<YoutubeWebviewPlayer> createState() => _YoutubeWebviewPlayerState();
+  State<YoutubeInAppWebviewPlayer> createState() =>
+      _YoutubeInAppWebviewPlayerState();
 }
 
-class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
+class _YoutubeInAppWebviewPlayerState extends State<YoutubeInAppWebviewPlayer> {
   String? videoId;
+  String? _htmlContent;
 
   @override
   void initState() {
@@ -31,9 +35,41 @@ class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
     init();
   }
 
-  void init() {
+  Future<void> init() async {
     videoId = _convertUrlToId(widget.videoUrl);
     AppLog.i(videoId, tag: "Video Id");
+
+    if (videoId != null && !kIsWeb) {
+      try {
+        String htmlTemplate =
+            await rootBundle.loadString('assets/store/youtube_player.html');
+
+        String htmlContent = htmlTemplate
+            .replaceAll('{{VIDEO_ID}}', videoId!)
+            .replaceAll('{{ENABLE_CAPTION}}', '0')
+            .replaceAll('{{CAPTION_LANGUAGE}}', 'en')
+            .replaceAll('{{SHOW_CONTROLS}}', '1')
+            .replaceAll('{{ENABLE_FULLSCREEN}}', '0')
+            .replaceAll('{{INTERFACE_LANGUAGE}}', 'en')
+            .replaceAll('{{LOOP}}', '0')
+            .replaceAll('{{PLAYLIST_PARAM}}', '')
+            .replaceAll(
+                '{{ORIGIN_PARAM}}', "'origin': 'https://www.youtube.com',")
+            .replaceAll('{{START_AT}}', '0')
+            .replaceAll('{{END_AT}}', '0')
+            .replaceAll('{{UPDATE_INTERVAL}}', '1000')
+            .replaceAll('Webviewtube.postMessage(',
+                'window.flutter_inappwebview.callHandler("Webviewtube", ');
+
+        if (mounted) {
+          setState(() {
+            _htmlContent = htmlContent;
+          });
+        }
+      } catch (e) {
+        AppLog.e('Error loading YouTube HTML template: $e');
+      }
+    }
   }
 
   String? _convertUrlToId(String url, {bool trimWhitespaces = true}) {
@@ -72,14 +108,30 @@ class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
       return CustomErrorWidget(width: width, height: height);
     }
 
+    if (_htmlContent == null) {
+      return SizedBox(
+        width: width,
+        height: height,
+        child: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return SizedBox(
       width: width,
       height: height,
       child: InAppWebView(
-        initialUrlRequest: URLRequest(
-          url: WebUri(
-              "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"),
-        ),
+        initialUrlRequest: kIsWeb
+            ? URLRequest(
+                url: WebUri(
+                    "https://www.youtube.com/embed/$videoId?playsinline=1&rel=0&fs=0&modestbranding=1&iv_load_policy=3&origin=https://www.youtube.com"),
+              )
+            : null,
+        initialData: (!kIsWeb)
+            ? InAppWebViewInitialData(
+                data: _htmlContent!,
+                baseUrl: WebUri("https://www.youtube-nocookie.com/"),
+              )
+            : null,
         initialSettings: InAppWebViewSettings(
           userAgent:
               "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
@@ -90,6 +142,16 @@ class _YoutubeWebviewPlayerState extends State<YoutubeWebviewPlayer> {
               "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
           useHybridComposition: true,
         ),
+        onWebViewCreated: (controller) {
+          if (!kIsWeb) {
+            controller.addJavaScriptHandler(
+              handlerName: 'Webviewtube',
+              callback: (args) {
+                AppLog.i(args.toString(), tag: "Webviewtube");
+              },
+            );
+          }
+        },
       ),
     );
   }
