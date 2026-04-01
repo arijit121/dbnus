@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:dbnus/core/services/context_service.dart';
 
 class ScreenUtils {
+  static double devicePixelRatio() =>
+      MediaQuery.of(CurrentContext().context).devicePixelRatio;
+
   static double paddingLeft() =>
       MediaQuery.of(CurrentContext().context).padding.left;
 
