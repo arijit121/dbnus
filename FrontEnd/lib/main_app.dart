@@ -149,9 +149,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         kOrientationLockBreakpoint) {
       SystemChrome.setPreferredOrientations(<DeviceOrientation>[
         DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
       ]);
     } else {
-      SystemChrome.setPreferredOrientations(<DeviceOrientation>[]);
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
     }
   }
 

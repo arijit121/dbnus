@@ -25,6 +25,8 @@ import 'package:dbnus/features/game/presentation/pages/space_shooter_game.dart'
     deferred as space_shooter;
 import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
     deferred as brick_breaker;
+import 'package:dbnus/features/game/presentation/pages/gravity_orbit_game.dart'
+    deferred as gravity_orbit;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
@@ -310,6 +312,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await open_street_map.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.gravityOrbit,
+        path: RouteName.gravityOrbit,
+        builder: (BuildContext context, GoRouterState state) {
+          return gravity_orbit.GravityOrbitPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await gravity_orbit.loadLibrary();
           return null;
         },
       ),

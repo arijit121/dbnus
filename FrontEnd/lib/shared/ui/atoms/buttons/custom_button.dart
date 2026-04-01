@@ -115,7 +115,7 @@ class CustomIconButton extends StatelessWidget {
 /// Applies a gradient background to the button (optional, overrides backGroundColor).
 /// [padding]
 /// Specifies the internal padding of the button's content (defaults to EdgeInsets.symmetric(horizontal: 16)).
-class CustomGOEButton extends StatelessWidget {
+class CustomGOEButton extends StatefulWidget {
   const CustomGOEButton(
       {super.key,
       required this.onPressed,
@@ -144,24 +144,53 @@ class CustomGOEButton extends StatelessWidget {
   final List<BoxShadow>? boxShadow;
 
   @override
+  State<CustomGOEButton> createState() => _CustomGOEButtonState();
+}
+
+class _CustomGOEButtonState extends State<CustomGOEButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Determine the effective background color and gradient when disabled
-    final Color? effectiveBackgroundColor = onPressed == null &&
-            (backGroundColor != null || gradient != null)
-        ? disableBackGroundColor ??
-            (backGroundColor != null
-                ? backGroundColor?.withAlpha(60)
-                : gradient != null
-                    ? ColorExe.mixColors(gradient?.colors ?? [])?.withAlpha(60)
+    final Color? effectiveBackgroundColor = widget.onPressed == null &&
+            (widget.backGroundColor != null || widget.gradient != null)
+        ? widget.disableBackGroundColor ??
+            (widget.backGroundColor != null
+                ? widget.backGroundColor?.withAlpha(60)
+                : widget.gradient != null
+                    ? ColorExe.mixColors(widget.gradient?.colors ?? [])
+                        ?.withAlpha(60)
                     : Colors.grey.shade400) // Disabled background color
-        : backGroundColor;
-    final Gradient? effectiveGradient = onPressed == null ? null : gradient;
+        : widget.backGroundColor;
+    final Gradient? effectiveGradient =
+        widget.onPressed == null ? null : widget.gradient;
 
-    final Color? effectiveBorderColor = onPressed == null && borderColor != null
-        ? disableBorderColor ?? Colors.grey.shade400 // Disabled border color
-        : borderColor;
+    final Color? effectiveBorderColor =
+        widget.onPressed == null && widget.borderColor != null
+            ? widget.disableBorderColor ?? Colors.grey.shade400
+            : widget.borderColor;
 
-    // Determine splash, highlight, and hover colors based on background or gradient
     Color? sHlHColor = effectiveGradient != null
         ? ColorExe.mixColors(effectiveGradient.colors)
             ?.withAlpha((0.3 * 255).toInt())
@@ -176,48 +205,70 @@ class CustomGOEButton extends StatelessWidget {
         sHlHColor != null ? ColorExe.darken(sHlHColor, 0.025) : null;
 
     final double? effectiveHeight =
-        borderColor != null && (height ?? 0) > 2 ? (height ?? 0) - 2 : height;
+        widget.borderColor != null && (widget.height ?? 0) > 2
+            ? (widget.height ?? 0) - 2
+            : widget.height;
 
     final double? effectiveWidth =
-        borderColor != null && (width ?? 0) > 2 ? (width ?? 0) - 2 : width;
+        widget.borderColor != null && (widget.width ?? 0) > 2
+            ? (widget.width ?? 0) - 2
+            : widget.width;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: borderRadius ?? BorderRadius.circular(16),
-        boxShadow: boxShadow,
-        border: effectiveBorderColor != null
-            ? Border.all(
-                color: effectiveBorderColor,
-              )
-            : null,
-        gradient: effectiveGradient,
-        color: effectiveGradient == null ? effectiveBackgroundColor : null,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: Ink(
+    return MouseRegion(
+      onEnter: (_) => _controller.forward(),
+      onExit: (_) => _controller.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: Container(
           decoration: BoxDecoration(
+            borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
+            boxShadow: widget.boxShadow ??
+                [
+                  if (widget.onPressed != null)
+                    BoxShadow(
+                      color: (widget.gradient?.colors.first ??
+                              widget.backGroundColor ??
+                              Colors.black)
+                          .withValues(alpha: 0.2),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    )
+                ],
+            border: effectiveBorderColor != null
+                ? Border.all(
+                    color: effectiveBorderColor,
+                  )
+                : null,
             gradient: effectiveGradient,
-            borderRadius: borderRadius ?? BorderRadius.circular(16),
             color: effectiveGradient == null ? effectiveBackgroundColor : null,
           ),
-          child: InkWell(
-            customBorder: RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(16),
-            ),
-            onTap: onPressed,
-            // Disable onTap if disabled
-            splashColor: splashColor,
-            highlightColor: highlightColor,
-            hoverColor: hoverColor,
-            child: Container(
-              height: effectiveHeight,
-              width: effectiveWidth,
-              alignment: Alignment.center,
-              padding: padding,
+          child: Material(
+            color: Colors.transparent,
+            child: Ink(
               decoration: BoxDecoration(
-                  borderRadius: borderRadius ?? BorderRadius.circular(16)),
-              child: child,
+                gradient: effectiveGradient,
+                borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
+                color: effectiveGradient == null ? effectiveBackgroundColor : null,
+              ),
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
+                ),
+                onTap: widget.onPressed,
+                splashColor: splashColor,
+                highlightColor: highlightColor,
+                hoverColor: hoverColor,
+                child: Container(
+                  height: effectiveHeight,
+                  width: effectiveWidth,
+                  alignment: Alignment.center,
+                  padding: widget.padding,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(16)),
+                  child: widget.child,
+                ),
+              ),
             ),
           ),
         ),

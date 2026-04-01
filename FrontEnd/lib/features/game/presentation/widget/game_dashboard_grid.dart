@@ -70,6 +70,13 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFF2980B9), const Color(0xFF1A5276)],
         routeName: RouteName.brickBreaker,
       ),
+      GameEntry(
+        title: 'Gravity Orbit',
+        subtitle: 'Switch orbits to survive',
+        icon: Icons.blur_circular_rounded,
+        gradient: [const Color(0xFF6C63FF), const Color(0xFFFF0080)],
+        routeName: RouteName.gravityOrbit,
+      ),
     ];
 
     return LayoutBuilder(builder: (context, constraints) {

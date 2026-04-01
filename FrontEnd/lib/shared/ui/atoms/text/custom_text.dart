@@ -17,7 +17,8 @@ TextStyle customizeTextStyle(
     double? height,
     Color? backgroundColor,
     String? font,
-    FontStyle? fontStyle}) {
+    FontStyle? fontStyle,
+    double? letterSpacing}) {
   return ValueHandler.isTextNotEmptyOrNull(font)
       ? GoogleFonts.getFont(
           font!,
@@ -30,6 +31,7 @@ TextStyle customizeTextStyle(
           height: height,
           backgroundColor: backgroundColor,
           fontStyle: fontStyle,
+          letterSpacing: letterSpacing,
         )
       : GoogleFonts.inter(
           decoration: decoration,
@@ -41,6 +43,7 @@ TextStyle customizeTextStyle(
           height: height,
           backgroundColor: backgroundColor,
           fontStyle: fontStyle,
+          letterSpacing: letterSpacing,
         );
 }
 
@@ -58,6 +61,7 @@ class CustomText extends StatelessWidget {
   final String? font;
   final TextOverflow? overflow;
   final FontStyle? fontStyle;
+  final double? letterSpacing;
 
   const CustomText(
     this.text, {
@@ -74,6 +78,7 @@ class CustomText extends StatelessWidget {
     this.font,
     this.overflow,
     this.fontStyle,
+    this.letterSpacing,
   });
 
   @override
@@ -92,7 +97,8 @@ class CustomText extends StatelessWidget {
           height: height ?? (kIsWeb ? 1.2 : 0.0),
           decoration: decoration,
           backgroundColor: backGroundColor,
-          decorationColor: decorationColor ?? color),
+          decorationColor: decorationColor ?? color,
+          letterSpacing: letterSpacing),
     );
   }
 }
