@@ -65,3 +65,6 @@ windows/flutter/generated_plugins.cmake
 
 # tmp directory
 .tmp/
+
+# Super Power Agent
+.agent/
