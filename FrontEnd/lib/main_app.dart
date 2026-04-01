@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:app_links/app_links.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -94,11 +95,7 @@ Future<void> main() async {
   await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) async {
-    runApp(const MyApp());
-  });
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -108,7 +105,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  ui.FlutterView? _view;
+  static const double kOrientationLockBreakpoint = 600;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -120,14 +120,39 @@ class _MyAppState extends State<MyApp> {
         RedirectEngine.redirectRoutes(redirectUrl: uri);
       });
     });
-
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    WidgetsBinding.instance.removeObserver(this);
+    _view = null;
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _view = View.maybeOf(context);
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final ui.Display? display = _view?.display;
+    if (display == null) {
+      return;
+    }
+    if (display.size.width / display.devicePixelRatio <
+        kOrientationLockBreakpoint) {
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+        DeviceOrientation.portraitUp,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[]);
+    }
   }
 
   bool _isExitAppDialogOpen = false;
