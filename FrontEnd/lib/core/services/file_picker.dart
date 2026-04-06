@@ -53,8 +53,8 @@ class CustomFilePicker {
         if (!allowedExtensionsFinal.contains(platformFile.extension)) {
           PopUpItems.toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
-        } else if (platformFile.extension == 'jpg' ||
-            platformFile.extension == 'jpeg') {
+        } else if (['jpeg', 'jpg', 'heic', 'png']
+            .contains(platformFile.extension)) {
           if (sizeInMb > _maxFileSize) {
             CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
               name: platformFile.name,
@@ -69,11 +69,28 @@ class CustomFilePicker {
               );
             }
           } else {
-            return CustomFile(
-              name: platformFile.name,
-              path: kIsWeb ? null : platformFile.path,
-              bytes: kIsWeb ? platformFile.bytes : null,
-            );
+            if (platformFile.extension == 'jpg' ||
+                platformFile.extension == 'jpeg') {
+              return CustomFile(
+                name: platformFile.name,
+                path: kIsWeb ? null : platformFile.path,
+                bytes: kIsWeb ? platformFile.bytes : null,
+              );
+            } else {
+              CustomFile? compressFile =
+                  await _compressAndResizeImage(CustomFile(
+                name: platformFile.name,
+                path: kIsWeb ? null : platformFile.path,
+                bytes: platformFile.bytes,
+              ));
+              if (compressFile != null) {
+                return CustomFile(
+                  name: compressFile.name,
+                  path: kIsWeb ? null : compressFile.path,
+                  bytes: kIsWeb ? compressFile.bytes : null,
+                );
+              }
+            }
           }
         } else if (sizeInMb > _maxFileSize) {
           PopUpItems.toastMessage(
@@ -160,11 +177,26 @@ class CustomFilePicker {
             );
           }
         } else {
-          return CustomFile(
-            name: image.name,
-            path: kIsWeb ? null : image.path,
-            bytes: kIsWeb ? await image.readAsBytes() : null,
-          );
+          if (image.name.endsWith('jpg') || image.name.endsWith('jpeg')) {
+            return CustomFile(
+              name: image.name,
+              path: kIsWeb ? null : image.path,
+              bytes: kIsWeb ? await image.readAsBytes() : null,
+            );
+          } else {
+            CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              name: image.name,
+              path: kIsWeb ? null : image.path,
+              bytes: kIsWeb ? await image.readAsBytes() : null,
+            ));
+            if (compressFile != null) {
+              return CustomFile(
+                name: compressFile.name,
+                path: kIsWeb ? null : compressFile.path,
+                bytes: kIsWeb ? compressFile.bytes : null,
+              );
+            }
+          }
         }
       }
     } catch (e, stacktrace) {
@@ -202,11 +234,26 @@ class CustomFilePicker {
             );
           }
         } else {
-          return CustomFile(
-            name: image.name,
-            path: kIsWeb ? null : image.path,
-            bytes: kIsWeb ? await image.readAsBytes() : null,
-          );
+          if (image.name.endsWith('jpg') || image.name.endsWith('jpeg')) {
+            return CustomFile(
+              name: image.name,
+              path: kIsWeb ? null : image.path,
+              bytes: kIsWeb ? await image.readAsBytes() : null,
+            );
+          } else {
+            CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
+              name: image.name,
+              path: kIsWeb ? null : image.path,
+              bytes: kIsWeb ? await image.readAsBytes() : null,
+            ));
+            if (compressFile != null) {
+              return CustomFile(
+                name: compressFile.name,
+                path: kIsWeb ? null : compressFile.path,
+                bytes: kIsWeb ? compressFile.bytes : null,
+              );
+            }
+          }
         }
       }
     } catch (e, stacktrace) {
