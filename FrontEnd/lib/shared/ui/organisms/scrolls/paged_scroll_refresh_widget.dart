@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../constants/color_const.dart';
 
 class PagedScrollRefreshWidget extends StatefulWidget {
-  final Function? paginate, onRefresh, onScroll;
+  final Function? paginate, onRefresh;
   final Widget child;
+  final Function(ScrollNotification)? onScroll;
 
   const PagedScrollRefreshWidget({
     super.key,
@@ -26,7 +27,9 @@ class _PagedScrollRefreshWidgetState extends State<PagedScrollRefreshWidget> {
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollInfo) {
-        widget.onScroll?.call();
+        if (widget.onScroll != null) {
+          widget.onScroll!(scrollInfo);
+        }
         final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
         final currentScrollPosition = scrollInfo.metrics.pixels;
 
