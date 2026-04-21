@@ -92,7 +92,7 @@ class CustomRouterWeb {
     int index = 0;
     try {
       String? routeHistory =
-          await JsProvider().getSessionStorageItem("routeHistory");
+          await JsProvider.getSessionStorageItem("routeHistory");
       if (ValueHandler.isTextNotEmptyOrNull(routeHistory)) {
         String value = json.decode(routeHistory!);
         value.replaceAll("[", "");

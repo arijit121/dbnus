@@ -114,7 +114,7 @@ class JsProvider {
     }
   }
 
-  Future<String?> getWebOtp() async {
+  static Future<String?> getWebOtp() async {
     String jsPath = "assets/js/webotp.js";
     try {
       return await jsHelper.loadJs<String>(
@@ -135,7 +135,7 @@ class JsProvider {
     }
   }
 
-  Future<String?> getSessionStorageItem(String key) async {
+  static Future<String?> getSessionStorageItem(String key) async {
     try {
       String jsPath = "assets/js/storage-utils.js";
       final result = await jsHelper.loadJs<String>(
@@ -151,7 +151,7 @@ class JsProvider {
     return null;
   }
 
-  Future<bool?> clearSessionStorageKey(String key) async {
+  static Future<bool?> clearSessionStorageKey(String key) async {
     try {
       String jsPath = "assets/js/storage-utils.js";
       final result = await jsHelper.loadJs<bool>(

@@ -84,7 +84,7 @@ class CustomRoute {
           pathParameters: pathParameters,
           extra: extra);
     } else {
-      await JsProvider().clearSessionStorageKey("routeHistory");
+      await JsProvider.clearSessionStorageKey("routeHistory");
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.goNamed(name,
           queryParameters: queryParameters,
@@ -100,7 +100,7 @@ class CustomRoute {
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.go(location, extra: extra);
     } else {
-      await JsProvider().clearSessionStorageKey("routeHistory");
+      await JsProvider.clearSessionStorageKey("routeHistory");
       RouterManager routerManager = RouterManager.getInstance;
       routerManager.router.go(location, extra: extra);
     }
