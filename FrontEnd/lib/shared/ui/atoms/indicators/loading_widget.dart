@@ -44,7 +44,25 @@ class LoadingWidget extends StatelessWidget {
   }
 }
 
-/// shows loading dialog and return the context of the dialog 
+/// Displays a global, non-dismissible loading dialog.
+///
+/// This dialog prevents user interactions while it is visible. It returns
+/// a [Future] that resolves to the [BuildContext] of the displayed dialog.
+/// You can pass this context to [hideLoading] to explicitly close the dialog.
+///
+/// **Example Usage:**
+/// ```dart
+/// // Show the loading indicator before starting an async task
+/// final dialogContext = await showLoading();
+/// 
+/// try {
+///   // Perform a long-running operation...
+///   await fetchSomeData();
+/// } finally {
+///   // Safely hide the loading dialog when finished
+///   hideLoading(loadingDialogContext: dialogContext);
+/// }
+/// ```
 Future<BuildContext> showLoading() {
   Completer<BuildContext> dialogCompleter = Completer<BuildContext>();
 
@@ -76,7 +94,24 @@ Future<BuildContext> showLoading() {
   return dialogCompleter.future;
 }
 
-/// Hides loading dialog  
+/// Hides the currently visible global loading dialog.
+///
+/// If [loadingDialogContext] is provided, it uses that specific context to
+/// close the dialog. Otherwise, it falls back to the current global context
+/// and pops the route specifically matching the `global_loading_dialog` name.
+///
+/// **Example Usage:**
+/// ```dart
+/// // 1. Hiding without a specific context (uses global context):
+/// showLoading();
+/// await performTask();
+/// hideLoading(); 
+///
+/// // 2. Hiding with a specific context:
+/// final dialogContext = await showLoading();
+/// await performTask();
+/// hideLoading(loadingDialogContext: dialogContext);
+/// ```
 void hideLoading({BuildContext? loadingDialogContext}) {
   final context = loadingDialogContext ?? CurrentContext().context;
   if (context.mounted && Navigator.canPop(context)) {
