@@ -1,3 +1,4 @@
+import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -111,6 +112,26 @@ class JsNavigationSection extends StatelessWidget {
             onTap: () {
               PopUpItems.toastMessage(
                   "Show tost msg..", ColorConst.primaryDark);
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: FeatherIcons.loader,
+            title: "Show Loading",
+            subtitle: "Display a loading widget",
+            color: ColorConst.primaryDark,
+            onTap: () async {
+              /*PopUpItems.customMsgDialog(
+                  title: "Debug",
+                  content: "This is a debug message.",
+                  type: DialogType.warning);*/
+              final loadingDialogContext = await showLoading();
+              await Future.delayed(const Duration(seconds: 2));
+              hideLoading(loadingDialogContext: loadingDialogContext);
+              // await Future.delayed(const Duration(seconds: 2));
+              // hideLoading(loadingDialogContext: loadingDialogContext);
+              // await Future.delayed(const Duration(seconds: 2));
+              // hideLoading();
             },
           ),
         ],

@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/context_service.dart';
+
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
@@ -41,27 +44,50 @@ class LoadingWidget extends StatelessWidget {
   }
 }
 
-void showLoading() {
+/// shows loading dialog and return the context of the dialog 
+Future<BuildContext> showLoading() {
+  Completer<BuildContext> dialogCompleter = Completer<BuildContext>();
+
   showDialog(
     context: CurrentContext().context,
-    builder: (context) => Center(
-      child: SpinKitThreeBounce(
-        itemBuilder: (_, int index) {
-          return DecoratedBox(
-            decoration: BoxDecoration(
-                color: index.isEven
-                    ? ColorConst.baseHexColor
-                    : ColorConst.baseHexColor.withOpacity(0.2),
-                borderRadius: const BorderRadius.all(Radius.circular(50))),
-          );
-        },
-        size: 30.0,
-      ),
-    ),
     barrierDismissible: false,
+    routeSettings: RouteSettings(name: "global_loading_dialog"),
+    builder: (context) {
+      if (!dialogCompleter.isCompleted) {
+        dialogCompleter.complete(context);
+      }
+
+      return Center(
+        child: SpinKitThreeBounce(
+          itemBuilder: (_, int index) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                  color: index.isEven
+                      ? ColorConst.baseHexColor
+                      : ColorConst.baseHexColor.withValues(alpha: 0.2),
+                  borderRadius: const BorderRadius.all(Radius.circular(50))),
+            );
+          },
+          size: 30.0,
+        ),
+      );
+    },
   );
+  return dialogCompleter.future;
 }
 
-void hideLoading() {
-  Navigator.pop(CurrentContext().context);
+/// Hides loading dialog  
+void hideLoading({BuildContext? loadingDialogContext}) {
+  final context = loadingDialogContext ?? CurrentContext().context;
+  if (context.mounted && Navigator.canPop(context)) {
+    Navigator.popUntil(
+      context,
+      (route) {
+        if (route.settings.name == "global_loading_dialog") {
+          Navigator.pop(context);
+        }
+        return true;
+      },
+    );
+  }
 }
