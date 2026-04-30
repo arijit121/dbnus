@@ -116,6 +116,42 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
+            icon: FeatherIcons.mail,
+            title: "Show Toast on BottomSheet",
+            subtitle: "Display a toast message on BottomSheet",
+            color: ColorConst.primaryDark,
+            onTap: () {
+              final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+                  GlobalKey<ScaffoldMessengerState>();
+
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) {
+                  return ScaffoldMessenger(
+                    key: scaffoldKey,
+                    child: Scaffold(
+                      body: Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            PopUpItems.toastMessage(
+                              "Error occurred",
+                              Colors.red,
+                              scaffoldState: scaffoldKey.currentState,
+                            );
+                          },
+                          child: Text("Show Toast"),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
             icon: FeatherIcons.loader,
             title: "Show Loading",
             subtitle: "Display a loading widget",

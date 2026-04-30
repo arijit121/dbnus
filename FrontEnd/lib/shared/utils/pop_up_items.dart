@@ -16,6 +16,54 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/inputs/custom_text_formfield.dart';
 
 class PopUpItems {
+  /// Displays a toast message (SnackBar) on the screen.
+  ///
+  /// [message] is the primary text to display.
+  /// [color] is the background color of the toast.
+  /// [durationSeconds] determines how long the toast stays visible (default is 2 seconds).
+  /// [padding] optional padding for the toast content.
+  ///
+  /// [scaffoldState] optionally provides a specific [ScaffoldMessengerState]
+  /// to show the SnackBar. This is useful when you want to display the toast
+  /// in a different context (e.g., inside a BottomSheet)
+  /// where the default [ScaffoldMessenger.of] might not work
+  /// or might refer to an unintended Scaffold.
+  ///
+  /// If not provided, the method falls back to using
+  /// `ScaffoldMessenger.of(CurrentContext().context)`.
+  ///
+  /// ---
+  ///
+  /// ### Example: Using inside BottomSheet
+  /// ```dart
+  /// final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+  ///     GlobalKey<ScaffoldMessengerState>();
+  ///
+  /// showModalBottomSheet(
+  ///   context: context,
+  ///   isScrollControlled: true,
+  ///   backgroundColor: Colors.transparent,
+  ///   builder: (_) {
+  ///     return ScaffoldMessenger(
+  ///       key: scaffoldKey,
+  ///       child: Scaffold(
+  ///         body: Center(
+  ///           child: ElevatedButton(
+  ///             onPressed: () {
+  ///               PopUpItems.toastMessage(
+  ///                 "Error occurred",
+  ///                 Colors.red,
+  ///                 scaffoldState: scaffoldKey.currentState,
+  ///               );
+  ///             },
+  ///             child: Text("Show Toast"),
+  ///           ),
+  ///         ),
+  ///       ),
+  ///     );
+  ///   },
+  /// );
+  /// ```
   static void toastMessage(String message, Color color,
       {int? durationSeconds,
       ScaffoldMessengerState? scaffoldState,
