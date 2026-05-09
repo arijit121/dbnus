@@ -19,4 +19,5 @@ class RouteName {
   static const String brickBreaker = "/brick-breaker";
   static const String openStreetMap = "/open-street-map";
   static const String gravityOrbit = "/gravity-orbit";
+  static const String ludoGame = "/ludo-game";
 }
