@@ -41,7 +41,7 @@ class CustomFilePicker {
 
       List<String> allowedExtensionsFinal =
           allowedExtensions ?? ['jpeg', 'jpg', 'pdf'];
-      final result = await file_picker.FilePicker.platform.pickFiles(
+      final result = await file_picker.FilePicker.pickFiles(
         type: file_picker.FileType.custom,
         allowedExtensions: allowedExtensionsFinal,
       );
@@ -125,7 +125,7 @@ class CustomFilePicker {
         }
       }
       await file_picker.loadLibrary();
-      final result = await file_picker.FilePicker.platform.pickFiles(
+      final result = await file_picker.FilePicker.pickFiles(
           type: file_picker.FileType.custom,
           allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
           allowMultiple: true);
