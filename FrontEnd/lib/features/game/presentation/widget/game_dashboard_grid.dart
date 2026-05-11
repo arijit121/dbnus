@@ -77,6 +77,13 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFF6C63FF), const Color(0xFFFF0080)],
         routeName: RouteName.gravityOrbit,
       ),
+      GameEntry(
+        title: 'Ludo',
+        subtitle: 'Classic board game',
+        icon: Icons.casino_rounded,
+        gradient: [const Color(0xFFE74C3C), const Color(0xFFC0392B)],
+        routeName: RouteName.ludoGame,
+      ),
     ];
 
     return LayoutBuilder(builder: (context, constraints) {

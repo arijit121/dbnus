@@ -27,6 +27,8 @@ import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
     deferred as brick_breaker;
 import 'package:dbnus/features/game/presentation/pages/gravity_orbit_game.dart'
     deferred as gravity_orbit;
+import 'package:dbnus/features/game/presentation/pages/ludo_game.dart'
+    deferred as ludo_game;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
@@ -323,6 +325,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await gravity_orbit.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.ludoGame,
+        path: RouteName.ludoGame,
+        builder: (BuildContext context, GoRouterState state) {
+          return ludo_game.LudoGamePage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await ludo_game.loadLibrary();
           return null;
         },
       ),
