@@ -80,19 +80,23 @@ class _MyWebAppState extends State<MyWebApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await firebase_service.loadLibrary();
-      await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
-      await firebase_service.FirebaseService.generateToken();
+      await Future.wait([
+        firebase_service.FirebaseService.setAnalyticsCollectionEnabled(),
+        firebase_service.FirebaseService.generateToken()
+      ]);
       await js_provider.loadLibrary();
-      await js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js");
       foundation.loadLibrary().then((_) async {
         await js_provider.JsProvider.loadJs(
             jsPath:
                 "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js");
       });
-      await js_provider.JsProvider.loadJs(
-          jsPath:
-              "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
-      if (foundation.kReleaseMode) await js_provider.JsProvider.installPWA();
+      await Future.wait([
+        js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js"),
+        js_provider.JsProvider.loadJs(
+            jsPath:
+                "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"),
+        if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
+      ]);
     });
     super.initState();
   }
