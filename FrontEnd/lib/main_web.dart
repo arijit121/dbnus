@@ -86,16 +86,18 @@ class _MyWebAppState extends State<MyWebApp> {
       ]);
       await js_provider.loadLibrary();
       foundation.loadLibrary().then((_) async {
-        await js_provider.JsProvider.loadJs(
-            jsPath:
-                "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js");
+        await Future.wait([
+          js_provider.JsProvider.loadJs(
+              jsPath:
+                  "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js"),
+          if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
+        ]);
       });
       await Future.wait([
         js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js"),
         js_provider.JsProvider.loadJs(
             jsPath:
                 "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"),
-        if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
       ]);
     });
     super.initState();
