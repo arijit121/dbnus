@@ -25,7 +25,7 @@ import 'package:dbnus/core/localization/utils/localization_utils.dart';
 import 'package:dbnus/core/services/app_updater.dart';
 import 'package:dbnus/core/services/crash/utils/crash_utils.dart';
 import 'package:dbnus/core/services/download_handler.dart';
-import 'package:dbnus/core/services/firebase_service.dart';
+import 'package:dbnus/core/services/firebase_service.dart' as firebase_service;
 import 'package:dbnus/core/services/notification_handler.dart';
 import 'package:dbnus/core/services/redirect_engine.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
@@ -35,7 +35,7 @@ import 'package:dbnus/shared/utils/text_utils.dart';
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseService.showNotification(message);
+  firebase_service.FirebaseService.showNotification(message);
   AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
@@ -47,7 +47,7 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    FirebaseService.showNotification(message);
+    firebase_service.FirebaseService.showNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
@@ -89,8 +89,8 @@ Future<void> main() async {
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  await FirebaseService.getInitialMessage();
-  await FirebaseService.setAnalyticsCollectionEnabled();
+  await firebase_service.FirebaseService.getInitialMessage();
+  await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
   await NotificationHandler.requestPermissions();
   await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
       BackButtonInterceptor.add(myInterceptor);
-      await FirebaseService.generateToken();
+      await firebase_service.FirebaseService.generateToken();
       await AppUpdater.startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
         RedirectEngine.redirectRoutes(redirectUrl: uri);
