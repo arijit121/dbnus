@@ -57,6 +57,43 @@ class FormsSection extends StatelessWidget {
               color: Colors.amber,
             ),
           ),
+          16.ph,
+          CustomAutocompleteWidget<String>(
+            debouncer: Duration(seconds: 1, milliseconds: 500),
+            displayStringForOption: (o) => o,
+            fieldViewBuilder: (ctx, ctrl, focusNode, onSubmit) => TextField(
+              controller: ctrl,
+              focusNode: focusNode,
+              decoration: const InputDecoration(labelText: 'Search...'),
+              onEditingComplete: onSubmit,
+            ),
+            optionsBuilder: (String query) async {
+              // Replace with your real API / local filter
+
+              await Future.delayed(const Duration(milliseconds: 200));
+              AppLog.i(query, tag: "Check Debouncer");
+              return ['apple', 'banana', 'cherry']
+                  .where((s) => s.contains(query.toLowerCase()))
+                  .toList();
+            },
+            optionsViewBuilder: (ctx, onSelected, options) => Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                elevation: 4,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    itemBuilder: (_, i) => ListTile(
+                      title: Text(options.elementAt(i)),
+                      onTap: () => onSelected(options.elementAt(i)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

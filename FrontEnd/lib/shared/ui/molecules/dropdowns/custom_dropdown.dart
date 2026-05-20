@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:flutter/material.dart';
 
@@ -733,6 +735,116 @@ class CustomMenuAnchor<T> extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Debouncer {
+  final Duration delay;
+
+  Timer? _timer;
+
+  Debouncer({this.delay = const Duration(milliseconds: 300)});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+
+    _timer = Timer(delay, action);
+  }
+
+  void dispose() => _timer?.cancel();
+}
+
+class CustomAutocompleteWidget<T extends Object> extends StatefulWidget {
+  final FocusNode? focusNode;
+  final Function(String) optionsBuilder;
+  final AutocompleteFieldViewBuilder? fieldViewBuilder;
+  final AutocompleteOptionsViewBuilder<T> optionsViewBuilder;
+  final AutocompleteOnSelected<T>? onSelected;
+  final AutocompleteOptionToString<T> displayStringForOption;
+  final TextEditingController? textEditingController;
+  final TextEditingValue? initialValue;
+  final OptionsViewOpenDirection optionsViewOpenDirection;
+  final Duration? debouncer;
+
+  static String defaultStringForOption(Object? option) {
+    return option.toString();
+  }
+
+  const CustomAutocompleteWidget({
+    super.key,
+    this.focusNode,
+    required this.optionsBuilder,
+    this.fieldViewBuilder,
+    required this.optionsViewBuilder,
+    this.onSelected,
+    this.displayStringForOption = defaultStringForOption,
+    this.textEditingController,
+    this.initialValue,
+    this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
+    this.debouncer,
+  });
+
+  @override
+  State<CustomAutocompleteWidget<T>> createState() =>
+      _CustomAutocompleteWidgetState<T>();
+}
+
+class _CustomAutocompleteWidgetState<T extends Object>
+    extends State<CustomAutocompleteWidget<T>> {
+  Debouncer? _debouncer;
+
+  Completer<List<T>>? _pending;
+
+  @override
+  void initState() {
+    if (widget.debouncer != null) {
+      _debouncer = Debouncer(delay: widget.debouncer!);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _debouncer?.dispose();
+
+    super.dispose();
+  }
+
+  Future<List<T>> _optionsBuilder(TextEditingValue value) {
+    if (_debouncer != null) {
+      final completer = Completer<List<T>>();
+
+      _pending = completer; // track latest request
+
+      _debouncer?.run(() async {
+        // Only resolve if this is still the most recent call
+
+        if (_pending == completer) {
+          final results = await widget.optionsBuilder(value.text);
+
+          if (!completer.isCompleted) completer.complete(results);
+        }
+      });
+
+      return completer.future;
+    } else {
+      return widget.optionsBuilder(value.text);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RawAutocomplete<T>(
+      textEditingController: widget.textEditingController,
+      focusNode: widget.focusNode,
+      displayStringForOption: widget.displayStringForOption,
+      optionsBuilder: _optionsBuilder,
+      onSelected: widget.onSelected,
+      fieldViewBuilder: widget.fieldViewBuilder,
+      optionsViewBuilder: widget.optionsViewBuilder,
+      initialValue: widget.initialValue,
+      optionsViewOpenDirection: widget.optionsViewOpenDirection,
     );
   }
 }
