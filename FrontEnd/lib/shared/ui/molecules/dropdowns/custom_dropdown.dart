@@ -344,6 +344,9 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
   final Color? selectedBorderColor;
   final String? title;
   final Color? titleColor;
+  final bool? isDense;
+  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsets? expandedInsets;
 
   const CustomDropdownMenuFormField(
       {super.key,
@@ -365,7 +368,10 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
       this.borderColor,
       this.selectedBorderColor,
       this.title,
-      this.titleColor});
+      this.titleColor,
+      this.isDense,
+      this.contentPadding,
+      this.expandedInsets});
 
   @override
   Widget build(BuildContext context) {
@@ -421,6 +427,8 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ))),
             inputDecorationTheme: InputDecorationTheme(
+              isDense: isDense,
+              contentPadding: contentPadding,
               fillColor: fillColor,
               filled: filled ?? true,
               constraints: height != null
@@ -482,6 +490,7 @@ class CustomDropdownMenuFormField<T> extends StatelessWidget {
                 ),
               ),
             ),
+            expandedInsets: expandedInsets,
           ),
         ],
       );
