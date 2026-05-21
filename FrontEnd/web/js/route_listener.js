@@ -45,6 +45,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     
                     injectStructuredDataFromHTML(html);
                     injectMetaTagsFromHTML(html);
+                } else if (containerId === "web-seo-content-loader") {
+                    const doc = new DOMParser().parseFromString(html, "text/html");
+
+                    // Use <body>'s content for display
+                    container.innerHTML = doc.body.innerHTML;
+                    container.style.display = "block";
+
+                    injectStructuredDataFromHTML(html);
+                    injectMetaTagsFromHTML(html);
                 } else {
                     container.innerHTML = html;
                     container.style.display = "block";
