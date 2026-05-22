@@ -107,6 +107,8 @@ dependencies:
   printing: ^5.14.3
   icons_plus: ^5.0.0
   feather_icons: ^1.2.0
+  material_ui: ^0.0.1
+  cupertino_ui: ^0.0.1
 
   # Payment
   # paytm_allinonesdk: ^1.2.6
