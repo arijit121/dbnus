@@ -67,13 +67,13 @@ class FormsSection extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Search...'),
               onEditingComplete: onSubmit,
             ),
-            optionsBuilder: (String query) async {
+            optionsBuilder: (query) async {
               // Replace with your real API / local filter
 
               await Future.delayed(const Duration(milliseconds: 200));
               AppLog.i(query, tag: "Check Debouncer");
               return ['apple', 'banana', 'cherry']
-                  .where((s) => s.contains(query.toLowerCase()))
+                  .where((s) => s.contains(query.text.toLowerCase()))
                   .toList();
             },
             optionsViewBuilder: (ctx, onSelected, options) => Align(

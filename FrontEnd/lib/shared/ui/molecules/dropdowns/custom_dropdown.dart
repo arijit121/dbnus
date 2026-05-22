@@ -766,7 +766,7 @@ class Debouncer {
 
 class CustomAutocompleteWidget<T extends Object> extends StatefulWidget {
   final FocusNode? focusNode;
-  final Function(String) optionsBuilder;
+  final Function(TextEditingValue value) optionsBuilder;
   final AutocompleteFieldViewBuilder? fieldViewBuilder;
   final AutocompleteOptionsViewBuilder<T> optionsViewBuilder;
   final AutocompleteOnSelected<T>? onSelected;
@@ -820,7 +820,7 @@ class _CustomAutocompleteWidgetState<T extends Object>
     super.dispose();
   }
 
-  Future<List<T>> _optionsBuilder(TextEditingValue value) {
+  Future<List<T>> _optionsBuilder(TextEditingValue controller) {
     if (_debouncer != null) {
       final completer = Completer<List<T>>();
 
@@ -830,7 +830,7 @@ class _CustomAutocompleteWidgetState<T extends Object>
         // Only resolve if this is still the most recent call
 
         if (_pending == completer) {
-          final results = await widget.optionsBuilder(value.text);
+          final results = await widget.optionsBuilder(controller);
 
           if (!completer.isCompleted) completer.complete(results);
         }
@@ -838,7 +838,7 @@ class _CustomAutocompleteWidgetState<T extends Object>
 
       return completer.future;
     } else {
-      return widget.optionsBuilder(value.text);
+      return widget.optionsBuilder(controller);
     }
   }
 
