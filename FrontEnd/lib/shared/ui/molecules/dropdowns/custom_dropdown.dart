@@ -821,7 +821,7 @@ class _CustomAutocompleteWidgetState<T extends Object>
   }
 
   Future<List<T>> _optionsBuilder(TextEditingValue controller) {
-    if (_debouncer != null) {
+    if (_debouncer != null && controller.text.trim().isNotEmpty) {
       final completer = Completer<List<T>>();
 
       _pending = completer; // track latest request
