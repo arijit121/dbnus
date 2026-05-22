@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(html => {
 
+                const isFlutterLoaded = window.flutterLoaded === true;
+
                 if (containerId === "web-seo-content") {
                     const doc = new DOMParser().parseFromString(html, "text/html");
                     
@@ -48,8 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else if (containerId === "web-seo-content-loader") {
                     const doc = new DOMParser().parseFromString(html, "text/html");
 
-                    // Use <body>'s content for display
-                    container.innerHTML = doc.body.innerHTML;
+                    container.innerHTML = isFlutterLoaded ? doc.body.innerHTML : html;
                     container.style.display = "block";
 
                     injectStructuredDataFromHTML(html);
@@ -157,6 +158,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (seoContent) {
             seoContent.style.display = "none";
             seoContent.innerHTML = ""; // Clear previous content
+        }
+
+        const seoContentLoader = document.getElementById("web-seo-content-loader");
+        if (seoContentLoader) {
+            seoContentLoader.style.display = "none";
+            seoContentLoader.innerHTML = ""; // Clear previous content
         }
 
         if (path === "/" || path === "/index.html") {
