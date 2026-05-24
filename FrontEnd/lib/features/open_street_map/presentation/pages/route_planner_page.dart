@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -310,8 +311,8 @@ class _RoutePlannerPageState extends State<RoutePlannerPage> {
                           ],
                         ),
                         child: const Center(
-                          child: Icon(FeatherIcons.circle,
-                              color: Color(0xFF34A853), size: 14),
+                          child: CustomSvgAssetImageView(path: AssetsConst.featherCircle,
+                              color: Color(0xFF34A853), height: 14, width: 14),
                         ),
                       ),
                     ),
@@ -340,8 +341,8 @@ class _RoutePlannerPageState extends State<RoutePlannerPage> {
                                 ),
                               ],
                             ),
-                            child: const Icon(FeatherIcons.mapPin,
-                                color: Colors.white, size: 16),
+                            child: const CustomSvgAssetImageView(path: AssetsConst.featherMapPin,
+                                color: Colors.white, height: 16, width: 16),
                           ),
                           Container(
                             width: 2,

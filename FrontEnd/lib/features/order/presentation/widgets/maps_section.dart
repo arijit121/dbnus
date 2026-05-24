@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/open_service.dart';
@@ -29,7 +29,7 @@ class MapsSection extends StatelessWidget {
       child: Column(
         children: [
           OrderToolTile(
-            icon: FeatherIcons.search,
+            icon: AssetsConst.featherSearch,
             title: "Open Kolkata in Maps",
             subtitle: "Search by address with directions",
             color: ColorConst.deepGreen,
@@ -39,7 +39,7 @@ class MapsSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.navigation,
+            icon: AssetsConst.featherNavigation,
             title: "Open Coordinates",
             subtitle: "Lat: 22.5354, Lng: 88.3474",
             color: ColorConst.lightBlue,

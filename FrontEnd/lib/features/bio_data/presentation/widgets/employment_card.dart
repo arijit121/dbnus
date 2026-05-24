@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 import 'section_title.dart';
@@ -18,7 +19,7 @@ class EmploymentCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.briefcase,
+          icon: AssetsConst.featherBriefcase,
           title: "Employment History",
           color: const Color(0xFFE67E22),
         ),
@@ -107,9 +108,11 @@ class EmploymentCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  isCurrent ? FeatherIcons.zap : FeatherIcons.clock,
-                  size: 16,
+                CustomSvgAssetImageView(
+                  path: isCurrent
+                      ? AssetsConst.featherZap
+                      : AssetsConst.featherClock,
+                  height: 16, width: 16,
                   color: Colors.white,
                 ),
                 8.pw,

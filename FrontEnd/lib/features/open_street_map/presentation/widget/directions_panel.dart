@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class DirectionsPanel extends StatelessWidget {
@@ -55,7 +56,11 @@ class DirectionsPanel extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: const Icon(FeatherIcons.arrowLeft, size: 20),
+                  icon: const CustomSvgAssetImageView(
+                    path: AssetsConst.featherArrowLeft,
+                    color: Color(0xFF5F6368),
+                    height: 20, width: 20,
+                  ),
                   color: const Color(0xFF5F6368),
                   onPressed: onClearRoute,
                 ),
@@ -235,9 +240,9 @@ class DirectionsPanel extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      FeatherIcons.crosshair,
-                      size: 16,
+                    CustomSvgAssetImageView(
+                      path: AssetsConst.featherCrosshair,
+                      height: 16, width: 16,
                       color: usingCurrentLocation
                           ? const Color(0xFF4285F4)
                           : const Color(0xFF5F6368),
@@ -263,8 +268,8 @@ class DirectionsPanel extends StatelessWidget {
                       ),
                     ] else if (usingCurrentLocation) ...[
                       const Spacer(),
-                      const Icon(FeatherIcons.check,
-                          size: 16, color: Color(0xFF4285F4)),
+                      const CustomSvgAssetImageView(path: AssetsConst.featherCheck,
+                          height: 16, width: 16, color: Color(0xFF4285F4)),
                     ],
                   ],
                 ),

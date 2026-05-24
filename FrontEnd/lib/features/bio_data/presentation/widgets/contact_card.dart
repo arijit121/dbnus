@@ -1,4 +1,5 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/core/services/open_service.dart';
@@ -18,7 +19,7 @@ class ContactCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.phone,
+          icon: AssetsConst.featherPhone,
           title: "Contact",
           color: ColorConst.deepGreen,
         ),
@@ -26,14 +27,14 @@ class ContactCard extends StatelessWidget {
           child: Column(
             children: [
               _contactTile(
-                FeatherIcons.mapPin,
+                AssetsConst.featherMapPin,
                 'Kolkata, India',
                 ColorConst.violate,
                 null,
               ),
               _divider(),
               _contactTile(
-                FeatherIcons.phone,
+                AssetsConst.featherPhone,
                 '+91 89189 51655',
                 ColorConst.deepGreen,
                 () {
@@ -42,7 +43,7 @@ class ContactCard extends StatelessWidget {
               ),
               _divider(),
               _contactTile(
-                FeatherIcons.mail,
+                AssetsConst.featherMail,
                 'ruarijitsarkar@gmail.com',
                 ColorConst.red,
                 () {
@@ -53,7 +54,7 @@ class ContactCard extends StatelessWidget {
               ),
               _divider(),
               _contactTile(
-                FeatherIcons.linkedin,
+                AssetsConst.featherLinkedin,
                 'linkedin.com/in/arijit-sarkar-...',
                 ColorConst.lightBlue,
                 () {
@@ -72,7 +73,7 @@ class ContactCard extends StatelessWidget {
   }
 
   Widget _contactTile(
-    IconData icon,
+    String icon,
     String text,
     Color color,
     VoidCallback? onTap,
@@ -87,7 +88,7 @@ class ContactCard extends StatelessWidget {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, size: 16, color: color),
+            child: CustomSvgAssetImageView(path: icon, height: 16, width: 16, color: color),
           ),
           12.pw,
           Expanded(
@@ -100,7 +101,7 @@ class ContactCard extends StatelessWidget {
             ),
           ),
           if (onTap != null)
-            Icon(FeatherIcons.chevronRight, size: 16, color: ColorConst.grey),
+            CustomSvgAssetImageView(path: AssetsConst.featherChevronRight, height: 16, width: 16, color: ColorConst.grey),
         ],
       ),
     );

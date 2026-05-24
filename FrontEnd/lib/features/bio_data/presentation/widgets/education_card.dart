@@ -1,9 +1,10 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'card_shell.dart';
 import 'section_title.dart';
@@ -17,7 +18,7 @@ class EducationCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.bookOpen,
+          icon: AssetsConst.featherBookOpen,
           title: "Education",
           color: ColorConst.violate,
         ),
@@ -28,7 +29,7 @@ class EducationCard extends StatelessWidget {
                 '2017-2021',
                 'B. Tech (E.C.E)',
                 'UEM, Jaipur',
-                FeatherIcons.award,
+                AssetsConst.featherAward,
                 ColorConst.violate,
               ),
               _divider(),
@@ -36,7 +37,7 @@ class EducationCard extends StatelessWidget {
                 '2017',
                 'Higher Secondary',
                 'Panchgram High School',
-                FeatherIcons.book,
+                AssetsConst.featherBook,
                 ColorConst.lightBlue,
               ),
               _divider(),
@@ -44,7 +45,7 @@ class EducationCard extends StatelessWidget {
                 '2015',
                 'Secondary',
                 'Panchgram High School',
-                FeatherIcons.bookOpen,
+                AssetsConst.featherBookOpen,
                 ColorConst.deepGreen,
               ),
             ],
@@ -58,7 +59,7 @@ class EducationCard extends StatelessWidget {
     String period,
     String degree,
     String school,
-    IconData icon,
+    String icon,
     Color color,
   ) {
     return Padding(
@@ -71,7 +72,7 @@ class EducationCard extends StatelessWidget {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 18, color: color),
+            child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: color),
           ),
           14.pw,
           Expanded(

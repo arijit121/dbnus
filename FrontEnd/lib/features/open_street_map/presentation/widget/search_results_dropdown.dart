@@ -1,5 +1,6 @@
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/search_place.dart';
@@ -52,8 +53,8 @@ class SearchResultsDropdown extends StatelessWidget {
                   color: const Color(0xFFF1F3F4),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(FeatherIcons.mapPin,
-                    size: 16, color: Color(0xFF5F6368)),
+                child: const CustomSvgAssetImageView(path: AssetsConst.featherMapPin,
+                    height: 16, width: 16, color: Color(0xFF5F6368)),
               ),
               title: CustomText(
                 place.title,

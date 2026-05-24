@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -27,7 +27,7 @@ class MediaSection extends StatelessWidget {
         // ── YouTube Player ──────────────────────────
         _MediaCard(
           label: "Featured Video",
-          icon: FeatherIcons.youtube,
+          icon: AssetsConst.featherYoutube,
           child: Stack(
             children: [
               const YoutubeInAppWebviewPlayer(
@@ -86,7 +86,7 @@ class MediaSection extends StatelessWidget {
         // ── Featured Carousel ───────────────────────
         _MediaCard(
           label: "Featured Collection",
-          icon: FeatherIcons.grid,
+          icon: AssetsConst.featherGrid,
           child: CarouselSlider(
             radius: 14,
             autoScrollDuration: const Duration(seconds: 4),
@@ -155,7 +155,7 @@ class MediaSection extends StatelessWidget {
         // ── Second Carousel ─────────────────────────
         _MediaCard(
           label: "More to Explore",
-          icon: FeatherIcons.compass,
+          icon: AssetsConst.featherCompass,
           child: CarouselSlider(
             radius: 14,
             autoScrollDuration: const Duration(seconds: 4),
@@ -210,7 +210,7 @@ class _MediaCard extends StatelessWidget {
 
   final Widget child;
   final String? label;
-  final IconData? icon;
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _MediaCard extends StatelessWidget {
               child: Row(
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 14, color: ColorConst.secondaryDark),
+                    CustomSvgAssetImageView(path: icon!, height: 14, width: 14, color: ColorConst.secondaryDark),
                     6.pw,
                   ],
                   CustomText(

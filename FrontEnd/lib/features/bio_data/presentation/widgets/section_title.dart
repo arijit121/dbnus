@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class SectionTitle extends StatelessWidget {
@@ -11,7 +12,7 @@ class SectionTitle extends StatelessWidget {
     required this.color,
   });
 
-  final IconData icon;
+  final String icon;
   final String title;
   final Color color;
 
@@ -27,7 +28,7 @@ class SectionTitle extends StatelessWidget {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 18, color: color),
+            child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: color),
           ),
           12.pw,
           Flexible(

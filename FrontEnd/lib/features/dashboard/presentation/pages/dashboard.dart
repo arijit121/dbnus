@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/organisms/scrolls/smooth_scroll.dart';
@@ -104,7 +104,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                     _staggeredItem(
                       1,
                       const SectionTitle(
-                          title: "Quick Actions", icon: FeatherIcons.zap),
+                          title: "Quick Actions", icon: AssetsConst.featherZap),
                     ),
                     14.ph,
                     _staggeredItem(2, const QuickActionsGrid()),
@@ -114,7 +114,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                     _staggeredItem(
                       3,
                       const SectionTitle(
-                          title: "Tools & Utilities", icon: FeatherIcons.tool),
+                          title: "Tools & Utilities", icon: AssetsConst.featherTool),
                     ),
                     14.ph,
                     _staggeredItem(4, const ToolsSection()),
@@ -125,7 +125,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                       5,
                       const SectionTitle(
                           title: "Payment Gateway",
-                          icon: FeatherIcons.creditCard),
+                          icon: AssetsConst.featherCreditCard),
                     ),
                     14.ph,
                     _staggeredItem(
@@ -143,7 +143,7 @@ class _DashBoardPageState extends State<DashBoardPage>
                     _staggeredItem(
                       7,
                       const SectionTitle(
-                          title: "Media Gallery", icon: FeatherIcons.image),
+                          title: "Media Gallery", icon: AssetsConst.featherImage),
                     ),
                     14.ph,
                     // Media is typically long, no stagger needed

@@ -1,7 +1,8 @@
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class MapHeader extends StatelessWidget {
@@ -36,7 +37,7 @@ class MapHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child:
-                const Icon(FeatherIcons.mapPin, color: Colors.white, size: 26),
+                const CustomSvgAssetImageView(path: AssetsConst.featherMapPin, color: Colors.white, height: 26, width: 26),
           ),
           16.pw,
           Expanded(
@@ -69,8 +70,8 @@ class MapHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(FeatherIcons.globe,
-                    color: Color(0xFF4ECDC4), size: 14),
+                const CustomSvgAssetImageView(path: AssetsConst.featherGlobe,
+                    color: Color(0xFF4ECDC4), height: 14, width: 14),
                 6.pw,
                 const CustomText('OSM',
                     color: Color(0xFF4ECDC4),

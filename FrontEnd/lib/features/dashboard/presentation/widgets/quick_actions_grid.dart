@@ -2,13 +2,14 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/core/localization/utils/localization_utils.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/core/models/custom_file.dart';
 import 'package:dbnus/core/services/file_picker.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
@@ -25,7 +26,7 @@ class QuickActionsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final actions = [
       _QuickAction(
-        icon: FeatherIcons.globe,
+        icon: AssetsConst.featherGlobe,
         label: "Change Language",
         subtitle: "Random locale",
         gradient: const [ColorConst.violate, ColorConst.sidebarSelected],
@@ -36,7 +37,7 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
-        icon: FeatherIcons.fileText,
+        icon: AssetsConst.featherFileText,
         label: "Order Details",
         subtitle: "View order #56",
         gradient: const [ColorConst.lightBlue, ColorConst.deepBlue],
@@ -49,7 +50,7 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
-        icon: FeatherIcons.barChart2,
+        icon: AssetsConst.featherBarChart2,
         label: "Leaderboard",
         subtitle: "Rankings",
         gradient: const [ColorConst.deepGreen, Color(0xFF1B7A4D)],
@@ -60,7 +61,7 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
-        icon: FeatherIcons.uploadCloud,
+        icon: AssetsConst.featherUploadCloud,
         label: "File Pick",
         subtitle: "Upload files",
         gradient: const [Color(0xFFE67E22), Color(0xFFD35400)],
@@ -70,7 +71,7 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
-        icon: FeatherIcons.smartphone,
+        icon: AssetsConst.featherSmartphone,
         label: "Device ID",
         subtitle: "Copy identifier",
         gradient: const [Color(0xFF8E44AD), Color(0xFF6C3483)],
@@ -81,7 +82,7 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
-        icon: FeatherIcons.dollarSign,
+        icon: AssetsConst.featherDollarSign,
         label: "Razorpay",
         subtitle: "Payment",
         gradient: const [ColorConst.lightBlue, ColorConst.violate],
@@ -225,8 +226,8 @@ class _QuickActionCardState extends State<_QuickActionCard>
                           ),
                         ],
                       ),
-                      child: Icon(widget.action.icon,
-                          color: Colors.white, size: 20),
+                      child: CustomSvgAssetImageView(path: widget.action.icon,
+                          color: Colors.white, height: 20, width: 20),
                     ),
 
                     // Label + subtitle + chevron row
@@ -256,10 +257,10 @@ class _QuickActionCardState extends State<_QuickActionCard>
                             ],
                           ),
                         ),
-                        Icon(
-                          FeatherIcons.arrowRight,
+                        CustomSvgAssetImageView(
+                          path: AssetsConst.featherArrowRight,
                           color: Colors.white.withValues(alpha: 0.5),
-                          size: 14,
+                          height: 14, width: 14,
                         ),
                       ],
                     ),
@@ -275,7 +276,7 @@ class _QuickActionCardState extends State<_QuickActionCard>
 }
 
 class _QuickAction {
-  final IconData icon;
+  final String icon;
   final String label;
   final String subtitle;
   final List<Color> gradient;

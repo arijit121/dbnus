@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -39,8 +40,8 @@ class OrderHeader extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(FeatherIcons.shoppingBag,
-                color: Colors.white, size: 24),
+            child: const CustomSvgAssetImageView(path: AssetsConst.featherShoppingBag,
+                color: Colors.white, height: 24, width: 24),
           ),
           16.pw,
           Expanded(

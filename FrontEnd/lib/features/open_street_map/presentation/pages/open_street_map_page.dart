@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -162,8 +163,8 @@ class _OpenStreetMapPageState extends State<OpenStreetMapPage> {
                                 ),
                               ],
                             ),
-                            child: const Icon(FeatherIcons.mapPin,
-                                color: Colors.white, size: 16),
+                            child: const CustomSvgAssetImageView(path: AssetsConst.featherMapPin,
+                                color: Colors.white, height: 16, width: 16),
                           ),
                           Container(
                             width: 2,

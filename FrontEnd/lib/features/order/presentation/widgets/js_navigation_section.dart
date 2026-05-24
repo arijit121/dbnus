@@ -2,7 +2,7 @@ import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
@@ -37,7 +37,7 @@ class JsNavigationSection extends StatelessWidget {
       child: Column(
         children: [
           OrderToolTile(
-            icon: FeatherIcons.terminal,
+            icon: AssetsConst.featherTerminal,
             title: "JS Callback Async",
             subtitle: "Load JS and pass value with callback",
             color: const Color(0xFF8E44AD),
@@ -50,7 +50,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.link,
+            icon: AssetsConst.featherLink,
             title: "Change URL",
             subtitle: "Change browser URL to /test",
             color: ColorConst.lightBlue,
@@ -60,7 +60,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.uploadCloud,
+            icon: AssetsConst.featherUploadCloud,
             title: "File Picker",
             subtitle: "Pick a file from your device",
             color: ColorConst.deepGreen,
@@ -70,7 +70,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.arrowRight,
+            icon: AssetsConst.featherArrowRight,
             title: "Clear & Navigate to LeaderBoard",
             subtitle: "Clear stack and go to leaderboard",
             color: ColorConst.red,
@@ -80,7 +80,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.play,
+            icon: AssetsConst.featherPlay,
             title: "Navigate to Games",
             subtitle: "Go to the games page",
             color: ColorConst.violate,
@@ -92,7 +92,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.checkCircle,
+            icon: AssetsConst.featherCheckCircle,
             title: "Show Success",
             subtitle: "Display success message popup",
             color: ColorConst.green,
@@ -105,7 +105,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.messageSquare,
+            icon: AssetsConst.featherMessageSquare,
             title: "Show Toast",
             subtitle: "Display a toast message",
             color: ColorConst.primaryDark,
@@ -116,7 +116,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.mail,
+            icon: AssetsConst.featherMail,
             title: "Show Toast on BottomSheet",
             subtitle: "Display a toast message on BottomSheet",
             color: ColorConst.primaryDark,
@@ -152,7 +152,7 @@ class JsNavigationSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.loader,
+            icon: AssetsConst.featherLoader,
             title: "Show Loading",
             subtitle: "Display a loading widget",
             color: ColorConst.primaryDark,

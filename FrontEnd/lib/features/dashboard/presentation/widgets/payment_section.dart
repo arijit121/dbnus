@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -77,8 +78,8 @@ class PaymentSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(FeatherIcons.creditCard,
-                      color: Colors.white, size: 20),
+                  child: const CustomSvgAssetImageView(path: AssetsConst.featherCreditCard,
+                      color: Colors.white, height: 20, width: 20),
                 ),
                 12.pw,
                 Expanded(
@@ -208,8 +209,8 @@ class PaymentSection extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(FeatherIcons.shield,
-                          color: Colors.white, size: 18),
+                      const CustomSvgAssetImageView(path: AssetsConst.featherShield,
+                          color: Colors.white, height: 18, width: 18),
                       8.pw,
                       const CustomText("Pay with Paytm",
                           color: Colors.white, fontWeight: FontWeight.w600),
@@ -227,8 +228,8 @@ class PaymentSection extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(FeatherIcons.lock,
-                      size: 12,
+                  CustomSvgAssetImageView(path: AssetsConst.featherLock,
+                      height: 12, width: 12,
                       color: ColorConst.secondaryDark.withValues(alpha: 0.6)),
                   6.pw,
                   CustomText(

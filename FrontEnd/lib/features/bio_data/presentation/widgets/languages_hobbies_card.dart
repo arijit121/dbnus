@@ -1,8 +1,9 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 import 'card_shell.dart';
@@ -21,16 +22,16 @@ class LanguagesHobbiesCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SectionTitle(
-                icon: FeatherIcons.globe,
+                icon: AssetsConst.featherGlobe,
                 title: "Languages",
                 color: ColorConst.deepGreen,
               ),
               CardShell(
                 child: Row(
                   children: [
-                    Icon(
-                      FeatherIcons.messageCircle,
-                      size: 16,
+                    CustomSvgAssetImageView(
+                      path: AssetsConst.featherMessageCircle,
+                      height: 16, width: 16,
                       color: ColorConst.deepGreen,
                     ),
                     10.pw,
@@ -64,7 +65,7 @@ class LanguagesHobbiesCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SectionTitle(
-                icon: FeatherIcons.heart,
+                icon: AssetsConst.featherHeart,
                 title: "Hobbies",
                 color: const Color(0xFFE67E22),
               ),
@@ -73,9 +74,9 @@ class LanguagesHobbiesCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          FeatherIcons.compass,
-                          size: 16,
+                        const CustomSvgAssetImageView(
+                          path: AssetsConst.featherCompass,
+                          height: 16, width: 16,
                           color: Color(0xFFE67E22),
                         ),
                         8.pw,
@@ -90,9 +91,9 @@ class LanguagesHobbiesCard extends StatelessWidget {
                     8.ph,
                     Row(
                       children: [
-                        Icon(
-                          FeatherIcons.music,
-                          size: 16,
+                        CustomSvgAssetImageView(
+                          path: AssetsConst.featherMusic,
+                          height: 16, width: 16,
                           color: ColorConst.violate,
                         ),
                         8.pw,

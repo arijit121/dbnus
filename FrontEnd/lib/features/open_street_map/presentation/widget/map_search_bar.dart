@@ -1,5 +1,6 @@
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class MapSearchBar extends StatelessWidget {
@@ -37,7 +38,11 @@ class MapSearchBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 4),
             child: IconButton(
-              icon: const Icon(FeatherIcons.arrowLeft, size: 20),
+              icon: const CustomSvgAssetImageView(
+                path: AssetsConst.featherArrowLeft,
+                color: Color(0xFF5F6368),
+                height: 20, width: 20,
+              ),
               color: const Color(0xFF5F6368),
               onPressed: () => CustomRoute.back(),
             ),
@@ -69,8 +74,11 @@ class MapSearchBar extends StatelessWidget {
             )
           else if (controller.text.isNotEmpty)
             IconButton(
-              icon: const Icon(FeatherIcons.x,
-                  size: 18, color: Color(0xFF5F6368)),
+              icon: const CustomSvgAssetImageView(
+                path: AssetsConst.featherX,
+                height: 18, width: 18,
+                color: Color(0xFF5F6368),
+              ),
               onPressed: onClear,
             ),
         ],

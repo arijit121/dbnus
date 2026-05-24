@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -15,7 +16,7 @@ class OrderToolTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final IconData icon;
+  final String icon;
   final String title;
   final String subtitle;
   final Color color;
@@ -38,7 +39,8 @@ class OrderToolTile extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, color: color, size: 20),
+                child:
+                    CustomSvgAssetImageView(path: icon, color: color, height: 20, width: 20),
               ),
               14.pw,
               Expanded(
@@ -64,8 +66,10 @@ class OrderToolTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(FeatherIcons.chevronRight,
-                  color: ColorConst.grey, size: 18),
+              const CustomSvgAssetImageView(
+                  path: AssetsConst.featherChevronRight,
+                  color: ColorConst.grey,
+                  height: 18, width: 18),
             ],
           ),
         ),

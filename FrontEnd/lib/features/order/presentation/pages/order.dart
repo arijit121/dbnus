@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 
 import '../widgets/order_header.dart';
@@ -34,26 +34,26 @@ class _OrderState extends State<Order> {
 
         // ── Notifications & Downloads ───────────────────────
         const SectionTitle(
-            title: "Notifications & Downloads", icon: FeatherIcons.bell),
+            title: "Notifications & Downloads", icon: AssetsConst.featherBell),
         12.ph,
         const NotificationsSection(),
         24.ph,
 
         // ── Printing & Documents ────────────────────────────
         const SectionTitle(
-            title: "Printing Options", icon: FeatherIcons.printer),
+            title: "Printing Options", icon: AssetsConst.featherPrinter),
         12.ph,
         const PrintingSection(),
         24.ph,
 
         // ── JS & Navigation ─────────────────────────────────
-        const SectionTitle(title: "JS & Navigation", icon: FeatherIcons.code),
+        const SectionTitle(title: "JS & Navigation", icon: AssetsConst.featherCode),
         12.ph,
         const JsNavigationSection(),
         24.ph,
 
         // ── Pin Code ────────────────────────────────────────
-        const SectionTitle(title: "Pin Code", icon: FeatherIcons.lock),
+        const SectionTitle(title: "Pin Code", icon: AssetsConst.featherLock),
         12.ph,
         PinCodeSection(
           pinController: _pinController,
@@ -63,13 +63,13 @@ class _OrderState extends State<Order> {
         24.ph,
 
         // ── Forms & Inputs ──────────────────────────────────
-        const SectionTitle(title: "Forms & Inputs", icon: FeatherIcons.edit3),
+        const SectionTitle(title: "Forms & Inputs", icon: AssetsConst.featherEdit3),
         12.ph,
         const FormsSection(),
         24.ph,
 
         // ── Maps & Location ─────────────────────────────────
-        const SectionTitle(title: "Maps & Location", icon: FeatherIcons.mapPin),
+        const SectionTitle(title: "Maps & Location", icon: AssetsConst.featherMapPin),
         12.ph,
         const MapsSection(),
         24.ph,

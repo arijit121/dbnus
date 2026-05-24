@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/map_marker.dart';
@@ -61,8 +62,8 @@ class MapMarkerInfo extends StatelessWidget {
               if (onClose != null)
                 GestureDetector(
                   onTap: onClose,
-                  child: const Icon(FeatherIcons.x,
-                      color: Colors.white54, size: 20),
+                  child: const CustomSvgAssetImageView(path: AssetsConst.featherX,
+                      color: Colors.white54, height: 20, width: 20),
                 ),
             ],
           ),
@@ -75,7 +76,7 @@ class MapMarkerInfo extends StatelessWidget {
           10.ph,
           Row(
             children: [
-              const Icon(FeatherIcons.mapPin, color: Colors.white38, size: 14),
+              const CustomSvgAssetImageView(path: AssetsConst.featherMapPin, color: Colors.white38, height: 14, width: 14),
               6.pw,
               CustomText(
                 '${marker.position.latitude.toStringAsFixed(4)}, '

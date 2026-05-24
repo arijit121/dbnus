@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/constants/api_url_const.dart';
@@ -39,7 +39,7 @@ class _NotificationsSectionState extends State<NotificationsSection> {
       child: Column(
         children: [
           OrderToolTile(
-            icon: FeatherIcons.download,
+            icon: AssetsConst.featherDownload,
             title: "Download PDF",
             subtitle: "Download sample 1MB PDF file",
             color: ColorConst.lightBlue,
@@ -51,7 +51,7 @@ class _NotificationsSectionState extends State<NotificationsSection> {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.bell,
+            icon: AssetsConst.featherBell,
             title: "Show Notification",
             subtitle: "Display a sample push notification",
             color: ColorConst.violate,
@@ -76,7 +76,7 @@ class _NotificationsSectionState extends State<NotificationsSection> {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.refreshCw,
+            icon: AssetsConst.featherRefreshCw,
             title: "Update Notification",
             subtitle: "Update the last shown notification",
             color: const Color(0xFFE67E22),

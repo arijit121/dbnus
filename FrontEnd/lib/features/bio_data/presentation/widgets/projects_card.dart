@@ -1,11 +1,12 @@
 // ignore_color_warnings
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/core/services/open_service.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../../../shared/ui/organisms/grids/custom_grid_view.dart';
@@ -22,7 +23,7 @@ class ProjectsCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.layers,
+          icon: AssetsConst.featherLayers,
           title: "Projects",
           color: ColorConst.red,
         ),
@@ -37,28 +38,28 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'Age and Gender Recognition',
               'Developed accurate age and gender recognition systems using advanced Python algorithms.',
-              FeatherIcons.eye,
+              AssetsConst.featherEye,
               ColorConst.violate,
               const [],
             ),
             _projectCardWithLinks(
               'Food Frenzy',
               'Restaurant management app facilitating order food and streamlining order management.',
-              FeatherIcons.coffee,
+              AssetsConst.featherCoffee,
               const Color(0xFFE67E22),
               const [],
             ),
             _projectCardWithLinks(
               'Caretaker',
               'Comprehensive home service app featuring home and car cleaning services.',
-              FeatherIcons.home,
+              AssetsConst.featherHome,
               ColorConst.deepGreen,
               const [],
             ),
             _projectCardWithLinks(
               'Imanage',
               'Self-care app of Tata for bill payment and manage inventory.',
-              FeatherIcons.smartphone,
+              AssetsConst.featherSmartphone,
               ColorConst.lightBlue,
               const [
                 _ProjectLink(
@@ -74,7 +75,7 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'Tata WFM',
               'Optimizing workforce management, scheduling, resource allocation, and employee engagement.',
-              FeatherIcons.users,
+              AssetsConst.featherUsers,
               ColorConst.violate,
               const [
                 _ProjectLink(
@@ -86,28 +87,28 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'Tata Combing',
               'Office maintenance app for monitoring schedules and occupancy levels.',
-              FeatherIcons.settings,
+              AssetsConst.featherSettings,
               ColorConst.deepBlue,
               const [],
             ),
             _projectCardWithLinks(
               'Gotrakk',
               'Vehicle tracking system enabling real-time tracking and fleet optimization.',
-              FeatherIcons.navigation,
+              AssetsConst.featherNavigation,
               ColorConst.red,
               const [],
             ),
             _projectCardWithLinks(
               'Gemopai Connect',
               'Vehicle tracking system for real-time tracking and fleet optimization.',
-              FeatherIcons.truck,
+              AssetsConst.featherTruck,
               const Color(0xFFE67E22),
               const [],
             ),
             _projectCardWithLinks(
               'Jivanjor Smart Connect',
               'JACPL dealer app for simplified order placement and product info access.',
-              FeatherIcons.package,
+              AssetsConst.featherPackage,
               ColorConst.deepGreen,
               const [
                 _ProjectLink(
@@ -123,14 +124,14 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'MCSS Staffing Solutions',
               'Employee management app for scheduling shifts, tracking hours, and communication.',
-              FeatherIcons.clipboard,
+              AssetsConst.featherClipboard,
               ColorConst.lightBlue,
               const [],
             ),
             _projectCardWithLinks(
               'Retailer Shakti',
               'Retail management system for inventory, sales, and customer management.',
-              FeatherIcons.shoppingBag,
+              AssetsConst.featherShoppingBag,
               ColorConst.violate,
               const [
                 _ProjectLink(
@@ -147,7 +148,7 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'Genu Path Labs',
               'Healthcare platform with video calls, lab management, patient tracking, and report generation.',
-              FeatherIcons.activity,
+              AssetsConst.featherActivity,
               ColorConst.red,
               const [
                 _ProjectLink(
@@ -164,7 +165,7 @@ class ProjectsCard extends StatelessWidget {
             _projectCardWithLinks(
               'SastaSundar',
               'Medical e-commerce platform with mobile app, m-site, and video consultation.',
-              FeatherIcons.heart,
+              AssetsConst.featherHeart,
               ColorConst.deepGreen,
               const [
                 _ProjectLink(
@@ -187,7 +188,7 @@ class ProjectsCard extends StatelessWidget {
   Widget _projectCardWithLinks(
     String title,
     String description,
-    IconData icon,
+    String icon,
     Color color,
     List<_ProjectLink> links,
   ) {
@@ -204,7 +205,7 @@ class ProjectsCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, size: 18, color: color),
+                child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: color),
               ),
               14.pw,
               Expanded(
@@ -260,9 +261,9 @@ class ProjectsCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              FeatherIcons.externalLink,
-                              size: 12,
+                            CustomSvgAssetImageView(
+                              path: AssetsConst.featherExternalLink,
+                              height: 12, width: 12,
                               color: color,
                             ),
                             6.pw,

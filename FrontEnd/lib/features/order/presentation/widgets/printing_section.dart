@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/printing_handler.dart';
@@ -31,7 +31,7 @@ class PrintingSection extends StatelessWidget {
       child: Column(
         children: [
           OrderToolTile(
-            icon: FeatherIcons.printer,
+            icon: AssetsConst.featherPrinter,
             title: "Print PDF from URL",
             subtitle: "Download and print a sample PDF",
             color: ColorConst.primaryDark,
@@ -45,7 +45,7 @@ class PrintingSection extends StatelessWidget {
           ),
           _buildDivider(),
           OrderToolTile(
-            icon: FeatherIcons.fileText,
+            icon: AssetsConst.featherFileText,
             title: "Print Local PDF",
             subtitle: "Select a PDF from your device to print",
             color: ColorConst.violate,

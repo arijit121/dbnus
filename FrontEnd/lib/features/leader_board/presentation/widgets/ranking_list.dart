@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -22,8 +23,8 @@ class _RankingListState extends State<RankingList> {
       children: [
         Row(
           children: [
-            const Icon(FeatherIcons.list,
-                size: 20, color: ColorConst.primaryDark),
+            const CustomSvgAssetImageView(path: AssetsConst.featherList,
+                height: 20, width: 20, color: ColorConst.primaryDark),
             10.pw,
             const CustomText(
               "Ranking",
@@ -118,8 +119,8 @@ class _RankingListState extends State<RankingList> {
                       color: ColorConst.primaryDark,
                     ),
                     trailing: IconButton(
-                      icon: const Icon(FeatherIcons.trash2,
-                          size: 18, color: ColorConst.red),
+                      icon: const CustomSvgAssetImageView(path: AssetsConst.featherTrash2,
+                          height: 18, width: 18, color: ColorConst.red),
                       onPressed: () {
                         setState(() {
                           items.removeAt(index);

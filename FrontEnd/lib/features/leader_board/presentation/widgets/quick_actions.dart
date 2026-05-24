@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -20,8 +21,8 @@ class QuickActions extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(FeatherIcons.zap,
-                size: 20, color: ColorConst.primaryDark),
+            const CustomSvgAssetImageView(path: AssetsConst.featherZap,
+                height: 20, width: 20, color: ColorConst.primaryDark),
             10.pw,
             const CustomText(
               "Quick Actions",
@@ -36,7 +37,7 @@ class QuickActions extends StatelessWidget {
           children: [
             Expanded(
               child: _buildActionCard(
-                icon: FeatherIcons.shoppingCart,
+                icon: AssetsConst.featherShoppingCart,
                 label: "Add to Cart",
                 gradient: const [
                   ColorConst.violate,
@@ -54,7 +55,7 @@ class QuickActions extends StatelessWidget {
             12.pw,
             Expanded(
               child: _buildActionCard(
-                icon: FeatherIcons.package,
+                icon: AssetsConst.featherPackage,
                 label: "Go to Orders",
                 gradient: const [ColorConst.lightBlue, ColorConst.deepBlue],
                 onTap: () {
@@ -71,7 +72,7 @@ class QuickActions extends StatelessWidget {
   }
 
   Widget _buildActionCard({
-    required IconData icon,
+    required String icon,
     required String label,
     required List<Color> gradient,
     required VoidCallback onTap,
@@ -109,7 +110,7 @@ class QuickActions extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: Colors.white, size: 18),
+                child: CustomSvgAssetImageView(path: icon, color: Colors.white, height: 18, width: 18),
               ),
               CustomText(
                 label,

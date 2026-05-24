@@ -1,4 +1,4 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
@@ -17,7 +17,7 @@ class SkillsCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.cpu,
+          icon: AssetsConst.featherCpu,
           title: "Skills",
           color: const Color(0xFFE67E22),
         ),

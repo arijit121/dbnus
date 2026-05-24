@@ -1,5 +1,5 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
@@ -97,7 +97,10 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
             iconSize: 20,
             color: Colors.white54,
             padding: const EdgeInsets.all(8),
-            icon: const Icon(FeatherIcons.chevronsRight),
+            icon: const CustomSvgAssetImageView(
+              path: AssetsConst.featherChevronsRight,
+              color: Colors.white54,
+            ),
             onPressed: () {
               _tag.value = true;
             },
@@ -298,7 +301,10 @@ class _BrandHeader extends StatelessWidget {
               iconSize: 18,
               color: Colors.white38,
               padding: const EdgeInsets.all(6),
-              icon: const Icon(FeatherIcons.chevronsLeft),
+              icon: const CustomSvgAssetImageView(
+                path: AssetsConst.featherChevronsLeft,
+                color: Colors.white38,
+              ),
               onPressed: onCollapse,
             ),
           ),
@@ -499,7 +505,7 @@ class _UserSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
-              child: Icon(FeatherIcons.user, color: Colors.white, size: 16),
+              child: CustomSvgAssetImageView(path: AssetsConst.featherUser, color: Colors.white, height: 16, width: 16),
             ),
           ),
           10.pw,
@@ -521,10 +527,10 @@ class _UserSection extends StatelessWidget {
               ],
             ),
           ),
-          Icon(
-            FeatherIcons.moreHorizontal,
+          CustomSvgAssetImageView(
+            path: AssetsConst.featherMoreHorizontal,
             color: Colors.white.withValues(alpha: 0.3),
-            size: 16,
+            height: 16, width: 16,
           ),
         ],
       ),
@@ -550,7 +556,7 @@ class _UserAvatarMini extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: const Center(
-        child: Icon(FeatherIcons.user, color: Colors.white, size: 16),
+        child: CustomSvgAssetImageView(path: AssetsConst.featherUser, color: Colors.white, height: 16, width: 16),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:intl/intl.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -46,11 +47,11 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
     return "Good Evening";
   }
 
-  IconData _getGreetingIcon() {
+  String _getGreetingIcon() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return FeatherIcons.sunrise;
-    if (hour < 17) return FeatherIcons.sun;
-    return "Good Evening" != "" ? FeatherIcons.moon : FeatherIcons.moon;
+    if (hour < 12) return AssetsConst.featherSunrise;
+    if (hour < 17) return AssetsConst.featherSun;
+    return "Good Evening" != "" ? AssetsConst.featherMoon : AssetsConst.featherMoon;
   }
 
   @override
@@ -173,10 +174,10 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              _getGreetingIcon(),
+                            CustomSvgAssetImageView(
+                              path: _getGreetingIcon(),
                               color: const Color(0xFFFFD700),
-                              size: 16,
+                              height: 16, width: 16,
                             ),
                             6.pw,
                             CustomText(
@@ -226,10 +227,10 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                   crossAxisAlignment: WrapCrossAlignment.center,
                   // mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      FeatherIcons.calendar,
+                    CustomSvgAssetImageView(
+                      path: AssetsConst.featherCalendar,
                       color: Colors.white.withValues(alpha: 0.5),
-                      size: 14,
+                      height: 14, width: 14,
                     ),
                     8.pw,
                     CustomText(
@@ -334,7 +335,7 @@ class _AnimatedCounterButtonState extends State<_AnimatedCounterButton>
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FeatherIcons.activity, color: Colors.white, size: 16),
+              const CustomSvgAssetImageView(path: AssetsConst.featherActivity, color: Colors.white, height: 16, width: 16),
               8.pw,
               CustomText(
                 "${widget.value}",

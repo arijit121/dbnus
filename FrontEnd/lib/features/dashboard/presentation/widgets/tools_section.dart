@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
@@ -20,7 +21,7 @@ class ToolsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final tools = [
       _ToolItem(
-        icon: FeatherIcons.download,
+        icon: AssetsConst.featherDownload,
         title: "Download GlucoseFasting PDF",
         subtitle: "Download sample report",
         color: ColorConst.deepGreen,
@@ -32,7 +33,7 @@ class ToolsSection extends StatelessWidget {
         },
       ),
       _ToolItem(
-        icon: FeatherIcons.downloadCloud,
+        icon: AssetsConst.featherDownloadCloud,
         title: "Download with Headers",
         subtitle: "Authenticated download",
         color: ColorConst.lightBlue,
@@ -60,7 +61,7 @@ class ToolsSection extends StatelessWidget {
         },
       ),
       _ToolItem(
-        icon: FeatherIcons.mapPin,
+        icon: AssetsConst.featherMapPin,
         title: "Forward Geocoding",
         subtitle: "Jot Bhim, New Town, Bidhannagar",
         color: ColorConst.violate,
@@ -74,7 +75,7 @@ class ToolsSection extends StatelessWidget {
         },
       ),
       _ToolItem(
-        icon: FeatherIcons.navigation,
+        icon: AssetsConst.featherNavigation,
         title: "Reverse Geocoding",
         subtitle: "Lat: 22.5754, Lng: 88.4798",
         color: const Color(0xFFE67E22),
@@ -87,7 +88,7 @@ class ToolsSection extends StatelessWidget {
         },
       ),
       _ToolItem(
-        icon: FeatherIcons.checkCircle,
+        icon: AssetsConst.featherCheckCircle,
         title: "Show Success Dialog",
         subtitle: "Display success message popup",
         color: ColorConst.green,
@@ -100,7 +101,7 @@ class ToolsSection extends StatelessWidget {
         },
       ),
       _ToolItem(
-        icon: FeatherIcons.map,
+        icon: AssetsConst.featherMap,
         title: "Open Street Map",
         subtitle: "Explore world landmarks on a map",
         color: const Color(0xFF2980B9),
@@ -139,8 +140,8 @@ class ToolsSection extends StatelessWidget {
                     color: ColorConst.violate.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(FeatherIcons.layers,
-                      color: ColorConst.violate, size: 14),
+                  child: const CustomSvgAssetImageView(path: AssetsConst.featherLayers,
+                      color: ColorConst.violate, height: 14, width: 14),
                 ),
                 8.pw,
                 CustomText(
@@ -188,7 +189,7 @@ class ToolsSection extends StatelessWidget {
                     width: 1.5,
                   ),
                 ),
-                child: Icon(tool.icon, color: tool.color, size: 20),
+                child: CustomSvgAssetImageView(path: tool.icon, color: tool.color, height: 20, width: 20),
               ),
               14.pw,
               Expanded(
@@ -243,8 +244,8 @@ class ToolsSection extends StatelessWidget {
                   color: ColorConst.lineGrey,
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Icon(FeatherIcons.chevronRight,
-                    color: ColorConst.secondaryDark, size: 14),
+                child: const CustomSvgAssetImageView(path: AssetsConst.featherChevronRight,
+                    color: ColorConst.secondaryDark, height: 14, width: 14),
               ),
             ],
           ),
@@ -255,7 +256,7 @@ class ToolsSection extends StatelessWidget {
 }
 
 class _ToolItem {
-  final IconData icon;
+  final String icon;
   final String title;
   final String subtitle;
   final Color color;

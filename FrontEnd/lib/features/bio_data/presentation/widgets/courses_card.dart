@@ -1,7 +1,8 @@
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'card_shell.dart';
@@ -13,13 +14,13 @@ class CoursesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final courses = [
-      _Course('Back-end Development (REST API)', 'Udemy', FeatherIcons.server),
-      _Course('Java Vocational Training', 'MSME', FeatherIcons.coffee),
-      _Course('VLSI Vocational Training', 'MSME', FeatherIcons.cpu),
-      _Course('BSNL Telecom Training', 'BSNL', FeatherIcons.radio),
+      _Course('Back-end Development (REST API)', 'Udemy', AssetsConst.featherServer),
+      _Course('Java Vocational Training', 'MSME', AssetsConst.featherCoffee),
+      _Course('VLSI Vocational Training', 'MSME', AssetsConst.featherCpu),
+      _Course('BSNL Telecom Training', 'BSNL', AssetsConst.featherRadio),
       _Course(
-          'Machine Learning with Python', 'MYWBUT', FeatherIcons.trendingUp),
-      _Course('Python Programming', 'MYWBUT', FeatherIcons.terminal),
+          'Machine Learning with Python', 'MYWBUT', AssetsConst.featherTrendingUp),
+      _Course('Python Programming', 'MYWBUT', AssetsConst.featherTerminal),
     ];
 
     final colors = [
@@ -35,7 +36,7 @@ class CoursesCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.award,
+          icon: AssetsConst.featherAward,
           title: "Courses & Certifications",
           color: ColorConst.violate,
         ),
@@ -55,7 +56,7 @@ class CoursesCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child:
-                              Icon(courses[i].icon, size: 16, color: colors[i]),
+                              CustomSvgAssetImageView(path: courses[i].icon, height: 16, width: 16, color: colors[i]),
                         ),
                         12.pw,
                         Expanded(
@@ -101,6 +102,6 @@ class CoursesCard extends StatelessWidget {
 
 class _Course {
   final String title, provider;
-  final IconData icon;
+  final String icon;
   const _Course(this.title, this.provider, this.icon);
 }

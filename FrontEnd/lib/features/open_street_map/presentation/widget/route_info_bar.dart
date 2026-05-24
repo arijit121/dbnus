@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class RouteInfoBar extends StatefulWidget {
@@ -66,9 +67,9 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
   @override
   Widget build(BuildContext context) {
     final modes = [
-      (FeatherIcons.truck, 'Car'),
-      (FeatherIcons.zap, 'Bike'),
-      (FeatherIcons.user, 'Walk'),
+      (AssetsConst.featherTruck, 'Car'),
+      (AssetsConst.featherZap, 'Bike'),
+      (AssetsConst.featherUser, 'Walk'),
     ];
 
     return Container(
@@ -116,9 +117,9 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            modes[index].$1,
-                            size: 14,
+                          CustomSvgAssetImageView(
+                            path: modes[index].$1,
+                            height: 14, width: 14,
                             color: isSelected
                                 ? const Color(0xFF4285F4)
                                 : const Color(0xFF9AA0A6),
@@ -154,8 +155,8 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
                     color: const Color(0xFF34A853).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(FeatherIcons.navigation,
-                      color: Color(0xFF34A853), size: 18),
+                  child: const CustomSvgAssetImageView(path: AssetsConst.featherNavigation,
+                      color: Color(0xFF34A853), height: 18, width: 18),
                 ),
                 12.pw,
                 Expanded(
@@ -197,8 +198,8 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
                       color: const Color(0xFFF1F3F4),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(FeatherIcons.x,
-                        size: 16, color: Color(0xFF5F6368)),
+                    child: const CustomSvgAssetImageView(path: AssetsConst.featherX,
+                        height: 16, width: 16, color: Color(0xFF5F6368)),
                   ),
                 ),
               ],
@@ -229,7 +230,11 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: widget.onStartNavigation,
-                    icon: const Icon(FeatherIcons.navigation2, size: 18),
+                    icon: const CustomSvgAssetImageView(
+                      path: AssetsConst.featherNavigation2,
+                      color: Colors.white,
+                      height: 18, width: 18,
+                    ),
                     label: const Text('Start',
                         style: TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 15)),
@@ -247,13 +252,13 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
                 8.pw,
                 // Share button
                 _ActionIcon(
-                  icon: FeatherIcons.share2,
+                  icon: AssetsConst.featherShare2,
                   onTap: () {},
                 ),
                 6.pw,
                 // Save button
                 _ActionIcon(
-                  icon: FeatherIcons.bookmark,
+                  icon: AssetsConst.featherBookmark,
                   onTap: () {},
                 ),
               ],
@@ -266,7 +271,7 @@ class _RouteInfoBarState extends State<RouteInfoBar> {
 }
 
 class _ActionIcon extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final VoidCallback onTap;
 
   const _ActionIcon({required this.icon, required this.onTap});
@@ -281,7 +286,7 @@ class _ActionIcon extends StatelessWidget {
           color: const Color(0xFFF1F3F4),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(icon, size: 18, color: const Color(0xFF5F6368)),
+        child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: const Color(0xFF5F6368)),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -211,7 +212,10 @@ class _LandingUiState extends State<LandingUi>
                               onPressed: () {
                                 _scaffoldKey.currentState?.openDrawer();
                               },
-                              icon: const Icon(FeatherIcons.menu),
+                              icon: const CustomSvgAssetImageView(
+                                path: AssetsConst.featherMenu,
+                                color: ColorConst.primaryDark,
+                              ),
                             ),
                           ),
                         ),
@@ -275,7 +279,10 @@ class _LandingUiState extends State<LandingUi>
                               onPressed: () {
                                 // Could open notifications, search, etc.
                               },
-                              icon: const Icon(FeatherIcons.bell),
+                              icon: const CustomSvgAssetImageView(
+                                path: AssetsConst.featherBell,
+                                color: ColorConst.primaryDark,
+                              ),
                             ),
                           ),
                         ),

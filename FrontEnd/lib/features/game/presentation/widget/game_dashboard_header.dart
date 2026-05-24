@@ -1,7 +1,8 @@
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class GameDashboardHeader extends StatelessWidget {
@@ -35,7 +36,7 @@ class GameDashboardHeader extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
-            child: const Icon(FeatherIcons.zap, color: Colors.white, size: 26),
+            child: const CustomSvgAssetImageView(path: AssetsConst.featherZap, color: Colors.white, height: 26, width: 26),
           ),
           16.pw,
           Expanded(
@@ -68,8 +69,8 @@ class GameDashboardHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(FeatherIcons.grid,
-                    color: Color(0xFF6C63FF), size: 14),
+                const CustomSvgAssetImageView(path: AssetsConst.featherGrid,
+                    color: Color(0xFF6C63FF), height: 14, width: 14),
                 6.pw,
                 const CustomText('6',
                     color: Color(0xFF6C63FF),

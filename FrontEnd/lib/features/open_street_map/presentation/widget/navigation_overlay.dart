@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 class NavigationOverlay extends StatelessWidget {
@@ -60,57 +61,57 @@ class NavigationOverlay extends StatelessWidget {
     return '$h12:$minute $period';
   }
 
-  IconData _getManeuverIcon() {
+  String _getManeuverIcon() {
     switch (maneuverType) {
       case 'turn':
         switch (maneuverModifier) {
           case 'left':
-            return FeatherIcons.cornerUpLeft;
+            return AssetsConst.featherCornerUpLeft;
           case 'right':
-            return FeatherIcons.cornerUpRight;
+            return AssetsConst.featherCornerUpRight;
           case 'slight left':
-            return FeatherIcons.cornerUpLeft;
+            return AssetsConst.featherCornerUpLeft;
           case 'slight right':
-            return FeatherIcons.cornerUpRight;
+            return AssetsConst.featherCornerUpRight;
           case 'sharp left':
-            return FeatherIcons.cornerDownLeft;
+            return AssetsConst.featherCornerDownLeft;
           case 'sharp right':
-            return FeatherIcons.cornerDownRight;
+            return AssetsConst.featherCornerDownRight;
           case 'uturn':
-            return FeatherIcons.rotateCcw;
+            return AssetsConst.featherRotateCcw;
           default:
-            return FeatherIcons.arrowUp;
+            return AssetsConst.featherArrowUp;
         }
       case 'fork':
         return maneuverModifier == 'left'
-            ? FeatherIcons.gitBranch
-            : FeatherIcons.gitBranch;
+            ? AssetsConst.featherGitBranch
+            : AssetsConst.featherGitBranch;
       case 'roundabout':
       case 'rotary':
-        return FeatherIcons.refreshCw;
+        return AssetsConst.featherRefreshCw;
       case 'arrive':
-        return FeatherIcons.flag;
+        return AssetsConst.featherFlag;
       case 'depart':
-        return FeatherIcons.navigation2;
+        return AssetsConst.featherNavigation2;
       case 'merge':
-        return FeatherIcons.gitMerge;
+        return AssetsConst.featherGitMerge;
       case 'end of road':
         return maneuverModifier == 'left'
-            ? FeatherIcons.cornerUpLeft
-            : FeatherIcons.cornerUpRight;
+            ? AssetsConst.featherCornerUpLeft
+            : AssetsConst.featherCornerUpRight;
       default:
-        return FeatherIcons.arrowUp;
+        return AssetsConst.featherArrowUp;
     }
   }
 
-  IconData _getNextManeuverIcon(String? instruction) {
-    if (instruction == null) return FeatherIcons.arrowUp;
+  String _getNextManeuverIcon(String? instruction) {
+    if (instruction == null) return AssetsConst.featherArrowUp;
     final lower = instruction.toLowerCase();
-    if (lower.contains('left')) return FeatherIcons.cornerUpLeft;
-    if (lower.contains('right')) return FeatherIcons.cornerUpRight;
-    if (lower.contains('roundabout')) return FeatherIcons.refreshCw;
-    if (lower.contains('arrive')) return FeatherIcons.flag;
-    return FeatherIcons.arrowUp;
+    if (lower.contains('left')) return AssetsConst.featherCornerUpLeft;
+    if (lower.contains('right')) return AssetsConst.featherCornerUpRight;
+    if (lower.contains('roundabout')) return AssetsConst.featherRefreshCw;
+    if (lower.contains('arrive')) return AssetsConst.featherFlag;
+    return AssetsConst.featherArrowUp;
   }
 
   @override
@@ -145,10 +146,10 @@ class NavigationOverlay extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Maneuver icon
-                      Icon(
-                        _getManeuverIcon(),
+                      CustomSvgAssetImageView(
+                        path: _getManeuverIcon(),
                         color: Colors.white,
-                        size: 36,
+                        height: 36, width: 36,
                       ),
                       16.pw,
                       // Instruction text
@@ -203,10 +204,10 @@ class NavigationOverlay extends StatelessWidget {
                           size: 12,
                         ),
                         8.pw,
-                        Icon(
-                          _getNextManeuverIcon(nextInstruction),
+                        CustomSvgAssetImageView(
+                          path: _getNextManeuverIcon(nextInstruction),
                           color: Colors.white70,
-                          size: 16,
+                          height: 16, width: 16,
                         ),
                         8.pw,
                         Expanded(
@@ -315,7 +316,7 @@ class NavigationOverlay extends StatelessWidget {
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(FeatherIcons.x, size: 16, color: Colors.white),
+                        CustomSvgAssetImageView(path: AssetsConst.featherX, height: 16, width: 16, color: Colors.white),
                         SizedBox(width: 4),
                         CustomText(
                           'Stop',

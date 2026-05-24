@@ -1,6 +1,7 @@
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/search_place.dart';
@@ -17,26 +18,26 @@ class PlaceDetailsCard extends StatelessWidget {
     this.onDirections,
   });
 
-  IconData _getCategoryIcon() {
+  String _getCategoryIcon() {
     switch (place.category) {
       case 'amenity':
-        return FeatherIcons.coffee;
+        return AssetsConst.featherCoffee;
       case 'tourism':
-        return FeatherIcons.camera;
+        return AssetsConst.featherCamera;
       case 'shop':
-        return FeatherIcons.shoppingBag;
+        return AssetsConst.featherShoppingBag;
       case 'highway':
-        return FeatherIcons.navigation;
+        return AssetsConst.featherNavigation;
       case 'building':
-        return FeatherIcons.home;
+        return AssetsConst.featherHome;
       case 'natural':
-        return FeatherIcons.sun;
+        return AssetsConst.featherSun;
       case 'leisure':
-        return FeatherIcons.heart;
+        return AssetsConst.featherHeart;
       case 'place':
-        return FeatherIcons.mapPin;
+        return AssetsConst.featherMapPin;
       default:
-        return FeatherIcons.mapPin;
+        return AssetsConst.featherMapPin;
     }
   }
 
@@ -70,8 +71,11 @@ class PlaceDetailsCard extends StatelessWidget {
                     color: const Color(0xFF4285F4).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(_getCategoryIcon(),
-                      color: const Color(0xFF4285F4), size: 22),
+                  child: CustomSvgAssetImageView(
+                    path: _getCategoryIcon(),
+                    color: const Color(0xFF4285F4),
+                    height: 22, width: 22,
+                  ),
                 ),
                 12.pw,
                 Expanded(
@@ -106,7 +110,11 @@ class PlaceDetailsCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(FeatherIcons.x, size: 20),
+                  icon: const CustomSvgAssetImageView(
+                    path: AssetsConst.featherX,
+                    color: Colors.grey,
+                    height: 20, width: 20,
+                  ),
                   onPressed: onClose,
                   color: Colors.grey,
                   padding: EdgeInsets.zero,
@@ -124,8 +132,8 @@ class PlaceDetailsCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(FeatherIcons.mapPin,
-                    color: Color(0xFF5F6368), size: 16),
+                const CustomSvgAssetImageView(path: AssetsConst.featherMapPin,
+                    color: Color(0xFF5F6368), height: 16, width: 16),
                 8.pw,
                 Expanded(
                   child: CustomText(
@@ -145,8 +153,8 @@ class PlaceDetailsCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Row(
                 children: [
-                  const Icon(FeatherIcons.crosshair,
-                      color: Color(0xFF5F6368), size: 16),
+                  const CustomSvgAssetImageView(path: AssetsConst.featherCrosshair,
+                      color: Color(0xFF5F6368), height: 16, width: 16),
                   8.pw,
                   CustomText(
                     '${place.latitude!.toStringAsFixed(6)}, '
@@ -165,7 +173,11 @@ class PlaceDetailsCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: onDirections,
-                icon: const Icon(FeatherIcons.navigation2, size: 16),
+                icon: const CustomSvgAssetImageView(
+                  path: AssetsConst.featherNavigation2,
+                  color: Colors.white,
+                  height: 16, width: 16,
+                ),
                 label: const Text('Navigate',
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 style: ElevatedButton.styleFrom(

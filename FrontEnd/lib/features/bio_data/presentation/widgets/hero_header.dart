@@ -1,4 +1,5 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -49,14 +50,20 @@ class HeroHeader extends StatelessWidget {
           Row(
             children: [
               CustomIconButton(
-                icon: const Icon(FeatherIcons.arrowLeft),
+                icon: const CustomSvgAssetImageView(
+                  path: AssetsConst.featherArrowLeft,
+                  color: Colors.white,
+                ),
                 color: Colors.white,
                 iconSize: 20,
                 onPressed: () => CustomRoute.back(),
               ),
               const Spacer(),
               CustomIconButton(
-                icon: const Icon(FeatherIcons.share2),
+                icon: const CustomSvgAssetImageView(
+                  path: AssetsConst.featherShare2,
+                  color: Colors.white,
+                ),
                 color: Colors.white70,
                 iconSize: 20,
                 onPressed: () {
@@ -122,7 +129,7 @@ class HeroHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(FeatherIcons.code, size: 14, color: Colors.white70),
+                const CustomSvgAssetImageView(path: AssetsConst.featherCode, height: 14, width: 14, color: Colors.white70),
                 8.pw,
                 const CustomText(
                   "Flutter Developer  •  4+ Years",

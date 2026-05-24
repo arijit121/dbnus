@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({
@@ -13,7 +14,7 @@ class SectionTitle extends StatelessWidget {
   });
 
   final String title;
-  final IconData icon;
+  final String icon;
   final Widget? trailing;
 
   @override
@@ -41,7 +42,7 @@ class SectionTitle extends StatelessWidget {
             color: ColorConst.violate.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: ColorConst.violate),
+          child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: ColorConst.violate),
         ),
         10.pw,
         Expanded(

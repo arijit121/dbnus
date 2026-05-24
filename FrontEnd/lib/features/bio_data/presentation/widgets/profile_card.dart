@@ -1,4 +1,4 @@
-import 'package:feather_icons/feather_icons.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
@@ -16,7 +16,7 @@ class ProfileCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionTitle(
-          icon: FeatherIcons.user,
+          icon: AssetsConst.featherUser,
           title: "Profile",
           color: ColorConst.lightBlue,
         ),
