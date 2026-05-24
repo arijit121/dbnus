@@ -105,7 +105,6 @@ dependencies:
   gif_view: ^1.0.3
   syncfusion_flutter_pdfviewer: ^33.1.45
   printing: ^5.14.3
-  icons_plus: ^5.0.0
   material_ui: ^0.0.1
   cupertino_ui: ^0.0.1
 
