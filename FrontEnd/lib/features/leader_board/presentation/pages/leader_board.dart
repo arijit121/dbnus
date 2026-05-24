@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 
 import '../widgets/leaderboard_header.dart';

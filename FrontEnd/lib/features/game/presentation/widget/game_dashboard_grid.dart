@@ -4,7 +4,7 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/organisms/grids/custom_grid_view.dart';
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/navigation/router_name.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GameEntry {
   final String title;

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_udid/flutter_udid.dart' deferred as flutter_udid;
 import 'package:geolocator/geolocator.dart';
 import 'package:package_info_plus/package_info_plus.dart'

@@ -5,7 +5,7 @@ import 'package:camera/camera.dart' deferred as camera;
 import 'package:file_picker/file_picker.dart' deferred as file_picker;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart'
     deferred as flutter_image_compress;
 import 'package:image_picker/image_picker.dart' deferred as image_picker;

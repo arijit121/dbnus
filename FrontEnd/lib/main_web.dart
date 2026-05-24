@@ -5,7 +5,7 @@ import 'package:firebase_performance/firebase_performance.dart'
     deferred as firebase_performance;
 import 'package:flutter/foundation.dart' deferred as foundation;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:dbnus/shared/constants/theme_const.dart';

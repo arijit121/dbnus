@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';

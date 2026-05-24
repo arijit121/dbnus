@@ -1,6 +1,6 @@
 // ignore_color_warnings
 import 'package:dbnus/shared/constants/assects_const.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:dbnus/core/services/open_service.dart';
 import 'package:dbnus/shared/constants/color_const.dart';

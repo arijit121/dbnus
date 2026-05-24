@@ -3,7 +3,7 @@ import 'package:dbnus/core/services/value_handler.dart'
     deferred as value_handler;
 import 'package:dbnus/core/storage/local_preferences.dart'
     deferred as local_preferences;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:dbnus/core/enums/language_enum.dart';

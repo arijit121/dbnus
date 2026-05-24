@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:dbnus/shared/extensions/spacing.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/value_handler.dart';

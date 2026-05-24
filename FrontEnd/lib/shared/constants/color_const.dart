@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ColorConst {
   static const Color baseHexColor = Color(0xFF6C63FF); // Modern Purple-Blue

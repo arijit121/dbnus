@@ -1,7 +1,7 @@
 import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MapSearchBar extends StatelessWidget {
   final TextEditingController controller;

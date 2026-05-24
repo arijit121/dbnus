@@ -3,7 +3,7 @@ import 'package:dbnus/features/game/presentation/widget/game_dashboard_header.da
 import 'package:dbnus/features/game/presentation/widget/game_dashboard_grid.dart';
 import 'package:dbnus/features/game/presentation/widget/game_section_title.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GameDashboard extends StatelessWidget {
   const GameDashboard({super.key});

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../domain/entities/map_marker.dart';
