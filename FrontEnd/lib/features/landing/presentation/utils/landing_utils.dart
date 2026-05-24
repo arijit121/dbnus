@@ -1,6 +1,6 @@
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
