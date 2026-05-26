@@ -148,7 +148,6 @@ flutter:
     - assets/design/
     - assets/images/
     - assets/icon/
-    - assets/icon/feather/
     - assets/store/
     - assets/sound/
     - assets/js/
