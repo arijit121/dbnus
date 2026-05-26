@@ -30,7 +30,7 @@ _flutter.loader.load({
     },
     onEntrypointLoaded: async function (engineInitializer) {
 
-        let appRunner = await engineInitializer.initializeEngine({assetBase: assetBase});
+        const appRunner = await engineInitializer.initializeEngine({assetBase: assetBase});
 
         await appRunner.runApp();
 
@@ -39,7 +39,7 @@ _flutter.loader.load({
 
         // Hide SEO loaders from the user once Flutter is loaded, but keep in DOM
         if (seoLoader) {
-            await addDelay(300);
+            await addDelay(400);
             const doc = new DOMParser().parseFromString(seoLoader.innerHTML, "text/html");
             seoLoader.innerHTML = doc.body.innerHTML;
         }
