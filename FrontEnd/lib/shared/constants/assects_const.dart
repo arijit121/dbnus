@@ -91,6 +91,9 @@ class AssetsConst {
   static const String appRatingScreenImage =
       "assets/design/app_rating_screen_image.png";
   static const String emptyFile = "assets/icon/empty_file.svg";
+  static const String folderSolid = "assets/icon/folder_solid.svg";
+  static const String photoCameraSolid = "assets/icon/photo_camera_solid.svg";
+  static const String photo = "assets/icon/photo.svg";
 
   // Feather icon assets
   static const String featherActivity = "assets/icon/feather_activity.svg";

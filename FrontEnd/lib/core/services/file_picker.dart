@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart' deferred as camera;
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:file_picker/file_picker.dart' deferred as file_picker;
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart'
@@ -23,6 +23,8 @@ import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
+
+import '../../shared/constants/assects_const.dart';
 
 class CustomFilePicker {
   static const int _maxFileSize = 5;
@@ -302,10 +304,11 @@ class CustomFilePicker {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              CupertinoIcons.photo_camera_solid,
+                            CustomSvgAssetImageView(
+                              path: AssetsConst.photoCameraSolid,
                               color: Colors.blueGrey,
-                              size: 40,
+                              height: 40,
+                              width: 40,
                             ),
                             8.ph,
                             SizedBox(
@@ -330,10 +333,11 @@ class CustomFilePicker {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            CupertinoIcons.photo,
+                          CustomSvgAssetImageView(
+                            path: AssetsConst.photo,
                             color: Colors.blueGrey,
-                            size: 40,
+                            height: 40,
+                            width: 40,
                           ),
                           8.ph,
                           SizedBox(
@@ -358,10 +362,11 @@ class CustomFilePicker {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            CupertinoIcons.folder_solid,
+                          CustomSvgAssetImageView(
+                            path: AssetsConst.folderSolid,
                             color: Colors.blueGrey,
-                            size: 40,
+                            height: 40,
+                            width: 40,
                           ),
                           8.ph,
                           SizedBox(
