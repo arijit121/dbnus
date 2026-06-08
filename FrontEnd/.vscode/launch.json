@@ -54,6 +54,24 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_prod.dart"
+        },
+        {
+            "name": "Jaspr Web",
+            "request": "launch",
+            "type": "dart",
+            "cwd": "jaspr_web",
+            "program": "jaspr_web/lib/main.client.dart"
+        },
+        {
+            "name": "Jaspr Web (dev)",
+            "request": "launch",
+            "type": "dart",
+            "cwd": "jaspr_web",
+            "program": "jaspr_web/lib/main.client.dart",
+            "args": [
+                "--dart-define",
+                "ENV=dev"
+            ]
         }
     ]
 }
