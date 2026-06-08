@@ -1,5 +1,6 @@
 import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
+import 'package:web/web.dart' as web;
 import '../../shared/constants/theme.dart';
 import '../../shared/ui/ui.dart';
 
@@ -11,42 +12,66 @@ class LeaderBoardPage extends StatefulComponent {
 }
 
 class _LeaderBoardPageState extends State<LeaderBoardPage> {
-  final List<Map<String, dynamic>> _players = [
-    {'name': 'Alex Johnson', 'score': 9850, 'rank': 1, 'icon': '🥇', 'trend': '+12'},
-    {'name': 'Maria Garcia', 'score': 9420, 'rank': 2, 'icon': '🥈', 'trend': '+8'},
-    {'name': 'James Wilson', 'score': 8990, 'rank': 3, 'icon': '🥉', 'trend': '+5'},
-    {'name': 'Sarah Chen', 'score': 8750, 'rank': 4, 'icon': '4', 'trend': '+3'},
-    {'name': 'David Kim', 'score': 8340, 'rank': 5, 'icon': '5', 'trend': '-2'},
-    {'name': 'Emily Brown', 'score': 7980, 'rank': 6, 'icon': '6', 'trend': '+1'},
-    {'name': 'Michael Lee', 'score': 7650, 'rank': 7, 'icon': '7', 'trend': '+4'},
-    {'name': 'Lisa Wang', 'score': 7320, 'rank': 8, 'icon': '8', 'trend': '-1'},
-    {'name': 'Robert Taylor', 'score': 6990, 'rank': 9, 'icon': '9', 'trend': '+2'},
-    {'name': 'Amy Martinez', 'score': 6670, 'rank': 10, 'icon': '10', 'trend': '+6'},
-  ];
+  final List<web.Element> _injectedElements = [];
+  String? _originalTitle;
 
   @override
-  Component build(BuildContext context) {
-    return Column(
-      gap: 24,
-      children: [
-        /*Document.head(
-          title: 'Health Articles, Wellness Tips & Fitness Blog | SastaSundar',
-          meta: {
-            'viewport': 'width=device-width, initial-scale=1.0',
-            'description':
-            "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today!",
-            'keywords':
-            "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today! ",
-          },
-          children: [
-            meta(attributes: {'charset': 'UTF-8'}),
-            link(
-              href: 'https://sastasundar.com/assets/css/healtharticle-homepage-seo.css',
-              rel: 'stylesheet',
-            ),
-            script(
-              attributes: {'type': 'application/ld+json'},
-              content: r'''{
+  void initState() {
+    super.initState();
+    _injectSeoMetadata();
+  }
+
+  @override
+  void dispose() {
+    _removeSeoMetadata();
+    super.dispose();
+  }
+
+  void _injectSeoMetadata() {
+    final head = web.document.head;
+    if (head == null) return;
+
+    _originalTitle = web.document.title;
+    web.document.title = 'Health Articles, Wellness Tips & Fitness Blog | SastaSundar';
+
+    // 1. Charset meta tag
+    final charsetMeta = web.document.createElement('meta');
+    charsetMeta.setAttribute('charset', 'UTF-8');
+    head.appendChild(charsetMeta);
+    _injectedElements.add(charsetMeta);
+
+    // 2. Viewport meta tag
+    final viewportMeta = web.document.createElement('meta');
+    viewportMeta.setAttribute('name', 'viewport');
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+    head.appendChild(viewportMeta);
+    _injectedElements.add(viewportMeta);
+
+    // 3. Description meta tag
+    final descMeta = web.document.createElement('meta');
+    descMeta.setAttribute('name', 'description');
+    descMeta.setAttribute('content', "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today!");
+    head.appendChild(descMeta);
+    _injectedElements.add(descMeta);
+
+    // 4. Keywords meta tag
+    final keywordsMeta = web.document.createElement('meta');
+    keywordsMeta.setAttribute('name', 'keywords');
+    keywordsMeta.setAttribute('content', "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today! ");
+    head.appendChild(keywordsMeta);
+    _injectedElements.add(keywordsMeta);
+
+    // 5. External stylesheet link tag
+    final linkStyle = web.document.createElement('link');
+    linkStyle.setAttribute('rel', 'stylesheet');
+    linkStyle.setAttribute('href', 'https://sastasundar.com/assets/css/healtharticle-homepage-seo.css');
+    head.appendChild(linkStyle);
+    _injectedElements.add(linkStyle);
+
+    // 6. JSON-LD schema script tag
+    final scriptJsonLd = web.document.createElement('script');
+    scriptJsonLd.setAttribute('type', 'application/ld+json');
+    scriptJsonLd.textContent = r'''{
     "@context": "https://schema.org",
     "@graph": [
         {
@@ -261,10 +286,39 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
             ]
         }
     ]
-}''',
-            ),
-          ],
-        ),*/
+}''';
+    head.appendChild(scriptJsonLd);
+    _injectedElements.add(scriptJsonLd);
+  }
+
+  void _removeSeoMetadata() {
+    for (final element in _injectedElements) {
+      element.remove();
+    }
+    _injectedElements.clear();
+    if (_originalTitle != null) {
+      web.document.title = _originalTitle!;
+    }
+  }
+
+  final List<Map<String, dynamic>> _players = [
+    {'name': 'Alex Johnson', 'score': 9850, 'rank': 1, 'icon': '🥇', 'trend': '+12'},
+    {'name': 'Maria Garcia', 'score': 9420, 'rank': 2, 'icon': '🥈', 'trend': '+8'},
+    {'name': 'James Wilson', 'score': 8990, 'rank': 3, 'icon': '🥉', 'trend': '+5'},
+    {'name': 'Sarah Chen', 'score': 8750, 'rank': 4, 'icon': '4', 'trend': '+3'},
+    {'name': 'David Kim', 'score': 8340, 'rank': 5, 'icon': '5', 'trend': '-2'},
+    {'name': 'Emily Brown', 'score': 7980, 'rank': 6, 'icon': '6', 'trend': '+1'},
+    {'name': 'Michael Lee', 'score': 7650, 'rank': 7, 'icon': '7', 'trend': '+4'},
+    {'name': 'Lisa Wang', 'score': 7320, 'rank': 8, 'icon': '8', 'trend': '-1'},
+    {'name': 'Robert Taylor', 'score': 6990, 'rank': 9, 'icon': '9', 'trend': '+2'},
+    {'name': 'Amy Martinez', 'score': 6670, 'rank': 10, 'icon': '10', 'trend': '+6'},
+  ];
+
+  @override
+  Component build(BuildContext context) {
+    return Column(
+      gap: 24,
+      children: [
 
         // Header
         Row(
