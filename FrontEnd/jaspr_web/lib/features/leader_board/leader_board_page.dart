@@ -1,7 +1,6 @@
 import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
 import 'package:jaspr_app/shared/extensions/logger_extension.dart';
-// import 'package:web/web.dart' as web;
 import '../../shared/constants/theme.dart';
 import '../../shared/ui/ui.dart';
 

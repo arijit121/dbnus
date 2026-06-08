@@ -16,6 +16,7 @@
 .buildlog/
 .history
 .svn/
+.agents/
 migrate_working_dir/
 
 # IntelliJ related
