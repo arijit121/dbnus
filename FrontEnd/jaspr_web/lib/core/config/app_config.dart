@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:js_interop';
-import 'package:web/web.dart' as web;
+import 'package:universal_web/js_interop.dart';
+import 'package:universal_web/web.dart' as web;
 import 'package:uuid/uuid.dart';
 
 import '../../shared/extensions/logger_extension.dart';

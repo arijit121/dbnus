@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:js_interop';
+import 'package:universal_web/js_interop.dart';
 import 'dart:typed_data';
-import 'package:web/web.dart' as web;
+import 'package:universal_web/web.dart' as web;
 import '../models/custom_file.dart';
 import '../../shared/extensions/logger_extension.dart';
 
@@ -15,7 +15,7 @@ class CustomFilePicker {
         input.accept = allowedExtensions.map((e) => '.$e').join(',');
       }
 
-      input.onchange = (web.Event e) async {
+      input.onchange = (web.Event e) {
         final files = input.files;
         if (files != null && files.length > 0) {
           final file = files.item(0)!;
@@ -57,7 +57,7 @@ class CustomFilePicker {
         input.accept = allowedExtensions.map((e) => '.$e').join(',');
       }
 
-      input.onchange = (web.Event e) async {
+      input.onchange = (web.Event e) {
         final files = input.files;
         if (files != null && files.length > 0) {
           final customFiles = <CustomFile>[];
@@ -104,7 +104,7 @@ class CustomFilePicker {
       input.accept = 'image/*';
       input.setAttribute('capture', 'environment');
 
-      input.onchange = (web.Event e) async {
+      input.onchange = (web.Event e) {
         final files = input.files;
         if (files != null && files.length > 0) {
           final file = files.item(0)!;

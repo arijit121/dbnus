@@ -1,5 +1,5 @@
-import 'dart:js_interop';
-import 'package:web/web.dart' as web;
+import 'package:universal_web/js_interop.dart';
+import 'package:universal_web/web.dart' as web;
 import '../../shared/extensions/logger_extension.dart';
 
 class OpenService {
