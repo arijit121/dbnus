@@ -1,6 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-import '../../constants/theme.dart';
+import '../../../../shared/constants/theme.dart';
 
 class NavItem {
   final String title;

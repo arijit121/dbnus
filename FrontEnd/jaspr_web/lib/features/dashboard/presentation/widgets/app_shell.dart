@@ -1,7 +1,7 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-import '../../../navigation/route_names.dart';
-import '../../constants/text_utils.dart';
+import '../../../../navigation/route_names.dart';
+import '../../../../shared/constants/text_utils.dart';
 import 'navigation_rail.dart';
 import 'app_bar.dart';
 
