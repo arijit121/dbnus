@@ -1,11 +1,98 @@
-class ApiConfig {
-  static const String baseUrl = 'https://www.googleapis.com/';
-  static const String booksEndpoint = '${baseUrl}books/v1/volumes';
-  static const String hostUrl = 'https://dbnus-df986.web.app';
+import '../models/app_type_version_param.dart';
+import '../network/models/headers.dart';
+import '../../shared/extensions/logger_extension.dart';
+import 'app_config.dart';
 
-  static String testImageUrl({double aspectRatio = 1.0}) {
-    final width = 512 + (DateTime.now().millisecondsSinceEpoch % 1648);
-    final height = (width / aspectRatio).toInt();
-    return 'https://picsum.photos/$width/$height.jpg';
+class ApiConfig {
+  static Future<Map<String, String>> getHeaders({
+    bool? isPinCodeRequired,
+    bool? onlyContentType,
+    bool? noToken,
+    ContentType? contentType = ContentType.json,
+    bool? withoutOldHeader,
+  }) async {
+    try {
+      if (onlyContentType == true) {
+        return Headers(contentType: contentType?.value).toJson();
+      }
+
+      final appConfig = AppConfig();
+
+      final results = await Future.wait([
+        appConfig.getAppVersion(),
+        appConfig.getAppVersionCode(),
+        appConfig.getDeviceId(),
+        appConfig.getDeviceName(),
+        appConfig.getDeviceOsInfo(),
+        appConfig.getNetworkInfo(),
+        appConfig.getWifiIpV4(),
+        appConfig.getWifiIpV6(),
+        appConfig.getAppType(),
+      ]);
+
+      final appVersion = results[0];
+      final appVersionCode = results[1];
+      final deviceId = results[2];
+      final deviceName = results[3];
+      final deviceOsInfo = results[4];
+      final networkInfo = results[5];
+      final deviceIpV4 = results[6];
+      final deviceIpV6 = results[7];
+      final appType = results[8];
+
+      final headers = Headers(
+        contentType: contentType?.value,
+        appType: appType,
+        appVersion: appVersion,
+        appVersionCode: appVersionCode,
+        deviceId: deviceId,
+        deviceName: deviceName,
+        deviceOsInfo: deviceOsInfo,
+        deviceWidth: appConfig.getDeviceWidth(),
+        deviceHeight: appConfig.getDeviceHeight(),
+        deviceDensity: "560",
+        deviceDensityType: "xhdpi",
+        networkInfo: networkInfo,
+        authorization: "Basic YWRtaW46MTIzNA==",
+        deviceIpV4: deviceIpV4,
+        deviceIpV6: deviceIpV6,
+      );
+
+      return headers.toJson();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return {};
+    }
   }
+
+  static Future<Map<String, dynamic>> getParams({
+    bool? isPinCodeRequired,
+  }) async {
+    final results = await Future.wait([
+      AppConfig().getAppType(),
+      AppConfig().getAppVersion(),
+    ]);
+    final appType = results[0];
+    final appVersion = results[1];
+
+    Params appTypeVersionParam = Params(
+      appType: appType,
+      appVersion: appVersion,
+    );
+    Map<String, dynamic> json = appTypeVersionParam.toJson();
+    json.removeWhere((key, value) => value == null);
+    return json;
+  }
+}
+
+enum ContentType {
+  json('application/json'),
+  urlencoded_char_utf8('application/x-www-form-urlencoded; charset=utf-8'),
+  textplain_char_utf8('text/plain; charset=utf-8'),
+  xml('application/xml')
+  ;
+
+  final String value;
+
+  const ContentType(this.value);
 }

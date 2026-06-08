@@ -1,7 +1,7 @@
 import 'package:jaspr_router/jaspr_router.dart';
 
 import 'route_names.dart';
-import '../features/dashboard/dashboard_page.dart';
+import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../features/leader_board/leader_board_page.dart';
 import '../features/order/order_page.dart';
 import '../features/bio_data/bio_data_page.dart';

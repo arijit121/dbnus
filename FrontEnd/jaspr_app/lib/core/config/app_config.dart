@@ -4,33 +4,8 @@ import 'package:web/web.dart' as web;
 import 'package:uuid/uuid.dart';
 
 import '../../shared/extensions/logger_extension.dart';
+import '../models/position.dart';
 import '../storage/local_preferences.dart';
-
-class Position {
-  final double latitude;
-  final double longitude;
-  final DateTime timestamp;
-  final double accuracy;
-  final double altitude;
-  final double altitudeAccuracy;
-  final double heading;
-  final double headingAccuracy;
-  final double speed;
-  final double speedAccuracy;
-
-  Position({
-    required this.latitude,
-    required this.longitude,
-    required this.timestamp,
-    required this.accuracy,
-    required this.altitude,
-    required this.altitudeAccuracy,
-    required this.heading,
-    required this.headingAccuracy,
-    required this.speed,
-    required this.speedAccuracy,
-  });
-}
 
 class AppConfig {
   Future<String?> getAppVersion() async {
@@ -150,18 +125,20 @@ class AppConfig {
       final completer = Completer<Position?>();
       geolocation.getCurrentPosition(
         (web.GeolocationPosition pos) {
-          completer.complete(Position(
-            latitude: pos.coords.latitude.toDouble(),
-            longitude: pos.coords.longitude.toDouble(),
-            timestamp: DateTime.fromMillisecondsSinceEpoch(pos.timestamp),
-            accuracy: pos.coords.accuracy.toDouble(),
-            altitude: pos.coords.altitude?.toDouble() ?? 0.0,
-            altitudeAccuracy: pos.coords.altitudeAccuracy?.toDouble() ?? 0.0,
-            heading: pos.coords.heading?.toDouble() ?? 0.0,
-            headingAccuracy: 0.0,
-            speed: pos.coords.speed?.toDouble() ?? 0.0,
-            speedAccuracy: 0.0,
-          ));
+          completer.complete(
+            Position(
+              latitude: pos.coords.latitude.toDouble(),
+              longitude: pos.coords.longitude.toDouble(),
+              timestamp: DateTime.fromMillisecondsSinceEpoch(pos.timestamp),
+              accuracy: pos.coords.accuracy.toDouble(),
+              altitude: pos.coords.altitude?.toDouble() ?? 0.0,
+              altitudeAccuracy: pos.coords.altitudeAccuracy?.toDouble() ?? 0.0,
+              heading: pos.coords.heading?.toDouble() ?? 0.0,
+              headingAccuracy: 0.0,
+              speed: pos.coords.speed?.toDouble() ?? 0.0,
+              speedAccuracy: 0.0,
+            ),
+          );
         }.toJS,
         (web.GeolocationPositionError err) {
           completer.complete(null);
