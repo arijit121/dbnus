@@ -29,6 +29,243 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
     return Column(
       gap: 24,
       children: [
+        /*Document.head(
+          title: 'Health Articles, Wellness Tips & Fitness Blog | SastaSundar',
+          meta: {
+            'viewport': 'width=device-width, initial-scale=1.0',
+            'description':
+            "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today!",
+            'keywords':
+            "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today! ",
+          },
+          children: [
+            meta(attributes: {'charset': 'UTF-8'}),
+            link(
+              href: 'https://sastasundar.com/assets/css/healtharticle-homepage-seo.css',
+              rel: 'stylesheet',
+            ),
+            script(
+              attributes: {'type': 'application/ld+json'},
+              content: r'''{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Organization",
+            "@id": "https://sastasundar.com/#organization",
+            "name": "SastaSundar.com",
+            "url": "https://sastasundar.com",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://sastasundar.com/assets/images/ss_logo.png"
+            },
+            "sameAs": [
+                "https://www.facebook.com/SastaSundarApp/",
+                "https://x.com/Sastasundarapp",
+                "https://www.youtube.com/@SastaSundarApp",
+                "https://www.linkedin.com/company/sastasundarapp/"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-6289090000",
+                "email": "care@sastasundar.com",
+                "contactType": "customer support",
+                "areaServed": "IN",
+                "availableLanguage": [
+                    "English",
+                    "Hindi",
+                    "Bengali"
+                ]
+            }
+        },
+        {
+            "@type": "WebSite",
+            "@id": "https://sastasundar.com/#website",
+            "url": "https://sastasundar.com",
+            "name": "SastaSundar.com",
+            "publisher": {
+                "@id": "https://sastasundar.com/#organization"
+            }
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://sastasundar.com/health-article-seo#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://sastasundar.com"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Health Articles",
+                    "item": "https://sastasundar.com/health-article-seo"
+                }
+            ]
+        },
+        {
+            "@type": [
+                "CollectionPage",
+                "MedicalWebPage"
+            ],
+            "@id": "https://sastasundar.com/health-article-seo#webpage",
+            "url": "https://sastasundar.com/health-article-seo",
+            "name": "Health Articles, Wellness Tips & Fitness Blog | SastaSundar",
+            "headline": "Health Articles & Expert Wellness Tips",
+            "description": "Explore SastaSundar's health articles for expert tips on diet, fitness, beauty, and disease prevention. Read our wellness blog for a healthier lifestyle today!",
+            "inLanguage": "en",
+            "isPartOf": {
+                "@id": "https://sastasundar.com/#website"
+            },
+            "publisher": {
+                "@id": "https://sastasundar.com/#organization"
+            },
+            "breadcrumb": {
+                "@id": "https://sastasundar.com/health-article-seo#breadcrumb"
+            },
+            "primaryImageOfPage": {
+                "@type": "ImageObject",
+                "url": "https://sastasundar.com/assets/images/health-articles-banner.jpg"
+            },
+            "hasPart": [
+                {
+                    "@id": "https://sastasundar.com/health-article-seo#latestarticles"
+                },
+                {
+                    "@id": "https://sastasundar.com/health-article-seo#trendingarticles"
+                },
+                {
+                    "@id": "https://sastasundar.com/health-article-seo#browsebycategory"
+                }
+            ]
+        },
+        {
+            "@type": "ItemList",
+            "@id": "https://sastasundar.com/health-article-seo#latestarticles",
+            "name": "Latest Health Articles",
+            "itemListOrder": "https://schema.org/ItemListOrderDescending",
+            "numberOfItems": 10,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "url": "https://sastasundar.com/healtharticle/neem-leaves-benefits-for-skin-and-blood-purification"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "url": "https://sastasundar.com/healtharticle/cholesterol-myths-vs-facts"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "url": "https://sastasundar.com/healtharticle/balanced-diet-plate-for-healthy-lifestyle"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "url": "https://sastasundar.com/healtharticle/chickenpox-cases-symptoms-vaccine-treatment"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 5,
+                    "url": "https://sastasundar.com/healtharticle/pcod-vs-pcos-what-to-know"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 6,
+                    "url": "https://sastasundar.com/healtharticle/calcium-deficiency-symptoms-causes-improve-bone-health"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 7,
+                    "url": "https://sastasundar.com/healtharticle/heat-rash-causes-symptoms-treatment"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 8,
+                    "url": "https://sastasundar.com/healtharticle/safe-smart-travel-essentials-with-babies"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 9,
+                    "url": "https://sastasundar.com/healtharticle/turmeric-benefits-immunity-inflammation"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 10,
+                    "url": "https://sastasundar.com/healtharticle/gut-health-warning-signs-when-digestion-needs-help"
+                }
+            ]
+        },
+        {
+            "@type": "ItemList",
+            "@id": "https://sastasundar.com/health-article-seo#trendingarticles",
+            "name": "Trending Health Articles",
+            "itemListOrder": "https://schema.org/ItemListOrderDescending",
+            "numberOfItems": 5,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "url": "https://sastasundar.com/healtharticle/balanced-diet-plate-for-healthy-lifestyle"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "url": "https://sastasundar.com/healtharticle/neem-leaves-benefits-for-skin-and-blood-purification"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "url": "https://sastasundar.com/healtharticle/pcod-vs-pcos-what-to-know"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "url": "https://sastasundar.com/healtharticle/cholesterol-myths-vs-facts"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 5,
+                    "url": "https://sastasundar.com/healtharticle/heat-rash-causes-symptoms-treatment"
+                }
+            ]
+        },
+        {
+            "@type": "ItemList",
+            "@id": "https://sastasundar.com/health-article-seo#browsebycategory",
+            "name": "Browse Articles by Category",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 3,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Latest Articles",
+                    "url": "https://sastasundar.com/health-article-seo"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Trending Now",
+                    "url": "https://sastasundar.com/health-article-seo"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Browse by Category",
+                    "url": "https://sastasundar.com/health-article-seo"
+                }
+            ]
+        }
+    ]
+}''',
+            ),
+          ],
+        ),*/
+
         // Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
