@@ -1,6 +1,12 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import '../../shared/constants/theme.dart';
+import '../../shared/ui/atoms/custom_button.dart';
+import '../../shared/ui/atoms/custom_text.dart';
+import '../../shared/ui/organisms/column.dart';
+import '../../shared/ui/organisms/grid_view.dart';
+import '../../shared/ui/organisms/list_view.dart';
+import '../../shared/ui/organisms/row.dart';
 
 class LeaderBoardPage extends StatefulComponent {
   const LeaderBoardPage({super.key});
@@ -13,7 +19,7 @@ class LeaderBoardPage extends StatefulComponent {
 }
 
 class _LeaderBoardPageState extends State<LeaderBoardPage> {
-  List<Map<String, dynamic>> _players = [
+  final List<Map<String, dynamic>> _players = [
     {'name': 'Alex Johnson', 'score': 9850, 'rank': 1, 'icon': '🥇', 'trend': '+12'},
     {'name': 'Maria Garcia', 'score': 9420, 'rank': 2, 'icon': '🥈', 'trend': '+8'},
     {'name': 'James Wilson', 'score': 8990, 'rank': 3, 'icon': '🥉', 'trend': '+5'},
@@ -28,68 +34,149 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
 
   @override
   Component build(BuildContext context) {
-    return div(classes: 'leaderboard', [
-      // Header
-      div(classes: 'lb-header', [
-        h2([text('🏆 Leader Board')]),
-        p(classes: 'lb-subtitle', [text('Top performers this season')]),
-      ]),
+    return Column(
+      gap: 24,
+      children: [
+        // Header
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomText('🏆 Leader Board', variant: TextVariant.h2),
+                CustomText('Top performers this season', variant: TextVariant.bodySmall),
+              ],
+            ),
+            CustomButton(
+              label: 'Refresh',
+              icon: '🔄',
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+          ],
+        ),
 
-      // Top 3 podium
-      div(classes: 'podium', [
-        _podiumCard(_players[1], 'silver'),
-        _podiumCard(_players[0], 'gold'),
-        _podiumCard(_players[2], 'bronze'),
-      ]),
+        // Stats overview grid
+        GridView(
+          crossAxisCount: 3,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          shrinkWrap: true,
+          children: [
+            _statCard('🏆', 'Active Season', 'Season 10'),
+            _statCard('👥', 'Total Players', '1,234'),
+            _statCard('💰', 'Prize Pool', '\$5,000'),
+          ],
+        ),
 
-      // Full ranking list
-      div(classes: 'ranking-card', [
-        div(classes: 'ranking-header', [
-          span(classes: 'rh-rank', [text('#')]),
-          span(classes: 'rh-name', [text('Player')]),
-          span(classes: 'rh-score', [text('Score')]),
-          span(classes: 'rh-trend', [text('Trend')]),
+        // Top 3 podium
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          gap: 16,
+          className: 'podium',
+          children: [
+            _podiumCard(_players[1], 'silver'),
+            _podiumCard(_players[0], 'gold'),
+            _podiumCard(_players[2], 'bronze'),
+          ],
+        ),
+
+        // Full ranking list
+        div(classes: 'ranking-card', [
+          div(classes: 'ranking-header', [
+            span(classes: 'rh-rank', [Component.text('#')]),
+            span(classes: 'rh-name', [Component.text('Player')]),
+            span(classes: 'rh-score', [Component.text('Score')]),
+            span(classes: 'rh-trend', [Component.text('Trend')]),
+          ]),
+          ListView.separated(
+            itemCount: _players.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => _rankRow(_players[index]),
+            separatorBuilder: (context, index) => div(
+              styles: Styles(raw: {
+                'height': '1px',
+                'background-color': '#F1F5F9',
+                'margin': '0 16px',
+              }),
+              [],
+            ),
+          ),
         ]),
-        for (var player in _players)
-          _rankRow(player),
-      ]),
-    ]);
+      ],
+    );
+  }
+
+  Component _statCard(String icon, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      gap: 12,
+      children: [
+        div(classes: 'lb-stat-icon', [Component.text(icon)]),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomText(label, variant: TextVariant.bodySmall, color: secondaryDark),
+            CustomText(value, variant: TextVariant.h3, fontWeight: FontWeight.w700),
+          ],
+        ),
+      ],
+    );
   }
 
   Component _podiumCard(Map<String, dynamic> player, String tier) {
-    return div(classes: 'podium-card podium-$tier', [
-      div(classes: 'podium-medal', [text(player['icon'] as String)]),
-      p(classes: 'podium-name', [text(player['name'] as String)]),
-      p(classes: 'podium-score', [text('${player['score']} pts')]),
-    ]);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      className: 'podium-card podium-$tier',
+      gap: 8,
+      children: [
+        div(classes: 'podium-medal', [Component.text(player['icon'] as String)]),
+        CustomText(player['name'] as String, variant: TextVariant.body, fontWeight: FontWeight.w600),
+        CustomText('${player['score']} pts', variant: TextVariant.bodySmall, color: secondaryDark),
+      ],
+    );
   }
 
   Component _rankRow(Map<String, dynamic> player) {
     final rank = player['rank'] as int;
     final isTop3 = rank <= 3;
-    return div(classes: 'rank-row ${isTop3 ? "rank-top" : ""}', [
-      span(classes: 'rank-num', [text('${player['rank']}')]),
-      div(classes: 'rank-avatar', [
-        text(((player['name'] as String)[0])),
-      ]),
-      span(classes: 'rank-name', [text(player['name'] as String)]),
-      span(classes: 'rank-score', [text('${player['score']}')]),
-      span(
-        classes: 'rank-trend ${(player['trend'] as String).startsWith('+') ? "trend-up" : "trend-down"}',
-        [text(player['trend'] as String)],
-      ),
-    ]);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      className: 'rank-row ${isTop3 ? "rank-top" : ""}',
+      children: [
+        CustomText('${player['rank']}', className: 'rank-num'),
+        div(classes: 'rank-avatar', [
+          Component.text(((player['name'] as String)[0])),
+        ]),
+        CustomText(player['name'] as String, className: 'rank-name'),
+        CustomText('${player['score']}', className: 'rank-score'),
+        CustomText(
+          player['trend'] as String,
+          className: 'rank-trend ${(player['trend'] as String).startsWith('+') ? "trend-up" : "trend-down"}',
+        ),
+      ],
+    );
   }
 
   static List<StyleRule> get styles => [
-        css('.leaderboard').styles(
+
+
+        css('.lb-stat-icon').styles(
+          fontSize: 24.px,
+          width: 44.px,
+          height: 44.px,
           display: .flex,
-          flexDirection: .column,
-          gap: Gap.all(24.px),
-          raw: {'animation': 'fadeIn 0.4s ease'},
+          alignItems: .center,
+          justifyContent: .center,
+          radius: .all(.circular(12.px)),
+          backgroundColor: const Color('#F1F5F9'),
         ),
-        css('.lb-header').styles(raw: {'text-align': 'center'}),
-        css('.lb-subtitle').styles(color: secondaryDark, fontSize: 14.px, margin: .zero, raw: {'margin-top': '4px'}),
         // Podium
         css('.podium').styles(
           display: .flex,

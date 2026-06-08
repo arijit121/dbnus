@@ -19,3 +19,8 @@ enum MainAxisSize {
   max,
   min,
 }
+
+enum Axis {
+  horizontal,
+  vertical,
+}
