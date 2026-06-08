@@ -1,6 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-import '../../shared/constants/theme.dart';
+import '../../constants/theme.dart';
 
 class ComingSoonPage extends StatelessComponent {
   final String title;

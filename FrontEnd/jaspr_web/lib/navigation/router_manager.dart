@@ -5,8 +5,8 @@ import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../features/leader_board/leader_board_page.dart';
 import '../features/order/order_page.dart';
 import '../features/bio_data/bio_data_page.dart';
-import '../features/common/coming_soon_page.dart';
-import '../features/common/error_page.dart';
+import '../shared/ui/molecules/coming_soon_page.dart';
+import '../shared/ui/molecules/error_page.dart';
 
 /// Singleton Route Manager that maps RouteNames to Jaspr Components.
 /// Extends programmatic routing to all sidebar features (with coming-soon fallbacks).

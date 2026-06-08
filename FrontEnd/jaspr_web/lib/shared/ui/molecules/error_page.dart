@@ -1,7 +1,7 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import 'package:jaspr_router/jaspr_router.dart';
-import '../../shared/constants/theme.dart';
+import '../../constants/theme.dart';
 
 class ErrorPage extends StatelessComponent {
   const ErrorPage({super.key});
