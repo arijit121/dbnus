@@ -8,6 +8,7 @@ import '../../../../shared/constants/theme.dart';
 import '../../../../shared/constants/text_utils.dart';
 import '../../../../navigation/route_names.dart';
 import '../../../../core/models/dynamic_data.dart';
+import '../../../../shared/extensions/logger_extension.dart';
 import '../../data/datasources/dashboard_remote_data_source.dart';
 import '../../data/repositories/dashboard_repository_impl.dart';
 import '../../domain/usecases/get_dashboard_data.dart';
@@ -80,10 +81,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ],
             ),
-            CustomButton(
-              label: 'Refresh',
+            CustomGOEButton(
+              child: text('Refresh'),
               className: 'action-btn primary',
-              onPressed: () => _bloc.add(const FetchDashboardData()),
+              backGroundColor: baseHexColor,
+              onPressed: () {
+                 AppLog.i( 'Refreshing leaderboard data...');
+                _bloc.add(const FetchDashboardData());
+              },
             ),
           ],
         ),
@@ -116,9 +121,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   variant: TextVariant.bodySmall,
                   color: red,
                 ),
-                CustomButton(
-                  label: 'Retry',
+                CustomGOEButton(
+                  child: text('Retry'),
                   className: 'retry-btn',
+                  backGroundColor: baseHexColor,
                   onPressed: () => _bloc.add(const FetchDashboardData()),
                 ),
               ],
@@ -180,11 +186,11 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const CustomText('Quick Actions', variant: TextVariant.h3),
-                    CustomButton(
-                      label: TextUtils.viewAll,
+                    CustomGOEButton(
+                      child: text(TextUtils.viewAll),
                       className: 'view-all-btn',
+                      borderColor: baseHexColor,
                       onPressed: () {},
-                      isOutlined: true,
                     ),
                   ],
                 ),

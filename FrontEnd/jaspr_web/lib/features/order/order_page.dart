@@ -21,9 +21,10 @@ class OrderPage extends StatelessComponent {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const CustomText('🛒 Orders', variant: TextVariant.h2),
-            CustomButton(
-              label: '+ New Order',
+            CustomGOEButton(
+              child: text('+ New Order'),
               className: 'order-new-btn',
+              backGroundColor: baseHexColor,
               onPressed: () {},
             ),
           ],
@@ -62,11 +63,11 @@ class OrderPage extends StatelessComponent {
   }
 
   Component _filterChip(String label, bool active) {
-    return CustomButton(
-      label: label,
+    return CustomGOEButton(
+      child: text(label),
       className: 'filter-chip ${active ? "active" : ""}',
-      isPrimary: active,
-      isOutlined: !active,
+      backGroundColor: active ? baseHexColor : null,
+      borderColor: active ? null : baseHexColor,
       onPressed: () {},
     );
   }

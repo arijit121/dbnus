@@ -17,12 +17,10 @@ class AppTopBar extends StatelessComponent {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CustomButton(
-            label: '',
-            icon: '☰',
-            className: 'topbar-btn',
+          CustomGOEButton(
             onPressed: onMenuTap,
-            isOutlined: true,
+            className: 'topbar-btn',
+            child: text('☰'),
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,11 +37,10 @@ class AppTopBar extends StatelessComponent {
               CustomText(title, className: 'topbar-title', fontWeight: FontWeight.w700, variant: TextVariant.h3),
             ],
           ),
-          const CustomButton(
-            label: '',
-            icon: '🔔',
+          CustomGOEButton(
+            onPressed: () {},
             className: 'topbar-btn',
-            isOutlined: true,
+            child: text('🔔'),
           ),
         ],
       ),

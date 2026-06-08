@@ -16,7 +16,11 @@ class ErrorWidget extends StatelessComponent {
       h3([text('Oops!')]),
       p(classes: 'error-msg', [text(message ?? 'Something went wrong')]),
       if (onRetry != null)
-        CustomButton(label: 'Retry', onPressed: onRetry),
+        CustomGOEButton(
+          onPressed: onRetry,
+          backGroundColor: baseHexColor,
+          child: text('Retry'),
+        ),
     ]);
   }
 
