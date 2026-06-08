@@ -9,6 +9,8 @@ class CustomButton extends StatelessComponent {
   final bool isOutlined;
   final bool isSmall;
   final String? icon;
+  final String? className;
+  final Styles? style;
 
   const CustomButton({
     required this.label,
@@ -17,6 +19,8 @@ class CustomButton extends StatelessComponent {
     this.isOutlined = false,
     this.isSmall = false,
     this.icon,
+    this.className,
+    this.style,
     super.key,
   });
 
@@ -27,14 +31,16 @@ class CustomButton extends StatelessComponent {
       if (isPrimary && !isOutlined) 'btn-primary',
       if (isOutlined) 'btn-outlined',
       if (isSmall) 'btn-sm',
-    ].join(' ');
+      if (className != null) className!,
+    ].join(' ').trim();
 
     return button(
       classes: cls,
+      styles: style,
       events: {'click': (e) => onPressed?.call()},
       [
         if (icon != null) span(classes: 'btn-icon', [text(icon!)]),
-        text(label),
+        if (label.isNotEmpty) text(label),
       ],
     );
   }

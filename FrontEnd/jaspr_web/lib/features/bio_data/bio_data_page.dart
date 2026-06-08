@@ -1,12 +1,7 @@
 import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
 import '../../shared/constants/theme.dart';
-import '../../shared/ui/organisms/row.dart';
-import '../../shared/ui/organisms/column.dart';
-import '../../shared/ui/organisms/container.dart';
-import '../../shared/ui/organisms/sized_box.dart';
-import '../../shared/ui/organisms/card.dart';
-import '../../shared/ui/organisms/grid_view.dart';
+import '../../shared/ui/ui.dart';
 
 class BioDataPage extends StatelessComponent {
   const BioDataPage({super.key});
@@ -33,20 +28,20 @@ class BioDataPage extends StatelessComponent {
                 width: 80,
                 height: 80,
                 alignment: Alignment.center,
-                child: text('AJ'),
+                child: const CustomText('AJ', variant: TextVariant.h2, color: Colors.white, fontWeight: FontWeight.w700),
               ),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  h2([text('Alex Johnson')]),
-                  p(classes: 'bio-role', [text('Full Stack Developer')]),
+                  CustomText('Alex Johnson', variant: TextVariant.h2),
+                  CustomText('Full Stack Developer', className: 'bio-role', variant: TextVariant.bodySmall),
                   Row(
                     className: 'bio-badges',
                     gap: 8,
                     children: [
-                      span(classes: 'badge badge-purple', [text('Pro')]),
-                      span(classes: 'badge badge-green', [text('Verified')]),
+                      CustomText('Pro', className: 'badge badge-purple', variant: TextVariant.caption),
+                      CustomText('Verified', className: 'badge badge-green', variant: TextVariant.caption),
                     ],
                   ),
                 ],
@@ -104,7 +99,7 @@ class BioDataPage extends StatelessComponent {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          h3(classes: 'bio-card-title', [text(title)]),
+          CustomText(title, variant: TextVariant.h3, className: 'bio-card-title'),
           Column(
             className: 'bio-card-body',
             gap: 2,
@@ -123,46 +118,9 @@ class BioDataPage extends StatelessComponent {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        span(classes: 'bio-label', [text(label)]),
-        span(classes: 'bio-value', [text(value)]),
+        CustomText(label, className: 'bio-label', variant: TextVariant.bodySmall),
+        CustomText(value, className: 'bio-value', variant: TextVariant.body, fontWeight: FontWeight.w600),
       ],
     );
   }
-
-  @css
-  static List<StyleRule> get styles => [
-    css('.bio-profile', [
-      css('&').styles(
-        backgroundColor: Colors.white,
-      ),
-    ]),
-    css('.bio-avatar').styles(
-      radius: .all(.circular(20.px)),
-      color: Colors.white, fontSize: 28.px, fontWeight: .w700,
-      raw: {'background': 'linear-gradient(135deg, #6366F1, #8B5CF6)', 'flex-shrink': '0'},
-    ),
-    css('.bio-role').styles(color: secondaryDark, fontSize: 14.px, margin: .zero, raw: {'margin-top': '4px'}),
-    css('.badge').styles(
-      padding: .symmetric(horizontal: 10.px, vertical: 4.px),
-      radius: .all(.circular(6.px)), fontSize: 11.px, fontWeight: .w600,
-    ),
-    css('.badge-purple').styles(backgroundColor: const Color('#EDE9FE'), color: violate),
-    css('.badge-green').styles(backgroundColor: lightGreen, color: deepGreen),
-    css('.bio-card', [
-      css('&').styles(
-        backgroundColor: Colors.white,
-      ),
-      css('.bio-card-title').styles(fontSize: 16.px, raw: {'margin-bottom': '16px'}),
-    ]),
-    css('.bio-row', [
-      css('&').styles(
-        padding: .symmetric(horizontal: 8.px, vertical: 12.px),
-        radius: .all(.circular(8.px)),
-        raw: {'transition': 'background 0.15s ease'},
-      ),
-      css('&:hover').styles(backgroundColor: scaffoldBg),
-      css('.bio-label').styles(fontSize: 13.px, color: secondaryDark, fontWeight: .w500),
-      css('.bio-value').styles(fontSize: 14.px, color: primaryDark, fontWeight: .w600),
-    ]),
-  ];
 }

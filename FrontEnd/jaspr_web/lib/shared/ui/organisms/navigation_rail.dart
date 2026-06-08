@@ -1,6 +1,7 @@
-import 'package:jaspr/dom.dart';
+import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
-import '../../../../shared/constants/theme.dart';
+import '../../constants/theme.dart';
+import '../ui.dart';
 
 class NavItem {
   final String title;
@@ -27,38 +28,63 @@ class NavigationRail extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return nav(
-      classes: 'nav-rail ${expanded ? "nav-rail-expanded" : ""}',
-      [
-        // Logo header
-        div(classes: 'nav-rail-logo', [
-          div(classes: 'nav-logo-icon', [
-            span([text('D')]),
-          ]),
-          if (expanded || showLabels)
-            span(classes: 'nav-logo-text', [text('Dbnus')]),
-        ]),
-        // Divider
-        div(classes: 'nav-rail-divider', []),
-        // Nav items
-        div(classes: 'nav-rail-items', [
-          for (var i = 0; i < items.length; i++)
-            _buildNavItem(context, i, items[i]),
-        ]),
-      ],
+    return Container(
+      className: 'nav-rail ${expanded ? "nav-rail-expanded" : ""}',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Logo header
+          Row(
+            className: 'nav-rail-logo',
+            crossAxisAlignment: CrossAxisAlignment.center,
+            gap: 12,
+            children: [
+              Container(
+                className: 'nav-logo-icon',
+                width: 36,
+                height: 36,
+                alignment: Alignment.center,
+                child: const CustomText('D', fontWeight: FontWeight.w700, color: Colors.white),
+              ),
+              if (expanded || showLabels)
+                const CustomText('Dbnus', className: 'nav-logo-text', fontWeight: FontWeight.w700, color: Colors.white, variant: TextVariant.h3),
+            ],
+          ),
+          // Divider
+          const Container(className: 'nav-rail-divider'),
+          // Nav items
+          Container(
+            className: 'nav-rail-items',
+            child: Column(
+              gap: 4,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < items.length; i++)
+                  _buildNavItem(context, i, items[i]),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Component _buildNavItem(BuildContext context, int index, NavItem item) {
     final isActive = index == selectedIndex;
-    return div(
-      classes: 'nav-item ${isActive ? "nav-item-active" : ""}',
+    return Container(
+      className: 'nav-item ${isActive ? "nav-item-active" : ""}',
       events: {'click': (e) => onSelect?.call(index)},
-      [
-        span(classes: 'nav-item-icon', [text(item.icon)]),
-        if (expanded || showLabels)
-          span(classes: 'nav-item-label', [text(item.title)]),
-      ],
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        gap: 12,
+        children: [
+          CustomText(item.icon, className: 'nav-item-icon'),
+          if (expanded || showLabels)
+            CustomText(item.title, className: 'nav-item-label', fontWeight: FontWeight.w500),
+        ],
+      ),
     );
   }
 

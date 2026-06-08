@@ -15,6 +15,7 @@ class Container extends StatelessComponent {
   final Alignment? alignment;
   final String? className;
   final Styles? style;
+  final Map<String, EventCallback>? events;
 
   const Container({
     this.child,
@@ -27,6 +28,7 @@ class Container extends StatelessComponent {
     this.alignment,
     this.className,
     this.style,
+    this.events,
     super.key,
   });
 
@@ -83,6 +85,7 @@ class Container extends StatelessComponent {
         Styles(raw: rawStyles),
         if (style != null) style!,
       ]),
+      events: events,
       child != null ? [child!] : [],
     );
   }

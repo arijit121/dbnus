@@ -1,21 +1,13 @@
-import 'package:jaspr/dom.dart';
+import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
 import '../../shared/constants/theme.dart';
-import '../../shared/ui/atoms/custom_button.dart';
-import '../../shared/ui/atoms/custom_text.dart';
-import '../../shared/ui/organisms/column.dart';
-import '../../shared/ui/organisms/grid_view.dart';
-import '../../shared/ui/organisms/list_view.dart';
-import '../../shared/ui/organisms/row.dart';
+import '../../shared/ui/ui.dart';
 
 class LeaderBoardPage extends StatefulComponent {
   const LeaderBoardPage({super.key});
 
   @override
   State<LeaderBoardPage> createState() => _LeaderBoardPageState();
-
-  @css
-  static List<StyleRule> get styles => _LeaderBoardPageState.styles;
 }
 
 class _LeaderBoardPageState extends State<LeaderBoardPage> {
@@ -42,7 +34,7 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -87,27 +79,35 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
         ),
 
         // Full ranking list
-        div(classes: 'ranking-card', [
-          div(classes: 'ranking-header', [
-            span(classes: 'rh-rank', [Component.text('#')]),
-            span(classes: 'rh-name', [Component.text('Player')]),
-            span(classes: 'rh-score', [Component.text('Score')]),
-            span(classes: 'rh-trend', [Component.text('Trend')]),
-          ]),
-          ListView.separated(
-            itemCount: _players.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) => _rankRow(_players[index]),
-            separatorBuilder: (context, index) => div(
-              styles: Styles(raw: {
-                'height': '1px',
-                'background-color': '#F1F5F9',
-                'margin': '0 16px',
-              }),
-              [],
-            ),
+        Card(
+          className: 'ranking-card',
+          padding: const EdgeInsets.all(20.0),
+          borderRadius: const BorderRadius.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                className: 'ranking-header',
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomText('#', className: 'rh-rank', variant: TextVariant.label),
+                    CustomText('Player', className: 'rh-name', variant: TextVariant.label),
+                    CustomText('Score', className: 'rh-score', variant: TextVariant.label),
+                    CustomText('Trend', className: 'rh-trend', variant: TextVariant.label),
+                  ],
+                ),
+              ),
+              ListView.separated(
+                itemCount: _players.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => _rankRow(_players[index]),
+                separatorBuilder: (context, index) => const CustomDivider(),
+              ),
+            ],
           ),
-        ]),
+        ),
       ],
     );
   }
@@ -117,7 +117,16 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       gap: 12,
       children: [
-        div(classes: 'lb-stat-icon', [Component.text(icon)]),
+        Container(
+          className: 'lb-stat-icon',
+          width: 44,
+          height: 44,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(12.0),
+          ),
+          child: CustomText(icon, variant: TextVariant.h3),
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -136,7 +145,7 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
       className: 'podium-card podium-$tier',
       gap: 8,
       children: [
-        div(classes: 'podium-medal', [Component.text(player['icon'] as String)]),
+        CustomText(player['icon'] as String, className: 'podium-medal', variant: TextVariant.h1),
         CustomText(player['name'] as String, variant: TextVariant.body, fontWeight: FontWeight.w600),
         CustomText('${player['score']} pts', variant: TextVariant.bodySmall, color: secondaryDark),
       ],
@@ -150,126 +159,25 @@ class _LeaderBoardPageState extends State<LeaderBoardPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       className: 'rank-row ${isTop3 ? "rank-top" : ""}',
       children: [
-        CustomText('${player['rank']}', className: 'rank-num'),
-        div(classes: 'rank-avatar', [
-          Component.text(((player['name'] as String)[0])),
-        ]),
-        CustomText(player['name'] as String, className: 'rank-name'),
-        CustomText('${player['score']}', className: 'rank-score'),
+        CustomText('${player['rank']}', className: 'rank-num', fontWeight: FontWeight.w700),
+        Container(
+          className: 'rank-avatar',
+          width: 36,
+          height: 36,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(18.0),
+          ),
+          child: CustomText(((player['name'] as String)[0]), fontWeight: FontWeight.w600, color: Colors.white),
+        ),
+        CustomText(player['name'] as String, className: 'rank-name', fontWeight: FontWeight.w500),
+        CustomText('${player['score']}', className: 'rank-score', fontWeight: FontWeight.w600),
         CustomText(
           player['trend'] as String,
           className: 'rank-trend ${(player['trend'] as String).startsWith('+') ? "trend-up" : "trend-down"}',
+          fontWeight: FontWeight.w500,
         ),
       ],
     );
   }
-
-  static List<StyleRule> get styles => [
-
-
-        css('.lb-stat-icon').styles(
-          fontSize: 24.px,
-          width: 44.px,
-          height: 44.px,
-          display: .flex,
-          alignItems: .center,
-          justifyContent: .center,
-          radius: .all(.circular(12.px)),
-          backgroundColor: const Color('#F1F5F9'),
-        ),
-        // Podium
-        css('.podium').styles(
-          display: .flex,
-          justifyContent: .center,
-          alignItems: .end,
-          gap: Gap.all(16.px),
-          padding: .symmetric(vertical: 20.px),
-        ),
-        css('.podium-card', [
-          css('&').styles(
-            display: .flex,
-            flexDirection: .column,
-            alignItems: .center,
-            padding: .all(20.px),
-            radius: .all(.circular(16.px)),
-            backgroundColor: Colors.white,
-            width: 160.px,
-            raw: {
-              'box-shadow': '0 4px 16px rgba(0,0,0,0.06)',
-              'transition': 'transform 0.2s ease',
-            },
-          ),
-          css('&:hover').styles(raw: {'transform': 'translateY(-4px)'}),
-          css('&.podium-gold').styles(raw: {
-            'background': 'linear-gradient(135deg, #FEF3C7, #FDE68A)',
-            'border': '2px solid #F59E0B',
-            'order': '0',
-            'padding-top': '28px',
-            'padding-bottom': '28px',
-          }),
-          css('&.podium-silver').styles(raw: {
-            'background': 'linear-gradient(135deg, #F1F5F9, #E2E8F0)',
-            'border': '2px solid #94A3B8',
-            'order': '-1',
-          }),
-          css('&.podium-bronze').styles(raw: {
-            'background': 'linear-gradient(135deg, #FED7AA, #FDBA74)',
-            'border': '2px solid #EA580C',
-            'order': '1',
-          }),
-          css('.podium-medal').styles(fontSize: 36.px, raw: {'margin-bottom': '8px'}),
-          css('.podium-name').styles(fontSize: 14.px, fontWeight: .w600, margin: .zero, color: primaryDark),
-          css('.podium-score').styles(fontSize: 13.px, color: secondaryDark, margin: .zero, raw: {'margin-top': '4px'}),
-        ]),
-        // Ranking table
-        css('.ranking-card').styles(
-          backgroundColor: Colors.white,
-          radius: .all(.circular(16.px)),
-          padding: .all(20.px),
-          raw: {'box-shadow': '0 1px 3px rgba(0,0,0,0.04)'},
-        ),
-        css('.ranking-header').styles(
-          display: .flex,
-          alignItems: .center,
-          padding: .symmetric(horizontal: 16.px, vertical: 12.px),
-          fontSize: 12.px,
-          fontWeight: .w600,
-          color: grey,
-          raw: {'text-transform': 'uppercase', 'letter-spacing': '0.05em', 'border-bottom': '1px solid #F1F5F9'},
-        ),
-        css('.rh-rank').styles(width: 50.px),
-        css('.rh-name').styles(raw: {'flex': '1'}),
-        css('.rh-score').styles(width: 80.px, raw: {'text-align': 'right'}),
-        css('.rh-trend').styles(width: 60.px, raw: {'text-align': 'right'}),
-        // Rank rows
-        css('.rank-row', [
-          css('&').styles(
-            display: .flex,
-            alignItems: .center,
-            padding: .symmetric(horizontal: 16.px, vertical: 14.px),
-            radius: .all(.circular(10.px)),
-            raw: {'transition': 'background 0.15s ease'},
-          ),
-          css('&:hover').styles(backgroundColor: scaffoldBg),
-          css('.rank-num').styles(width: 50.px, fontWeight: .w700, fontSize: 14.px, color: secondaryDark),
-          css('.rank-avatar').styles(
-            width: 36.px,
-            height: 36.px,
-            radius: .all(.circular(18.px)),
-            backgroundColor: baseHexColor,
-            color: Colors.white,
-            display: .flex,
-            alignItems: .center,
-            justifyContent: .center,
-            fontWeight: .w600,
-            fontSize: 14.px,
-            raw: {'margin-right': '12px', 'flex-shrink': '0'},
-          ),
-          css('.rank-name').styles(raw: {'flex': '1'}, fontSize: 14.px, fontWeight: .w500, color: primaryDark),
-          css('.rank-score').styles(width: 80.px, raw: {'text-align': 'right'}, fontSize: 14.px, fontWeight: .w600, color: primaryDark),
-          css('.rank-trend').styles(width: 60.px, raw: {'text-align': 'right'}, fontSize: 13.px, fontWeight: .w500),
-          css('.trend-up').styles(color: green),
-          css('.trend-down').styles(color: red),
-        ]),
-      ];
 }

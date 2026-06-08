@@ -1,6 +1,7 @@
-import 'package:jaspr/dom.dart';
+import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
-import '../../../../shared/constants/theme.dart';
+import '../../constants/theme.dart';
+import '../ui.dart';
 
 class AppTopBar extends StatelessComponent {
   final void Function()? onMenuTap;
@@ -10,21 +11,43 @@ class AppTopBar extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return header(classes: 'app-top-bar', [
-      button(
-        classes: 'topbar-btn',
-        events: {'click': (e) => onMenuTap?.call()},
-        [text('☰')],
+    return Container(
+      className: 'app-top-bar',
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CustomButton(
+            label: '',
+            icon: '☰',
+            className: 'topbar-btn',
+            onPressed: onMenuTap,
+            isOutlined: true,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            gap: 8,
+            className: 'topbar-brand',
+            children: [
+              Container(
+                className: 'topbar-logo',
+                width: 30,
+                height: 30,
+                alignment: Alignment.center,
+                child: const CustomText('D', fontWeight: FontWeight.w700, color: Colors.white),
+              ),
+              CustomText(title, className: 'topbar-title', fontWeight: FontWeight.w700, variant: TextVariant.h3),
+            ],
+          ),
+          const CustomButton(
+            label: '',
+            icon: '🔔',
+            className: 'topbar-btn',
+            isOutlined: true,
+          ),
+        ],
       ),
-      div(classes: 'topbar-brand', [
-        div(classes: 'topbar-logo', [span([text('D')])]),
-        span(classes: 'topbar-title', [text(title)]),
-      ]),
-      button(
-        classes: 'topbar-btn',
-        [text('🔔')],
-      ),
-    ]);
+    );
   }
 
   @css

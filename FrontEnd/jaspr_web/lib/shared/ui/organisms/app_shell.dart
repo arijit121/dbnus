@@ -1,9 +1,8 @@
-import 'package:jaspr/dom.dart';
+import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
 import 'package:jaspr/jaspr.dart';
-import '../../../../navigation/route_names.dart';
-import '../../../../shared/constants/text_utils.dart';
-import 'navigation_rail.dart';
-import 'app_bar.dart';
+import '../../../navigation/route_names.dart';
+import '../../constants/text_utils.dart';
+import '../ui.dart';
 
 class AppShell extends StatefulComponent {
   final Component child;
@@ -47,55 +46,78 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Component build(BuildContext context) {
-    return div(classes: 'app-shell', [
-      // Mobile overlay
-      if (_drawerOpen)
-        div(
-          classes: 'drawer-overlay',
-          events: {'click': (e) => _toggleDrawer()},
-          [],
-        ),
-      // Sidebar - mobile drawer
-      div(classes: 'sidebar-mobile ${_drawerOpen ? "open" : ""}', [
-        NavigationRail(
-          selectedIndex: component.selectedIndex,
-          items: navItems,
-          expanded: true,
-          showLabels: true,
-          onSelect: (index) {
-            setState(() => _drawerOpen = false);
-            component.onNavigate(index);
-          },
-        ),
-      ]),
-      // Sidebar - tablet (icons only)
-      div(classes: 'sidebar-tablet', [
-        NavigationRail(
-          selectedIndex: component.selectedIndex,
-          items: navItems,
-          expanded: false,
-          showLabels: false,
-          onSelect: component.onNavigate,
-        ),
-      ]),
-      // Sidebar - desktop (expanded)
-      div(classes: 'sidebar-desktop', [
-        NavigationRail(
-          selectedIndex: component.selectedIndex,
-          items: navItems,
-          expanded: true,
-          showLabels: true,
-          onSelect: component.onNavigate,
-        ),
-      ]),
-      // Content area
-      div(classes: 'shell-content', [
-        AppTopBar(onMenuTap: _toggleDrawer),
-        div(classes: 'shell-body', [
-          component.child,
-        ]),
-      ]),
-    ]);
+    return Container(
+      className: 'app-shell',
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          // Mobile overlay
+          if (_drawerOpen)
+            Container(
+              className: 'drawer-overlay',
+              events: {'click': (e) => _toggleDrawer()},
+              child: const SizedBox(),
+            ),
+          // Sidebar - mobile drawer
+          Container(
+            className: 'sidebar-mobile ${_drawerOpen ? "open" : ""}',
+            child: NavigationRail(
+              selectedIndex: component.selectedIndex,
+              items: navItems,
+              expanded: true,
+              showLabels: true,
+              onSelect: (index) {
+                setState(() => _drawerOpen = false);
+                component.onNavigate(index);
+              },
+            ),
+          ),
+          // Sidebar - tablet (icons only)
+          Container(
+            className: 'sidebar-tablet',
+            child: NavigationRail(
+              selectedIndex: component.selectedIndex,
+              items: navItems,
+              expanded: false,
+              showLabels: false,
+              onSelect: component.onNavigate,
+            ),
+          ),
+          // Sidebar - desktop (expanded)
+          Container(
+            className: 'sidebar-desktop',
+            child: NavigationRail(
+              selectedIndex: component.selectedIndex,
+              items: navItems,
+              expanded: true,
+              showLabels: true,
+              onSelect: component.onNavigate,
+            ),
+          ),
+          // Content area
+          Expanded(
+            child: Container(
+              className: 'shell-content',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  AppTopBar(onMenuTap: _toggleDrawer),
+                  Expanded(
+                    child: Container(
+                      className: 'shell-body',
+                      child: component.child,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   static List<StyleRule> get styles => [
