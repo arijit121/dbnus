@@ -4,7 +4,6 @@ import 'package:jaspr/jaspr.dart';
 import 'package:jaspr_router/jaspr_router.dart';
 import 'package:jaspr_app/shared/constants/assects_const.dart';
 import 'package:jaspr_app/shared/constants/theme.dart';
-import 'package:jaspr_app/shared/constants/api_url_const.dart';
 import 'package:jaspr_app/shared/ui/ui.dart';
 import 'package:jaspr_app/shared/utils/pop_up_items.dart';
 import 'package:jaspr_app/navigation/route_names.dart';
@@ -185,7 +184,7 @@ class MediaSection extends StatelessComponent {
           children: [
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.accurateReport,
                 height: 180,
                 label: "Gallery",
                 onTap: () {
@@ -195,7 +194,7 @@ class MediaSection extends StatelessComponent {
             ),
             Expanded(
               child: _ImageCardWithOverlay(
-                url: "${ApiUrlConst.testImgUrl()}lfmbldmfbl",
+                url: AssetsConst.nsbl,
                 height: 180,
                 label: "Explore",
               ),
@@ -210,11 +209,13 @@ class MediaSection extends StatelessComponent {
           child: CarouselSlider(
             radius: 14,
             autoScrollDuration: const Duration(seconds: 4),
-            imageList: List.generate(5, (int index) {
-              return index == 2
-                  ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
-                  : ApiUrlConst.testImgUrl();
-            }),
+            imageList: const [
+              AssetsConst.genuLogo,
+              AssetsConst.appRatingScreenImage,
+              AssetsConst.somethingWentWrong,
+              AssetsConst.noRecordFound,
+              AssetsConst.pageNotFound,
+            ],
             onTap: (index) {
               Router.of(context).push(RouteName.games);
             },
@@ -228,14 +229,14 @@ class MediaSection extends StatelessComponent {
           children: [
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.genuLogo,
                 height: 180,
                 label: "Showcase",
               ),
             ),
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.appRatingScreenImage,
                 height: 180,
                 label: "Discover",
               ),
@@ -249,14 +250,14 @@ class MediaSection extends StatelessComponent {
           children: [
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.helpButtonDesign,
                 height: 100,
                 label: "Trending",
               ),
             ),
             Expanded(
               child: _ImageCardWithOverlay(
-                url: "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
+                url: AssetsConst.pinCodePickerDesign,
                 height: 100,
                 label: "Accessories",
               ),
@@ -271,13 +272,19 @@ class MediaSection extends StatelessComponent {
           child: CarouselSlider(
             radius: 14,
             autoScrollDuration: const Duration(seconds: 4),
-            imageList: List.generate(5, (int index) {
-              return index == 2
-                  ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
-                  : ApiUrlConst.testImgUrl();
-            }),
+            imageList: const [
+              AssetsConst.genuLogo,
+              AssetsConst.appRatingScreenImage,
+              AssetsConst.somethingWentWrong,
+              AssetsConst.noRecordFound,
+              AssetsConst.pageNotFound,
+            ],
             onTap: (index) {
-              Router.of(context).push(RouteName.games);
+              if (index == 0) {
+                 Router.of(context).push(RouteName.games);
+              }  else {
+                  PopUpItems.toastMessage("Carousel Item $index Clicked", baseHexColor);
+              }
             },
             height: 400,
           ),
@@ -289,14 +296,14 @@ class MediaSection extends StatelessComponent {
           children: [
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.somethingWentWrong,
                 height: 180,
                 label: "Inspire",
               ),
             ),
             Expanded(
               child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
+                url: AssetsConst.noRecordFound,
                 height: 180,
                 label: "Create",
               ),
