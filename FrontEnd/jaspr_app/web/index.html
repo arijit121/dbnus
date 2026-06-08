@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Dbnus - A modern web application built with Jaspr framework, featuring dashboard, games, and more.">
+        <meta name="theme-color" content="#6C63FF">
+        <meta name="scaffolded-by" content="https://github.com/schultek/jaspr">
+
+        <title>Dbnus</title>
+
+        <!-- Loads the generated CSS file. -->
+        <!-- This contains all @css declarations from your components. -->
+        <link rel="stylesheet" href="main.css">
+        <link rel="icon" href="favicon.ico">
+
+        <!-- Loads and runs the compiled 'main.client.dart' file. -->
+        <script defer src="main.client.dart.js"></script>
+
+        <style>
+            /* Loading splash screen */
+            .app-loading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                background: #F8FAFC;
+                font-family: 'Inter', sans-serif;
+                gap: 16px;
+            }
+            .app-loading-logo {
+                width: 56px;
+                height: 56px;
+                border-radius: 14px;
+                background: linear-gradient(135deg, #6366F1, #8B5CF6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 700;
+                font-size: 24px;
+                animation: pulse-logo 1.5s infinite;
+            }
+            .app-loading-text {
+                color: #64748B;
+                font-size: 14px;
+            }
+            @keyframes pulse-logo {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.05); opacity: 0.8; }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Loading indicator shown while Dart compiles -->
+        <div class="app-loading" id="app-loading">
+            <div class="app-loading-logo">D</div>
+            <span class="app-loading-text">Loading Dbnus...</span>
+        </div>
+        <script>
+            // Remove loading screen once app mounts
+            const observer = new MutationObserver((mutations) => {
+                const loader = document.getElementById('app-loading');
+                if (loader && document.querySelector('.main')) {
+                    loader.remove();
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        </script>
+    </body>
+</html>
