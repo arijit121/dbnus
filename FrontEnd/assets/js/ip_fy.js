@@ -30,3 +30,19 @@ function getIPv4() {
     });
 }
 
+function getIP() {
+    return new Promise((resolve, reject) => {
+        fetch('https://api64.ipify.org/?format=json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                resolve(data.ip);
+            })
+            .catch(reject);
+    });
+}
+
