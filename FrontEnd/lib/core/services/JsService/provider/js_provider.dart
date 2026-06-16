@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/JsService/helper/js_helper.dart';
 
@@ -211,6 +213,36 @@ class JsProvider {
       final result = await jsHelper.loadJs<bool>(
         jsPath: jsPath,
         jsFunctionName: 'promptInstall',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future<String?> getIPv6() async {
+    try {
+      String jsPath = "assets/js/ip_fy.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getIPv6',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  static Future<String?> getIPv4() async {
+    try {
+      String jsPath = "assets/js/ip_fy.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getIPv4',
         usePromise: true,
       );
       return result;

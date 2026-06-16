@@ -14,6 +14,8 @@ import 'package:dbnus/core/network/api_client/repo/api_repo.dart'
 import 'package:dbnus/core/network/connection/connection_status.dart'
     deferred as connection_status;
 
+import '../../../services/JsService/provider/js_provider.dart';
+
 class ConnectionUtils {
   Future<void> setIpV4(String ipV4) async {
     await LocalPreferences()
@@ -55,7 +57,7 @@ class ConnectionUtils {
     final info = NetworkInfo();
     String? wifiIpV4;
     try {
-      wifiIpV4 = kIsWeb ? null : await info.getWifiIP();
+      wifiIpV4 = kIsWeb ? await JsProvider.getIPv4() : await info.getWifiIP();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -68,7 +70,7 @@ class ConnectionUtils {
     final info = NetworkInfo();
     String? wifiIpV6;
     try {
-      wifiIpV6 = kIsWeb ? null : await info.getWifiIPv6();
+      wifiIpV6 = kIsWeb ? await JsProvider.getIPv6() : await info.getWifiIPv6();
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

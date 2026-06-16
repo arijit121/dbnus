@@ -12,6 +12,7 @@ import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
 import 'package:dbnus/core/services/file_picker.dart';
 import 'package:dbnus/shared/utils/pop_up_items.dart';
 
+import '../../../../core/config/app_config.dart';
 import 'order_tool_tile.dart';
 
 class JsNavigationSection extends StatelessWidget {
@@ -168,6 +169,32 @@ class JsNavigationSection extends StatelessWidget {
               // hideLoading(loadingDialogContext: loadingDialogContext);
               // await Future.delayed(const Duration(seconds: 2));
               // hideLoading();
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.featherShield,
+            title: "Show IP V4",
+            subtitle: "IP",
+            color: ColorConst.primaryDark,
+            onTap: () async {
+              final ipV4 = await AppConfig().getWifiIpV4();
+              if (ipV4 != null) {
+                PopUpItems.toastMessage(ipV4, Colors.red);
+              }
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.featherShield,
+            title: "Show IP V6",
+            subtitle: "IP",
+            color: ColorConst.primaryDark,
+            onTap: () async {
+              final ipV4 = await AppConfig().getWifiIpV6();
+              if (ipV4 != null) {
+                PopUpItems.toastMessage(ipV4, Colors.red);
+              }
             },
           ),
         ],
