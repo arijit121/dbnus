@@ -251,4 +251,19 @@ class JsProvider {
     }
     return null;
   }
+
+  static Future<String?> getIP() async {
+    try {
+      String jsPath = "assets/js/ip_fy.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getIP',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
 }

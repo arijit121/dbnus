@@ -53,6 +53,36 @@ class ConnectionUtils {
     return ssIpV6;
   }
 
+  Future<void> setIp(String ip) async {
+    await LocalPreferences().setString(key: LocalPreferences.ssIp, value: ip);
+  }
+
+  Future<String?> getIp() async {
+    String? ssIp =
+        await LocalPreferences().getString(key: LocalPreferences.ssIp);
+    await value_handler.loadLibrary();
+    if (!value_handler.ValueHandler.isTextNotEmptyOrNull(ssIp)) {
+      ssIp = await fetchWifiIp();
+      if (value_handler.ValueHandler.isTextNotEmptyOrNull(ssIp)) {
+        await setIp(ssIp!);
+      }
+    }
+    return ssIp;
+  }
+
+  Future<String?> fetchWifiIp() async {
+    final info = NetworkInfo();
+    String? wifiIp;
+    try {
+      wifiIp = kIsWeb ? await JsProvider.getIP() : await info.getWifiIP();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return wifiIp ??
+        await _getIpFromInternet(
+            tag: 'WifiIp', uri: 'https://api64.ipify.org?format=json');
+  }
+
   Future<String?> fetchWifiIpV4() async {
     final info = NetworkInfo();
     String? wifiIpV4;
@@ -75,8 +105,10 @@ class ConnectionUtils {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return wifiIpV6 ??
-        await _getIpFromInternet(
-            tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json');
+        (kIsWeb
+            ? null
+            : await _getIpFromInternet(
+                tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json'));
   }
 
   Future<String?> _getIpFromInternet(

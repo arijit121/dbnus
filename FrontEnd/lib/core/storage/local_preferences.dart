@@ -17,6 +17,7 @@ class LocalPreferences {
   static const String webTryCatchPaymentData = "WebTryCatchPaymentData";
   static const String ssIpV4 = "SSIpV4";
   static const String ssIpV6 = "SSIpV6";
+  static const String ssIp = "SSIp";
 
   Future<void> setBool(
       {required String key,

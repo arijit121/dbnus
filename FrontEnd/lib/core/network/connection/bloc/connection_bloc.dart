@@ -8,6 +8,7 @@ import 'package:dbnus/core/network/connection/utils/connection_utils.dart'
     deferred as connection_utils;
 
 part 'connection_event.dart';
+
 part 'connection_state.dart';
 
 class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {
@@ -31,6 +32,10 @@ class ConnectionBloc extends Bloc<ConnectionEvent, ConnectionState> {
         String? ipV6 = await connection_utils.ConnectionUtils().fetchWifiIpV6();
         if (value_handler.ValueHandler.isTextNotEmptyOrNull(ipV6)) {
           connection_utils.ConnectionUtils().setIpV6(ipV6 ?? '');
+        }
+        String? ip = await connection_utils.ConnectionUtils().fetchWifiIp();
+        if (value_handler.ValueHandler.isTextNotEmptyOrNull(ip)) {
+          connection_utils.ConnectionUtils().setIp(ip ?? '');
         }
       }
     });

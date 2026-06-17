@@ -16,6 +16,7 @@ import 'package:dbnus/core/network/api_client/repo/api_repo.dart'
     deferred as api_repo;
 import 'package:dbnus/core/network/connection/connection_status.dart'
     deferred as connection_status;
+
 // import 'package:dbnus/core/network/models/api_return_model.dart';
 import 'package:dbnus/core/network/connection/utils/connection_utils.dart'
     deferred as connection_utils;
@@ -145,7 +146,6 @@ class AppConfig {
     }
   }
 
-
   Future<String?> getAppType() async {
     ///web, msite, android, ios
     try {
@@ -268,6 +268,16 @@ class AppConfig {
     }
   }
 
+  Future<String?> getWifiIp() async {
+    try {
+      await connection_utils.loadLibrary();
+      return await connection_utils.ConnectionUtils().getIp();
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+      return null;
+    }
+  }
+
   Future<String?> getWifiIpV4() async {
     try {
       await connection_utils.loadLibrary();
@@ -282,31 +292,6 @@ class AppConfig {
     try {
       await connection_utils.loadLibrary();
       return await connection_utils.ConnectionUtils().getIpV6();
-    } catch (e, stacktrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
-      return null;
-    }
-  }
-
-  Future<String?> _getIpFromInternet(
-      {required String tag, required String uri}) async {
-    try {
-      await Future.wait([
-        connection_status.loadLibrary(),
-        api_repo.loadLibrary(),
-        api_repo_imp.loadLibrary()
-      ]);
-      final connectionStatus = connection_status.ConnectionStatus.getInstance;
-      bool onlineStatus = await connectionStatus.checkConnection();
-      if (onlineStatus) {
-        final response = await api_repo.ApiEngine.instance
-            .callApi(tag: tag, uri: uri, method: api_repo_imp.Method.get);
-        if (response?.responseString != null && response?.statusCode == 200) {
-          var v = json.decode(response?.responseString ?? "");
-          return v['ip'];
-        }
-      }
-      return null;
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return null;

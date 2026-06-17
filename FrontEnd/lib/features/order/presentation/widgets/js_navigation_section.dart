@@ -174,6 +174,19 @@ class JsNavigationSection extends StatelessWidget {
           _buildDivider(),
           OrderToolTile(
             icon: AssetsConst.featherShield,
+            title: "Show IP",
+            subtitle: "IP",
+            color: ColorConst.primaryDark,
+            onTap: () async {
+              final ip = await AppConfig().getWifiIp();
+              if (ip != null) {
+                PopUpItems.toastMessage(ip, Colors.red);
+              }
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.featherShield,
             title: "Show IP V4",
             subtitle: "IP",
             color: ColorConst.primaryDark,
