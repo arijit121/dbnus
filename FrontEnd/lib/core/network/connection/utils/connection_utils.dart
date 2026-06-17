@@ -50,7 +50,9 @@ class ConnectionUtils {
         await setIpV6(ssIpV6!);
       }
     }
-    return ssIpV6;
+    if (ssIpV6 != "NO-IP-V6") {
+      return ssIpV6;
+    }
   }
 
   Future<void> setIp(String ip) async {
@@ -106,7 +108,7 @@ class ConnectionUtils {
     }
     return wifiIpV6 ??
         (kIsWeb
-            ? null
+            ? "NO-IP-V6"
             : await _getIpFromInternet(
                 tag: 'WifiIpV6', uri: 'https://api6.ipify.org?format=json'));
   }
