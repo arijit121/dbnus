@@ -53,6 +53,7 @@ class ConnectionUtils {
     if (ssIpV6 != "NO-IP-V6") {
       return ssIpV6;
     }
+    return null;
   }
 
   Future<void> setIp(String ip) async {
