@@ -177,6 +177,10 @@ class JsProvider {
     return jsHelper.isMobile();
   }
 
+  bool isOnline() {
+    return jsHelper.isOnline();
+  }
+
   /// ```
   ///
   /// {

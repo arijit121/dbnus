@@ -184,4 +184,8 @@ class JSHelper {
         userAgent.contains('ipod') ||
         userAgent.contains('mobile');
   }
+
+  bool isOnline() {
+    return web.window.navigator.onLine;
+  }
 }

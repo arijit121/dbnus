@@ -5,6 +5,8 @@ import 'package:connectivity_plus/connectivity_plus.dart'
     deferred as connectivity_plus;
 import 'package:flutter/foundation.dart';
 
+import '../../services/JsService/provider/js_provider.dart';
+
 ///ConnectionStatus connectionStatus = ConnectionStatus.getInstance;
 ///
 /// Check ConnectionStatus
@@ -17,8 +19,7 @@ import 'package:flutter/foundation.dart';
 ///
 class ConnectionStatus {
   //This creates the single instance by calling the `_internal` constructor specified below
-  static final ConnectionStatus _singleton = ConnectionStatus._internal()
-    ..initialize();
+  static final ConnectionStatus _singleton = ConnectionStatus._internal();
 
   ConnectionStatus._internal();
 
@@ -32,18 +33,23 @@ class ConnectionStatus {
   final StreamController<bool> _connectionChangeController =
       StreamController.broadcast();
 
-  //flutter_connectivity
-  // final _connectivity = connectivity_plus.Connectivity();
+  Timer? _timerHandle;
+  StreamSubscription? _connectivitySubscription;
 
-  //Hook into flutter_connectivity's Stream to listen for changes
-  //And check the connection status out of the gate
+  bool _isInitialized = false;
+  bool _isDisposed = false;
+
   Future<void> initialize() async {
+    if (_isInitialized) return;
+
+    _isInitialized = true;
     await connectivity_plus.loadLibrary();
-    final connectivity = connectivity_plus.Connectivity();
-    connectivity.onConnectivityChanged.listen((result) {
-      _connectionChange();
+    _connectivitySubscription =
+        connectivity_plus.Connectivity().onConnectivityChanged.listen((_) {
+      _checkOnline();
     });
-    checkConnection();
+
+    _checkOnline();
   }
 
   Stream<bool> get connectionChange => _connectionChangeController.stream;
@@ -52,39 +58,67 @@ class ConnectionStatus {
   //   Because this is meant to exist through the entire application life cycle this isn't
   //   really an issue
   void dispose() {
-    _connectionChangeController.close();
+    _isDisposed = true;
+
+    _timerHandle?.cancel();
+    _connectivitySubscription?.cancel();
+
+    if (!_connectionChangeController.isClosed) {
+      _connectionChangeController.close();
+    }
   }
 
-  //flutter_connectivity's listener
-  void _connectionChange() {
-    checkConnection();
-  }
+  Future<void> _checkOnline() async {
+    if (_isDisposed) return;
 
-  //The test to actually see if there is a connection
-  Future<bool> checkConnection() async {
-    bool previousConnection = _hasConnection;
+    final bool previousConnection = _hasConnection;
 
     try {
       if (kIsWeb) {
-        _hasConnection = true;
+        // Keeping your existing web behavior
+        _hasConnection = JsProvider().isOnline();
       } else {
         final result = await InternetAddress.lookup('google.com');
-        if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          _hasConnection = true;
-        } else {
-          _hasConnection = false;
-        }
+
+        _hasConnection =
+            result.isNotEmpty && result.first.rawAddress.isNotEmpty;
       }
-    } on SocketException catch (_) {
+    } on SocketException {
+      _hasConnection = false;
+    } catch (_) {
       _hasConnection = false;
     }
 
-    //The connection status changed send out an update to all listeners
-    if (previousConnection != _hasConnection) {
+    if (previousConnection != _hasConnection &&
+        !_connectionChangeController.isClosed) {
       _connectionChangeController.add(_hasConnection);
     }
 
+    if (_hasConnection) {
+      _timerHandle?.cancel();
+      _timerHandle = null;
+    }
+  }
+
+  Future<bool> checkConnection() async {
+    await _checkOnline();
+
+    if (!_hasConnection) {
+      _startTimer();
+    }
+
     return _hasConnection;
+  }
+
+  void _startTimer() {
+    if (_timerHandle?.isActive ?? false) {
+      return;
+    }
+
+    _timerHandle = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _checkOnline(),
+    );
   }
 
   Future<String> getNetworkInfo() async {
@@ -93,4 +127,6 @@ class ConnectionStatus {
     final connectivityResult = await connectivity.checkConnectivity();
     return connectivityResult.first.name;
   }
+
+  bool get hasConnection => _hasConnection;
 }

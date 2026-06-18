@@ -15,4 +15,8 @@ class JSHelper {
   bool isMobile() {
     return false;
   }
+
+  bool isOnline() {
+    return false;
+  }
 }
