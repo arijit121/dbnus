@@ -270,4 +270,33 @@ class JsProvider {
     }
     return null;
   }
+
+  Future<bool?> isEligibleForOpenSastaSundarApp() async {
+    try {
+      String jsPath = "assets/js/sastasundar_app.js";
+      final result = await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        jsFunctionName: 'isEligibleForOpenSastaSundarApp',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
+
+  Future<bool?> openSastaSundarApp() async {
+    try {
+      String jsPath = "assets/js/sastasundar_app.js";
+      final result = await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        jsFunctionName: 'openSastaSundarApp',
+      );
+      return result;
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
+  }
 }
