@@ -271,12 +271,12 @@ class JsProvider {
     return null;
   }
 
-  Future<bool?> isEligibleForOpenSastaSundarApp() async {
+  Future<bool?> isEligibleForOpenStoreApp() async {
     try {
-      String jsPath = "assets/js/sastasundar_app.js";
+      String jsPath = "assets/js/store_app.js";
       final result = await jsHelper.loadJs<bool>(
         jsPath: jsPath,
-        jsFunctionName: 'isEligibleForOpenSastaSundarApp',
+        jsFunctionName: 'isEligibleForOpenStoreApp',
         usePromise: true,
       );
       return result;
@@ -286,12 +286,12 @@ class JsProvider {
     return null;
   }
 
-  Future<bool?> openSastaSundarApp() async {
+  Future<bool?> openStoreApp() async {
     try {
-      String jsPath = "assets/js/sastasundar_app.js";
+      String jsPath = "assets/js/store_app.js";
       final result = await jsHelper.loadJs<bool>(
         jsPath: jsPath,
-        jsFunctionName: 'openSastaSundarApp',
+        jsFunctionName: 'openStoreApp',
       );
       return result;
     } catch (e, stacktrace) {

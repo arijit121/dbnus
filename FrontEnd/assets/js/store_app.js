@@ -1,4 +1,4 @@
-function isEligibleForOpenSastaSundarApp() {
+function isEligibleForOpenStoreApp() {
     return new Promise((resolve) => {
         const ua = navigator.userAgent || navigator.vendor || window.opera;
 
@@ -63,7 +63,7 @@ function _detectPrivateBrowsing() {
     });
 }
 
-function openSastaSundarApp() {
+function openStoreApp() {
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isAndroid = /Android/.test(navigator.userAgent);
 
