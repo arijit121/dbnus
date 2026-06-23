@@ -51,21 +51,38 @@ if (messaging) {
 // Handling Notification click
 self.addEventListener('notificationclick', (event) => {
   event.notification.close(); // Closing the notification when clicked
+  console.log('Notification click event: ', event.notification);
 
-  console.log('Notification click:', event.notification.data);
+  let urlToOpen = self.location.origin;
+  if (event.notification && event.notification.data && event.notification.data.url) {
+    urlToOpen = event.notification.data.url;
+  }
 
-  const urlToOpen = event.notification.data?.url || '/';
+  // Ensure the URL is absolute relative to origin
+  try {
+    urlToOpen = new URL(urlToOpen, self.location.origin).href;
+  } catch (err) {
+    console.error('Failed to parse notification URL: ', urlToOpen, err);
+    urlToOpen = self.location.origin;
+  }
 
+  // Open the URL in the default browser.
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      for (const client of windowClients) {
-        if (client.url.includes(urlToOpen) && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
+    clients.matchAll({
+      type: 'window',
+      includeUncontrolled: true,
     })
+      .then((windowClients) => {
+        // Check if there is already a window/tab open with the target URL
+        for (const client of windowClients) {
+          if (client.url === urlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // If not, open a new window/tab with the target URL
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
   );
 });
