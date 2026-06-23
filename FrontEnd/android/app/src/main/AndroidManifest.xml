@@ -57,6 +57,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -71,6 +72,9 @@
         android:requestLegacyExternalStorage="true"
         android:allowBackup="false"
         >
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="dbnus_app" />

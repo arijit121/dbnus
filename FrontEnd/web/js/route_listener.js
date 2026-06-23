@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(html => {
 
+                const isFlutterLoaded = window.flutterLoaded === true;
+
                 if (containerId === "web-seo-content") {
                     const doc = new DOMParser().parseFromString(html, "text/html");
                     
@@ -43,6 +45,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     container.innerHTML = doc.body.innerHTML;
                     container.style.display = "block";
                     
+                    injectStructuredDataFromHTML(html);
+                    injectMetaTagsFromHTML(html);
+                } else if (containerId === "web-seo-content-loader") {
+                    const doc = new DOMParser().parseFromString(html, "text/html");
+
+                    container.innerHTML = isFlutterLoaded ? doc.body.innerHTML : html;
+                    container.style.display = "block";
+
                     injectStructuredDataFromHTML(html);
                     injectMetaTagsFromHTML(html);
                 } else {
@@ -150,6 +160,12 @@ document.addEventListener("DOMContentLoaded", function () {
             seoContent.innerHTML = ""; // Clear previous content
         }
 
+        const seoContentLoader = document.getElementById("web-seo-content-loader");
+        if (seoContentLoader) {
+            seoContentLoader.style.display = "none";
+            seoContentLoader.innerHTML = ""; // Clear previous content
+        }
+
         if (path === "/" || path === "/index.html") {
             setData({ containerId: "web-loader", file: "design/default-loader.html" });
             // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
@@ -157,6 +173,30 @@ document.addEventListener("DOMContentLoaded", function () {
         else if (path === "/bio-data") {
             setData({ containerId: "web-loader", file: "design/bio-data-loader.html" });
             setData({ containerId: "web-seo-content", file: "seo/bio-data.html" });
+        }
+        else if (path === "/games") {
+            setData({ containerId: "web-seo-content", file: "seo/games.html" });
+        }
+        else if (path === "/tic-tac-toe") {
+            setData({ containerId: "web-seo-content", file: "seo/tic-tac-toe.html" });
+        }
+        else if (path === "/color-match") {
+            setData({ containerId: "web-seo-content", file: "seo/color-match.html" });
+        }
+        else if (path === "/snake-game") {
+            setData({ containerId: "web-seo-content", file: "seo/snake-game.html" });
+        }
+        else if (path === "/reaction-time") {
+            setData({ containerId: "web-seo-content", file: "seo/reaction-time.html" });
+        }
+        else if (path === "/space-shooter") {
+            setData({ containerId: "web-seo-content", file: "seo/space-shooter.html" });
+        }
+        else if (path === "/brick-breaker") {
+            setData({ containerId: "web-seo-content", file: "seo/brick-breaker.html" });
+        }
+        else if (path === "/gravity-orbit") {
+            setData({ containerId: "web-seo-content", file: "seo/gravity-orbit.html" });
         }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");

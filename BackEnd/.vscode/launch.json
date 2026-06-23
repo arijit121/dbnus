@@ -7,29 +7,30 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "runtimeExecutable": "nodemon",
-            "program": "src/index.ts",
+            "name": "Debug Backend (Auto Reload)",
+            "runtimeExecutable": "node",
+            "runtimeArgs": [
+                "--watch",
+                "--import",
+                "tsx"
+            ],
+            "args": [
+                "src/index.ts"
+            ],
             "restart": true,
             "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen"
+            "internalConsoleOptions": "neverOpen",
+            "sourceMaps": true
         },
-            {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug TS with Nodemon",
-      "runtimeExecutable": "nodemon",
-      "runtimeArgs": [
-        "--exec",
-        "node --experimental-network-inspection -r ts-node/register"
-      ],
-      "program": "${workspaceFolder}/src/index.ts",
-      "restart": true,
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "env": {
-        "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.json"
-      }
-    }
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Backend (Standard)",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/tsx",
+            "args": ["src/index.ts"],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "sourceMaps": true
+        }
     ]
 }

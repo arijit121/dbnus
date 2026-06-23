@@ -1,27 +1,29 @@
-import 'package:dbnus/service/JsService/provider/js_provider.dart'
+import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:firebase_performance/firebase_performance.dart'
     deferred as firebase_performance;
 import 'package:flutter/foundation.dart' deferred as foundation;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'const/theme_const.dart';
-import 'data/connection/bloc/connection_bloc.dart';
-import 'extension/logger_extension.dart';
-import 'firebase_options.dart' deferred as firebase_options;
-import 'router/router_manager.dart';
-import 'router/url_strategy/url_strategy.dart' deferred as url_strategy;
-import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/app_localizations/app_localizations.dart';
-import 'service/Localization/utils/localization_utils.dart';
-import 'service/crash/utils/crash_utils.dart' deferred as crash_utils;
-import 'service/firebase_service.dart' deferred as firebase_service;
-import 'storage/localCart/bloc/local_cart_bloc.dart';
-import 'utils/text_utils.dart';
+import 'package:dbnus/shared/constants/theme_const.dart';
+import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
+import 'package:dbnus/navigation/router_manager.dart';
+import 'package:dbnus/core/localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/localization/app_localizations/app_localizations.dart';
+import 'package:dbnus/core/localization/utils/localization_utils.dart';
+import 'package:dbnus/core/services/crash/utils/crash_utils.dart'
+    deferred as crash_utils;
+import 'package:dbnus/core/services/firebase_service.dart'
+    deferred as firebase_service;
+import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
+
+import 'navigation/url_strategy/url_strategy.dart' deferred as url_strategy;
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
@@ -78,18 +80,25 @@ class _MyWebAppState extends State<MyWebApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await firebase_service.loadLibrary();
-      await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
-      await firebase_service.FirebaseService.generateToken();
+      await Future.wait([
+        firebase_service.FirebaseService.setAnalyticsCollectionEnabled(),
+        firebase_service.FirebaseService.generateToken()
+      ]);
       await js_provider.loadLibrary();
-      await js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js");
       foundation.loadLibrary().then((_) async {
-        await js_provider.JsProvider.loadJs(
-            jsPath:
-                "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js");
+        await Future.wait([
+          js_provider.JsProvider.loadJs(
+              jsPath:
+                  "${foundation.kDebugMode ? "assets/" : ""}packages/flutter_inappwebview_web/assets/web/web_support.js"),
+          if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
+        ]);
       });
-      await js_provider.JsProvider.loadJs(
-          jsPath:
-              "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js");
+      await Future.wait([
+        js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js"),
+        js_provider.JsProvider.loadJs(
+            jsPath:
+                "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"),
+      ]);
     });
     super.initState();
   }
@@ -99,10 +108,12 @@ class _MyWebAppState extends State<MyWebApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalCartBloc()..add(InItLocalCartEvent()),
         ),
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalizationBloc()..add(InitLocalization()),
         ),

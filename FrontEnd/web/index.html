@@ -4,14 +4,14 @@
 <head>
     <base href="$FLUTTER_BASE_HREF">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-    <meta name="description" content="Test Content">
-
+    <meta name="description" content="Dbnus - A feature-rich Flutter showcase app">
+    <meta name="mobile-web-app-capable" content="yes">
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Test title">
+    <meta name="apple-mobile-web-app-title" content="Dbnus">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
     <!-- Favicon -->
@@ -21,15 +21,18 @@
     <!-- Other meta tags -->
     <meta name="theme-color" content="#FF5733">
 
-    <title>Test des</title>
+    <title>Dbnus</title>
     <link rel="manifest" href="manifest.json">
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="main.dart.wasm" as="script">
-    <link rel="stylesheet" href="style/styles.css" media="print" onload="this.onload=null;this.removeAttribute('media');">
+    <link rel="stylesheet" href="style/styles.css" media="print"
+        onload="this.onload=null;this.removeAttribute('media');">
 
     <!-- Preconnect for Faster External Requests -->
     <link rel="preconnect" href="https://www.gstatic.com">
 
+    <!-- Early PWA Capture -->
+    <script src="js/pwa_listener.js"></script>
 </head>
 
 <body>
@@ -37,6 +40,7 @@
         {{flutter_service_worker_version}}
     </script>
     <div id="web-loader" style="display: none;"></div>
+    <div id="web-seo-content-loader" style="display: none;"></div>
     <div id="web-seo-content" style="display: none;"></div>
     <script src="js/route_listener.js" defer></script>
     <script src="js/dynamic_js_loader.js" defer></script>

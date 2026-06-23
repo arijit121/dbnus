@@ -1,0 +1,30 @@
+import 'package:material_ui/material_ui.dart';
+
+import 'package:dbnus/shared/constants/assects_const.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
+
+class InitWidget extends StatelessWidget {
+  const InitWidget(
+      {super.key,
+      this.height = 300,
+      this.width = 300,
+      this.backgroundColor = Colors.transparent});
+
+  final double width;
+  final double height;
+  final Color? backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      width: width,
+      height: height,
+      child: CustomAssetImageView(
+        path: AssetsConst.dbnusNoImageLogo,
+        height: 60,
+        width: 60,
+      ),
+    );
+  }
+}

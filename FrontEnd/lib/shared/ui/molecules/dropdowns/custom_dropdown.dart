@@ -1,0 +1,861 @@
+import 'dart:async';
+
+import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:material_ui/material_ui.dart';
+
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/core/services/value_handler.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
+import 'package:dbnus/shared/ui/atoms/buttons/custom_button.dart';
+import 'package:dbnus/shared/ui/organisms/grids/custom_grid_view.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/text/key_value_widget.dart';
+
+import '../../atoms/decorations/custom_container.dart';
+
+class CustomDropDown<T> extends StatelessWidget {
+  final T? selectedValue;
+  final void Function(T?)? onChanged;
+  final List<CustomDropDownModel<T>> items;
+
+  const CustomDropDown({
+    super.key,
+    this.selectedValue,
+    required this.onChanged,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<T>(
+      value: selectedValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      underline: Container(
+        height: 2,
+        color: Colors.transparent,
+      ),
+      elevation: 1,
+      style: customizeTextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
+          fontColor: ColorConst.primaryDark),
+      onChanged: onChanged,
+      items: List.generate(
+          items.length,
+          (index) => DropdownMenuItem<T>(
+                value: items.elementAt(index).value,
+                child: CustomText(items.elementAt(index).title ?? '',
+                    color: ColorConst.primaryDark, size: 13),
+              )),
+    );
+  }
+}
+
+class CustomMultiMenuAnchor<T> extends StatelessWidget {
+  final void Function(T?) onPressed;
+  final Widget icon;
+  final List<CustomDropDownModel<T>> items;
+  final List<CustomDropDownModel<T>>? selectedItems;
+  final double? iconSize;
+  final Color? color;
+  final String? nonSelectAbleTitle;
+
+  const CustomMultiMenuAnchor({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    required this.items,
+    this.selectedItems,
+    this.iconSize,
+    this.color,
+    this.nonSelectAbleTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MenuAnchor(
+      style: MenuStyle(
+        backgroundColor: WidgetStateProperty.all(
+            Colors.white), // Set background color to white
+      ),
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+        return IconButton(
+          iconSize: iconSize,
+          color: color,
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: icon,
+        );
+      },
+      menuChildren: List<MenuItemButton>.generate(
+        items.length,
+        (int index) {
+          bool isSelected = false;
+          if (selectedItems != null &&
+              selectedItems!
+                  .any((item) => item.value == items.elementAt(index).value)) {
+            isSelected = true;
+          }
+          return MenuItemButton(
+            onPressed: () {
+              onPressed(items.elementAt(index).value);
+            },
+            child: Row(
+              children: [
+                if (items.elementAt(index).value != null &&
+                    items.elementAt(index).title != nonSelectAbleTitle)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: CustomContainer(
+                      color: isSelected ? ColorConst.baseHexColor : null,
+                      height: 18,
+                      width: 18,
+                      borderRadius: BorderRadius.circular(4),
+                      borderColor: isSelected
+                          ? ColorConst.baseHexColor
+                          : ColorConst.grey,
+                      child: isSelected
+                          ? Center(
+                              child: Icon(Icons.check,
+                                  color: Colors.white, size: 16))
+                          : null,
+                    ),
+                  ),
+                CustomText(items.elementAt(index).title ?? "",
+                    color: ColorConst.primaryDark, size: 13),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class CustomMultiSelectorBottomSheet<T> extends StatelessWidget {
+  final void Function(List<T>?) onPressed;
+  final Widget child, okButtonWidget;
+  final Widget? cancelButtonWidget;
+  final String? title;
+  final int? crossAxisCount;
+  final List<CustomDropDownModel<T>> items;
+  final List<CustomDropDownModel<T>>? selectedItems;
+
+  const CustomMultiSelectorBottomSheet({
+    super.key,
+    required this.onPressed,
+    required this.items,
+    this.selectedItems,
+    this.crossAxisCount,
+    required this.child,
+    required this.okButtonWidget,
+    this.cancelButtonWidget,
+    this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        List<T?>? v = await _showBottomSheet(context);
+        List<T> result = v
+                ?.where((element) => element != null)
+                .map((e) => e as T)
+                .toList() ??
+            [];
+        onPressed(result);
+      },
+      child: child,
+    );
+  }
+
+  Future<List<T?>?> _showBottomSheet(BuildContext context) async {
+    final selected = selectedItems?.map((e) => e.value).toSet() ?? <T>{};
+
+    final result = await showModalBottomSheet<List<T?>>(
+      backgroundColor: Colors.white,
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: ScreenUtils.nh() / 1.5, // Set max height here
+              ),
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (ValueHandler.isTextNotEmptyOrNull(title))
+                            Expanded(
+                              child: CustomText(title!,
+                                  color: ColorConst.primaryDark,
+                                  size: 16,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          CustomIconButton(
+                              color: ColorConst.primaryDark,
+                              onPressed: () async {
+                                Navigator.pop(
+                                    context,
+                                    selectedItems
+                                        ?.map((e) => e.value)
+                                        .toList());
+                              },
+                              icon: const Icon(Icons.close))
+                        ],
+                      ),
+                    ),
+                    if (ValueHandler.isTextNotEmptyOrNull(title))
+                      Divider(color: ColorConst.lineGrey, height: 2),
+                    Flexible(
+                      child: CustomGridView.count(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        shrinkWrap: true,
+                        crossAxisCount: crossAxisCount ?? 1,
+                        crossAxisSpacing: 8,
+                        itemCount: items.length,
+                        builder: (context, index) {
+                          final item = items.elementAt(index);
+                          final isSelected = selected.contains(item.value);
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                if (isSelected == true) {
+                                  selected.remove(item.value);
+                                } else {
+                                  selected.add(item.value);
+                                }
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText(items.elementAt(index).title ?? "",
+                                    color: ColorConst.primaryDark, size: 13),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 4),
+                                  child: CustomContainer(
+                                    color: isSelected
+                                        ? ColorConst.baseHexColor
+                                        : null,
+                                    height: 18,
+                                    width: 18,
+                                    borderRadius: BorderRadius.circular(4),
+                                    borderColor: isSelected
+                                        ? ColorConst.baseHexColor
+                                        : ColorConst.grey,
+                                    child: isSelected
+                                        ? Center(
+                                            child: Icon(Icons.check,
+                                                color: Colors.white, size: 16))
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return 8.ph;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (cancelButtonWidget != null)
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(
+                                    context,
+                                    selectedItems
+                                        ?.map((e) => e.value)
+                                        .toList());
+                              },
+                              child: cancelButtonWidget,
+                            ),
+                          InkWell(
+                            onTap: () {
+                              final selectedModels = items
+                                  .where(
+                                      (item) => selected.contains(item.value))
+                                  .toList();
+                              Navigator.pop(context,
+                                  selectedModels.map((e) => e.value).toList());
+                            },
+                            child: okButtonWidget,
+                          ),
+                        ],
+                      ),
+                    ),
+                    8.ph
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    return result;
+  }
+}
+
+class CustomDropdownMenuFormField<T> extends StatelessWidget {
+  final List<CustomDropDownModel<T>> items;
+  final void Function(T?)? onChanged;
+  final String? hintText;
+  final Widget? prefix, suffix;
+  final T? value;
+  final String? Function(T?)? validator;
+  final AutovalidateMode autoValidateMode;
+  final double? height;
+  final Widget? label;
+  final double? menuHeight;
+  final bool enableFilter;
+  final BorderRadius borderRadius;
+  final Color? fillColor;
+  final bool? filled;
+  final Color? borderColor;
+  final Color? selectedBorderColor;
+  final String? title;
+  final Color? titleColor;
+  final bool? isDense;
+  final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsets? expandedInsets;
+
+  const CustomDropdownMenuFormField(
+      {super.key,
+      required this.onChanged,
+      required this.items,
+      this.hintText,
+      this.prefix,
+      this.suffix,
+      this.value,
+      this.validator,
+      this.autoValidateMode = AutovalidateMode.onUserInteraction,
+      this.height = 48,
+      this.label,
+      this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+      this.menuHeight,
+      this.enableFilter = false,
+      this.fillColor = Colors.white,
+      this.filled,
+      this.borderColor,
+      this.selectedBorderColor,
+      this.title,
+      this.titleColor,
+      this.isDense,
+      this.contentPadding,
+      this.expandedInsets});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (title?.isNotEmpty == true)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: CustomText(title ?? "",
+                  color: titleColor ?? ColorConst.primaryDark,
+                  size: 14,
+                  fontWeight: FontWeight.w400),
+            ),
+          _DropdownMenuFormField<T?>(
+            enableFilter: enableFilter,
+            requestFocusOnTap: enableFilter,
+            menuHeight: menuHeight,
+            label: label,
+            validator: validator,
+            autovalidateMode: autoValidateMode,
+            width: constraints.maxWidth,
+            menuStyle: const MenuStyle(
+              backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+            ),
+            initialSelection: value,
+            leadingIcon: prefix,
+            trailingIcon: suffix ??
+                Icon(Icons.arrow_drop_down,
+                    size: 24, color: ColorConst.primaryDark),
+            selectedTrailingIcon: suffix != null
+                ? RotatedBox(
+                    quarterTurns: 2,
+                    child: suffix,
+                  )
+                : Icon(Icons.arrow_drop_up,
+                    size: 24, color: ColorConst.primaryDark),
+            hintText: hintText,
+            textStyle: customizeTextStyle(
+                fontColor: ColorConst.primaryDark, fontSize: 16),
+            onSelected: onChanged,
+            dropdownMenuEntries: List.generate(
+                items.length,
+                (index) => DropdownMenuEntry<T?>(
+                    value: items.elementAt(index).value,
+                    label: items.elementAt(index).title ?? "",
+                    labelWidget: CustomText(
+                      items.elementAt(index).title ?? "",
+                      color: ColorConst.primaryDark,
+                      size: 16,
+                      fontWeight: FontWeight.w500,
+                    ))),
+            inputDecorationTheme: InputDecorationTheme(
+              isDense: isDense,
+              contentPadding: contentPadding,
+              fillColor: fillColor,
+              filled: filled ?? true,
+              constraints: height != null
+                  ? BoxConstraints.tight(Size.fromHeight(height!))
+                  : null,
+              errorStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  fontColor: ColorConst.red),
+              hintStyle: customizeTextStyle(
+                  fontColor: ColorConst.redGrey, fontSize: 16),
+              labelStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14,
+                  fontColor: ColorConst.blueGrey),
+              floatingLabelStyle: customizeTextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  fontColor: ColorConst.primaryDark),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: BorderSide(
+                  color: selectedBorderColor ?? Colors.blue,
+                  width: 1,
+                ),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: Colors.white,
+                  width: 1,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: BorderSide(
+                  color: borderColor ?? ColorConst.grey,
+                  width: 1,
+                ),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  width: 1,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: ColorConst.red,
+                  width: 1,
+                ),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: borderRadius,
+                borderSide: const BorderSide(
+                  color: ColorConst.red,
+                  width: 1,
+                ),
+              ),
+            ),
+            expandedInsets: expandedInsets,
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class _DropdownMenuFormField<T> extends FormField<T> {
+  _DropdownMenuFormField({
+    super.key,
+    bool enabled = true,
+    double? width,
+    double? menuHeight,
+    Widget? leadingIcon,
+    Widget? trailingIcon,
+    Widget? label,
+    String? hintText,
+    String? helperText,
+    Widget? selectedTrailingIcon,
+    bool enableFilter = false,
+    bool enableSearch = true,
+    TextStyle? textStyle,
+    InputDecorationTheme? inputDecorationTheme,
+    MenuStyle? menuStyle,
+    this.controller,
+    T? initialSelection,
+    this.onSelected,
+    bool? requestFocusOnTap,
+    EdgeInsets? expandedInsets,
+    required List<DropdownMenuEntry<T>> dropdownMenuEntries,
+    super.autovalidateMode = AutovalidateMode.disabled,
+    super.validator,
+  }) : super(
+            initialValue: initialSelection,
+            builder: (FormFieldState<T> field) {
+              final _DropdownMenuFormFieldState<T> state =
+                  field as _DropdownMenuFormFieldState<T>;
+              void onSelectedHandler(T? value) {
+                field.didChange(value);
+                onSelected?.call(value);
+              }
+
+              InputDecorationTheme? localInputDecorationTheme =
+                  inputDecorationTheme;
+              if (state.errorText != null) {
+                localInputDecorationTheme = localInputDecorationTheme?.copyWith(
+                  focusedBorder: inputDecorationTheme?.focusedErrorBorder,
+                  enabledBorder: inputDecorationTheme?.errorBorder,
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                spacing: 4,
+                children: [
+                  DropdownMenu<T>(
+                    key: key,
+                    enabled: enabled,
+                    width: width,
+                    menuHeight: menuHeight,
+                    leadingIcon: leadingIcon,
+                    trailingIcon: trailingIcon,
+                    label: label,
+                    hintText: hintText,
+                    helperText: helperText,
+                    selectedTrailingIcon: selectedTrailingIcon,
+                    enableFilter: enableFilter,
+                    enableSearch: enableSearch,
+                    textStyle: textStyle,
+                    inputDecorationTheme: localInputDecorationTheme,
+                    menuStyle: menuStyle,
+                    controller: controller,
+                    initialSelection: state.value,
+                    onSelected: onSelectedHandler,
+                    requestFocusOnTap: requestFocusOnTap,
+                    expandedInsets: expandedInsets,
+                    dropdownMenuEntries: dropdownMenuEntries,
+                  ),
+                  if (state.errorText != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        state.errorText!,
+                        style: inputDecorationTheme?.errorStyle,
+                      ),
+                    ),
+                ],
+              );
+            });
+
+  final ValueChanged<T?>? onSelected;
+
+  final TextEditingController? controller;
+
+  @override
+  FormFieldState<T> createState() => _DropdownMenuFormFieldState<T>();
+}
+
+class _DropdownMenuFormFieldState<T> extends FormFieldState<T> {
+  _DropdownMenuFormField<T> get _dropdownMenuFormField =>
+      widget as _DropdownMenuFormField<T>;
+
+  @override
+  void didUpdateWidget(_DropdownMenuFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialValue != widget.initialValue) {
+      setValue(widget.initialValue);
+    }
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    _dropdownMenuFormField.onSelected!(value);
+  }
+}
+
+class CustomDropDownFormField<T> extends StatelessWidget {
+  final void Function(T?)? onChanged;
+  final List<CustomDropDownModel<T>> items;
+  final String? hintText;
+  final String? Function(T?)? validator;
+  final T? value;
+  final Widget? prefix, suffix;
+  final Widget? label;
+  final BorderRadius borderRadius;
+
+  const CustomDropDownFormField({
+    super.key,
+    required this.onChanged,
+    required this.items,
+    this.hintText,
+    this.validator,
+    this.value,
+    this.prefix,
+    this.suffix,
+    this.label,
+    this.borderRadius = const BorderRadius.all(Radius.circular(6.0)),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<T>(
+      isExpanded: true,
+      dropdownColor: Colors.white,
+      initialValue: value,
+      items: List.generate(
+          items.length,
+          (index) => DropdownMenuItem<T>(
+                value: items.elementAt(index).value,
+                child: CustomText(items.elementAt(index).title ?? '',
+                    color: ColorConst.primaryDark, size: 13),
+              )),
+      onChanged: onChanged,
+      hint: hintText != null
+          ? CustomText(hintText!, color: ColorConst.grey, size: 13)
+          : null,
+      validator: validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      icon: 0.pw,
+      decoration: InputDecoration(
+        prefixIcon: prefix,
+        suffixIcon: suffix ??
+            Icon(Icons.arrow_drop_down,
+                size: 24, color: ColorConst.primaryDark),
+        label: label,
+        contentPadding: const EdgeInsets.only(left: 8),
+        hintStyle: customizeTextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            fontColor: ColorConst.blueGrey),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: const BorderSide(
+            color: Colors.blue,
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: BorderSide(
+            color: ColorConst.blueGrey,
+            width: 1,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: borderRadius,
+          borderSide: const BorderSide(
+            color: ColorConst.red,
+            width: 1,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDropDownModel<T> {
+  T? value;
+  String? title;
+
+  CustomDropDownModel({this.value, this.title});
+}
+
+class CustomMenuAnchor<T> extends StatelessWidget {
+  final void Function(T?) onPressed;
+  final Widget child;
+  final List<CustomDropDownModel<T>> items;
+
+  const CustomMenuAnchor({
+    super.key,
+    required this.onPressed,
+    required this.child,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: ThemeData(
+        menuTheme: const MenuThemeData(
+          style: MenuStyle(
+              backgroundColor: WidgetStatePropertyAll<Color>(Colors.white)),
+        ),
+      ),
+      child: MenuAnchor(
+        style: MenuStyle(
+          backgroundColor: WidgetStateProperty.all(
+              Colors.white), // Set background color to white
+        ),
+        builder: (BuildContext context, MenuController controller, Widget? _) {
+          return InkWell(
+            onTap: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            child: child,
+          );
+        },
+        menuChildren: List<MenuItemButton>.generate(
+          items.length,
+          (int index) => MenuItemButton(
+            onPressed: () {
+              onPressed(items.elementAt(index).value);
+            },
+            child: CustomText(items.elementAt(index).title ?? "",
+                color: ColorConst.primaryDark, size: 13),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Debouncer {
+  final Duration delay;
+
+  Timer? _timer;
+
+  Debouncer({this.delay = const Duration(milliseconds: 300)});
+
+  void run(VoidCallback action) {
+    _timer?.cancel();
+
+    _timer = Timer(delay, action);
+  }
+
+  void dispose() => _timer?.cancel();
+}
+
+class CustomAutocompleteWidget<T extends Object> extends StatefulWidget {
+  final FocusNode? focusNode;
+  final Function(TextEditingValue value) optionsBuilder;
+  final AutocompleteFieldViewBuilder? fieldViewBuilder;
+  final AutocompleteOptionsViewBuilder<T> optionsViewBuilder;
+  final AutocompleteOnSelected<T>? onSelected;
+  final AutocompleteOptionToString<T> displayStringForOption;
+  final TextEditingController? textEditingController;
+  final TextEditingValue? initialValue;
+  final OptionsViewOpenDirection optionsViewOpenDirection;
+  final Duration? debouncer;
+
+  static String defaultStringForOption(Object? option) {
+    return option.toString();
+  }
+
+  const CustomAutocompleteWidget({
+    super.key,
+    this.focusNode,
+    required this.optionsBuilder,
+    this.fieldViewBuilder,
+    required this.optionsViewBuilder,
+    this.onSelected,
+    this.displayStringForOption = defaultStringForOption,
+    this.textEditingController,
+    this.initialValue,
+    this.optionsViewOpenDirection = OptionsViewOpenDirection.down,
+    this.debouncer,
+  });
+
+  @override
+  State<CustomAutocompleteWidget<T>> createState() =>
+      _CustomAutocompleteWidgetState<T>();
+}
+
+class _CustomAutocompleteWidgetState<T extends Object>
+    extends State<CustomAutocompleteWidget<T>> {
+  Debouncer? _debouncer;
+
+  Completer<List<T>>? _pending;
+
+  @override
+  void initState() {
+    if (widget.debouncer != null) {
+      _debouncer = Debouncer(delay: widget.debouncer!);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _debouncer?.dispose();
+
+    super.dispose();
+  }
+
+  Future<List<T>> _optionsBuilder(TextEditingValue controller) {
+    if (_debouncer != null &&
+        (controller.text.trim().isNotEmpty ||
+            (controller.text.length != controller.text.trim().length))) {
+      final completer = Completer<List<T>>();
+
+      _pending = completer; // track latest request
+
+      _debouncer?.run(() async {
+        // Only resolve if this is still the most recent call
+
+        if (_pending == completer) {
+          final results = await widget.optionsBuilder(controller);
+
+          if (!completer.isCompleted) completer.complete(results);
+        }
+      });
+
+      return completer.future;
+    } else {
+      return widget.optionsBuilder(controller);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RawAutocomplete<T>(
+      textEditingController: widget.textEditingController,
+      focusNode: widget.focusNode,
+      displayStringForOption: widget.displayStringForOption,
+      optionsBuilder: _optionsBuilder,
+      onSelected: widget.onSelected,
+      fieldViewBuilder: widget.fieldViewBuilder,
+      optionsViewBuilder: widget.optionsViewBuilder,
+      initialValue: widget.initialValue,
+      optionsViewOpenDirection: widget.optionsViewOpenDirection,
+    );
+  }
+}

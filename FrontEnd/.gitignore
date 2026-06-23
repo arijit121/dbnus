@@ -31,6 +31,7 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
+pubspec.lock
 /build/
 
 # Symbolication related
@@ -47,4 +48,23 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
-/lib/service/Localization/app_localizations/
+/lib/core/localization/app_localizations/
+
+# Firebase
+.firebase/
+
+# User requested
+lib/core/localization/app_localizations
+
+# Generated plugin registrants
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugins.cmake
+macos/Flutter/GeneratedPluginRegistrant.swift
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
+
+# tmp directory
+.tmp/
+
+# Super Power Agent
+.agent/

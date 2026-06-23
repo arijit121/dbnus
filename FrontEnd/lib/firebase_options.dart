@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'package:dbnus/firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -90,5 +90,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'dbnus-df986.firebasestorage.app',
     measurementId: 'G-K53JP17WSN',
   );
-
 }

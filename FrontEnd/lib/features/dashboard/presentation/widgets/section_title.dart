@@ -1,0 +1,60 @@
+import 'package:material_ui/material_ui.dart';
+
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
+
+class SectionTitle extends StatelessWidget {
+  const SectionTitle({
+    super.key,
+    required this.title,
+    required this.icon,
+    this.trailing,
+  });
+
+  final String title;
+  final String icon;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        // Accent bar
+        Container(
+          width: 4,
+          height: 28,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [ColorConst.violate, ColorConst.sidebarSelected],
+            ),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        10.pw,
+        // Icon with soft background circle
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: ColorConst.violate.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+          ),
+          child: CustomSvgAssetImageView(path: icon, height: 18, width: 18, color: ColorConst.violate),
+        ),
+        10.pw,
+        Expanded(
+          child: CustomText(
+            title,
+            fontWeight: FontWeight.w700,
+            size: 18,
+            color: ColorConst.primaryDark,
+          ),
+        ),
+        if (trailing != null) trailing!,
+      ],
+    );
+  }
+}

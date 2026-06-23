@@ -6,39 +6,72 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main_app.dart",
-            "args": ["--flavor", "dev", "--target", "lib/main_dev.dart"]
+            "args": [
+                "--flavor",
+                "dev",
+                "--target",
+                "lib/main_dev.dart"
+            ]
         },
         {
             "name": "FrontEnd (stg)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_app.dart",
-            "args": ["--flavor", "stg", "--target", "lib/main_stg.dart"]
+            "args": [
+                "--flavor",
+                "stg",
+                "--target",
+                "lib/main_stg.dart"
+            ]
         },
         {
             "name": "FrontEnd (prod)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_app.dart",
-            "args": ["--flavor", "prod", "--target", "lib/main_prod.dart"]
+            "args": [
+                "--flavor",
+                "prod",
+                "--target",
+                "lib/main_prod.dart"
+            ]
         },
         {
-            "name": "FrontEnd/Web (dev)",
+            "name": "FrontEnd/No Flavor (dev)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "FrontEnd/Web (stg)",
+            "name": "FrontEnd/No Flavor (stg)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_stg.dart"
         },
         {
-            "name": "FrontEnd/Web (prod)",
+            "name": "FrontEnd/No Flavor (prod)",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_prod.dart"
+        },
+        {
+            "name": "Jaspr Web",
+            "request": "launch",
+            "type": "dart",
+            "cwd": "jaspr_web",
+            "program": "jaspr_web/lib/main.client.dart"
+        },
+        {
+            "name": "Jaspr Web (dev)",
+            "request": "launch",
+            "type": "dart",
+            "cwd": "jaspr_web",
+            "program": "jaspr_web/lib/main.client.dart",
+            "args": [
+                "--dart-define",
+                "ENV=dev"
+            ]
         }
     ]
 }

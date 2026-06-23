@@ -1,4 +1,4 @@
-import 'main_web.dart'
+import 'package:dbnus/main_web.dart'
     if (dart.library.io) 'main_app.dart'
     if (dart.library.js_interop) 'main_web.dart' deferred as main_runner;
 

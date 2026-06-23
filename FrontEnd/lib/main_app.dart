@@ -1,41 +1,41 @@
 import 'dart:async';
+import 'dart:ui' as ui;
 
 import 'package:app_links/app_links.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:dbnus/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'const/theme_const.dart';
-import 'data/connection/bloc/connection_bloc.dart';
-import 'extension/logger_extension.dart';
-import 'firebase_options.dart';
-import 'router/custom_router/custom_route.dart';
-import 'router/router_manager.dart';
-import 'router/router_name.dart';
-import 'service/Localization/bloc/localization_bloc.dart';
-import 'service/Localization/app_localizations/app_localizations.dart';
-import 'service/Localization/utils/localization_utils.dart';
-import 'service/app_updater.dart';
-import 'service/crash/utils/crash_utils.dart';
-import 'service/download_handler.dart';
-import 'service/firebase_service.dart';
-import 'service/notification_handler.dart';
-import 'service/redirect_engine.dart';
-import 'storage/localCart/bloc/local_cart_bloc.dart';
-import 'utils/pop_up_items.dart';
-import 'utils/text_utils.dart';
+import 'package:dbnus/shared/constants/theme_const.dart';
+import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
+import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:dbnus/navigation/custom_router/custom_route.dart';
+import 'package:dbnus/navigation/router_manager.dart';
+import 'package:dbnus/navigation/router_name.dart';
+import 'package:dbnus/core/localization/bloc/localization_bloc.dart';
+import 'package:dbnus/core/localization/app_localizations/app_localizations.dart';
+import 'package:dbnus/core/localization/utils/localization_utils.dart';
+import 'package:dbnus/core/services/app_updater.dart';
+import 'package:dbnus/core/services/crash/utils/crash_utils.dart';
+import 'package:dbnus/core/services/download_handler.dart';
+import 'package:dbnus/core/services/firebase_service.dart' as firebase_service;
+import 'package:dbnus/core/services/notification_handler.dart';
+import 'package:dbnus/core/services/redirect_engine.dart';
+import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
+import 'package:dbnus/shared/utils/pop_up_items.dart';
+import 'package:dbnus/shared/utils/text_utils.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseService.showNotification(message);
+  firebase_service.FirebaseService.showNotification(message);
   AppLog.i("On Background Message Id : ${message.messageId}");
 }
 
@@ -47,7 +47,7 @@ Future<void> main() async {
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
   FirebaseMessaging.onMessage.listen((message) {
     AppLog.i("On Message Id : ${message.messageId}");
-    FirebaseService.showNotification(message);
+    firebase_service.FirebaseService.showNotification(message);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
@@ -89,17 +89,13 @@ Future<void> main() async {
 
   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-  await FirebaseService.getInitialMessage();
-  await FirebaseService.setAnalyticsCollectionEnabled();
+  await firebase_service.FirebaseService.getInitialMessage();
+  await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
   await NotificationHandler.requestPermissions();
   await NotificationHandler.initiateNotification();
   await DownloadHandler().config();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((_) async {
-    runApp(const MyApp());
-  });
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -109,26 +105,58 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  ui.FlutterView? _view;
+  static const double kOrientationLockBreakpoint = 600;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
       BackButtonInterceptor.add(myInterceptor);
-      await FirebaseService.generateToken();
+      await firebase_service.FirebaseService.generateToken();
       await AppUpdater.startUpdate();
       AppLinks().uriLinkStream.listen((uri) {
         RedirectEngine.redirectRoutes(redirectUrl: uri);
       });
     });
-
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void dispose() {
     BackButtonInterceptor.remove(myInterceptor);
+    WidgetsBinding.instance.removeObserver(this);
+    _view = null;
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _view = View.maybeOf(context);
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final ui.Display? display = _view?.display;
+    if (display == null) {
+      return;
+    }
+    if (display.size.width / display.devicePixelRatio <
+        kOrientationLockBreakpoint) {
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
   }
 
   bool _isExitAppDialogOpen = false;
@@ -162,10 +190,12 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalCartBloc()..add(InItLocalCartEvent()),
         ),
         BlocProvider(
+          lazy: false,
           create: (BuildContext context) =>
               LocalizationBloc()..add(InitLocalization()),
         ),
