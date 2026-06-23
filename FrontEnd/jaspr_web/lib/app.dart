@@ -6,6 +6,7 @@ import 'navigation/router_manager.dart';
 
 /// Root application component with routing.
 /// Mirrors the Flutter app's `MyWebApp` + `RouterManager`.
+@client
 class App extends StatelessComponent {
   const App({super.key});
 

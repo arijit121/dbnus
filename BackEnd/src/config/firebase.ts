@@ -1,11 +1,22 @@
 // src/config/firebase.ts
 import admin from 'firebase-admin';
+import fs from 'fs';
+import path from 'path';
 
 if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
   throw new Error("Missing FIREBASE_SERVICE_ACCOUNT environment variable.");
 }
 
-const serviceAccountData = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+let serviceAccountData: any;
+const serviceAccountValue = process.env.FIREBASE_SERVICE_ACCOUNT.trim();
+
+if (serviceAccountValue.startsWith('{')) {
+  serviceAccountData = JSON.parse(serviceAccountValue);
+} else {
+  // Resolve relative to the root directory
+  const resolvedPath = path.resolve(process.cwd(), serviceAccountValue);
+  serviceAccountData = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+}
 
 // Ensure private_key has correct newline sequences interpreted from the JSON parse
 const privateKey = serviceAccountData.private_key

@@ -28,4 +28,5 @@ dev_dependencies:
   lints: ^5.0.0
 
 jaspr:
-  mode: client
+  mode: server
+
