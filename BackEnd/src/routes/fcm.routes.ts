@@ -18,33 +18,38 @@ const router = Router();
  *             type: object
  *             required:
  *               - token
- *               - title
- *               - body
+ *               - data
  *             properties:
  *               token:
  *                 type: string
  *                 description: FCM device token
  *                 example: fmW3DHP43T6dq0jwEotArI:APA91bGbKhCgw9UWo3WD9Zi1tZJ9HbihIyb59seEbUqGwxpO-g_2n3FzG3r9G5hUnIg76IsCVi2DxQYuYpz8IKGFoZFJRA0sZsmeNHr6x4fGKUF2-aTaGDw
- *               title:
- *                 type: string
- *                 description: Notification title
- *                 example: Silent Notification
- *               message:
- *                 type: string
- *                 description: Notification message
- *                 example: test
- *               body:
- *                 type: string
- *                 description: Notification body with HTML support
- *                 example: <p>This is<sub> subscript</sub> and <sup>superscript</sup></p>
- *               image:
- *                 type: string
- *                 description: URL image for the notification
- *                 example: https://res.genupathlabs.com/genu_path_lab/GenuPushImage/900X450_1695990869.jpg
- *               ActionURL:
- *                 type: string
- *                 description: URL to open upon interacting with the notification
- *                 example: http://gplab.in/m04oLk
+ *               data:
+ *                 type: object
+ *                 description: Notification data payload with HTML support
+ *                 required:
+ *                   - title
+ *                 properties:
+ *                   title:
+ *                     type: string
+ *                     description: Title of the notification
+ *                     example: "Silent Notification"
+ *                   message:
+ *                     type: string
+ *                     description: Message text
+ *                     example: "test"
+ *                   body:
+ *                     type: string
+ *                     description: Notification body with HTML support
+ *                     example: "<p>This is<sub> subscript</sub> and <sup>superscript</sup></p>"
+ *                   image:
+ *                     type: string
+ *                     description: Optional image URL
+ *                     example: "https://res.genupathlabs.com/genu_path_lab/GenuPushImage/900X450_1695990869.jpg"
+ *                   ActionURL:
+ *                     type: string
+ *                     description: Optional action redirection URL
+ *                     example: "https://sastasundar-8f573.web.app/order-online"
  *     responses:
  *       200:
  *         description: Notification sent successfully
