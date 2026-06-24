@@ -55,7 +55,7 @@ class JsProvider {
     }
   }
 
-  static Future<void> replaceState({required String path}) async {
+  static Future<void> replaceUrl({required String path}) async {
     try {
       String jsPath = "assets/js/change_url.js";
       await jsHelper.loadJs(

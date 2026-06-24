@@ -214,7 +214,7 @@ class CustomRoute {
         RouterManager.getInstance.router.push(location, extra: extra);
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
           await Future.delayed(Duration(seconds: 1));
-          JsProvider.replaceState(path: location);
+          JsProvider.replaceUrl(path: location);
         });
       } else {
         RouterManager.getInstance.router.go(location, extra: extra);
