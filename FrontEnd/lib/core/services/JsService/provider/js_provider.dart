@@ -49,7 +49,17 @@ class JsProvider {
     try {
       String jsPath = "assets/js/change_url.js";
       await jsHelper.loadJs(
-          jsPath: jsPath, jsFunctionName: 'changeUrl', jsFunctionArgs: [path]);
+          jsPath: jsPath, jsFunctionName: 'pushState', jsFunctionArgs: [path]);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+  }
+
+  static Future<void> replaceState({required String path}) async {
+    try {
+      String jsPath = "assets/js/change_url.js";
+      await jsHelper.loadJs(
+          jsPath: jsPath, jsFunctionName: 'replaceState', jsFunctionArgs: [path]);
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }

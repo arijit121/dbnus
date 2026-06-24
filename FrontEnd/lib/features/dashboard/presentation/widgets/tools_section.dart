@@ -67,10 +67,9 @@ class ToolsSection extends StatelessWidget {
         color: ColorConst.violate,
         tag: "Location",
         onTap: () async {
-          ForwardGeocoding? forwardGeocoding =
-              await Geocoding.forwardGeocoding(
-                  address:
-                      "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India");
+          ForwardGeocoding? forwardGeocoding = await Geocoding.forwardGeocoding(
+              address:
+                  "Jot Bhim, New Town, Bidhannagar, North 24 Parganas District, West Bengal, 700160, India");
           AppLog.i(forwardGeocoding?.longitude);
         },
       ),
@@ -81,9 +80,8 @@ class ToolsSection extends StatelessWidget {
         color: const Color(0xFFE67E22),
         tag: "Location",
         onTap: () async {
-          ReverseGeocoding? reverseGeocoding =
-              await Geocoding.reverseGeocoding(
-                  latitude: 22.5754, longitude: 88.4798);
+          ReverseGeocoding? reverseGeocoding = await Geocoding.reverseGeocoding(
+              latitude: 22.5754, longitude: 88.4798);
           AppLog.i(reverseGeocoding?.displayName);
         },
       ),
@@ -108,6 +106,16 @@ class ToolsSection extends StatelessWidget {
         tag: "Map",
         onTap: () {
           CustomRoute.navigateNamed(RouteName.openStreetMap);
+        },
+      ),
+      _ToolItem(
+        icon: AssetsConst.featherMap,
+        title: "Map View",
+        subtitle: "Open Street Map  strPreRouteState",
+        tag: "Map",
+        color: const Color(0xFF2980B9),
+        onTap: () {
+          CustomRoute.navigate(RouteName.openStreetMap, strPreRouteState: true);
         },
       ),
     ];
@@ -140,8 +148,11 @@ class ToolsSection extends StatelessWidget {
                     color: ColorConst.violate.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const CustomSvgAssetImageView(path: AssetsConst.featherLayers,
-                      color: ColorConst.violate, height: 14, width: 14),
+                  child: const CustomSvgAssetImageView(
+                      path: AssetsConst.featherLayers,
+                      color: ColorConst.violate,
+                      height: 14,
+                      width: 14),
                 ),
                 8.pw,
                 CustomText(
@@ -189,7 +200,8 @@ class ToolsSection extends StatelessWidget {
                     width: 1.5,
                   ),
                 ),
-                child: CustomSvgAssetImageView(path: tool.icon, color: tool.color, height: 20, width: 20),
+                child: CustomSvgAssetImageView(
+                    path: tool.icon, color: tool.color, height: 20, width: 20),
               ),
               14.pw,
               Expanded(
@@ -244,8 +256,11 @@ class ToolsSection extends StatelessWidget {
                   color: ColorConst.lineGrey,
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const CustomSvgAssetImageView(path: AssetsConst.featherChevronRight,
-                    color: ColorConst.secondaryDark, height: 14, width: 14),
+                child: const CustomSvgAssetImageView(
+                    path: AssetsConst.featherChevronRight,
+                    color: ColorConst.secondaryDark,
+                    height: 14,
+                    width: 14),
               ),
             ],
           ),

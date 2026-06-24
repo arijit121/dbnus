@@ -203,4 +203,24 @@ class CustomRoute {
           extra: extra);
     }
   }
+
+  static Future<void> navigate(
+    String location, {
+    bool? strPreRouteState,
+    Object? extra,
+  }) async {
+    if (kIsWeb) {
+      if (strPreRouteState == true) {
+        RouterManager.getInstance.router.push(location, extra: extra);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+          await Future.delayed(Duration(seconds: 1));
+          JsProvider.replaceState(path: location);
+        });
+      } else {
+        RouterManager.getInstance.router.go(location, extra: extra);
+      }
+    } else {
+      await RouterManager.getInstance.router.push(location, extra: extra);
+    }
+  }
 }
