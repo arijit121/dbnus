@@ -204,6 +204,20 @@ class CustomRoute {
     }
   }
 
+  /// Navigates to the specified [location].
+  ///
+  /// Can navigate to a URI location with optional query parameters,
+  /// e.g. `/family/f2/person/p1?color=blue`.
+  ///
+  /// On web platforms:
+  /// - If [strPreRouteState] is `true`, it pushes the [location] onto the router stack
+  ///   and schedules a post-frame callback to replace the browser URL after a 500ms delay.
+  /// - Otherwise, it uses `go` to navigate directly to the [location].
+  ///
+  /// On non-web platforms:
+  /// - It pushes the [location] onto the router stack.
+  ///
+  /// [extra] can be used to pass additional data/state to the destination route.
   static Future<void> navigate(
     String location, {
     bool? strPreRouteState,
@@ -213,7 +227,7 @@ class CustomRoute {
       if (strPreRouteState == true) {
         RouterManager.getInstance.router.push(location, extra: extra);
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(Duration(milliseconds: 500));
           JsProvider.replaceUrl(path: location);
         });
       } else {
