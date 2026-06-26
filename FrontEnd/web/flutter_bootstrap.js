@@ -23,6 +23,11 @@ const renderer = searchParams.get('renderer');
 _flutter.loader.load({
     config: {
          renderer: renderer,
+         // Load main.dart.js from CDN
+         entrypointBaseUrl: assetBase,
+         // Load assets from CDN
+         assetBase: assetBase,
+        // Load CanvasKit from CDN
          canvasKitBaseUrl:`${assetBase}canvaskit/`,
     },
     serviceWorkerSettings: {
