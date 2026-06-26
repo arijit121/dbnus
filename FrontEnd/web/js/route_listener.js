@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+function init()
+{
 
     let historyPatched = "";
     let routeHistory = JSON.parse(sessionStorage.getItem('routeHistory') || "[]");
@@ -40,11 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (containerId === "web-seo-content") {
                     const doc = new DOMParser().parseFromString(html, "text/html");
-                    
+
                     // Use <body>'s content for display
                     container.innerHTML = doc.body.innerHTML;
                     container.style.display = "block";
-                    
+
                     injectStructuredDataFromHTML(html);
                     injectMetaTagsFromHTML(html);
                 } else if (containerId === "web-seo-content-loader") {
@@ -242,4 +243,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initial load
     handleRouteChange();
-});
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+} else {
+    init();
+}

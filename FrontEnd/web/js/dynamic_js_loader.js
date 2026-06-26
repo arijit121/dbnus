@@ -34,9 +34,9 @@ async function dynamicJsLoader({
                 jsFilePath = jsPath;
                 
                 // If you have a base URL for assets, you can use it here
-                const assetBase = window.flutterAssetBase || '';
-                if (assetBase) {
-                    jsFilePath = assetBase + jsFilePath;
+                const assetBaseDynamicJsLoader = window.FLUTTER_ASSET_BASE || '';
+                if (assetBaseDynamicJsLoader) {
+                    jsFilePath = assetBaseDynamicJsLoader + jsFilePath;
                 }
             } else {
                 jsFilePath = jsPath;

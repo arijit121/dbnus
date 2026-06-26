@@ -15,7 +15,7 @@ function addDelay(delay) {
 var web_loader = document.getElementById("web-loader");
 var seoLoader = document.getElementById("web-seo-content-loader");
 
-const assetBase = window.location.origin + "/";
+const assetBase = window.FLUTTER_ASSET_BASE || window.location.origin + "/";
 
 const searchParams = new URLSearchParams(window.location.search);
 const renderer = searchParams.get('renderer');
@@ -34,7 +34,6 @@ _flutter.loader.load({
 
         await appRunner.runApp();
 
-        window.flutterAssetBase = assetBase;
         window.flutterLoaded = true;
 
         // Hide SEO loaders from the user once Flutter is loaded, but keep in DOM
