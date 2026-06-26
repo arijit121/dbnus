@@ -1,5 +1,4 @@
-function init()
-{
+document.addEventListener("DOMContentLoaded", function () {
 
     let historyPatched = "";
     let routeHistory = JSON.parse(sessionStorage.getItem('routeHistory') || "[]");
@@ -41,11 +40,11 @@ function init()
 
                 if (containerId === "web-seo-content") {
                     const doc = new DOMParser().parseFromString(html, "text/html");
-
+                    
                     // Use <body>'s content for display
                     container.innerHTML = doc.body.innerHTML;
                     container.style.display = "block";
-
+                    
                     injectStructuredDataFromHTML(html);
                     injectMetaTagsFromHTML(html);
                 } else if (containerId === "web-seo-content-loader") {
@@ -243,10 +242,4 @@ function init()
 
     // Initial load
     handleRouteChange();
-}
-
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-} else {
-    init();
-}
+});
