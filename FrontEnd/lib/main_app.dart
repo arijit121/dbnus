@@ -7,7 +7,6 @@ import 'package:dbnus/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
@@ -42,13 +41,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
+  // await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // FirebaseMessaging.instance.setAutoInitEnabled(false);
-  FirebaseMessaging.onMessage.listen((message) {
-    AppLog.i("On Message Id : ${message.messageId}");
-    firebase_service.FirebaseService.showNotification(message);
-  });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
     if (event.data.containsKey("ActionURL")) {
       RedirectEngine.redirectRoutes(
@@ -57,7 +52,11 @@ Future<void> main() async {
       );
     }
   });
-
+  await firebase_service.FirebaseService.getInitialMessage();
+  await NotificationHandler.initiateNotification();
+  await DownloadHandler().config();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  runApp(const MyApp());
   CrashUtils.setValue(value: false);
   FlutterError.onError = (errorDetails) {
     if (errorDetails.library?.contains("widgets library") == true) {
@@ -86,16 +85,6 @@ Future<void> main() async {
     AppLog.e("$error", stackTrace: stack, tag: "Error");
     return true;
   };
-
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-
-  await firebase_service.FirebaseService.getInitialMessage();
-  await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
-  await NotificationHandler.requestPermissions();
-  await NotificationHandler.initiateNotification();
-  await DownloadHandler().config();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -114,14 +103,27 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       SystemChrome.setSystemUIOverlayStyle(ThemeConst.systemOverlayStyle);
       BackButtonInterceptor.add(myInterceptor);
-      await firebase_service.FirebaseService.generateToken();
       await AppUpdater.startUpdate();
+      FirebaseMessaging.onMessage.listen((message) {
+        AppLog.i("On Message Id : ${message.messageId}");
+        firebase_service.FirebaseService.showNotification(message);
+      });
       AppLinks().uriLinkStream.listen((uri) {
         RedirectEngine.redirectRoutes(redirectUrl: uri);
+      });
+      Future.delayed(const Duration(seconds: 2), () {
+        lateCall();
       });
     });
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  Future<void> lateCall() async {
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    await firebase_service.FirebaseService.setAnalyticsCollectionEnabled();
+    await NotificationHandler.requestPermissions();
+    await firebase_service.FirebaseService.generateToken();
   }
 
   @override

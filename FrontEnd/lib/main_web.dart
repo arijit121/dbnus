@@ -1,8 +1,6 @@
 import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
-import 'package:firebase_performance/firebase_performance.dart'
-    deferred as firebase_performance;
 import 'package:flutter/foundation.dart' deferred as foundation;
 import 'package:flutter/gestures.dart';
 import 'package:material_ui/material_ui.dart';
@@ -34,11 +32,11 @@ Future<void> main() async {
       [firebase_core.loadLibrary(), firebase_options.loadLibrary()]);
   await firebase_core.Firebase.initializeApp(
       options: firebase_options.DefaultFirebaseOptions.currentPlatform);
-  firebase_performance.loadLibrary().then((_) async {
+/*  firebase_performance.loadLibrary().then((_) async {
     await firebase_performance.FirebasePerformance.instance
         .setPerformanceCollectionEnabled(true);
-  });
-
+  });*/
+  runApp(const MyWebApp());
   crash_utils.loadLibrary().then((_) async {
     await crash_utils.CrashUtils.setValue(value: false);
   });
@@ -64,8 +62,6 @@ Future<void> main() async {
       return true;
     };
   });
-
-  runApp(const MyWebApp());
 }
 
 class MyWebApp extends StatefulWidget {
