@@ -1,4 +1,5 @@
 import 'dart:async';
+
 // import 'dart:js' deferred as js;
 // import 'dart:js_util' deferred as js_util;
 import 'dart:js_interop';
@@ -166,8 +167,8 @@ class JSHelper {
 
       final result = await dynamicJsLoader(options).toDart;
       return result?.dartify() as T?;
-    } catch (e) {
-      throw Exception('Error calling loadJs: $e');
+    } catch (e, s) {
+      throw Exception('Error calling loadJs: $e,$s');
     }
   }
 
@@ -175,7 +176,7 @@ class JSHelper {
     return web.window.navigator.userAgent;
   }
 
-    bool isMobile() {
+  bool isMobile() {
     final userAgent = web.window.navigator.userAgent.toLowerCase();
 
     return userAgent.contains('android') ||
