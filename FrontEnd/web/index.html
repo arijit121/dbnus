@@ -3,15 +3,6 @@
 
 <head>
     <base href="$FLUTTER_BASE_HREF">
-    <script>
-        window.FLUTTER_ASSET_BASE = window.location.origin + "/";
-        (function() {
-            var baseEl = document.querySelector('base');
-            if (baseEl) {
-                baseEl.href = window.FLUTTER_ASSET_BASE;
-            }
-        })();
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -32,46 +23,16 @@
 
     <title>Dbnus</title>
     <link rel="manifest" href="manifest.json">
-    <script>
-        const assetBaseIndex = window.FLUTTER_ASSET_BASE;
-
-        // CSS preload
-        const preloadCss = document.createElement("link");
-        preloadCss.rel = "preload";
-        preloadCss.as = "style";
-        preloadCss.href = `${assetBaseIndex}style/styles.css`;
-        document.head.appendChild(preloadCss);
-
-        // WASM preload
-        const preloadWasm = document.createElement("link");
-        preloadWasm.rel = "preload";
-        preloadWasm.as = "fetch";
-        preloadWasm.type = "application/wasm";
-        preloadWasm.crossOrigin = "anonymous";
-        preloadWasm.href = `${assetBaseIndex}main.dart.wasm`;
-        document.head.appendChild(preloadWasm);
-
-        // CSS
-        const css = document.createElement("link");
-        css.rel = "stylesheet";
-        css.href = `${assetBaseIndex}style/styles.css`;
-        css.media = "print";
-        css.onload = function () {
-            this.removeAttribute("media");
-        };
-        document.head.appendChild(css);
-    </script>
+    <link rel="preload" href="style/styles.css" as="style">
+    <link rel="preload" href="main.dart.wasm" as="script">
+    <link rel="stylesheet" href="style/styles.css" media="print"
+        onload="this.onload=null;this.removeAttribute('media');">
 
     <!-- Preconnect for Faster External Requests -->
     <link rel="preconnect" href="https://www.gstatic.com">
 
     <!-- Early PWA Capture -->
-    <script>
-        const pwaScript = document.createElement('script');
-        pwaScript.src = `${window.FLUTTER_ASSET_BASE}js/pwa_listener.js`;
-        pwaScript.crossOrigin = "anonymous";
-        document.head.appendChild(pwaScript);
-    </script>
+    <script src="js/pwa_listener.js"></script>
 </head>
 
 <body>
@@ -81,33 +42,12 @@
     <div id="web-loader" style="display: none;"></div>
     <div id="web-seo-content-loader" style="display: none;"></div>
     <div id="web-seo-content" style="display: none;"></div>
-    <script>
-        const routeListenerScript = document.createElement('script');
-        routeListenerScript.src =
-            `${window.FLUTTER_ASSET_BASE}js/route_listener.js`;
-        routeListenerScript.defer = true;
-        routeListenerScript.crossOrigin = "anonymous";
-        document.body.appendChild(routeListenerScript);
-    </script>
-    <script>
-        const dynamicJsLoaderScript = document.createElement('script');
-        dynamicJsLoaderScript.src =
-            `${window.FLUTTER_ASSET_BASE}js/dynamic_js_loader.js`;
-        dynamicJsLoaderScript.defer = true;
-        dynamicJsLoaderScript.crossOrigin = "anonymous";
-        document.body.appendChild(dynamicJsLoaderScript);
-    </script>
-    <script>
-        const flutterBootstrapScript = document.createElement('script');
-        flutterBootstrapScript.src =
-            `${window.FLUTTER_ASSET_BASE}flutter_bootstrap.js`;
-        flutterBootstrapScript.async = true;
-        flutterBootstrapScript.crossOrigin = "anonymous";
-        document.body.appendChild(flutterBootstrapScript);
-    </script>
+    <script src="js/route_listener.js" defer></script>
+    <script src="js/dynamic_js_loader.js" defer></script>
+    <script src="flutter_bootstrap.js" async></script>
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register('firebase-messaging-sw.js', {
                     scope: '/firebase-cloud-messaging-push-scope',
                 });
