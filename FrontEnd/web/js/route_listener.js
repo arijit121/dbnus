@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (path === "/" || path === "/index.html") {
-            setData({ containerId: "web-loader", file: "design/default-loader.html" });
+            setData({ containerId: "web-loader", file: "design/dashboard-loader.html" });
             // setData({ containerId: "web-seo-content", file: "design/dynamic-loader.html" });
         }
         else if (path === "/bio-data") {

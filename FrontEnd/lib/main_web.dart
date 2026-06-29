@@ -22,12 +22,16 @@ import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 
 import 'navigation/url_strategy/url_strategy.dart' deferred as url_strategy;
+import 'package:flutter/rendering.dart';
+
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
     url_strategy.usePathUrlStrategy();
   });
   WidgetsFlutterBinding.ensureInitialized();
+  SemanticsBinding.instance.ensureSemantics();
+
   await Future.wait(
       [firebase_core.loadLibrary(), firebase_options.loadLibrary()]);
   await firebase_core.Firebase.initializeApp(

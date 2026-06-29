@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorful Dashboard Skeleton</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+body{
+    background:#f4f6fc;
+    overflow:hidden;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#c8cbe0;
+    border-radius:20px;
+}
+
+/* Layout */
+
+.wrapper{
+    display:flex;
+    height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+    width:260px;
+    background:#181b32;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    width:180px;
+    height:55px;
+    border-radius:16px;
+}
+
+.menu{
+    margin-top:40px;
+}
+
+.menu-item{
+    height:52px;
+    margin-bottom:16px;
+    border-radius:14px;
+}
+
+.user{
+    margin-top:auto;
+    height:70px;
+    border-radius:16px;
+}
+
+/* Content */
+
+.content{
+    flex:1;
+    padding:24px;
+    overflow:auto;
+}
+
+.hero{
+    height:170px;
+    border-radius:24px;
+    margin-bottom:28px;
+}
+
+.title{
+    width:240px;
+    height:28px;
+    border-radius:8px;
+    margin-bottom:24px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:22px;
+}
+
+.card{
+    height:220px;
+    border-radius:24px;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Icon Placeholder */
+
+.card::after{
+    content:"";
+    position:absolute;
+    width:52px;
+    height:52px;
+    left:20px;
+    top:20px;
+    border-radius:16px;
+    background:rgba(255,255,255,.22);
+}
+
+/* Bubble Decoration */
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    right:-40px;
+    top:-40px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
+/* ============================
+   Colorful Shimmer
+============================ */
+
+.shimmer{
+    position:relative;
+    overflow:hidden;
+}
+
+.shimmer span{
+    display:none;
+}
+
+.shimmer .shine,
+.shimmer::selection{
+    display:none;
+}
+
+.shimmer>.light{
+    display:none;
+}
+
+.shimmer::marker{
+    display:none;
+}
+
+.shimmer .dummy{
+    display:none;
+}
+
+.shimmer::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255,255,255,.08) 20%,
+        rgba(255,255,255,.9) 50%,
+        rgba(255,255,255,.08) 80%,
+        transparent 100%
+    );
+    transform:translateX(-150%) skewX(-20deg);
+    animation:shine 1.5s linear infinite;
+}
+
+@keyframes shine{
+    100%{
+        transform:translateX(250%) skewX(-20deg);
+    }
+}
+
+/* Colors */
+
+.purple{
+    background:linear-gradient(135deg,#8B5CF6,#6D28D9);
+}
+
+.blue{
+    background:linear-gradient(135deg,#3B82F6,#2563EB);
+}
+
+.green{
+    background:linear-gradient(135deg,#22C55E,#15803D);
+}
+
+.orange{
+    background:linear-gradient(135deg,#F59E0B,#EA580C);
+}
+
+.pink{
+    background:linear-gradient(135deg,#EC4899,#DB2777);
+}
+
+.cyan{
+    background:linear-gradient(135deg,#06B6D4,#0284C7);
+}
+
+.indigo{
+    background:linear-gradient(135deg,#6366F1,#4338CA);
+}
+
+.red{
+    background:linear-gradient(135deg,#EF4444,#DC2626);
+}
+
+.yellow{
+    background:linear-gradient(135deg,#FACC15,#EAB308);
+}
+
+.dark{
+    background:linear-gradient(135deg,#434343,#242424);
+}
+
+/* Mobile */
+
+@media(max-width:900px){
+
+.sidebar{
+    width:80px;
+}
+
+.logo{
+    width:40px;
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar{
+    display:none;
+}
+
+.content{
+    padding:18px;
+}
+
+.grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+}
+
+.hero{
+    height:180px;
+}
+
+.card{
+    height:170px;
+}
+
+}
+
+@media(max-width:500px){
+
+.grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+.card{
+    height:150px;
+}
+
+.hero{
+    height:170px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <aside class="sidebar">
+
+        <div class="logo shimmer purple"></div>
+
+        <div class="menu">
+            <div class="menu-item shimmer blue"></div>
+            <div class="menu-item shimmer green"></div>
+            <div class="menu-item shimmer orange"></div>
+            <div class="menu-item shimmer pink"></div>
+            <div class="menu-item shimmer cyan"></div>
+            <div class="menu-item shimmer indigo"></div>
+        </div>
+
+        <div class="user shimmer dark"></div>
+
+    </aside>
+
+    <main class="content">
+
+        <div class="hero shimmer dark"></div>
+
+        <div class="title shimmer purple"></div>
+
+        <div class="grid">
+
+            <div class="card shimmer purple"></div>
+            <div class="card shimmer blue"></div>
+            <div class="card shimmer green"></div>
+
+            <div class="card shimmer orange"></div>
+            <div class="card shimmer pink"></div>
+            <div class="card shimmer cyan"></div>
+
+            <div class="card shimmer indigo"></div>
+            <div class="card shimmer red"></div>
+            <div class="card shimmer yellow"></div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
