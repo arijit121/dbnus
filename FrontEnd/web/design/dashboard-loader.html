@@ -6,275 +6,1228 @@
 <title>Colorful Dashboard Skeleton</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Inter,Arial,sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Outfit', Arial, sans-serif;
+}
+
+:root {
+    --bg-scaffold: #f8fafc;
+    --bg-sidebar: #0f172a;
+    --bg-card: #ffffff;
+    --color-primary: #1e293b;
+    --color-secondary: #64748b;
+    --color-accent: #6366f1;
+    --color-violate: #8b5cf6;
+    --border-color: rgba(15, 23, 42, 0.04);
+    --border-color-dark: rgba(255, 255, 255, 0.08);
 }
 
 body{
-    background:#f4f6fc;
-    overflow:hidden;
+    background: var(--bg-scaffold);
+    color: var(--color-primary);
+    overflow: hidden;
 }
 
 /* Scrollbar */
-
 ::-webkit-scrollbar{
-    width:8px;
+    width:6px;
 }
-
+::-webkit-scrollbar-track {
+    background: transparent;
+}
 ::-webkit-scrollbar-thumb{
-    background:#c8cbe0;
+    background:#cbd5e1;
     border-radius:20px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 /* Layout */
-
 .wrapper{
     display:flex;
     height:100vh;
 }
 
 /* Sidebar */
-
 .sidebar{
     width:260px;
-    background:#181b32;
-    padding:20px;
+    background: var(--bg-sidebar);
+    padding: 24px 16px;
     display:flex;
     flex-direction:column;
+    border-top-right-radius: 20px;
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.25);
+    z-index: 10;
 }
 
-.logo{
-    width:180px;
-    height:55px;
-    border-radius:16px;
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-left: 8px;
 }
 
-.menu{
-    margin-top:40px;
+.brand-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-violate));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.brand-name {
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sidebar-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    margin: 12px 0 12px 12px;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .menu-item{
-    height:52px;
-    margin-bottom:16px;
-    border-radius:14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height:46px;
+    padding: 0 14px;
+    border-radius:12px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.54);
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.user{
+.menu-item.active {
+    background: rgba(99, 102, 241, 0.15);
+    color: white;
+    font-weight: 600;
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.menu-item:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.menu-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+}
+
+.menu-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-user{
     margin-top:auto;
-    height:70px;
-    border-radius:16px;
+    height:54px;
+    padding: 10px 12px;
+    border-radius:12px;
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Content */
+.user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6c63ff, #4e69f4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
 
+.user-avatar svg {
+    width: 16px;
+    height: 16px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.user-name {
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-status {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 11px;
+}
+
+.user-options {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Content Area */
 .content{
     flex:1;
-    padding:24px;
-    overflow:auto;
+    padding: 24px 28px;
+    overflow-y:auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
 }
 
-.hero{
-    height:170px;
-    border-radius:24px;
-    margin-bottom:28px;
+/* Welcome Header Banner */
+.welcome-banner {
+    width: 100%;
+    min-height: 154px;
+    border-radius: 20px;
+    padding: 24px;
+    background: linear-gradient(135deg, #1a1d2e 0%, #2d3250 40%, #424769 100%);
+    box-shadow: 0 8px 20px rgba(26, 29, 46, 0.4), 0 4px 30px rgba(139, 92, 246, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
 }
 
-.title{
-    width:240px;
-    height:28px;
-    border-radius:8px;
-    margin-bottom:24px;
+/* Decorative circles in banner */
+.welcome-banner::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    right: -20px;
+    top: -20px;
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:22px;
+.welcome-banner::after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    right: 30px;
+    bottom: -30px;
 }
 
-.card{
-    height:220px;
-    border-radius:24px;
-    position:relative;
-    overflow:hidden;
+.welcome-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-/* Icon Placeholder */
-
-.card::after{
-    content:"";
-    position:absolute;
-    width:52px;
-    height:52px;
-    left:20px;
-    top:20px;
-    border-radius:16px;
-    background:rgba(255,255,255,.22);
+.welcome-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-/* Bubble Decoration */
-
-.card::before{
-    content:"";
-    position:absolute;
-    width:120px;
-    height:120px;
-    right:-40px;
-    top:-40px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
+.welcome-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--color-violate), var(--color-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
-/* ============================
-   Colorful Shimmer
-============================ */
-
-.shimmer{
-    position:relative;
-    overflow:hidden;
+.welcome-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.shimmer span{
-    display:none;
+.greeting-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.shimmer .shine,
-.shimmer::selection{
-    display:none;
+.greeting-icon {
+    font-size: 14px;
+    color: #ffd700;
+    display: flex;
+    align-items: center;
 }
 
-.shimmer>.light{
-    display:none;
+.greeting-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-weight: 500;
 }
 
-.shimmer::marker{
-    display:none;
+.welcome-title {
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
 }
 
-.shimmer .dummy{
-    display:none;
+.welcome-counter-pill {
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.15s ease;
 }
 
-.shimmer::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(
-        115deg,
-        transparent 0%,
-        rgba(255,255,255,.08) 20%,
-        rgba(255,255,255,.9) 50%,
-        rgba(255,255,255,.08) 80%,
-        transparent 100%
+.welcome-counter-pill:active {
+    transform: scale(0.95);
+}
+
+.counter-icon {
+    display: flex;
+    align-items: center;
+    width: 16px;
+    height: 16px;
+}
+
+.counter-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.welcome-banner-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.date-badge {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.date-icon {
+    display: flex;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+}
+
+.footer-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.flavor-info {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+}
+
+/* Sections General */
+.dashboard-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 4px;
+}
+
+.section-icon {
+    display: flex;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* Quick Actions Grid */
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.action-card {
+    border-radius: 18px;
+    aspect-ratio: 1.25;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+}
+
+.action-card:active {
+    transform: scale(0.95);
+}
+
+.card-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    filter: blur(14px);
+    z-index: 1;
+}
+
+.action-card::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    right: -15px;
+    top: -15px;
+    z-index: 2;
+}
+
+.action-card::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    right: 20px;
+    bottom: -10px;
+    z-index: 2;
+}
+
+.action-card-content {
+    position: relative;
+    z-index: 3;
+    padding: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.action-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.action-icon-wrapper svg {
+    width: 20px;
+    height: 20px;
+}
+
+.action-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.action-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.action-label {
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.action-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.action-arrow {
+    display: flex;
+    align-items: center;
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Action Card Gradients */
+.grad-violet {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+}
+.grad-blue {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+.grad-green {
+    background: linear-gradient(135deg, #15803d, #1b7a4d);
+}
+.grad-orange {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+.grad-purple {
+    background: linear-gradient(135deg, #8e44ad, #6c3483);
+}
+.grad-vibrate {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+/* Tools & Utilities Card */
+.tools-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.tools-header {
+    padding: 14px 16px 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.layers-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--color-violate);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layers-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.tools-count {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-secondary);
+}
+
+.tools-divider {
+    height: 1px;
+    background: #f1f5f9;
+}
+
+.tool-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.tool-item:hover {
+    background: #f8fafc;
+}
+
+.tool-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+}
+
+.tool-icon-wrapper svg {
+    width: 20px;
+    height: 20px;
+}
+
+.tool-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    overflow: hidden;
+}
+
+.tool-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tool-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tool-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.tool-subtitle {
+    font-size: 12px;
+    color: var(--color-secondary);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.tool-chevron {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: var(--color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool-chevron svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Tool Colors */
+.tool-green {
+    background: rgba(21, 128, 61, 0.08);
+    border: 1.5px solid rgba(21, 128, 61, 0.2);
+    color: #15803d;
+}
+.tag-green {
+    background: rgba(21, 128, 61, 0.1);
+    color: #15803d;
+}
+
+.tool-blue {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1.5px solid rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+.tag-blue {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.tool-violate {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1.5px solid rgba(139, 92, 246, 0.2);
+    color: #8b5cf6;
+}
+.tag-violate {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+}
+
+.tool-orange {
+    background: rgba(230, 126, 34, 0.08);
+    border: 1.5px solid rgba(230, 126, 34, 0.2);
+    color: #e67e22;
+}
+.tag-orange {
+    background: rgba(230, 126, 34, 0.1);
+    color: #e67e22;
+}
+
+.tool-green500 {
+    background: rgba(34, 197, 94, 0.08);
+    border: 1.5px solid rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+.tag-green500 {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.tool-sky {
+    background: rgba(41, 128, 185, 0.08);
+    border: 1.5px solid rgba(41, 128, 185, 0.2);
+    color: #2980b9;
+}
+.tag-sky {
+    background: rgba(41, 128, 185, 0.1);
+    color: #2980b9;
+}
+
+/* Payment Gateway Card */
+.payment-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.payment-header {
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(99, 102, 241, 0.03));
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--color-violate), var(--color-accent));
+    box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.payment-icon-wrapper svg {
+    width: 20px;
+    height: 20px;
+}
+
+.payment-header-text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.payment-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.payment-subtitle {
+    font-size: 12px;
+    color: var(--color-secondary);
+}
+
+.payment-status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(21, 128, 61, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #15803d;
+}
+
+.status-text {
+    font-size: 11px;
+    color: #15803d;
+    font-weight: 600;
+}
+
+.payment-steps {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 0;
+}
+
+.payment-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.step-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    color: #94a3b8;
+    border: 1.5px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.payment-step.filled .step-circle {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--color-violate);
+    border-color: var(--color-violate);
+}
+
+.step-label {
+    font-size: 9px;
+    font-weight: 500;
+    color: #94a3b8;
+}
+
+.payment-step.filled .step-label {
+    color: var(--color-primary);
+}
+
+.step-line {
+    width: 12px;
+    height: 1.5px;
+    background: #cbd5e1;
+    margin-bottom: 12px;
+}
+
+.step-line.filled {
+    background: rgba(139, 92, 246, 0.2);
+}
+
+.payment-form {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-primary);
+}
+
+.form-input-wrapper {
+    height: 42px;
+    border-radius: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.skeleton-input-content {
+    height: 12px;
+    width: 60px;
+    border-radius: 4px;
+    background: #cbd5e1;
+}
+
+.payment-actions {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pay-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--color-violate), var(--color-accent));
+    color: white;
+    font-weight: 600;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.pay-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.security-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(100, 116, 139, 0.6);
+    font-weight: 500;
+}
+
+.security-info svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Media Gallery Section */
+.media-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.media-card {
+    background: var(--bg-card);
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+
+.media-card-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.media-card-header svg {
+    width: 14px;
+    height: 14px;
+    color: var(--color-secondary);
+}
+
+.media-card-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-secondary);
+}
+
+.video-placeholder {
+    height: 220px;
+    background: #1e293b;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-thumbnail {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%);
+    z-index: 1;
+}
+
+.play-button-overlay {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ef4444;
+    font-size: 18px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    z-index: 2;
+    cursor: pointer;
+    padding-left: 4px;
+}
+
+.media-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.image-card {
+    flex: 1;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: #e2e8f0;
+}
+
+.image-card.tall {
+    aspect-ratio: 1.0;
+}
+
+.image-card.short {
+    height: 100px;
+}
+
+.image-card:not(.tall):not(.short) {
+    height: 180px;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
+}
+
+.image-label {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+}
+
+/* Image Placeholders Gradients (WOW visuals) */
+.bg-img-1 { background: linear-gradient(135deg, #f59e0b, #ec4899); }
+.bg-img-2 { background: linear-gradient(135deg, #10b981, #3b82f6); }
+.bg-img-3 { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+.bg-img-4 { background: linear-gradient(135deg, #06b6d4, #10b981); }
+.bg-img-5 { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+.bg-img-6 { background: linear-gradient(135deg, #f43f5e, #f59e0b); }
+.bg-img-7 { background: linear-gradient(135deg, #8b5cf6, #3b82f6); }
+.bg-img-8 { background: linear-gradient(135deg, #10b981, #f59e0b); }
+
+.carousel-placeholder.large {
+    height: 400px;
+    background: #cbd5e1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.carousel-track {
+    position: absolute;
+    inset: 0;
+}
+
+.carousel-slide {
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide.active {
+    background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+}
+
+.carousel-slide.active2 {
+    background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    z-index: 2;
+}
+
+.indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+}
+
+.indicator.active {
+    width: 24px;
+    border-radius: 4px;
+    background: white;
+}
+
+/* ==================================
+   Subtle Modern Shimmer Animation 
+================================== */
+.shimmer {
+    position: relative;
+    overflow: hidden;
+    background: #cbd5e1 !important;
+}
+
+.shimmer::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 20%,
+        rgba(255, 255, 255, 0.55) 60%,
+        rgba(255, 255, 255, 0) 100%
     );
-    transform:translateX(-150%) skewX(-20deg);
-    animation:shine 1.5s linear infinite;
+    animation: shimmer-ani 2s infinite ease-out;
 }
 
-@keyframes shine{
-    100%{
-        transform:translateX(250%) skewX(-20deg);
+.shimmer-dark {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.shimmer-dark::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.08) 20%,
+        rgba(255, 255, 255, 0.18) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer-ani 2s infinite ease-out;
+}
+
+.shimmer-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.shimmer-glow::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.12) 20%,
+        rgba(255, 255, 255, 0.28) 60%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: shimmer-ani 2s infinite ease-out;
+}
+
+@keyframes shimmer-ani {
+    100% {
+        transform: translateX(100%);
     }
 }
 
-/* Colors */
-
-.purple{
-    background:linear-gradient(135deg,#8B5CF6,#6D28D9);
-}
-
-.blue{
-    background:linear-gradient(135deg,#3B82F6,#2563EB);
-}
-
-.green{
-    background:linear-gradient(135deg,#22C55E,#15803D);
-}
-
-.orange{
-    background:linear-gradient(135deg,#F59E0B,#EA580C);
-}
-
-.pink{
-    background:linear-gradient(135deg,#EC4899,#DB2777);
-}
-
-.cyan{
-    background:linear-gradient(135deg,#06B6D4,#0284C7);
-}
-
-.indigo{
-    background:linear-gradient(135deg,#6366F1,#4338CA);
-}
-
-.red{
-    background:linear-gradient(135deg,#EF4444,#DC2626);
-}
-
-.yellow{
-    background:linear-gradient(135deg,#FACC15,#EAB308);
-}
-
-.dark{
-    background:linear-gradient(135deg,#434343,#242424);
-}
-
-/* Mobile */
-
+/* Mobile Responsiveness */
 @media(max-width:900px){
-
-.sidebar{
-    width:80px;
-}
-
-.logo{
-    width:40px;
-}
-
+    .sidebar{
+        width:80px;
+        padding: 24px 8px;
+    }
+    .brand-name, .sidebar-section-label, .menu-label, .user-info, .user-options {
+        display: none;
+    }
+    .sidebar-header {
+        justify-content: center;
+        padding-left: 0;
+    }
+    .menu-item {
+        justify-content: center;
+        padding: 0;
+    }
+    .sidebar-user {
+        justify-content: center;
+        padding: 6px;
+    }
 }
 
 @media(max-width:768px){
-
-.sidebar{
-    display:none;
-}
-
-.content{
-    padding:18px;
-}
-
-.grid{
-    grid-template-columns:repeat(2,1fr);
-    gap:16px;
-}
-
-.hero{
-    height:180px;
-}
-
-.card{
-    height:170px;
-}
-
+    .sidebar{
+        display:none;
+    }
+    .content{
+        padding:18px;
+    }
+    .quick-actions-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
 }
 
 @media(max-width:500px){
-
-.grid{
-    grid-template-columns:repeat(2,1fr);
-}
-
-.card{
-    height:150px;
-}
-
-.hero{
-    height:170px;
-}
-
+    .quick-actions-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+    .payment-steps {
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
 }
 </style>
 
@@ -284,44 +1237,730 @@ body{
 
 <div class="wrapper">
 
+    <!-- Sidebar Section: Matches lib/features/landing responsive designs -->
     <aside class="sidebar">
-
-        <div class="logo shimmer purple"></div>
-
-        <div class="menu">
-            <div class="menu-item shimmer blue"></div>
-            <div class="menu-item shimmer green"></div>
-            <div class="menu-item shimmer orange"></div>
-            <div class="menu-item shimmer pink"></div>
-            <div class="menu-item shimmer cyan"></div>
-            <div class="menu-item shimmer indigo"></div>
+        <div class="sidebar-header">
+            <div class="brand-logo">D</div>
+            <span class="brand-name">Dbnus</span>
         </div>
 
-        <div class="user shimmer dark"></div>
+        <div class="sidebar-section-label">NAVIGATION</div>
 
+        <nav class="sidebar-menu">
+            <!-- Exactly 5 navigation items from LandingUtils.listNavigation -->
+            <a href="#" class="menu-item active">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"></rect>
+                        <rect x="14" y="3" width="7" height="5"></rect>
+                        <rect x="14" y="12" width="7" height="9"></rect>
+                        <rect x="3" y="16" width="7" height="5"></rect>
+                    </svg>
+                </span>
+                <span class="menu-label">Dashboard</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </span>
+                <span class="menu-label">Leaderboard</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </span>
+                <span class="menu-label">Order</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="6" y1="12" x2="18" y2="12"></line>
+                        <line x1="12" y1="6" x2="12" y2="18"></line>
+                        <rect x="2" y="2" width="20" height="20" rx="4" ry="4"></rect>
+                    </svg>
+                </span>
+                <span class="menu-label">Game</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </span>
+                <span class="menu-label">BioData</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="user-info">
+                <span class="user-name">User</span>
+                <span class="user-status">Online</span>
+            </div>
+            <span class="user-options">•••</span>
+        </div>
     </aside>
 
+    <!-- Main Content Panel: Matches lib/features/dashboard pages & widgets -->
     <main class="content">
 
-        <div class="hero shimmer dark"></div>
+        <!-- ── Welcome Header (WelcomeHeader widget) ── -->
+        <header class="welcome-banner shimmer-glow">
+            <div class="welcome-header-top">
+                <div class="welcome-profile">
+                    <div class="welcome-avatar">D</div>
+                    <div class="welcome-text">
+                        <div class="greeting-row">
+                            <span class="greeting-icon">☀️</span>
+                            <span class="greeting-label">Good Morning</span>
+                        </div>
+                        <h1 class="welcome-title">Hello World</h1>
+                    </div>
+                </div>
+                <div class="welcome-counter-pill">
+                    <span class="counter-icon">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="counter-value">0</span>
+                </div>
+            </div>
+            <div class="welcome-banner-footer">
+                <div class="date-badge">
+                    <span class="date-icon">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </span>
+                    <!-- <span class="date-text">Monday, Jun 29, 2026</span> -->
+                </div>
+                <div class="footer-dot"></div>
+                <span class="flavor-info">Dbnus</span>
+            </div>
+        </header>
 
-        <div class="title shimmer purple"></div>
+        <!-- ── Quick Actions Grid (QuickActionsGrid widget) ── -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <span class="section-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </span>
+                <h2 class="section-title">Quick Actions</h2>
+            </div>
+            <div class="quick-actions-grid">
+                <!-- Action 1: Change Language -->
+                <div class="action-card grad-violet shimmer-glow">
+                    <div class="card-glow" style="background: #8b5cf6;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">Change Language</span>
+                                <span class="action-subtitle">Random locale</span> -->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="grid">
+                <!-- Action 2: Order Details -->
+                <div class="action-card grad-blue shimmer-glow">
+                    <div class="card-glow" style="background: #3b82f6;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">Order Details</span>
+                                <span class="action-subtitle">View order #56</span> -->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="card shimmer purple"></div>
-            <div class="card shimmer blue"></div>
-            <div class="card shimmer green"></div>
+                <!-- Action 3: Leaderboard -->
+                <div class="action-card grad-green shimmer-glow">
+                    <div class="card-glow" style="background: #15803d;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">Leaderboard</span>
+                                <span class="action-subtitle">Rankings</span> -->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="card shimmer orange"></div>
-            <div class="card shimmer pink"></div>
-            <div class="card shimmer cyan"></div>
+                <!-- Action 4: File Pick -->
+                <div class="action-card grad-orange shimmer-glow">
+                    <div class="card-glow" style="background: #e67e22;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.2 15v3.8a2 2 0 0 1-2 2H4.8a2 2 0 0 1-2-2V15"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">File Pick</span>
+                                <span class="action-subtitle">Upload files</span> -->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="card shimmer indigo"></div>
-            <div class="card shimmer red"></div>
-            <div class="card shimmer yellow"></div>
+                <!-- Action 5: Device ID -->
+                <div class="action-card grad-purple shimmer-glow">
+                    <div class="card-glow" style="background: #8e44ad;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">Device ID</span> 
+                                <span class="action-subtitle">Copy identifier</span>-->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-        </div>
+                <!-- Action 6: Razorpay -->
+                <div class="action-card grad-vibrate shimmer-glow">
+                    <div class="card-glow" style="background: #3b82f6;"></div>
+                    <div class="action-card-content">
+                        <div class="action-icon-wrapper">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <div class="action-card-bottom">
+                            <div class="action-details">
+                                <!-- <span class="action-label">Razorpay</span>
+                                <span class="action-subtitle">Payment</span> -->
+                            </div>
+                            <span class="action-arrow">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Tools & Utilities (ToolsSection widget) ── -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <span class="section-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                </span>
+                <h2 class="section-title">Tools & Utilities</h2>
+            </div>
+
+            <div class="tools-card">
+                <div class="tools-header">
+                    <span class="layers-icon">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="tools-count">7 tools available</span>
+                </div>
+                <div class="tools-divider"></div>
+
+                <div class="tools-list">
+                    <!-- Tool 1: Download report -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-green">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Download GlucoseFasting PDF</span>
+                                <span class="tool-tag tag-green">Download</span>
+                            </div>
+                            <span class="tool-subtitle">Download sample report</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 2: Auth download -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-blue">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Download with Headers</span>
+                                <span class="tool-tag tag-blue">Download</span>
+                            </div>
+                            <span class="tool-subtitle">Authenticated download</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 3: Forward Geo -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-violate">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Forward Geocoding</span>
+                                <span class="tool-tag tag-violate">Location</span>
+                            </div>
+                            <span class="tool-subtitle">Jot Bhim, New Town, Bidhannagar</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 4: Reverse Geo -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-orange">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Reverse Geocoding</span>
+                                <span class="tool-tag tag-orange">Location</span>
+                            </div>
+                            <span class="tool-subtitle">Lat: 22.5754, Lng: 88.4798</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 5: Success dialog -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-green500">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Show Success Dialog</span>
+                                <span class="tool-tag tag-green500">UI</span>
+                            </div>
+                            <span class="tool-subtitle">Display success message popup</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 6: Open Street Map -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-sky">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                                <line x1="8" y1="2" x2="8" y2="18"></line>
+                                <line x1="16" y1="6" x2="16" y2="22"></line>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Open Street Map</span>
+                                <span class="tool-tag tag-sky">Map</span>
+                            </div>
+                            <span class="tool-subtitle">Explore world landmarks on a map</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="tools-divider" style="margin-left: 72px;"></div>
+
+                    <!-- Tool 7: Map View -->
+                    <div class="tool-item">
+                        <div class="tool-icon-wrapper tool-sky">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                                <line x1="8" y1="2" x2="8" y2="18"></line>
+                                <line x1="16" y1="6" x2="16" y2="22"></line>
+                            </svg>
+                        </div>
+                        <div class="tool-content">
+                            <div class="tool-title-row">
+                                <span class="tool-title">Map View</span>
+                                <span class="tool-tag tag-sky">Map</span>
+                            </div>
+                            <span class="tool-subtitle">Open Street Map strPreRouteState</span>
+                        </div>
+                        <div class="tool-chevron">
+                            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Payment Gateway (PaymentSection widget) ── -->
+        <section class="dashboard-section">
+            <div class="section-header">
+                <span class="section-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                </span>
+                <h2 class="section-title">Payment Gateway</h2>
+            </div>
+
+            <div class="payment-card">
+                <div class="payment-header">
+                    <div class="payment-icon-wrapper">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="payment-header-text">
+                        <span class="payment-title">Paytm Gateway</span>
+                        <span class="payment-subtitle">Secure payment processing</span>
+                    </div>
+                    <div class="payment-status-badge">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Active</span>
+                    </div>
+                </div>
+                <div class="tools-divider"></div>
+
+                <!-- Horizontal Steps -->
+                <div class="payment-steps">
+                    <div class="payment-step filled">
+                        <div class="step-circle">1</div>
+                        <span class="step-label">Amount</span>
+                    </div>
+                    <div class="step-line filled"></div>
+                    <div class="payment-step filled">
+                        <div class="step-circle">2</div>
+                        <span class="step-label">MID</span>
+                    </div>
+                    <div class="step-line filled"></div>
+                    <div class="payment-step filled">
+                        <div class="step-circle">3</div>
+                        <span class="step-label">Order</span>
+                    </div>
+                    <div class="step-line filled"></div>
+                    <div class="payment-step filled">
+                        <div class="step-circle">4</div>
+                        <span class="step-label">Token</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="payment-step">
+                        <div class="step-circle">5</div>
+                        <span class="step-label">Pay</span>
+                    </div>
+                </div>
+
+                <!-- Form Elements -->
+                <div class="payment-form">
+                    <div class="form-group">
+                        <label class="form-label">Amount</label>
+                        <div class="form-input-wrapper">
+                            <div class="skeleton-input-content shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">MID</label>
+                        <div class="form-input-wrapper">
+                            <div class="skeleton-input-content shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Order ID</label>
+                        <div class="form-input-wrapper">
+                            <div class="skeleton-input-content shimmer"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Txn Token</label>
+                        <div class="form-input-wrapper">
+                            <div class="skeleton-input-content shimmer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-actions">
+                    <button class="pay-btn shimmer-glow">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Pay with Paytm</span>
+                    </button>
+
+                    <div class="security-info">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>Secured by 256-bit encryption</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Media Gallery (MediaSection widget) ── -->
+        <section class="dashboard-section" style="margin-bottom: 40px;">
+            <div class="section-header">
+                <span class="section-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                </span>
+                <h2 class="section-title">Media Gallery</h2>
+            </div>
+
+            <div class="media-container">
+                <!-- Featured Video -->
+                <div class="media-card">
+                    <div class="media-card-header">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25a29 29 0 0 0-.46-5.33z"></path>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+                        </svg>
+                        <span class="media-card-label">Featured Video</span>
+                    </div>
+                    <div class="video-placeholder">
+                        <div class="video-thumbnail bg-img-7"></div>
+                        <div class="play-button-overlay">▶</div>
+                    </div>
+                </div>
+
+                <!-- Gallery & Explore Pair -->
+                <div class="media-row">
+                    <div class="image-card">
+                        <div class="image-placeholder bg-img-1"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Gallery</span>
+                    </div>
+                    <div class="image-card">
+                        <div class="image-placeholder bg-img-2"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Explore</span>
+                    </div>
+                </div>
+
+                <!-- Featured Collection Carousel -->
+                <div class="media-card">
+                    <div class="media-card-header">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span class="media-card-label">Featured Collection</span>
+                    </div>
+                    <div class="carousel-placeholder large">
+                        <div class="carousel-track">
+                            <div class="carousel-slide active"></div>
+                        </div>
+                        <div class="carousel-indicators">
+                            <span class="indicator active"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Showcase & Discover Pair -->
+                <div class="media-row">
+                    <div class="image-card tall">
+                        <div class="image-placeholder bg-img-3"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Showcase</span>
+                    </div>
+                    <div class="image-card tall">
+                        <div class="image-placeholder bg-img-4"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Discover</span>
+                    </div>
+                </div>
+
+                <!-- Trending & Accessories Pair -->
+                <div class="media-row">
+                    <div class="image-card short">
+                        <div class="image-placeholder bg-img-5"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Trending</span>
+                    </div>
+                    <div class="image-card short">
+                        <div class="image-placeholder bg-img-6"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Accessories</span>
+                    </div>
+                </div>
+
+                <!-- More to Explore Carousel -->
+                <div class="media-card">
+                    <div class="media-card-header">
+                        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                        </svg>
+                        <span class="media-card-label">More to Explore</span>
+                    </div>
+                    <div class="carousel-placeholder large">
+                        <div class="carousel-track">
+                            <div class="carousel-slide active2"></div>
+                        </div>
+                        <div class="carousel-indicators">
+                            <span class="indicator active"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                            <span class="indicator"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inspire & Create Pair -->
+                <div class="media-row">
+                    <div class="image-card tall">
+                        <div class="image-placeholder bg-img-8"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Inspire</span>
+                    </div>
+                    <div class="image-card tall">
+                        <div class="image-placeholder bg-img-7"></div>
+                        <div class="image-overlay"></div>
+                        <span class="image-label">Create</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
