@@ -19,7 +19,7 @@ class CustomContainer extends StatelessWidget {
         this.width,
         this.borderRadius,
         this.color,
-        required this.child,
+        this.child,
         this.padding,
         this.margin,
         this.borderColor,
