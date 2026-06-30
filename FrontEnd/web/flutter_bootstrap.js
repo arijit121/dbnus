@@ -96,7 +96,8 @@ _flutter.loader.load({
 
         // Hide SEO loaders from the user once Flutter is loaded, but keep in DOM
         if (seoLoader) {
-            await addDelay(networkDelay);
+            const duration = networkDelay + 300;
+            await addDelay(duration);
             const doc = new DOMParser().parseFromString(seoLoader.innerHTML, "text/html");
             seoLoader.innerHTML = doc.body.innerHTML;
         }
