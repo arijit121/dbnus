@@ -8,6 +8,7 @@ import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
+import 'package:dbnus/shared/utils/screen_utils.dart';
 
 class DrawerNavigationRail extends StatefulWidget {
   const DrawerNavigationRail(
@@ -557,6 +558,80 @@ class _UserAvatarMini extends StatelessWidget {
       ),
       child: const Center(
         child: CustomSvgAssetImageView(path: AssetsConst.featherUser, color: Colors.white, height: 16, width: 16),
+      ),
+    );
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// Button Navigation Bar (for narrow mobile layouts)
+// ══════════════════════════════════════════════════════════
+class ButtonNavigationBar extends StatelessWidget {
+  const ButtonNavigationBar({
+    super.key,
+    required this.chooseIndex,
+    required this.selectedIndex,
+  });
+
+  final void Function(int) chooseIndex;
+  final int selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 64 + ScreenUtils.paddingBottom(),
+      padding: EdgeInsets.only(bottom: ScreenUtils.paddingBottom()),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF1A1D2E),
+            Color(0xFF15172A),
+          ],
+        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 10,
+            spreadRadius: 1,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(
+          LandingUtils.listNavigation.length,
+          (index) {
+            final nav = LandingUtils.listNavigation.elementAt(index);
+            final isSelected = index == selectedIndex;
+            return InkWell(
+              key: Key(nav.title),
+              onTap: () => chooseIndex(index),
+              splashColor: ColorConst.sidebarSelected.withValues(alpha: 0.15),
+              highlightColor: ColorConst.sidebarSelected.withValues(alpha: 0.08),
+              child: SizedBox(
+                width: 66,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _NavigationIcon(
+                      icon: nav.icon,
+                      color: isSelected ? Colors.white : Colors.white54,
+                    ),
+                    4.ph,
+                    CustomText(
+                      LandingUtils.getTranslatedTitle(context, nav.title),
+                      color: isSelected ? Colors.white : Colors.white54,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      size: 11,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

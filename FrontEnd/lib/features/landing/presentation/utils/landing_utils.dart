@@ -1,5 +1,4 @@
 import 'package:dbnus/shared/constants/assects_const.dart';
-import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
@@ -7,14 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/navigation/router_name.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
-import 'package:dbnus/features/game/presentation/pages/game_dashboard.dart'
-    deferred as game_dashboard;
-import 'package:dbnus/features/leader_board/presentation/pages/leader_board.dart'
-    deferred as my_reorderable_list;
-import 'package:dbnus/features/dashboard/presentation/pages/dashboard.dart'
-    deferred as test_page;
-import 'package:dbnus/features/order/presentation/pages/order.dart'
-    deferred as ui_temp;
+
 import 'package:dbnus/features/landing/domain/entities/navigation_option.dart';
 
 import '../../../../core/localization/extension/localization_ext.dart';
@@ -41,27 +33,6 @@ class LandingUtils {
         action: RouteName.bioData),
   ];
 
-  static Future<Widget?> getUi({required String action}) async {
-    switch (action) {
-      case RouteName.initialView:
-        await test_page.loadLibrary();
-        return test_page.DashBoardPage();
-
-      case RouteName.leaderBoard:
-        await my_reorderable_list.loadLibrary();
-        return my_reorderable_list.LeaderBoard();
-
-      case RouteName.order:
-        await ui_temp.loadLibrary();
-        return ui_temp.Order();
-
-      case RouteName.games:
-        await game_dashboard.loadLibrary();
-        return game_dashboard.GameDashboard();
-    }
-    return null;
-  }
-
   static String getTranslatedTitle(BuildContext context, String title) {
     final l10n = context.l10n;
     switch (title) {
@@ -80,13 +51,12 @@ class LandingUtils {
     }
   }
 
-  static Future<void> redirect(String action) async {
+  static Future<void> redirect(String action, {bool uiContain = true}) async {
     GoRouter router = RouterManager.getInstance.router;
     if (kIsWeb) {
       router.goNamed(action);
     } else {
-      Widget? ui = await getUi(action: action);
-      if (ui != null) {
+      if (uiContain) {
         router.replaceNamed(action);
       } else {
         router.pushNamed(action);

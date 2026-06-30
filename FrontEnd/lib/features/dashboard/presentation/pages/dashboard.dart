@@ -3,6 +3,7 @@ import 'package:dbnus/shared/constants/assects_const.dart';
 
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/organisms/scrolls/smooth_scroll.dart';
+import 'package:dbnus/features/landing/presentation/pages/landing.dart';
 
 import '../widgets/welcome_header.dart';
 import '../widgets/quick_actions_grid.dart';
@@ -85,77 +86,80 @@ class _DashBoardPageState extends State<DashBoardPage>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SmoothScroll(
-            primary: false,
-            children: [
-              // Consistent horizontal padding for all sections
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Column(
-                  children: [
-                    // ── Welcome Header ──────────────────────────────
-                    _staggeredItem(0, WelcomeHeader(counter: counter)),
-                    28.ph,
+    return LandingUi(
+      index: 0,
+      ui: Column(
+        children: [
+          Expanded(
+            child: SmoothScroll(
+              primary: false,
+              children: [
+                // Consistent horizontal padding for all sections
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Column(
+                    children: [
+                      // ── Welcome Header ──────────────────────────────
+                      _staggeredItem(0, WelcomeHeader(counter: counter)),
+                      28.ph,
 
-                    // ── Quick Actions ───────────────────────────────
-                    _staggeredItem(
-                      1,
-                      const SectionTitle(
-                          title: "Quick Actions", icon: AssetsConst.featherZap),
-                    ),
-                    14.ph,
-                    _staggeredItem(2, const QuickActionsGrid()),
-                    28.ph,
-
-                    // ── Tools & Utilities ───────────────────────────
-                    _staggeredItem(
-                      3,
-                      const SectionTitle(
-                          title: "Tools & Utilities", icon: AssetsConst.featherTool),
-                    ),
-                    14.ph,
-                    _staggeredItem(4, const ToolsSection()),
-                    28.ph,
-
-                    // ── Payment Gateway ─────────────────────────────
-                    _staggeredItem(
-                      5,
-                      const SectionTitle(
-                          title: "Payment Gateway",
-                          icon: AssetsConst.featherCreditCard),
-                    ),
-                    14.ph,
-                    _staggeredItem(
-                      6,
-                      PaymentSection(
-                        amountController: _amountController,
-                        midController: _midController,
-                        orderIdController: _orderIdController,
-                        txnTokenController: _txnTokenController,
+                      // ── Quick Actions ───────────────────────────────
+                      _staggeredItem(
+                        1,
+                        const SectionTitle(
+                            title: "Quick Actions", icon: AssetsConst.featherZap),
                       ),
-                    ),
-                    28.ph,
+                      14.ph,
+                      _staggeredItem(2, const QuickActionsGrid()),
+                      28.ph,
 
-                    // ── Media Gallery ───────────────────────────────
-                    _staggeredItem(
-                      7,
-                      const SectionTitle(
-                          title: "Media Gallery", icon: AssetsConst.featherImage),
-                    ),
-                    14.ph,
-                    // Media is typically long, no stagger needed
-                    const MediaSection(),
-                    28.ph,
-                  ],
+                      // ── Tools & Utilities ───────────────────────────
+                      _staggeredItem(
+                        3,
+                        const SectionTitle(
+                            title: "Tools & Utilities", icon: AssetsConst.featherTool),
+                      ),
+                      14.ph,
+                      _staggeredItem(4, const ToolsSection()),
+                      28.ph,
+
+                      // ── Payment Gateway ─────────────────────────────
+                      _staggeredItem(
+                        5,
+                        const SectionTitle(
+                            title: "Payment Gateway",
+                            icon: AssetsConst.featherCreditCard),
+                      ),
+                      14.ph,
+                      _staggeredItem(
+                        6,
+                        PaymentSection(
+                          amountController: _amountController,
+                          midController: _midController,
+                          orderIdController: _orderIdController,
+                          txnTokenController: _txnTokenController,
+                        ),
+                      ),
+                      28.ph,
+
+                      // ── Media Gallery ───────────────────────────────
+                      _staggeredItem(
+                        7,
+                        const SectionTitle(
+                            title: "Media Gallery", icon: AssetsConst.featherImage),
+                      ),
+                      14.ph,
+                      // Media is typically long, no stagger needed
+                      const MediaSection(),
+                      28.ph,
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

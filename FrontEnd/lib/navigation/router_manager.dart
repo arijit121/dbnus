@@ -8,7 +8,14 @@ import 'package:dbnus/features/bio_data/presentation/pages/bio_data.dart'
     deferred as flutter_bio_data;
 import 'package:dbnus/features/landing/presentation/pages/landing.dart'
     deferred as landing;
-import 'package:dbnus/features/landing/presentation/utils/landing_utils.dart';
+import 'package:dbnus/features/dashboard/presentation/pages/dashboard.dart'
+    deferred as dashboard;
+import 'package:dbnus/features/leader_board/presentation/pages/leader_board.dart'
+    deferred as leaderboard;
+import 'package:dbnus/features/order/presentation/pages/order.dart'
+    deferred as order;
+import 'package:dbnus/features/game/presentation/pages/game_dashboard.dart'
+    deferred as games;
 import 'package:dbnus/features/order_details/presentation/pages/order_details.dart'
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway_status/web_view_payment_gateway_status.dart'
@@ -85,109 +92,64 @@ class RouterManager {
       GoRoute(
         name: RouteName.initialView,
         path: RouteName.initialView,
-        // builder: (BuildContext context, GoRouterState state) {
-        //   return landing.LandingUi(
-        //     index: 0,
-        //   );
-        // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return _slideTransition(
-            landing.LandingUi(key: Key("0"), index: 0),
+            dashboard.DashBoardPage(key: const Key("0")),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
-          await landing.loadLibrary();
+          await dashboard.loadLibrary();
           return null;
         },
       ),
       GoRoute(
         name: RouteName.leaderBoard,
         path: RouteName.leaderBoard,
-        // builder: (BuildContext context, GoRouterState state) {
-        //   return landing.LandingUi(
-        //     index: LandingUtils.listNavigation.indexWhere(
-        //         (element) => element.action == RouteName.leaderBoard),
-        //   );
-        // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return _slideTransition(
-            landing.LandingUi(
-              key: Key(
-                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.leaderBoard)}"),
-              index: LandingUtils.listNavigation.indexWhere(
-                  (element) => element.action == RouteName.leaderBoard),
-            ),
+            leaderboard.LeaderBoard(key: const Key("1")),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
-          await landing.loadLibrary();
+          await leaderboard.loadLibrary();
           return null;
         },
       ),
       GoRoute(
         name: RouteName.order,
         path: RouteName.order,
-        // builder: (BuildContext context, GoRouterState state) {
-        //   return landing.LandingUi(
-        //     index: LandingUtils.listNavigation
-        //         .indexWhere((element) => element.action == RouteName.order),
-        //   );
-        // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return _slideTransition(
-            landing.LandingUi(
-              key: Key(
-                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.order)}"),
-              index: LandingUtils.listNavigation
-                  .indexWhere((element) => element.action == RouteName.order),
-            ),
+            order.Order(key: const Key("2")),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
-          await landing.loadLibrary();
+          await order.loadLibrary();
           return null;
         },
       ),
       GoRoute(
         name: RouteName.games,
         path: RouteName.games,
-        // builder: (BuildContext context, GoRouterState state) {
-        //   return landing.LandingUi(
-        //     index: LandingUtils.listNavigation
-        //         .indexWhere((element) => element.action == RouteName.games),
-        //   );
-        // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return _slideTransition(
-            landing.LandingUi(
-              key: Key(
-                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.games)}"),
-              index: LandingUtils.listNavigation
-                  .indexWhere((element) => element.action == RouteName.games),
-            ),
+            games.GameDashboard(key: const Key("3")),
           );
         },
         redirect: (BuildContext context, GoRouterState state) async {
-          await landing.loadLibrary();
+          await games.loadLibrary();
           return null;
         },
       ),
       GoRoute(
         name: RouteName.massage,
         path: RouteName.massage,
-        // builder: (BuildContext context, GoRouterState state) {
-        //   return landing.LandingUi(
-        //     index: LandingUtils.listNavigation
-        //         .indexWhere((element) => element.action == RouteName.massage),
-        //   );
-        // },
         pageBuilder: (BuildContext context, GoRouterState state) {
           return _slideTransition(
             landing.LandingUi(
-              key: Key(
-                  "${LandingUtils.listNavigation.indexWhere((element) => element.action == RouteName.massage)}"),
-              index: LandingUtils.listNavigation
-                  .indexWhere((element) => element.action == RouteName.massage),
+              key: const Key("-1"),
+              index: -1,
+              ui: const SizedBox.shrink(),
             ),
           );
         },
