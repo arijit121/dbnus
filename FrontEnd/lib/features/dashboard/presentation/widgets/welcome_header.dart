@@ -1,5 +1,5 @@
-import 'dart:math' as math;
 import 'package:material_ui/material_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 import 'package:intl/intl.dart';
@@ -8,6 +8,7 @@ import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:dbnus/core/localization/extension/localization_ext.dart';
 import 'package:dbnus/flavors.dart';
+import 'package:dbnus/features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 class WelcomeHeader extends StatefulWidget {
   const WelcomeHeader({
@@ -207,6 +208,18 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                         value: value,
                         onTap: () {
                           widget.counter.value = widget.counter.value + 1;
+                        },
+                      );
+                    },
+                  ),
+
+                  BlocBuilder<DashboardBloc, DashboardState>(
+                    builder: (BuildContext context, DashboardState state) {
+                      final value = state.counter.value ?? 0;
+                      return _AnimatedCounterButton(
+                        value: value,
+                        onTap: () {
+                          context.read<DashboardBloc>().add(IncrementCounter());
                         },
                       );
                     },
