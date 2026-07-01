@@ -9,6 +9,7 @@ import 'package:dbnus/features/dashboard/domain/repositories/dashboard_repositor
 import 'package:dbnus/features/dashboard/domain/usecases/get_dashboard_data_usecase.dart';
 
 part 'dashboard_event.dart';
+
 part 'dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
@@ -26,7 +27,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     // Initialization code if needed
   }
 
-  void _getDashboardData(GetDashboardData event, Emitter<DashboardState> emit) async {
+  void _getDashboardData(
+      GetDashboardData event, Emitter<DashboardState> emit) async {
     bool onlineStatus = await connectionStatus.checkConnection();
     if (onlineStatus) {
       emit(state.copyWith(dashboardData: const DynamicBlocData.loading()));
@@ -37,7 +39,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         ));
       } else {
         emit(state.copyWith(
-          dashboardData: const DynamicBlocData.error(message: "Something went wrong"),
+          dashboardData:
+              const DynamicBlocData.error(message: "Something went wrong"),
         ));
       }
     } else {
@@ -51,6 +54,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   void _incrementCounter(IncrementCounter event, Emitter<DashboardState> emit) {
     final currentValue = state.counter.value ?? 0;
+    emit(state.copyWith(
+      counter: DynamicBlocData<int>.init(value: currentValue),
+    ));
     emit(state.copyWith(
       counter: DynamicBlocData<int>.success(value: currentValue + 1),
     ));

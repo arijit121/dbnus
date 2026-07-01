@@ -201,28 +201,32 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                   ),
 
                   // Counter button
-                  ValueListenableBuilder<int>(
-                    valueListenable: widget.counter,
-                    builder: (BuildContext context, int value, Widget? child) {
-                      return _AnimatedCounterButton(
-                        value: value,
-                        onTap: () {
-                          widget.counter.value = widget.counter.value + 1;
+                  Column(
+                    children: [
+                      ValueListenableBuilder<int>(
+                        valueListenable: widget.counter,
+                        builder: (BuildContext context, int value, Widget? child) {
+                          return _AnimatedCounterButton(
+                            value: value,
+                            onTap: () {
+                              widget.counter.value = widget.counter.value + 1;
+                            },
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ),
 
-                  BlocBuilder<DashboardBloc, DashboardState>(
-                    builder: (BuildContext context, DashboardState state) {
-                      final value = state.counter.value ?? 0;
-                      return _AnimatedCounterButton(
-                        value: value,
-                        onTap: () {
-                          context.read<DashboardBloc>().add(IncrementCounter());
+                      BlocBuilder<DashboardBloc, DashboardState>(
+                        builder: (BuildContext context, DashboardState state) {
+                          final value = state.counter.value ?? 0;
+                          return _AnimatedCounterButton(
+                            value: value,
+                            onTap: () {
+                              context.read<DashboardBloc>().add(IncrementCounter());
+                            },
+                          );
                         },
-                      );
-                    },
+                      ),
+                    ],
                   ),
                 ],
               ),
