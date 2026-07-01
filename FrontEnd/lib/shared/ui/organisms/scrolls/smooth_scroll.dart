@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/rendering.dart';
 import 'package:material_ui/material_ui.dart';
 
 const int NORMAL_SCROLL_ANIMATION_LENGTH_MS = 250;
@@ -12,7 +13,8 @@ class SmoothScroll extends StatefulWidget {
   final bool? primary;
   final bool shrinkWrap;
   final Axis scrollDirection;
-  final double? cacheExtent;
+  final ScrollCacheExtent? scrollCacheExtent;
+  final double? itemExtent;
 
   // For children-based constructor
   final List<Widget>? children;
@@ -31,7 +33,8 @@ class SmoothScroll extends StatefulWidget {
     this.primary,
     this.shrinkWrap = false,
     this.scrollDirection = Axis.vertical,
-    this.cacheExtent,
+    this.scrollCacheExtent,
+    this.itemExtent,
   })  : itemCount = null,
         itemBuilder = null,
         separatorBuilder = null;
@@ -46,7 +49,8 @@ class SmoothScroll extends StatefulWidget {
     this.primary,
     this.shrinkWrap = false,
     this.scrollDirection = Axis.vertical,
-    this.cacheExtent,
+    this.scrollCacheExtent,
+    this.itemExtent,
   })  : children = null,
         separatorBuilder = null;
 
@@ -61,8 +65,9 @@ class SmoothScroll extends StatefulWidget {
     this.primary,
     this.shrinkWrap = false,
     this.scrollDirection = Axis.vertical,
-    this.cacheExtent,
-  }) : children = null;
+    this.scrollCacheExtent,
+  })  : children = null,
+        itemExtent = null;
 
   @override
   State<SmoothScroll> createState() => _SmoothScrollState();
@@ -93,14 +98,15 @@ class _SmoothScrollState extends State<SmoothScroll> {
         primary: widget.primary,
         shrinkWrap: widget.shrinkWrap,
         scrollDirection: widget.scrollDirection,
-        cacheExtent: widget.cacheExtent,
+        scrollCacheExtent: widget.scrollCacheExtent,
+        itemExtent: widget.itemExtent,
         children: !shouldSmoothScroll
             ? widget.children!
             : widget.children!
-            .map((toElement) => _KeepAliveRepaintBoundary(
-          child: toElement,
-        ))
-            .toList(),
+                .map((toElement) => _KeepAliveRepaintBoundary(
+                      child: toElement,
+                    ))
+                .toList(),
       );
     } else if (widget.separatorBuilder != null) {
       listView = ListView.separated(
@@ -111,21 +117,21 @@ class _SmoothScrollState extends State<SmoothScroll> {
         itemBuilder: !shouldSmoothScroll
             ? widget.itemBuilder!
             : (context, index) {
-          return _KeepAliveRepaintBoundary(
-            child: widget.itemBuilder!(context, index),
-          );
-        },
+                return _KeepAliveRepaintBoundary(
+                  child: widget.itemBuilder!(context, index),
+                );
+              },
         separatorBuilder: !shouldSmoothScroll
             ? widget.separatorBuilder!
             : (context, index) {
-          return _KeepAliveRepaintBoundary(
-            child: widget.separatorBuilder!(context, index),
-          );
-        },
+                return _KeepAliveRepaintBoundary(
+                  child: widget.separatorBuilder!(context, index),
+                );
+              },
         primary: widget.primary,
         shrinkWrap: widget.shrinkWrap,
         scrollDirection: widget.scrollDirection,
-        cacheExtent: widget.cacheExtent,
+        scrollCacheExtent: widget.scrollCacheExtent,
       );
     } else {
       listView = ListView.builder(
@@ -136,14 +142,15 @@ class _SmoothScrollState extends State<SmoothScroll> {
         itemBuilder: !shouldSmoothScroll
             ? widget.itemBuilder!
             : (context, index) {
-          return _KeepAliveRepaintBoundary(
-            child: widget.itemBuilder!(context, index),
-          );
-        },
+                return _KeepAliveRepaintBoundary(
+                  child: widget.itemBuilder!(context, index),
+                );
+              },
         primary: widget.primary,
         shrinkWrap: widget.shrinkWrap,
         scrollDirection: widget.scrollDirection,
-        cacheExtent: widget.cacheExtent,
+        scrollCacheExtent: widget.scrollCacheExtent,
+        itemExtent: widget.itemExtent,
       );
     }
 
@@ -179,7 +186,7 @@ class _SmoothScrollWrapperState extends State<_SmoothScrollWrapper> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller;
+    _controller = widget.controller ?? ScrollController();
     _scrollPosition = _controller.initialScrollOffset;
   }
 
@@ -190,7 +197,7 @@ class _SmoothScrollWrapperState extends State<_SmoothScrollWrapper> {
         if (pointerSignal is PointerScrollEvent) {
           int duration = NORMAL_SCROLL_ANIMATION_LENGTH_MS;
           _scrollPosition +=
-          pointerSignal.scrollDelta.dy > 0 ? SCROLL_SPEED : -SCROLL_SPEED;
+              pointerSignal.scrollDelta.dy > 0 ? SCROLL_SPEED : -SCROLL_SPEED;
 
           final max = _controller.position.maxScrollExtent;
           final min = _controller.position.minScrollExtent;
