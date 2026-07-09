@@ -18,6 +18,10 @@ class LocalPreferences {
   static const String ssIpV4 = "SSIpV4";
   static const String ssIpV6 = "SSIpV6";
   static const String ssIp = "SSIp";
+  static const String googleGeoCodingSessionToken =
+      "GoogleGeoCodingSessionToken";
+  static const String googleGeoCodingSessionTokenTime =
+      "GoogleGeoCodingSessionTokenTime";
 
   Future<void> setBool(
       {required String key,

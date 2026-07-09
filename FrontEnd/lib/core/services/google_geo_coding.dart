@@ -1,16 +1,16 @@
 import 'dart:convert';
 
-import 'package:sastasundar/service/value_handler.dart';
+import 'package:dbnus/core/services/value_handler.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../data/api_client/imp/api_repo_imp.dart';
-import '../../../data/api_client/repo/api_repo.dart';
-import '../../../data/model/api_return_model.dart';
-import '../../../data/model/location_model.dart';
-import '../../../extension/logger_extension.dart';
-import '../../../storage/local_preferences.dart';
+import '../../shared/extensions/logger_extension.dart';
+import '../models/location_model.dart';
+import '../network/api_client/imp/api_repo_imp.dart';
+import '../network/api_client/repo/api_repo.dart';
+import '../network/models/api_return_model.dart';
+import '../storage/local_preferences.dart';
 
-class GoogleGeoCodingV2 {
+class GoogleGeoCoding {
   final String _key = "AIzaSyDz0x8H1ijyGAbQEtsznK3glcrUEEtNA4M";
   final String _geocodeApi =
       "https://maps.googleapis.com/maps/api/geocode/json";
@@ -64,7 +64,7 @@ class GoogleGeoCodingV2 {
     //     address.replaceAll(RegExp(r'^[A-Z0-9]{4}\+[A-Z0-9]{2,3},?\s*'), '');
     // // Remove leading house/plot/range numbers (e.g. 16-315, or 32,)
     // address = address.replaceFirst(RegExp(r'^\d+[-\d/]*\b,?\s*'), '');
-    if (ValueHandler().isTextNotEmptyOrNull(addressName)) {
+    if (ValueHandler.isTextNotEmptyOrNull(addressName)) {
       List<String> parts = address.split(', ');
       parts.removeWhere((element) {
         String cleanElement = element.trim().toLowerCase();
@@ -105,7 +105,7 @@ class GoogleGeoCodingV2 {
   Future<LocationModel?> searchNearby(
       {required double latitude, required double longitude}) async {
     try {
-      ApiReturnModel? response = await apiRepo().callApi(
+      ApiReturnModel? response = await ApiEngine.instance.callApi(
         tag: "SearchNearby",
         uri: "$_placesApi:searchNearby",
         method: Method.post,
@@ -210,7 +210,7 @@ class GoogleGeoCodingV2 {
   Future<LocationModel?> reverseGeocoding(
       {required double latitude, required double longitude}) async {
     try {
-      ApiReturnModel? v = await apiRepo().callApi(
+      ApiReturnModel? v = await ApiEngine.instance.callApi(
           tag: "ReverseGeocoding",
           uri: _geocodeApi,
           headers: {'Content-Type': 'application/json'},
@@ -337,10 +337,10 @@ class GoogleGeoCodingV2 {
       List<LocationModel>? v1 = await placeAutocomplete(input: v.address ?? "");
       v.address = _formatAddress2(v.address);
       String? name = (v1?.isNotEmpty == true &&
-              ValueHandler().isTextNotEmptyOrNull(v1?.firstOrNull?.addressName))
+              ValueHandler.isTextNotEmptyOrNull(v1?.firstOrNull?.addressName))
           ? _formatAddress2(v1?.firstOrNull?.addressName)
           : null;
-      if (ValueHandler().isTextNotEmptyOrNull(name)) {
+      if (ValueHandler.isTextNotEmptyOrNull(name)) {
         v.addressName = name;
         return v;
       }
@@ -351,7 +351,7 @@ class GoogleGeoCodingV2 {
 
   Future<LocationModel?> geocoding({required String address}) async {
     try {
-      ApiReturnModel? v = await apiRepo().callApi(
+      ApiReturnModel? v = await ApiEngine.instance.callApi(
           tag: "Geocoding",
           uri: _geocodeApi,
           headers: {'Content-Type': 'application/json'},
@@ -441,7 +441,7 @@ class GoogleGeoCodingV2 {
     try {
       String sessionToken = await _getSessionToken();
 
-      ApiReturnModel? response = await apiRepo().callApi(
+      ApiReturnModel? response = await ApiEngine.instance.callApi(
           tag: "PlaceAutocomplete",
           uri: "$_placesApi:autocomplete",
           method: Method.post,
@@ -493,7 +493,7 @@ class GoogleGeoCodingV2 {
     try {
       String sessionToken = await _getSessionToken();
 
-      ApiReturnModel? response = await apiRepo().callApi(
+      ApiReturnModel? response = await ApiEngine.instance.callApi(
         tag: "PlaceDetails",
         uri: "$_placesApi/$placeId",
         headers: {
@@ -631,14 +631,14 @@ class GoogleGeoCodingV2 {
     String? googleGeoCodingSessionTokenTime = await LocalPreferences()
         .getString(key: LocalPreferences.googleGeoCodingSessionTokenTime);
     Duration? duration;
-    if (ValueHandler().isTextNotEmptyOrNull(googleGeoCodingSessionTokenTime)) {
-      duration = ValueHandler().dateTimeCompare(
+    if (ValueHandler.isTextNotEmptyOrNull(googleGeoCodingSessionTokenTime)) {
+      duration = ValueHandler.dateTimeCompare(
           dateTime: googleGeoCodingSessionTokenTime,
           compareWithDate: DateTime.now());
     }
     if (duration != null &&
         duration.inMinutes.abs() < 5 &&
-        ValueHandler().isTextNotEmptyOrNull(sessionToken)) {
+        ValueHandler.isTextNotEmptyOrNull(sessionToken)) {
       return sessionToken!;
     } else {
       sessionToken = const Uuid().v4();
