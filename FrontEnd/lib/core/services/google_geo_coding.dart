@@ -102,7 +102,7 @@ class GoogleGeoCoding {
     return address;
   }
 
-  Future<LocationModel?> searchNearby(
+  Future<List<LocationModel>?> searchNearby(
       {required double latitude, required double longitude}) async {
     try {
       ApiReturnModel? response = await ApiEngine.instance.callApi(
@@ -134,69 +134,57 @@ class GoogleGeoCoding {
       if (response?.statusCode == 200 && response?.responseString != null) {
         Map<String, dynamic> data = jsonDecode(response!.responseString!);
         List<dynamic> places = data['places'] ?? [];
-        if (places.isNotEmpty) {
-          // Pass 1: Look for establishment/POI/premise
-          Map<String, dynamic>? bestPlace;
-          for (var place in places) {
-            List<dynamic> types = place['types'] ?? [];
-            if (types.any((t) => [
-                  "establishment",
-                  "point_of_interest",
-                  "landmark",
-                  "premise"
-                ].contains(t))) {
-              bestPlace = place as Map<String, dynamic>?;
-              break;
+        List<LocationModel> resultsList = [];
+        for (var place in places) {
+          String? addressName = place['displayName']?['text'];
+          String? address = _formatAddress(place['formattedAddress'],
+              addressName: addressName);
+
+          double? placeLat = place['location']?['latitude'];
+          double? placeLng = place['location']?['longitude'];
+
+          double? neLat;
+          double? neLng;
+          double? swLat;
+          double? swLng;
+
+          var viewport = place['viewport'];
+          if (viewport != null) {
+            var low = viewport['low'];
+            var high = viewport['high'];
+            if (low != null && high != null) {
+              neLat = high['latitude'];
+              neLng = high['longitude'];
+              swLat = low['latitude'];
+              swLng = low['longitude'];
             }
           }
-          bestPlace ??= places[0] as Map<String, dynamic>?;
-          if (bestPlace != null) {
-            String? addressName = bestPlace['displayName']?['text'];
-            String? address = _formatAddress(bestPlace['formattedAddress'],
-                addressName: addressName);
 
-            double? placeLat = bestPlace['location']?['latitude'];
-            double? placeLng = bestPlace['location']?['longitude'];
-
-            double? neLat;
-            double? neLng;
-            double? swLat;
-            double? swLng;
-
-            var viewport = bestPlace['viewport'];
-            if (viewport != null) {
-              var low = viewport['low'];
-              var high = viewport['high'];
-              if (low != null && high != null) {
-                neLat = high['latitude'];
-                neLng = high['longitude'];
-                swLat = low['latitude'];
-                swLng = low['longitude'];
-              }
+          String? postalCode;
+          if (address != null) {
+            final match = RegExp(r'\b\d{6}\b').firstMatch(address);
+            if (match != null) {
+              postalCode = match.group(0);
             }
-
-            String? postalCode;
-            if (address != null) {
-              final match = RegExp(r'\b\d{6}\b').firstMatch(address);
-              if (match != null) {
-                postalCode = match.group(0);
-              }
-            }
-
-            return LocationModel(
-              locationId: bestPlace['id'],
-              addressName: addressName,
-              address: address,
-              lat: placeLat ?? latitude,
-              lng: placeLng ?? longitude,
-              neLat: neLat,
-              neLng: neLng,
-              swLat: swLat,
-              swLng: swLng,
-              pinCode: postalCode,
-            );
           }
+
+          resultsList.add(LocationModel(
+            locationId: place['id'],
+            addressName: addressName,
+            address: address,
+            lat: placeLat ?? latitude,
+            lng: placeLng ?? longitude,
+            neLat: neLat,
+            neLng: neLng,
+            swLat: swLat,
+            swLng: swLng,
+            pinCode: postalCode,
+            types: place['types'] != null
+                ? List<String>.from(place['types'])
+                : null,
+          ));
         }
+        return resultsList;
       } else {
         AppLog.i(
             "searchNearby failed with status: ${response?.statusCode}, body: ${response?.responseString}");
@@ -207,7 +195,7 @@ class GoogleGeoCoding {
     return null;
   }
 
-  Future<LocationModel?> reverseGeocoding(
+  Future<List<LocationModel>?> reverseGeocoding(
       {required double latitude, required double longitude}) async {
     try {
       ApiReturnModel? v = await ApiEngine.instance.callApi(
@@ -220,55 +208,19 @@ class GoogleGeoCoding {
       if (v?.statusCode == 200 && v?.responseString != null) {
         Map<String, dynamic> data = jsonDecode(v!.responseString!);
         List<dynamic> results = data['results'] ?? [];
-        if (results.isEmpty) return null;
+        List<LocationModel> resultsList = [];
+        for (var result in results) {
+          String? addressName;
+          String? formattedAddress;
+          String? postalCode;
+          double? neLat;
+          double? neLng;
+          double? swLat;
+          double? swLng;
 
-        Map<String, dynamic>? firstAddress;
+          formattedAddress = _formatAddress(result['formatted_address']);
 
-        // Pass 1: Look for establishment/POI/premise
-        for (final result in results) {
-          var typesRaw = result['types'];
-          if (typesRaw is List) {
-            List<String> types = typesRaw.map((e) => e.toString()).toList();
-            if (types.any((t) => [
-                  "establishment",
-                  "point_of_interest",
-                  "premise"
-                ].contains(t))) {
-              firstAddress = result;
-              break;
-            }
-          }
-        }
-
-        // Pass 2: Fallback to street_address
-        if (firstAddress == null) {
-          for (final result in results) {
-            var typesRaw = result['types'];
-            if (typesRaw is List) {
-              List<String> types = typesRaw.map((e) => e.toString()).toList();
-              if (types.contains("street_address")) {
-                firstAddress = result;
-                break;
-              }
-            }
-          }
-        }
-
-        // Pass 3: Fallback to first result
-        firstAddress ??= results.isNotEmpty ? results[0] : null;
-
-        String? addressName;
-        String? formattedAddress;
-        String? postalCode;
-        double? neLat;
-        double? neLng;
-        double? swLat;
-        double? swLng;
-
-        if (firstAddress != null) {
-          formattedAddress = _formatAddress(firstAddress['formatted_address']);
-
-          var addressComponents = firstAddress['address_components'] as List?;
+          var addressComponents = result['address_components'] as List?;
           if (addressComponents != null) {
             addressName = _extractAddressName(addressComponents);
 
@@ -283,7 +235,7 @@ class GoogleGeoCoding {
           }
           addressName ??= formattedAddress?.split(',').first.trim();
 
-          var geometry = firstAddress['geometry'];
+          var geometry = result['geometry'];
           if (geometry != null) {
             var bounds = geometry['bounds'] ?? geometry['viewport'];
             if (bounds != null) {
@@ -307,18 +259,22 @@ class GoogleGeoCoding {
               }
             }
           }
-        }
 
-        return LocationModel(
-            pinCode: postalCode,
-            address: formattedAddress,
-            addressName: addressName,
-            lat: latitude,
-            lng: longitude,
-            neLat: neLat,
-            neLng: neLng,
-            swLat: swLat,
-            swLng: swLng);
+          resultsList.add(LocationModel(
+              pinCode: postalCode,
+              address: formattedAddress,
+              addressName: addressName,
+              lat: latitude,
+              lng: longitude,
+              neLat: neLat,
+              neLng: neLng,
+              swLat: swLat,
+              swLng: swLng,
+              types: result['types'] != null
+                  ? List<String>.from(result['types'])
+                  : null));
+        }
+        return resultsList;
       } else {
         AppLog.i(v?.responseString ?? "");
       }
@@ -330,20 +286,29 @@ class GoogleGeoCoding {
 
   Future<LocationModel?> reverseGeocodingV2(
       {required double latitude, required double longitude}) async {
-    LocationModel? v =
+    List<LocationModel>? results =
         await searchNearby(latitude: latitude, longitude: longitude);
-    v ??= await reverseGeocoding(latitude: latitude, longitude: longitude);
+    if (!(results?.isNotEmpty == true)) {
+      results =
+          await reverseGeocoding(latitude: latitude, longitude: longitude);
+    }
+    LocationModel? v = results?.firstOrNull;
+
     if (v != null) {
-      List<LocationModel>? v1 = await placeAutocomplete(input: v.address ?? "");
-      v.address = _formatAddress2(v.address);
-      String? name = (v1?.isNotEmpty == true &&
-              ValueHandler.isTextNotEmptyOrNull(v1?.firstOrNull?.addressName))
-          ? _formatAddress2(v1?.firstOrNull?.addressName)
-          : null;
-      if (ValueHandler.isTextNotEmptyOrNull(name)) {
-        v.addressName = name;
-        return v;
+      if (results!.length > 1) {
+        List<LocationModel>? v1 =
+            await placeAutocomplete(input: v.address ?? "");
+        String? name = (v1?.isNotEmpty == true &&
+                ValueHandler.isTextNotEmptyOrNull(v1?.firstOrNull?.addressName))
+            ? _formatAddress2(v1?.firstOrNull?.addressName)
+            : null;
+        if (ValueHandler.isTextNotEmptyOrNull(name)) {
+          v.addressName = name;
+          v.address = _formatAddress2(v.address);
+          return v;
+        }
       }
+      v.address = _formatAddress2(v.address);
       return v;
     }
     return null;
@@ -426,7 +391,10 @@ class GoogleGeoCoding {
             neLat: neLat,
             neLng: neLng,
             swLat: swLat,
-            swLng: swLng);
+            swLng: swLng,
+            types: result['types'] != null
+                ? List<String>.from(result['types'])
+                : null);
       } else {
         AppLog.i(v?.responseString ?? "");
       }
@@ -475,7 +443,8 @@ class GoogleGeoCoding {
                   address: placePrediction["text"]?["text"]?.toString().trim(),
                   addressName: placePrediction["structuredFormat"]?["mainText"]
                           ?["text"]
-                      ?.toString()));
+                      ?.toString(),
+                  types: List<String>.from(types)));
             }
           }
         }
@@ -500,7 +469,7 @@ class GoogleGeoCoding {
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': _key,
           'X-Goog-FieldMask':
-              'id,displayName,formattedAddress,location,viewport,addressComponents',
+              'id,displayName,formattedAddress,location,viewport,addressComponents,types',
         },
         queryParameters: {"sessionToken": sessionToken},
         method: Method.get,
@@ -615,7 +584,10 @@ class GoogleGeoCoding {
             neLat: neLat,
             neLng: neLng,
             swLat: swLat,
-            swLng: swLng);
+            swLng: swLng,
+            types: data['types'] != null
+                ? List<String>.from(data['types'])
+                : null);
       } else {
         AppLog.i(response?.responseString ?? "No response");
       }

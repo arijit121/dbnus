@@ -12,6 +12,7 @@ class LocationModel {
   double? neLng;
   double? swLat;
   double? swLng;
+  List<String>? types;
 
   LocationModel(
       {this.locationId,
@@ -23,7 +24,8 @@ class LocationModel {
       this.neLat,
       this.neLng,
       this.swLat,
-      this.swLng});
+      this.swLng,
+      this.types});
 
   LocationModel.fromJson(Map<String, dynamic> json) {
     try {
@@ -37,6 +39,7 @@ class LocationModel {
       neLng = json['neLng'];
       swLat = json['swLat'];
       swLng = json['swLng'];
+      types = json['types'] is List ? List<String>.from(json['types']) : null;  
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
@@ -54,6 +57,7 @@ class LocationModel {
     data['neLng'] = neLng;
     data['swLat'] = swLat;
     data['swLng'] = swLng;
+    data['types'] = types;
     return data;
   }
 }
