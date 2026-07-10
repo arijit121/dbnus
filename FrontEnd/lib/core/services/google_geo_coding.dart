@@ -87,9 +87,9 @@ class GoogleGeoCoding {
 
   String? _formatAddress2(String? address) {
     if (address == null) return null;
-    // Remove plus code (e.g. VJ64+G9H)
-    address =
-        address.replaceAll(RegExp(r'^[A-Z0-9]{4}\+[A-Z0-9]{2,3},?\s*'), '');
+    // Remove plus code (e.g. VJ64+G9H or 52X4+6XM anywhere in the string)
+    address = address.replaceAll(
+        RegExp(r'\b[A-Z0-9]{4,8}\+[A-Z0-9]{2,4}\b,?\s*'), '');
     // Remove leading house/plot/range numbers (e.g. 16-315, or 32,)
     address = address.replaceFirst(RegExp(r'^\d+[-\d/]*\b,?\s*'), '');
 
@@ -308,6 +308,7 @@ class GoogleGeoCoding {
           return v;
         }
       }
+      v.addressName = _formatAddress2(v.addressName);
       v.address = _formatAddress2(v.address);
       return v;
     }
