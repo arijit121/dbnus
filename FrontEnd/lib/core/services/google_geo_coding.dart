@@ -113,7 +113,7 @@ class GoogleGeoCoding {
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': _key,
           'X-Goog-FieldMask':
-              'places.id,places.displayName,places.location,places.types,places.formattedAddress,places.viewport',
+              'places.id,places.displayName,places.location,places.types,places.postalAddress,places.formattedAddress,places.viewport',
         },
         bodyData: BodyData.raw(
           body: {
