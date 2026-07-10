@@ -160,13 +160,7 @@ class GoogleGeoCoding {
             }
           }
 
-          String? postalCode;
-          if (address != null) {
-            final match = RegExp(r'\b\d{6}\b').firstMatch(address);
-            if (match != null) {
-              postalCode = match.group(0);
-            }
-          }
+          String? postalCode = place['postalAddress']?['postalCode'];
 
           resultsList.add(LocationModel(
             locationId: place['id'],
