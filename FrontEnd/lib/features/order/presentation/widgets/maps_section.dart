@@ -100,7 +100,7 @@ class _MapsSectionState extends State<MapsSection> {
               }
             },
           ),
-          _buildDivider(),
+          /*_buildDivider(),
           OrderToolTile(
             icon: AssetsConst.featherMapPin,
             title: "Reverse Geocoding V2",
@@ -147,7 +147,7 @@ class _MapsSectionState extends State<MapsSection> {
                 );
               }
             },
-          ),
+          ),*/
         ],
       ),
     );
