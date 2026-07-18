@@ -383,6 +383,17 @@ function _showInstallDialog(info) {
 
 function promptInstall() {
     return new Promise(function (resolve) {
+        var lastDismissed = localStorage.getItem('__pwa_last_dismissed_time');
+        if (lastDismissed) {
+            var diff = Date.now() - parseInt(lastDismissed, 10);
+            var oneDay = 24 * 60 * 60 * 1000;
+            if (diff < oneDay) {
+                console.log('[PWA] promptInstall ignored: dismissed less than 24 hours ago');
+                resolve(false);
+                return;
+            }
+        }
+
         var info = _detectPlatformInfo();
 
         // 1. SYNC EXECUTION FIRST (Crucial for native prompt)
@@ -434,6 +445,7 @@ function promptInstall() {
 
             document.getElementById('__pwa_btn_cancel').addEventListener('click', function () {
                 closeConfirmDialog();
+                localStorage.setItem('__pwa_last_dismissed_time', Date.now().toString());
                 resolve(false);
             });
 
