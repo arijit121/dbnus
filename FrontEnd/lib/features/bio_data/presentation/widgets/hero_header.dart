@@ -15,6 +15,23 @@ class HeroHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // Theme-specific colors
+    final List<Color> bgColors = isDark 
+        ? [ColorConst.sidebarBg, const Color(0xFF2D3250)]
+        : [const Color(0xFFF8FAFC), const Color(0xFFE2E8F0)];
+        
+    final Color textColor = isDark ? Colors.white : ColorConst.primaryDark;
+    final Color subTextColor = isDark ? Colors.white70 : ColorConst.secondaryDark;
+    final Color iconColor = isDark ? Colors.white : ColorConst.primaryDark;
+    
+    final Color badgeBg = isDark 
+        ? Colors.white.withOpacity(0.12)
+        : Colors.black.withOpacity(0.05);
+        
+    final Color borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFCBD5E1);
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
@@ -27,20 +44,20 @@ class HeroHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            ColorConst.sidebarBg,
-            const Color(0xFF2D3250),
-          ],
+          colors: bgColors,
         ),
         borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(28),
-          bottomRight: Radius.circular(28),
+          bottomLeft: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
+        border: Border(
+          bottom: BorderSide(color: borderColor),
         ),
         boxShadow: [
           BoxShadow(
-            color: ColorConst.sidebarBg.withValues(alpha: 0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: isDark ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.015),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -50,21 +67,21 @@ class HeroHeader extends StatelessWidget {
           Row(
             children: [
               CustomIconButton(
-                icon: const CustomSvgAssetImageView(
+                icon: CustomSvgAssetImageView(
                   path: AssetsConst.featherArrowLeft,
-                  color: Colors.white,
+                  color: iconColor,
                 ),
-                color: Colors.white,
+                color: iconColor,
                 iconSize: 20,
                 onPressed: () => CustomRoute.back(),
               ),
               const Spacer(),
               CustomIconButton(
-                icon: const CustomSvgAssetImageView(
+                icon: CustomSvgAssetImageView(
                   path: AssetsConst.featherShare2,
-                  color: Colors.white,
+                  color: iconColor.withOpacity(0.8),
                 ),
-                color: Colors.white70,
+                color: iconColor.withOpacity(0.8),
                 iconSize: 20,
                 onPressed: () {
                   OpenService.share(
@@ -93,9 +110,9 @@ class HeroHeader extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: ColorConst.sidebarSelected.withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 6),
+                  color: ColorConst.sidebarSelected.withOpacity(0.3),
+                  blurRadius: 15,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -103,7 +120,7 @@ class HeroHeader extends StatelessWidget {
               child: CustomText(
                 "AS",
                 color: Colors.white,
-                size: 30,
+                size: 26,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -111,10 +128,10 @@ class HeroHeader extends StatelessWidget {
           12.ph,
 
           // Name
-          const CustomText(
+          CustomText(
             "Arijit Sarkar",
-            color: Colors.white,
-            size: 24,
+            color: textColor,
+            size: 22,
             fontWeight: FontWeight.w800,
           ),
           6.ph,
@@ -123,18 +140,23 @@ class HeroHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
+              color: badgeBg,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomSvgAssetImageView(path: AssetsConst.featherCode, height: 14, width: 14, color: Colors.white70),
+                CustomSvgAssetImageView(
+                  path: AssetsConst.featherCode,
+                  height: 12,
+                  width: 12,
+                  color: subTextColor,
+                ),
                 8.pw,
-                const CustomText(
+                CustomText(
                   "Flutter Developer  •  4+ Years",
-                  color: Colors.white70,
-                  size: 12,
+                  color: subTextColor,
+                  size: 11,
                   fontWeight: FontWeight.w600,
                 ),
               ],

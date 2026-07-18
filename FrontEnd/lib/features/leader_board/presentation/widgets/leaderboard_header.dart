@@ -11,53 +11,56 @@ class LeaderboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final cardBg = isDark ? const Color(0xFF131520) : Colors.white;
+    final accentColor = const Color(0xFF10B981); // Emerald green for leaderboard theme
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF1B7A4D),
-            ColorConst.deepGreen,
-          ],
-        ),
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
-            color: ColorConst.deepGreen.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
+              color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child:
-                const CustomSvgAssetImageView(path: AssetsConst.featherAward, color: Colors.white, height: 24, width: 24),
+            child: CustomSvgAssetImageView(
+              path: AssetsConst.featherAward,
+              color: accentColor,
+              height: 22,
+              width: 22,
+            ),
           ),
           16.pw,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomText(
-                  "Leaderboard",
-                  color: Colors.white,
+                CustomText(
+                  "Leaderboard rankings",
+                  color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
                   fontWeight: FontWeight.w700,
-                  size: 22,
+                  size: 18,
                 ),
                 4.ph,
-                const CustomText(
-                  "Drag to reorder items",
-                  color: Colors.white70,
+                CustomText(
+                  "Drag items to reorder ranks, update scoring, or manage users.",
+                  color: isDark ? const Color(0xFF94A3B8) : ColorConst.secondaryDark,
                   size: 13,
                 ),
               ],

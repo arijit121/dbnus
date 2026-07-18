@@ -17,18 +17,25 @@ class QuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const CustomSvgAssetImageView(path: AssetsConst.featherZap,
-                height: 20, width: 20, color: ColorConst.primaryDark),
+            CustomSvgAssetImageView(
+              path: AssetsConst.featherZap,
+              height: 18,
+              width: 18,
+              color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
+            ),
             10.pw,
-            const CustomText(
+            CustomText(
               "Quick Actions",
               fontWeight: FontWeight.w600,
-              size: 18,
-              color: ColorConst.primaryDark,
+              size: 16,
+              color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
             ),
           ],
         ),
@@ -37,27 +44,27 @@ class QuickActions extends StatelessWidget {
           children: [
             Expanded(
               child: _buildActionCard(
+                context: context,
                 icon: AssetsConst.featherShoppingCart,
                 label: "Add to Cart",
-                gradient: const [
-                  ColorConst.violate,
-                  ColorConst.sidebarSelected
-                ],
+                accentColor: ColorConst.baseHexColor,
                 onTap: () {
                   context.read<LocalCartBloc>().add(AddServiceToCart(
-                          serviceModel: CartServiceModel(
-                        serviceId: "hvsdhvfshv",
-                        price: 20.6,
-                      )));
+                        serviceModel: CartServiceModel(
+                          serviceId: "hvsdhvfshv",
+                          price: 20.6,
+                        ),
+                      ));
                 },
               ),
             ),
             12.pw,
             Expanded(
               child: _buildActionCard(
+                context: context,
                 icon: AssetsConst.featherPackage,
                 label: "Go to Orders",
-                gradient: const [ColorConst.lightBlue, ColorConst.deepBlue],
+                accentColor: const Color(0xFF0EA5E9), // Clean blue
                 onTap: () {
                   kIsWeb
                       ? context.goNamed(RouteName.order)
@@ -72,51 +79,64 @@ class QuickActions extends StatelessWidget {
   }
 
   Widget _buildActionCard({
+    required BuildContext context,
     required String icon,
     required String label,
-    required List<Color> gradient,
+    required Color accentColor,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final cardBg = isDark ? const Color(0xFF131520) : Colors.white;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Container(
-          height: 90,
+          height: 80,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: gradient,
-            ),
+            color: cardBg,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: gradient.first.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
+                color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: CustomSvgAssetImageView(path: icon, color: Colors.white, height: 18, width: 18),
+                child: CustomSvgAssetImageView(
+                  path: icon,
+                  color: accentColor,
+                  height: 18,
+                  width: 18,
+                ),
               ),
-              CustomText(
-                label,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                size: 13,
+              16.pw,
+              Expanded(
+                child: CustomText(
+                  label,
+                  color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
+                  fontWeight: FontWeight.w600,
+                  size: 14,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 12,
+                color: isDark ? Colors.white24 : Colors.black26,
               ),
             ],
           ),

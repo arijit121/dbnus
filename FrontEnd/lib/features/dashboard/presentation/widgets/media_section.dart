@@ -35,7 +35,6 @@ class MediaSection extends StatelessWidget {
                 height: 220,
                 fullScreen: true,
               ),
-              // Play button overlay
               Positioned.fill(
                 child: IgnorePointer(
                   child: Container(
@@ -45,7 +44,7 @@ class MediaSection extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          Colors.black.withValues(alpha: 0.3),
+                          Colors.black.withOpacity(0.3),
                         ],
                       ),
                     ),
@@ -102,98 +101,6 @@ class MediaSection extends StatelessWidget {
             },
             height: 400,
           ),
-        ),
-        20.ph,
-
-        // ── Image pair: Showcase ────────────────────
-        Row(
-          spacing: 12,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
-                height: ScreenUtils.nw() / 2,
-                label: "Showcase",
-              ),
-            ),
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
-                height: ScreenUtils.nw() / 2,
-                label: "Discover",
-              ),
-            ),
-          ],
-        ),
-        20.ph,
-
-        // ── Small image pair ────────────────────────
-        Row(
-          spacing: 12,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
-                height: 100,
-                label: "Trending",
-              ),
-            ),
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url:
-                    "https://stage-cdn.aadharhealth.in/incom/app_images/1726653030_accessories.png",
-                height: 100,
-                label: "Accessories",
-              ),
-            ),
-          ],
-        ),
-        20.ph,
-
-        // ── Second Carousel ─────────────────────────
-        _MediaCard(
-          label: "More to Explore",
-          icon: AssetsConst.featherCompass,
-          child: CarouselSlider(
-            radius: 14,
-            autoScrollDuration: const Duration(seconds: 4),
-            imageList: List.generate(5, (int index) {
-              return index == 2
-                  ? ApiUrlConst.testImgUrl(aspectRatio: 16 / 9)
-                  : ApiUrlConst.testImgUrl();
-            }),
-            onTap: (index) {
-              kIsWeb
-                  ? context.goNamed(RouteName.games)
-                  : context.pushNamed(RouteName.games);
-            },
-            height: 400,
-          ),
-        ),
-        20.ph,
-
-        // ── Final image pair ────────────────────────
-        Row(
-          spacing: 12,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
-                height: ScreenUtils.nw() / 2,
-                label: "Inspire",
-              ),
-            ),
-            Expanded(
-              child: _ImageCardWithOverlay(
-                url: ApiUrlConst.testImgUrl(),
-                height: ScreenUtils.nw() / 2,
-                label: "Create",
-              ),
-            ),
-          ],
         ),
       ],
     );

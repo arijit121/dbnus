@@ -59,80 +59,34 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final dateStr = DateFormat('EEEE, MMM d, yyyy').format(now);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AnimatedBuilder(
-      animation: _gradientController,
-      builder: (context, child) {
-        final t = _gradientController.value;
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment(
-                -1.0 + t * 0.5,
-                -1.0 + t * 0.3,
-              ),
-              end: Alignment(
-                1.0 - t * 0.3,
-                1.0 - t * 0.5,
-              ),
-              colors: const [
-                Color(0xFF1A1D2E),
-                Color(0xFF2D3250),
-                Color(0xFF424769),
-              ],
-              stops: [
-                0.0,
-                0.4 + t * 0.2,
-                1.0,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF1A1D2E).withValues(alpha: 0.4),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-              BoxShadow(
-                color: ColorConst.violate.withValues(alpha: 0.15),
-                blurRadius: 30,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? Colors.white.withValues(alpha: 0.08) : const Color(0xFFE2E8F0),
+          width: 1,
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? const [Color(0xFF141724), Color(0xFF0F111E)]
+              : const [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? Colors.black.withValues(alpha: 0.4) : Colors.black.withValues(alpha: 0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
-          child: child,
-        );
-      },
+        ],
+      ),
       child: Stack(
         children: [
-          // Decorative circles
-          Positioned(
-            right: -20,
-            top: -20,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.04),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 30,
-            bottom: -30,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.03),
-              ),
-            ),
-          ),
-
           // Content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,24 +100,17 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [
-                          ColorConst.violate,
-                          ColorConst.sidebarSelected
+                          ColorConst.baseHexColor,
+                          ColorConst.vibrateBlue,
                         ],
                       ),
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorConst.violate.withValues(alpha: 0.4),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Center(
                       child: CustomText(
                         F.title.isNotEmpty ? F.title[0].toUpperCase() : "D",
                         color: Colors.white,
-                        size: 20,
+                        size: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -177,14 +124,15 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                           children: [
                             CustomSvgAssetImageView(
                               path: _getGreetingIcon(),
-                              color: const Color(0xFFFFD700),
-                              height: 16, width: 16,
+                              color: isDark ? const Color(0xFFFFD700) : const Color(0xFFF59E0B),
+                              height: 14,
+                              width: 14,
                             ),
                             6.pw,
                             CustomText(
                               _getGreeting(),
-                              color: Colors.white.withValues(alpha: 0.7),
-                              size: 13,
+                              color: isDark ? Colors.white.withValues(alpha: 0.7) : ColorConst.secondaryDark,
+                              size: 12,
                               fontWeight: FontWeight.w500,
                             ),
                           ],
@@ -192,15 +140,15 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                         4.ph,
                         CustomText(
                           context.l10n.hello_world,
-                          color: Colors.white,
-                          size: 22,
+                          color: isDark ? Colors.white : ColorConst.primaryDark,
+                          size: 20,
                           fontWeight: FontWeight.w700,
                         ),
                       ],
                     ),
                   ),
 
-                  // Counter button
+                  // Counter buttons in a sleek column
                   Column(
                     children: [
                       ValueListenableBuilder<int>(
@@ -214,7 +162,7 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                           );
                         },
                       ),
-
+                      8.ph,
                       BlocBuilder<DashboardBloc, DashboardState>(
                         builder: (BuildContext context, DashboardState state) {
                           final value = state.counter.value ?? 0;
@@ -233,26 +181,29 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
               16.ph,
               // Date and flavor info row
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(10),
+                  color: isDark ? Colors.white.withValues(alpha: 0.04) : const Color(0xFFF1F5F9),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isDark ? Colors.white.withValues(alpha: 0.04) : const Color(0xFFE2E8F0),
+                    width: 0.5,
+                  ),
                 ),
                 child: Wrap(
                   runSpacing: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomSvgAssetImageView(
                       path: AssetsConst.featherCalendar,
-                      color: Colors.white.withValues(alpha: 0.5),
-                      height: 14, width: 14,
+                      color: isDark ? Colors.white.withValues(alpha: 0.5) : ColorConst.secondaryDark,
+                      height: 14,
+                      width: 14,
                     ),
                     8.pw,
                     CustomText(
                       dateStr,
-                      color: Colors.white.withValues(alpha: 0.6),
+                      color: isDark ? Colors.white.withValues(alpha: 0.7) : ColorConst.secondaryDark,
                       size: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -261,15 +212,16 @@ class _WelcomeHeaderState extends State<WelcomeHeader>
                       width: 4,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: isDark ? Colors.white.withValues(alpha: 0.3) : ColorConst.lightGrey,
                         shape: BoxShape.circle,
                       ),
                     ),
                     16.pw,
                     CustomText(
                       "${F.title} • ${F.name}",
-                      color: Colors.white.withValues(alpha: 0.5),
+                      color: isDark ? Colors.white.withValues(alpha: 0.5) : ColorConst.secondaryDark.withValues(alpha: 0.8),
                       size: 12,
+                      fontWeight: FontWeight.w500,
                     ),
                   ],
                 ),
@@ -305,9 +257,9 @@ class _AnimatedCounterButtonState extends State<_AnimatedCounterButton>
     super.initState();
     _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 100),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.9).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.easeInOut),
     );
   }
@@ -320,6 +272,8 @@ class _AnimatedCounterButtonState extends State<_AnimatedCounterButton>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTapDown: (_) => _scaleController.forward(),
       onTapUp: (_) {
@@ -336,29 +290,30 @@ class _AnimatedCounterButtonState extends State<_AnimatedCounterButton>
           );
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.white.withValues(alpha: 0.15),
-                Colors.white.withValues(alpha: 0.08),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(12),
+            color: isDark ? Colors.white.withValues(alpha: 0.06) : const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: isDark ? Colors.white.withValues(alpha: 0.08) : const Color(0xFFE2E8F0),
+              width: 1,
             ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CustomSvgAssetImageView(path: AssetsConst.featherActivity, color: Colors.white, height: 16, width: 16),
+              CustomSvgAssetImageView(
+                path: AssetsConst.featherActivity,
+                color: isDark ? Colors.white : ColorConst.primaryDark,
+                height: 14,
+                width: 14,
+              ),
               8.pw,
               CustomText(
                 "${widget.value}",
-                color: Colors.white,
+                color: isDark ? Colors.white : ColorConst.primaryDark,
                 fontWeight: FontWeight.w600,
-                size: 16,
+                size: 14,
               ),
             ],
           ),

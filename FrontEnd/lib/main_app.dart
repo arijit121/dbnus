@@ -215,7 +215,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: LocalizationUtils.supportedLocales,
             title: TextUtils.appTitle,
-            themeMode: ThemeMode.system,
+            themeMode: ThemeMode.light,
             theme: ThemeConst.theme,
             darkTheme: ThemeConst.darkTheme,
             routerConfig: RouterManager.getInstance.router,

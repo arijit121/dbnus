@@ -139,7 +139,7 @@ class _MyWebAppState extends State<MyWebApp> {
                 PointerDeviceKind.unknown
               },
             ),
-            themeMode: ThemeMode.system,
+            themeMode: ThemeMode.light,
             theme: ThemeConst.theme,
             darkTheme: ThemeConst.darkTheme,
             routerConfig: RouterManager.getInstance.router,

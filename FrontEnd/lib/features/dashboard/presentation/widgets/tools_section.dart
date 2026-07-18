@@ -120,20 +120,25 @@ class ToolsSection extends StatelessWidget {
       ),
     ];
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final cardBg = isDark ? const Color(0xFF131520) : Colors.white;
+
     return Container(
       decoration: BoxDecoration(
-        color: ColorConst.cardBg,
-        borderRadius: BorderRadius.circular(18),
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: borderColor,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(
-          color: Colors.black.withValues(alpha: 0.04),
-        ),
       ),
       child: Column(
         children: [
@@ -145,8 +150,8 @@ class ToolsSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: ColorConst.violate.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    color: ColorConst.violate.withOpacity(isDark ? 0.15 : 0.08),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: const CustomSvgAssetImageView(
                       path: AssetsConst.featherLayers,
@@ -158,32 +163,34 @@ class ToolsSection extends StatelessWidget {
                 CustomText(
                   "${tools.length} tools available",
                   size: 12,
-                  color: ColorConst.secondaryDark,
+                  color: isDark ? const Color(0xFF94A3B8) : ColorConst.secondaryDark,
                   fontWeight: FontWeight.w500,
                 ),
               ],
             ),
           ),
-          const Divider(height: 1, color: ColorConst.lineGrey),
+          Divider(height: 1, color: borderColor),
 
           // Tool tiles
           ...List.generate(tools.length * 2 - 1, (index) {
             if (index.isOdd) {
-              return const Divider(
-                  height: 1, indent: 60, color: ColorConst.lineGrey);
+              return Divider(
+                  height: 1, indent: 60, color: borderColor);
             }
-            return _buildToolTile(tools[index ~/ 2]);
+            return _buildToolTile(context, tools[index ~/ 2]);
           }),
         ],
       ),
     );
   }
 
-  Widget _buildToolTile(_ToolItem tool) {
+  Widget _buildToolTile(BuildContext context, _ToolItem tool) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
         onTap: tool.onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -193,15 +200,15 @@ class ToolsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: tool.color.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
+                  color: tool.color.withOpacity(isDark ? 0.15 : 0.08),
+                  borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: tool.color.withValues(alpha: 0.2),
-                    width: 1.5,
+                    color: tool.color.withOpacity(0.2),
+                    width: 1,
                   ),
                 ),
                 child: CustomSvgAssetImageView(
-                    path: tool.icon, color: tool.color, height: 20, width: 20),
+                    path: tool.icon, color: tool.color, height: 18, width: 18),
               ),
               14.pw,
               Expanded(
@@ -215,7 +222,7 @@ class ToolsSection extends StatelessWidget {
                             tool.title,
                             fontWeight: FontWeight.w600,
                             size: 14,
-                            color: ColorConst.primaryDark,
+                            color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -226,7 +233,7 @@ class ToolsSection extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: tool.color.withValues(alpha: 0.1),
+                            color: tool.color.withOpacity(isDark ? 0.15 : 0.08),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: CustomText(
@@ -238,11 +245,11 @@ class ToolsSection extends StatelessWidget {
                         ),
                       ],
                     ),
-                    3.ph,
+                    4.ph,
                     CustomText(
                       tool.subtitle,
                       size: 12,
-                      color: ColorConst.secondaryDark,
+                      color: isDark ? const Color(0xFF94A3B8) : ColorConst.secondaryDark,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -253,12 +260,16 @@ class ToolsSection extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: ColorConst.lineGrey,
+                  color: isDark ? Colors.white.withOpacity(0.04) : const Color(0xFFF1F5F9),
                   borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: borderColor,
+                    width: 1,
+                  ),
                 ),
-                child: const CustomSvgAssetImageView(
+                child: CustomSvgAssetImageView(
                     path: AssetsConst.featherChevronRight,
-                    color: ColorConst.secondaryDark,
+                    color: isDark ? Colors.white.withOpacity(0.3) : ColorConst.secondaryDark.withOpacity(0.5),
                     height: 14,
                     width: 14),
               ),

@@ -11,53 +11,56 @@ class OrderHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final cardBg = isDark ? const Color(0xFF131520) : Colors.white;
+    final accentColor = const Color(0xFF0EA5E9); // Modern sky blue accent
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            ColorConst.deepBlue,
-            ColorConst.lightBlue,
-          ],
-        ),
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
-            color: ColorConst.deepBlue.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
+              color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: const CustomSvgAssetImageView(path: AssetsConst.featherShoppingBag,
-                color: Colors.white, height: 24, width: 24),
+            child: CustomSvgAssetImageView(
+              path: AssetsConst.featherShoppingBag,
+              color: accentColor,
+              height: 22,
+              width: 22,
+            ),
           ),
           16.pw,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomText(
-                  "Orders",
-                  color: Colors.white,
+                CustomText(
+                  "Order Management",
+                  color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
                   fontWeight: FontWeight.w700,
-                  size: 22,
+                  size: 18,
                 ),
                 4.ph,
-                const CustomText(
-                  "Manage orders, notifications & tools",
-                  color: Colors.white70,
+                CustomText(
+                  "Track transactions, configure notifications, print bills & run web tests.",
+                  color: isDark ? const Color(0xFF94A3B8) : ColorConst.secondaryDark,
                   size: 13,
                 ),
               ],

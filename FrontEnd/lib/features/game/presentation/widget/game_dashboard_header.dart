@@ -10,21 +10,23 @@ class GameDashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0);
+    final cardBg = isDark ? const Color(0xFF131520) : Colors.white;
+    final accentColor = const Color(0xFF6C63FF); // Violet accent for Game Center
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF1A1D2E), Color(0xFF2D3250)],
-        ),
+        color: cardBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
-            color: ColorConst.sidebarBg.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -33,49 +35,59 @@ class GameDashboardHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(14),
+              color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: const CustomSvgAssetImageView(path: AssetsConst.featherZap, color: Colors.white, height: 26, width: 26),
+            child: CustomSvgAssetImageView(
+              path: AssetsConst.featherZap,
+              color: accentColor,
+              height: 22,
+              width: 22,
+            ),
           ),
           16.pw,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const CustomText(
+                CustomText(
                   'Game Center',
-                  color: Colors.white,
+                  color: isDark ? const Color(0xFFF8FAFC) : ColorConst.primaryDark,
                   fontWeight: FontWeight.w700,
-                  size: 22,
+                  size: 18,
                 ),
                 4.ph,
                 CustomText(
-                  'Choose a game and have fun!',
-                  color: Colors.white.withValues(alpha: 0.7),
+                  'Choose a game and test your skills!',
+                  color: isDark ? const Color(0xFF94A3B8) : ColorConst.secondaryDark,
                   size: 13,
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF6C63FF).withValues(alpha: 0.2),
+              color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                  color: const Color(0xFF6C63FF).withValues(alpha: 0.3)),
+              border: Border.all(color: accentColor.withOpacity(isDark ? 0.3 : 0.15)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CustomSvgAssetImageView(path: AssetsConst.featherGrid,
-                    color: Color(0xFF6C63FF), height: 14, width: 14),
+                CustomSvgAssetImageView(
+                  path: AssetsConst.featherGrid,
+                  color: accentColor,
+                  height: 12,
+                  width: 12,
+                ),
                 6.pw,
-                const CustomText('6',
-                    color: Color(0xFF6C63FF),
-                    fontWeight: FontWeight.w700,
-                    size: 14),
+                CustomText(
+                  '8', // updated from 6 since there are 8 games in the grid
+                  color: accentColor,
+                  fontWeight: FontWeight.w700,
+                  size: 13,
+                ),
               ],
             ),
           ),

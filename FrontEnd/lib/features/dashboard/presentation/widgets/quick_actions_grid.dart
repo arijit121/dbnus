@@ -134,7 +134,7 @@ class _QuickActionCardState extends State<_QuickActionCard>
       vsync: this,
       duration: const Duration(milliseconds: 120),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
@@ -147,6 +147,9 @@ class _QuickActionCardState extends State<_QuickActionCard>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final accentColor = widget.action.gradient.first;
+
     return GestureDetector(
       onTapDown: (_) => _controller.forward(),
       onTapUp: (_) {
@@ -164,110 +167,81 @@ class _QuickActionCardState extends State<_QuickActionCard>
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: widget.action.gradient,
+            color: isDark ? const Color(0xFF131520) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0),
+              width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.action.gradient.first.withValues(alpha: 0.35),
-                blurRadius: 14,
-                offset: const Offset(0, 6),
+                color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              // Decorative circles for depth/texture
-              Positioned(
-                right: -15,
-                top: -15,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.08),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Icon with subtle matching tint background
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: accentColor.withOpacity(isDark ? 0.15 : 0.08),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: CustomSvgAssetImageView(
+                      path: widget.action.icon,
+                      color: accentColor,
+                      height: 18,
+                      width: 18,
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                right: 20,
-                bottom: -10,
-                child: Container(
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.06),
-                  ),
-                ),
-              ),
 
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Label + subtitle + chevron row
+                Row(
                   children: [
-                    // Icon with glow
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withValues(alpha: 0.1),
-                            blurRadius: 8,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            widget.action.label,
+                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                            fontWeight: FontWeight.w600,
+                            size: 13,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          4.ph,
+                          CustomText(
+                            widget.action.subtitle,
+                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                            fontWeight: FontWeight.w400,
+                            size: 11,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
-                      child: CustomSvgAssetImageView(path: widget.action.icon,
-                          color: Colors.white, height: 20, width: 20),
                     ),
-
-                    // Label + subtitle + chevron row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                widget.action.label,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                size: 13,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              2.ph,
-                              CustomText(
-                                widget.action.subtitle,
-                                color: Colors.white.withValues(alpha: 0.7),
-                                fontWeight: FontWeight.w400,
-                                size: 11,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                        CustomSvgAssetImageView(
-                          path: AssetsConst.featherArrowRight,
-                          color: Colors.white.withValues(alpha: 0.5),
-                          height: 14, width: 14,
-                        ),
-                      ],
+                    CustomSvgAssetImageView(
+                      path: AssetsConst.featherArrowRight,
+                      color: isDark ? Colors.white.withOpacity(0.3) : ColorConst.secondaryDark.withOpacity(0.4),
+                      height: 14,
+                      width: 14,
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

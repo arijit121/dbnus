@@ -104,68 +104,134 @@ class _DashBoardPageState extends State<DashBoardPage>
               child: SmoothScroll(
                 primary: false,
                 children: [
-                  // Consistent horizontal padding for all sections
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Column(
-                      children: [
-                        // ── Welcome Header ──────────────────────────────
-                        _staggeredItem(0, WelcomeHeader(counter: counter)),
-                        28.ph,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final isWide = constraints.maxWidth > 700;
+                        if (isWide) {
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Left Column: Core features
+                              Expanded(
+                                flex: 5,
+                                child: Column(
+                                  children: [
+                                    _staggeredItem(0, WelcomeHeader(counter: counter)),
+                                    24.ph,
+                                    _staggeredItem(
+                                      1,
+                                      const SectionTitle(
+                                          title: "Quick Actions",
+                                          icon: AssetsConst.featherZap),
+                                    ),
+                                    12.ph,
+                                    _staggeredItem(2, const QuickActionsGrid()),
+                                    24.ph,
+                                    _staggeredItem(
+                                      3,
+                                      const SectionTitle(
+                                          title: "Tools & Utilities",
+                                          icon: AssetsConst.featherTool),
+                                    ),
+                                    12.ph,
+                                    _staggeredItem(4, const ToolsSection()),
+                                    24.ph,
+                                  ],
+                                ),
+                              ),
+                              24.pw,
+                              // Right Column: Side features
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  children: [
+                                    _staggeredItem(
+                                      5,
+                                      const SectionTitle(
+                                          title: "Payment Gateway",
+                                          icon: AssetsConst.featherCreditCard),
+                                    ),
+                                    12.ph,
+                                    _staggeredItem(
+                                      6,
+                                      PaymentSection(
+                                        amountController: _amountController,
+                                        midController: _midController,
+                                        orderIdController: _orderIdController,
+                                        txnTokenController: _txnTokenController,
+                                      ),
+                                    ),
+                                    24.ph,
+                                    _staggeredItem(
+                                      7,
+                                      const SectionTitle(
+                                          title: "Media Gallery",
+                                          icon: AssetsConst.featherImage),
+                                    ),
+                                    12.ph,
+                                    const MediaSection(),
+                                    24.ph,
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }
 
-                        // ── Quick Actions ───────────────────────────────
-                        _staggeredItem(
-                          1,
-                          const SectionTitle(
-                              title: "Quick Actions",
-                              icon: AssetsConst.featherZap),
-                        ),
-                        14.ph,
-                        _staggeredItem(2, const QuickActionsGrid()),
-                        28.ph,
-
-                        // ── Tools & Utilities ───────────────────────────
-                        _staggeredItem(
-                          3,
-                          const SectionTitle(
-                              title: "Tools & Utilities",
-                              icon: AssetsConst.featherTool),
-                        ),
-                        14.ph,
-                        _staggeredItem(4, const ToolsSection()),
-                        28.ph,
-
-                        // ── Payment Gateway ─────────────────────────────
-                        _staggeredItem(
-                          5,
-                          const SectionTitle(
-                              title: "Payment Gateway",
-                              icon: AssetsConst.featherCreditCard),
-                        ),
-                        14.ph,
-                        _staggeredItem(
-                          6,
-                          PaymentSection(
-                            amountController: _amountController,
-                            midController: _midController,
-                            orderIdController: _orderIdController,
-                            txnTokenController: _txnTokenController,
-                          ),
-                        ),
-                        28.ph,
-
-                        // ── Media Gallery ───────────────────────────────
-                        _staggeredItem(
-                          7,
-                          const SectionTitle(
-                              title: "Media Gallery",
-                              icon: AssetsConst.featherImage),
-                        ),
-                        14.ph,
-                        // Media is typically long, no stagger needed
-                        const MediaSection(),
-                        28.ph,
-                      ],
+                        // Mobile/Narrow screen column layout
+                        return Column(
+                          children: [
+                            _staggeredItem(0, WelcomeHeader(counter: counter)),
+                            24.ph,
+                            _staggeredItem(
+                              1,
+                              const SectionTitle(
+                                  title: "Quick Actions",
+                                  icon: AssetsConst.featherZap),
+                            ),
+                            12.ph,
+                            _staggeredItem(2, const QuickActionsGrid()),
+                            24.ph,
+                            _staggeredItem(
+                              3,
+                              const SectionTitle(
+                                  title: "Tools & Utilities",
+                                  icon: AssetsConst.featherTool),
+                            ),
+                            12.ph,
+                            _staggeredItem(4, const ToolsSection()),
+                            24.ph,
+                            _staggeredItem(
+                              5,
+                              const SectionTitle(
+                                  title: "Payment Gateway",
+                                  icon: AssetsConst.featherCreditCard),
+                            ),
+                            12.ph,
+                            _staggeredItem(
+                              6,
+                              PaymentSection(
+                                amountController: _amountController,
+                                midController: _midController,
+                                orderIdController: _orderIdController,
+                                txnTokenController: _txnTokenController,
+                              ),
+                            ),
+                            24.ph,
+                            _staggeredItem(
+                              7,
+                              const SectionTitle(
+                                  title: "Media Gallery",
+                                  icon: AssetsConst.featherImage),
+                            ),
+                            12.ph,
+                            const MediaSection(),
+                            24.ph,
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ],

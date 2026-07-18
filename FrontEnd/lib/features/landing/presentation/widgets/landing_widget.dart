@@ -50,14 +50,13 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
   Widget _buildCollapsedRail() {
     return Container(
       width: 64,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF1A1D2E),
-            Color(0xFF15172A),
-          ],
+      decoration: BoxDecoration(
+        color: ColorConst.sidebarBg,
+        border: Border(
+          right: BorderSide(
+            color: Colors.white.withOpacity(0.04),
+            width: 1,
+          ),
         ),
       ),
       child: Column(
@@ -149,24 +148,19 @@ class _DrawerNavigationRailState extends State<DrawerNavigationRail> {
       width: widget.withTitle == true ? 220 : null,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF1A1D2E),
-            Color(0xFF15172A),
-            Color(0xFF1A1D2E),
-          ],
-          stops: [0.0, 0.5, 1.0],
+        color: ColorConst.sidebarBg,
+        border: Border(
+          right: BorderSide(
+            color: Colors.white.withOpacity(0.04),
+            width: 1,
+          ),
         ),
-        borderRadius:
-            const BorderRadius.only(topRight: Radius.circular(20.0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 16.0,
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 10.0,
             spreadRadius: 1.0,
-            offset: const Offset(2, 0),
+            offset: const Offset(1, 0),
           ),
         ],
       ),
