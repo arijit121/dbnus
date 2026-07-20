@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart'
-    deferred as connectivity_plus;
+import 'package:connectivity_plus/connectivity_plus.dart' as connectivity_plus;
 import 'package:flutter/foundation.dart';
 
 import '../../services/JsService/provider/js_provider.dart';
@@ -43,7 +42,6 @@ class ConnectionStatus {
     if (_isInitialized) return;
 
     _isInitialized = true;
-    await connectivity_plus.loadLibrary();
     _connectivitySubscription =
         connectivity_plus.Connectivity().onConnectivityChanged.listen((_) {
       _checkOnline();
@@ -122,7 +120,6 @@ class ConnectionStatus {
   }
 
   Future<String> getNetworkInfo() async {
-    await connectivity_plus.loadLibrary();
     final connectivity = connectivity_plus.Connectivity();
     final connectivityResult = await connectivity.checkConnectivity();
     return connectivityResult.first.name;
