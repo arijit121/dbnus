@@ -84,7 +84,15 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFFE74C3C), const Color(0xFFC0392B)],
         routeName: RouteName.ludoGame,
       ),
+      GameEntry(
+        title: 'Cyber Tube 3D',
+        subtitle: 'Neon 3D Tunnel Runner',
+        icon: Icons.directions_run_rounded,
+        gradient: [const Color(0xFF00F0FF), const Color(0xFFFF007F)],
+        routeName: RouteName.cyberRunner,
+      ),
     ];
+
 
     return LayoutBuilder(builder: (context, constraints) {
       int crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;

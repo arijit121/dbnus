@@ -36,6 +36,8 @@ import 'package:dbnus/features/game/presentation/pages/gravity_orbit_game.dart'
     deferred as gravity_orbit;
 import 'package:dbnus/features/game/presentation/pages/ludo_game.dart'
     deferred as ludo_game;
+import 'package:dbnus/features/game/presentation/pages/three_js_game.dart'
+    deferred as cyber_runner;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
@@ -298,6 +300,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await ludo_game.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.cyberRunner,
+        path: RouteName.cyberRunner,
+        builder: (BuildContext context, GoRouterState state) {
+          return cyber_runner.CyberRunnerPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await cyber_runner.loadLibrary();
           return null;
         },
       ),
