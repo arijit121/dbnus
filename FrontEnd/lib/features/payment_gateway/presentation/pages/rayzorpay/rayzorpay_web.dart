@@ -92,17 +92,14 @@ class _RayzorPayState extends State<RayzorPay> {
       AppLog.i(json.encode(resultMap), tag: "resultMap");
 
       if (resultMap?['success'].toString() == "true") {
-        var successReturnBody = {"PayMent_STATUS": "TXN_SUCCESS"};
-        // onPaymentSuccess?.call(paymentResult);
-        // var successReturnBody = {
-        //   "razorpay_payment_id": response.paymentId,
-        //   "razorpay_signature": response.signature,
-        //   "razorpay_order_id": response.orderId,
-        //   "receipt": widget.razorpayMerchantDetails.receipt,
-        //   "amount": widget.razorpayMerchantDetails.amount,
-        //   "PayMent_STATUS": "TXN_SUCCESS"
-        // };
-        //
+        var successReturnBody = {
+          "razorpay_payment_id": resultMap?['razorpay_payment_id'],
+          "razorpay_signature": resultMap?['razorpay_signature'],
+          "razorpay_order_id": resultMap?['razorpay_order_id'],
+          "receipt": widget.razorpayMerchantDetails.receipt,
+          "amount": widget.razorpayMerchantDetails.amount,
+          "PayMent_STATUS": "TXN_SUCCESS"
+        };
         BuildContext context = CurrentContext().context;
         if (context.mounted) {
           Navigator.of(context).pop(successReturnBody);
