@@ -72,9 +72,37 @@ class FormsSection extends StatelessWidget {
 
               await Future.delayed(const Duration(milliseconds: 200));
               AppLog.i(query, tag: "Check Debouncer");
-              return ['apple', 'banana', 'cherry']
-                  .where((s) => s.contains(query.text.toLowerCase()))
-                  .toList();
+              return query.text.trim().isNotEmpty
+                  ? ([
+                      "apple",
+                      "banana",
+                      "cherry",
+                      "date",
+                      "elderberry",
+                      "fig",
+                      "grape",
+                      "honeydew",
+                      "kiwi",
+                      "lemon",
+                      "mango",
+                      "nectarine",
+                      "orange",
+                      "papaya",
+                      "quince",
+                      "raspberry",
+                      "strawberry",
+                      "tangerine",
+                      "ugli_fruit",
+                      "vanilla_bean",
+                      "watermelon",
+                      "xigua",
+                      "yuzu",
+                      "zucchini",
+                      "apricot"
+                    ]
+                      .where((s) => s.contains(query.text.trim().toLowerCase()))
+                      .toList())
+                  : <String>[];
             },
             optionsViewBuilder: (ctx, onSelected, options) => Align(
               alignment: Alignment.topLeft,
