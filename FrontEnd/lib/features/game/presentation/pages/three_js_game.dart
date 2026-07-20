@@ -4,18 +4,50 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:three_js/three_js.dart' as three;
+import '../../../../core/services/JsService/provider/js_provider.dart';
 import '../../../../navigation/custom_router/custom_route.dart';
+import '../../../../shared/ui/atoms/indicators/loading_widget.dart';
 import '../../../../shared/ui/atoms/text/custom_text.dart';
 import '../../../../shared/ui/atoms/buttons/custom_button.dart';
 
-class CyberRunnerPage extends StatefulWidget {
+class CyberRunnerPage extends StatelessWidget {
   const CyberRunnerPage({super.key});
 
   @override
-  State<CyberRunnerPage> createState() => _CyberRunnerPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: FutureBuilder(
+            future: JsProvider.loadJs(
+              jsPath:
+                  "https://cdn.jsdelivr.net/gh/Knightro63/flutter_angle/assets/gles_bindings.js",
+            ),
+            builder: (context, asyncSnapshot) {
+              if (asyncSnapshot.connectionState == ConnectionState.done) {
+                return const CyberRunnerPageData();
+              } else if (asyncSnapshot.hasError) {
+                return Center(
+                  child: CustomText('Error loading JS: ${asyncSnapshot.error}'),
+                );
+              } else {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+            }),
+      ),
+    );
+  }
 }
 
-class _CyberRunnerPageState extends State<CyberRunnerPage> {
+class CyberRunnerPageData extends StatefulWidget {
+  const CyberRunnerPageData({super.key});
+
+  @override
+  State<CyberRunnerPageData> createState() => _CyberRunnerPageDataState();
+}
+
+class _CyberRunnerPageDataState extends State<CyberRunnerPageData> {
   late three.ThreeJS threeJs;
 
   // Game Parameters
@@ -68,7 +100,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
   Future<void> setup() async {
     try {
       // 1. Camera
-      threeJs.camera = three.PerspectiveCamera(65, threeJs.width / threeJs.height, 0.1, 1000);
+      threeJs.camera = three.PerspectiveCamera(
+          65, threeJs.width / threeJs.height, 0.1, 1000);
       threeJs.camera.position.setValues(0, 0, 8);
       threeJs.camera.lookAt(three.Vector3(0, 0, -20));
 
@@ -89,7 +122,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
       threeJs.scene.add(pointLight);
 
       // 4. Tunnel
-      final geomTube = three.CylinderGeometry(tubeRadius, tubeRadius, tubeLength, 24, 60, true);
+      final geomTube = three.CylinderGeometry(
+          tubeRadius, tubeRadius, tubeLength, 24, 60, true);
       geomTube.rotateX(math.pi / 2);
       geomTube.translate(0, 0, -tubeLength / 2);
 
@@ -128,7 +162,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
         starSpeeds[i] = 1.0 + random.nextDouble() * 2.5;
       }
 
-      starGeometry.setAttributeFromString('position', three.Float32BufferAttribute(starPositions, 3));
+      starGeometry.setAttributeFromString(
+          'position', three.Float32BufferAttribute(starPositions, 3));
       final starMaterial = three.PointsMaterial.fromMap({
         'color': 0xffffff,
         'size': 0.25,
@@ -156,11 +191,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
 
       // Wings
       final wingGeom = three.BoxGeometry(0.8, 0.06, 0.4);
-      final matWing = three.MeshPhongMaterial.fromMap({
-        'color': 0x00f0ff,
-        'emissive': 0x0066aa,
-        'flatShading': true
-      });
+      final matWing = three.MeshPhongMaterial.fromMap(
+          {'color': 0x00f0ff, 'emissive': 0x0066aa, 'flatShading': true});
       final leftWing = three.Mesh(wingGeom, matWing);
       leftWing.position.setValues(-0.4, -0.05, 0.15);
       leftWing.rotation.y = -0.1;
@@ -175,11 +207,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
       // Flame
       final flameGeom = three.ConeGeometry(0.12, 0.5, 4);
       flameGeom.rotateX(-math.pi / 2);
-      final matFlame = three.MeshBasicMaterial.fromMap({
-        'color': 0xfff600,
-        'transparent': true,
-        'opacity': 0.8
-      });
+      final matFlame = three.MeshBasicMaterial.fromMap(
+          {'color': 0xfff600, 'transparent': true, 'opacity': 0.8});
       final flameMesh = three.Mesh(flameGeom, matFlame);
       flameMesh.position.setValues(0, 0, 0.5);
       flameMesh.name = "engineFlame";
@@ -265,15 +294,20 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
     innerGridTube.rotation.z += 0.08 * dt;
 
     // Banking Camera
-    threeJs.camera.position.x = threeJs.camera.position.x + (playerGroup.position.x * 0.12 - threeJs.camera.position.x) * 0.1;
-    threeJs.camera.position.y = threeJs.camera.position.y + (playerGroup.position.y * 0.12 - threeJs.camera.position.y) * 0.1;
-    threeJs.camera.lookAt(three.Vector3(playerGroup.position.x * 0.3, playerGroup.position.y * 0.3, -25));
+    threeJs.camera.position.x = threeJs.camera.position.x +
+        (playerGroup.position.x * 0.12 - threeJs.camera.position.x) * 0.1;
+    threeJs.camera.position.y = threeJs.camera.position.y +
+        (playerGroup.position.y * 0.12 - threeJs.camera.position.y) * 0.1;
+    threeJs.camera.lookAt(three.Vector3(
+        playerGroup.position.x * 0.3, playerGroup.position.y * 0.3, -25));
 
     // engineFlame pulse scale
     final flame = playerGroup.getObjectByName("engineFlame");
     if (flame != null) {
-      flame.scale.y = 0.8 + math.sin(DateTime.now().millisecondsSinceEpoch * 0.05) * 0.3;
-      flame.scale.x = 0.9 + math.cos(DateTime.now().millisecondsSinceEpoch * 0.05) * 0.1;
+      flame.scale.y =
+          0.8 + math.sin(DateTime.now().millisecondsSinceEpoch * 0.05) * 0.3;
+      flame.scale.x =
+          0.9 + math.cos(DateTime.now().millisecondsSinceEpoch * 0.05) * 0.1;
     }
 
     // Spawning timer
@@ -381,7 +415,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
         'shininess': 30
       });
       final obs = three.Mesh(geom, mat);
-      obs.position.setValues(math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
+      obs.position.setValues(
+          math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
       obs.rotation.set(random.nextDouble(), random.nextDouble(), angle);
       obs.userData = {'angle': angle};
       threeJs.scene.add(obs);
@@ -389,26 +424,22 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
     } else if (roll < 0.9) {
       // Spawn score crystal (Cyan Octahedron)
       final geom = three.OctahedronGeometry(0.35, 0);
-      final mat = three.MeshPhongMaterial.fromMap({
-        'color': 0x00ffcc,
-        'emissive': 0x006655,
-        'shininess': 90
-      });
+      final mat = three.MeshPhongMaterial.fromMap(
+          {'color': 0x00ffcc, 'emissive': 0x006655, 'shininess': 90});
       final cry = three.Mesh(geom, mat);
-      cry.position.setValues(math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
+      cry.position.setValues(
+          math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
       cry.userData = {'angle': angle, 'type': 0};
       threeJs.scene.add(cry);
       collectibles.add(cry);
     } else {
       // Spawn repair sphere (Gold Dodecahedron)
       final geom = three.DodecahedronGeometry(0.3, 0);
-      final mat = three.MeshPhongMaterial.fromMap({
-        'color': 0xffd700,
-        'emissive': 0x887700,
-        'shininess': 90
-      });
+      final mat = three.MeshPhongMaterial.fromMap(
+          {'color': 0xffd700, 'emissive': 0x887700, 'shininess': 90});
       final rep = three.Mesh(geom, mat);
-      rep.position.setValues(math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
+      rep.position.setValues(
+          math.cos(angle) * distance, math.sin(angle) * distance, spawnZ);
       rep.userData = {'angle': angle, 'type': 1};
       threeJs.scene.add(rep);
       collectibles.add(rep);
@@ -421,13 +452,17 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
       autofocus: true,
       onKeyEvent: (node, event) {
         final isDown = event is KeyDownEvent || event is KeyRepeatEvent;
-        if (event.logicalKey == LogicalKeyboardKey.arrowLeft || event.logicalKey == LogicalKeyboardKey.keyA) {
+        if (event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+            event.logicalKey == LogicalKeyboardKey.keyA) {
           keyLeft = isDown;
         }
-        if (event.logicalKey == LogicalKeyboardKey.arrowRight || event.logicalKey == LogicalKeyboardKey.keyD) {
+        if (event.logicalKey == LogicalKeyboardKey.arrowRight ||
+            event.logicalKey == LogicalKeyboardKey.keyD) {
           keyRight = isDown;
         }
-        if (event.logicalKey == LogicalKeyboardKey.space && !gameRunning && !showGameOver) {
+        if (event.logicalKey == LogicalKeyboardKey.space &&
+            !gameRunning &&
+            !showGameOver) {
           startGame();
         }
         return KeyEventResult.handled;
@@ -452,9 +487,13 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.error_outline, color: Color(0xFFFF007F), size: 48),
+                                const Icon(Icons.error_outline,
+                                    color: Color(0xFFFF007F), size: 48),
                                 const SizedBox(height: 16),
-                                CustomText('Engine Error: $_initError', color: Colors.white, size: 14, textAlign: TextAlign.center),
+                                CustomText('Engine Error: $_initError',
+                                    color: Colors.white,
+                                    size: 14,
+                                    textAlign: TextAlign.center),
                                 const SizedBox(height: 24),
                                 CustomGOEButton(
                                   onPressed: () {
@@ -465,7 +504,9 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                                     setup();
                                   },
                                   backGroundColor: const Color(0xFFFF007F),
-                                  child: const CustomText('Retry', color: Colors.white, fontWeight: FontWeight.bold),
+                                  child: const CustomText('Retry',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -474,10 +515,14 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00F0FF)),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Color(0xFF00F0FF)),
                               ),
                               SizedBox(height: 16),
-                              CustomText('Initializing 3D Engines...', color: Color(0xFF8B8BA7), size: 14, fontWeight: FontWeight.bold),
+                              CustomText('Initializing 3D Engines...',
+                                  color: Color(0xFF8B8BA7),
+                                  size: 14,
+                                  fontWeight: FontWeight.bold),
                             ],
                           ),
                   ),
@@ -491,7 +536,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
               right: 0,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -499,22 +545,31 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                            icon: const Icon(Icons.arrow_back_ios_new,
+                                color: Colors.white),
                             onPressed: () => CustomRoute.back(),
                           ),
                           const SizedBox(width: 10),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               color: const Color(0x990a0a19),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0x3300f0ff)),
+                              border:
+                                  Border.all(color: const Color(0x3300f0ff)),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const CustomText('SCORE', color: Color(0xFF00F0FF), size: 10, fontWeight: FontWeight.bold),
-                                CustomText('$score', color: Colors.white, size: 20, fontWeight: FontWeight.w900),
+                                const CustomText('SCORE',
+                                    color: Color(0xFF00F0FF),
+                                    size: 10,
+                                    fontWeight: FontWeight.bold),
+                                CustomText('$score',
+                                    color: Colors.white,
+                                    size: 20,
+                                    fontWeight: FontWeight.w900),
                               ],
                             ),
                           ),
@@ -530,12 +585,16 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                             decoration: BoxDecoration(
                               color: const Color(0x990a0a19),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0x33ff007f)),
+                              border:
+                                  Border.all(color: const Color(0x33ff007f)),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const CustomText('SHIELDS', color: Color(0xFFFF007F), size: 10, fontWeight: FontWeight.bold),
+                                const CustomText('SHIELDS',
+                                    color: Color(0xFFFF007F),
+                                    size: 10,
+                                    fontWeight: FontWeight.bold),
                                 const SizedBox(height: 4),
                                 Container(
                                   width: 120,
@@ -549,11 +608,15 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                                     duration: const Duration(milliseconds: 200),
                                     width: 120 * (shield / 100),
                                     decoration: BoxDecoration(
-                                      gradient: const LinearGradient(colors: [Color(0xFFFF007F), Color(0xFFFF00FF)]),
+                                      gradient: const LinearGradient(colors: [
+                                        Color(0xFFFF007F),
+                                        Color(0xFFFF00FF)
+                                      ]),
                                       borderRadius: BorderRadius.circular(4),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFFF007F).withValues(alpha: 0.8),
+                                          color: const Color(0xFFFF007F)
+                                              .withValues(alpha: 0.8),
                                           blurRadius: 8,
                                         ),
                                       ],
@@ -564,7 +627,10 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          CustomText('x${speedMultiplier.toStringAsFixed(1)}', color: const Color(0xFFFF007F), size: 14, fontWeight: FontWeight.bold),
+                          CustomText('x${speedMultiplier.toStringAsFixed(1)}',
+                              color: const Color(0xFFFF007F),
+                              size: 14,
+                              fontWeight: FontWeight.bold),
                         ],
                       ),
                     ],
@@ -611,7 +677,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                       decoration: BoxDecoration(
                         color: const Color(0xDD0f0f23),
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: const Color(0x6600f0ff), width: 2),
+                        border: Border.all(
+                            color: const Color(0x6600f0ff), width: 2),
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0x3300f0ff),
@@ -622,31 +689,52 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const CustomText('Cyber Tube 3D', color: Colors.white, size: 28, fontWeight: FontWeight.w900),
+                          const CustomText('Cyber Tube 3D',
+                              color: Colors.white,
+                              size: 28,
+                              fontWeight: FontWeight.w900),
                           const SizedBox(height: 8),
-                          const CustomText('Neon 3D Tunnel Runner', color: Color(0xFF8B8BA7), size: 14, fontWeight: FontWeight.bold),
+                          const CustomText('Neon 3D Tunnel Runner',
+                              color: Color(0xFF8B8BA7),
+                              size: 14,
+                              fontWeight: FontWeight.bold),
                           const SizedBox(height: 24),
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.03),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                              border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.05)),
                             ),
                             child: const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CustomText('🚀 Dodge neon obstacles', color: Color(0xFFA4A4C1), size: 12),
+                                CustomText('🚀 Dodge neon obstacles',
+                                    color: Color(0xFFA4A4C1), size: 12),
                                 SizedBox(height: 6),
-                                CustomText('💎 Collect cyan crystals for points', color: Color(0xFFA4A4C1), size: 12),
+                                CustomText(
+                                    '💎 Collect cyan crystals for points',
+                                    color: Color(0xFFA4A4C1),
+                                    size: 12),
                                 SizedBox(height: 6),
-                                CustomText('🛠️ Collect golden spheres to repair shields', color: Color(0xFFA4A4C1), size: 12),
+                                CustomText(
+                                    '🛠️ Collect golden spheres to repair shields',
+                                    color: Color(0xFFA4A4C1),
+                                    size: 12),
                                 SizedBox(height: 12),
-                                CustomText('Controls:', color: Color(0xFF00F0FF), size: 12, fontWeight: FontWeight.bold),
+                                CustomText('Controls:',
+                                    color: Color(0xFF00F0FF),
+                                    size: 12,
+                                    fontWeight: FontWeight.bold),
                                 SizedBox(height: 4),
-                                CustomText('💻 PC: LEFT/RIGHT Arrows or A/D', color: Color(0xFFA4A4C1), size: 12),
+                                CustomText('💻 PC: LEFT/RIGHT Arrows or A/D',
+                                    color: Color(0xFFA4A4C1), size: 12),
                                 SizedBox(height: 4),
-                                CustomText('📱 Mobile: Tap and hold sides of screen', color: Color(0xFFA4A4C1), size: 12),
+                                CustomText(
+                                    '📱 Mobile: Tap and hold sides of screen',
+                                    color: Color(0xFFA4A4C1),
+                                    size: 12),
                               ],
                             ),
                           ),
@@ -654,9 +742,13 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                           CustomGOEButton(
                             onPressed: startGame,
                             backGroundColor: const Color(0xFF00F0FF),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 14),
                             borderRadius: BorderRadius.circular(14),
-                            child: const CustomText('Launch Ship', color: Colors.black, fontWeight: FontWeight.bold, size: 16),
+                            child: const CustomText('Launch Ship',
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                size: 16),
                           ),
                         ],
                       ),
@@ -678,7 +770,8 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                       decoration: BoxDecoration(
                         color: const Color(0xDD0f0f23),
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: const Color(0x66ff007f), width: 2),
+                        border: Border.all(
+                            color: const Color(0x66ff007f), width: 2),
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0x33ff007f),
@@ -689,32 +782,50 @@ class _CyberRunnerPageState extends State<CyberRunnerPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const CustomText('Ship Terminated', color: Color(0xFFFF007F), size: 28, fontWeight: FontWeight.w900),
+                          const CustomText('Ship Terminated',
+                              color: Color(0xFFFF007F),
+                              size: 28,
+                              fontWeight: FontWeight.w900),
                           const SizedBox(height: 8),
-                          const CustomText('Vessel Destroyed', color: Color(0xFF8B8BA7), size: 14, fontWeight: FontWeight.bold),
+                          const CustomText('Vessel Destroyed',
+                              color: Color(0xFF8B8BA7),
+                              size: 14,
+                              fontWeight: FontWeight.bold),
                           const SizedBox(height: 24),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const CustomText('Final Score:', color: Color(0xFFA4A4C1), size: 16),
-                              CustomText('$score', color: const Color(0xFFFF007F), size: 18, fontWeight: FontWeight.bold),
+                              const CustomText('Final Score:',
+                                  color: Color(0xFFA4A4C1), size: 16),
+                              CustomText('$score',
+                                  color: const Color(0xFFFF007F),
+                                  size: 18,
+                                  fontWeight: FontWeight.bold),
                             ],
                           ),
                           const SizedBox(height: 12),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const CustomText('High Score:', color: Color(0xFFA4A4C1), size: 16),
-                              CustomText('$highScore', color: const Color(0xFF00F0FF), size: 18, fontWeight: FontWeight.bold),
+                              const CustomText('High Score:',
+                                  color: Color(0xFFA4A4C1), size: 16),
+                              CustomText('$highScore',
+                                  color: const Color(0xFF00F0FF),
+                                  size: 18,
+                                  fontWeight: FontWeight.bold),
                             ],
                           ),
                           const SizedBox(height: 28),
                           CustomGOEButton(
                             onPressed: startGame,
                             backGroundColor: const Color(0xFFFF007F),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 32, vertical: 14),
                             borderRadius: BorderRadius.circular(14),
-                            child: const CustomText('Respawn Ship', color: Colors.white, fontWeight: FontWeight.bold, size: 16),
+                            child: const CustomText('Respawn Ship',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                size: 16),
                           ),
                         ],
                       ),
