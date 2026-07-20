@@ -13,51 +13,74 @@ function addDelay(delay) {
 }
 
 /**
- * Returns how long the loading screen should stay visible.
- * Slower connection => longer loading animation.
+ * Calculates a dynamic loading delay based on network conditions.
+ *
+ * Delay Range:
+ *   1000ms (Fast)
+ *   6000ms (Very Slow)
  */
 async function getConnectionDelay() {
+  const MIN_DELAY = 1000;
+  const MAX_DELAY = 6000;
+
+  const clamp = (value) =>
+    Math.min(Math.max(Math.round(value), MIN_DELAY), MAX_DELAY);
+
   const connection = navigator.connection;
 
-  // --- STRATEGY 1: Chromium Shortcut (Chrome, Edge, Android) ---
-  if (connection && typeof connection.downlink === 'number' && typeof connection.rtt === 'number') {
-    const downlink = connection.downlink;
-    const rtt = connection.rtt;
-    
-    if (downlink <= 0.5 || rtt >= 2000) return 6000;
-    if (downlink <= 1.0 || rtt >= 1000) return 5000;
-    if (downlink <= 2.0 || rtt >= 600)  return 4000;
-    if (downlink <= 5.0 || rtt >= 400)  return 3000;
-    if (downlink <= 10.0 || rtt >= 150) return 2000;
-    return 1000;
+  // ==========================================================
+  // Chrome / Edge / Android
+  // ==========================================================
+  if (
+    connection &&
+    typeof connection.downlink === "number" &&
+    typeof connection.rtt === "number"
+  ) {
+    const downlink = Math.max(connection.downlink, 0.1);
+    const rtt = Math.max(connection.rtt, 0);
+
+    console.log(`Downlink: ${downlink.toFixed(2)} Mbps`);
+    console.log(`RTT: ${rtt} ms`);
+
+    // Slow speed contributes more delay
+    const speedDelay = (1 / downlink) * 2200;
+
+    // High latency contributes more delay
+    const latencyDelay = rtt * 2;
+
+    // Combine both (70% speed, 30% latency)
+    const delay = speedDelay * 0.7 + latencyDelay * 0.3;
+
+    const finalDelay = clamp(delay);
+
+    console.log(`Loading Delay: ${finalDelay} ms`);
+
+    return finalDelay;
   }
 
-  // --- STRATEGY 2: Cross-Platform Fallback (Safari, Firefox, iOS) ---
+  // ==========================================================
+  // Safari / Firefox / iOS
+  // ==========================================================
   try {
-    // We fetch a tiny, un-cacheable file to measure real-time latency
-    const startTime = performance.now();
-    
-    await fetch('icons/favicon.ico', { 
-      cache: 'no-store', // Crucial: forces a fresh network request
-      mode: 'no-cors' 
+    const start = performance.now();
+
+    await fetch(`icons/favicon.ico?t=${Date.now()}`, {
+      cache: "no-store",
     });
-    
-    const endTime = performance.now();
-    const duration = endTime - startTime; // This acts as our real-time RTT
 
-    console.log(`Cross-platform measured latency: ${duration.toFixed(2)} ms`);
+    const latency = performance.now() - start;
 
-    // Map the measured latency directly to your tiers
-    if (duration >= 2000) return 7000;
-    if (duration >= 1000) return 6000;
-    if (duration >= 600)  return 5000;
-    if (duration >= 400)  return 4000;
-    if (duration >= 150)  return 3000;
-    return 2000;
+    console.log(`Measured latency: ${latency.toFixed(0)} ms`);
 
-  } catch (error) {
-    console.warn("Network ping failed, defaulting.", error);
-    return 2000; // Safe default if user is offline or fetch fails
+    const finalDelay = clamp(latency * 2);
+
+    console.log(`Loading Delay: ${finalDelay} ms`);
+
+    return finalDelay;
+  } catch (e) {
+    console.warn("Unable to measure network.", e);
+
+    return 3000;
   }
 }
 
