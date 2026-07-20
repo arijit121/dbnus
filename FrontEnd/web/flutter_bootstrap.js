@@ -103,7 +103,7 @@ _flutter.loader.load({
         }
 
         if (web_loader) {
-            const duration = networkDelay + 300;
+            const duration = networkDelay;
             // Smooth fade out immediately when the build is loaded and running
             web_loader.style.pointerEvents = "none";
             web_loader.style.transition = `opacity ${duration / 1000}s ease`;
