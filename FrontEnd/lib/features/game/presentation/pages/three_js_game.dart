@@ -102,7 +102,7 @@ class _CyberRunnerPageDataState extends State<CyberRunnerPageData> {
       // 1. Camera
       threeJs.camera = three.PerspectiveCamera(
           65, threeJs.width / threeJs.height, 0.1, 1000);
-      threeJs.camera.position.setValues(0, 0, 8);
+      threeJs.camera.position.setValues(0, 0, 18);
       threeJs.camera.lookAt(three.Vector3(0, 0, -20));
 
       // 2. Scene
@@ -293,11 +293,22 @@ class _CyberRunnerPageDataState extends State<CyberRunnerPageData> {
     // Rotate Tube Grid
     innerGridTube.rotation.z += 0.08 * dt;
 
-    // Banking Camera
+    // Banking & Responsive Camera Distance
+    final double aspect = (threeJs.width > 0 && threeJs.height > 0)
+        ? (threeJs.width / threeJs.height)
+        : 16.0 / 9.0;
+    final double halfFovRad = (65.0 / 2.0) * math.pi / 180.0;
+    final double tanHalfFov = math.tan(halfFovRad);
+    final double distFitHeight = (tubeRadius * 1.15) / tanHalfFov;
+    final double distFitWidth = (tubeRadius * 1.15) / (tanHalfFov * aspect);
+    final double targetZ = math.max(distFitHeight, distFitWidth);
+
     threeJs.camera.position.x = threeJs.camera.position.x +
         (playerGroup.position.x * 0.12 - threeJs.camera.position.x) * 0.1;
     threeJs.camera.position.y = threeJs.camera.position.y +
         (playerGroup.position.y * 0.12 - threeJs.camera.position.y) * 0.1;
+    threeJs.camera.position.z = threeJs.camera.position.z +
+        (targetZ - threeJs.camera.position.z) * 0.1;
     threeJs.camera.lookAt(three.Vector3(
         playerGroup.position.x * 0.3, playerGroup.position.y * 0.3, -25));
 
