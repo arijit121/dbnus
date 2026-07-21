@@ -91,6 +91,13 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFF00F0FF), const Color(0xFFFF007F)],
         routeName: RouteName.cyberRunner,
       ),
+      GameEntry(
+        title: 'Star Wing 3D',
+        subtitle: '3D Space Flight Simulator',
+        icon: Icons.flight_takeoff_rounded,
+        gradient: [const Color(0xFF00FF66), const Color(0xFF0080FF)],
+        routeName: RouteName.spaceFlight3d,
+      ),
     ];
 
 

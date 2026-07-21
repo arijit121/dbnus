@@ -21,5 +21,6 @@ class RouteName {
   static const String gravityOrbit = "/gravity-orbit";
   static const String ludoGame = "/ludo-game";
   static const String cyberRunner = "/cyber-runner";
+  static const String spaceFlight3d = "/space-flight-3d";
 }
 
