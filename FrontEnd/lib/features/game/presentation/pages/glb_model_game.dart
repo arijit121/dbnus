@@ -233,6 +233,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
         currentGlbMesh = gltf!.scene;
         final s = spaceshipModel.defaultScale;
         currentGlbMesh!.scale.setValues(s, s, s);
+        currentGlbMesh!.rotation.y = math.pi / 2; // Rotate 90 degrees horizontally right to left
         playerGroup.add(currentGlbMesh!);
         updatePlayerModel();
         return;
@@ -243,6 +244,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
 
     // High-quality 3D Sci-Fi Spaceship fallback model
     currentGlbMesh = _createSpaceshipGlbFallback();
+    currentGlbMesh!.rotation.y = math.pi / 2; // Rotate 90 degrees horizontally right to left
     playerGroup.add(currentGlbMesh!);
     updatePlayerModel();
   }
