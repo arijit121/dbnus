@@ -102,7 +102,6 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   // Scene elements
   late three.Group playerGroup;
   late three.Points starfield;
-  late three.Mesh gridFloor;
   three.Object3D? currentGlbMesh;
 
   final List<three.Mesh> obstacles = [];
@@ -185,20 +184,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       starfield.userData = {'speeds': starSpeeds};
       threeJs.scene.add(starfield);
 
-      // 5. Grid Floor Plane
-      final gridGeom = three.PlaneGeometry(120, 320, 24, 64);
-      gridGeom.rotateX(-math.pi / 2);
-      gridGeom.translate(0, -2.5, -100);
-      final gridMat = three.MeshBasicMaterial.fromMap({
-        'color': 0x00f0ff,
-        'wireframe': true,
-        'transparent': true,
-        'opacity': 0.12,
-      });
-      gridFloor = three.Mesh(gridGeom, gridMat);
-      threeJs.scene.add(gridFloor);
-
-      // 6. Player Spaceship GLB Container Group
+      // 5. Player Spaceship GLB Container Group
       playerGroup = three.Group();
       threeJs.scene.add(playerGroup);
 
