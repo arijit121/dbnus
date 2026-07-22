@@ -198,6 +198,18 @@ document.addEventListener("DOMContentLoaded", function () {
         else if (path === "/gravity-orbit") {
             setData({ containerId: "web-seo-content", file: "seo/gravity-orbit.html" });
         }
+        else if (path === "/ludo-game") {
+            setData({ containerId: "web-seo-content", file: "seo/ludo-game.html" });
+        }
+        else if (path === "/cyber-runner") {
+            setData({ containerId: "web-seo-content", file: "seo/cyber-runner.html" });
+        }
+        else if (path === "/space-flight-3d") {
+            setData({ containerId: "web-seo-content", file: "seo/space-flight-3d.html" });
+        }
+        else if (path === "/glb-model-game") {
+            setData({ containerId: "web-seo-content", file: "seo/glb-model-game.html" });
+        }
         // else if (path.startsWith("/path-parameter/")) {
         //     let value = path.split("/").pop().replace(/-/g, " ");
         //     setData({ containerId: "web-loader", file: "design/dynamic-loader.html", replaceData: { "data": value } });
