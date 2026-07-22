@@ -98,6 +98,13 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFF00FF66), const Color(0xFF0080FF)],
         routeName: RouteName.spaceFlight3d,
       ),
+      GameEntry(
+        title: 'GLB Arena 3D',
+        subtitle: '3D Game with downloaded .GLB models',
+        icon: Icons.view_in_ar_rounded,
+        gradient: [const Color(0xFFFF0055), const Color(0xFFFFCC00)],
+        routeName: RouteName.glbModelGame,
+      ),
     ];
 
 

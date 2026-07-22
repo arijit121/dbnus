@@ -196,5 +196,9 @@ class AssetsConst {
 
   static const String soundAlarm = "sound/sound_alarm.mp3";
   static const String callRingtone = "sound/call_ringtone.mp3";
+
+  // 3D GLB Models
+  static const String spaceshipGlbModel = "assets/models/spaceship.glb";
+  static const String damagedHelmetGlbModel = "assets/models/damaged_helmet.glb";
 }
 

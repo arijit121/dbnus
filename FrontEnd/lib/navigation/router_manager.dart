@@ -40,6 +40,8 @@ import 'package:dbnus/features/game/presentation/pages/three_js_game.dart'
     deferred as cyber_runner;
 import 'package:dbnus/features/game/presentation/pages/space_flight_3d_game.dart'
     deferred as space_flight_3d;
+import 'package:dbnus/features/game/presentation/pages/glb_model_game.dart'
+    deferred as glb_model_game;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
@@ -324,6 +326,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await space_flight_3d.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.glbModelGame,
+        path: RouteName.glbModelGame,
+        builder: (BuildContext context, GoRouterState state) {
+          return glb_model_game.GlbModelGamePage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await glb_model_game.loadLibrary();
           return null;
         },
       ),

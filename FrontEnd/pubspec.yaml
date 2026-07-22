@@ -152,6 +152,7 @@ flutter:
     - assets/store/
     - assets/sound/
     - assets/js/
+    - assets/models/
 
 
 flutter_intl:
