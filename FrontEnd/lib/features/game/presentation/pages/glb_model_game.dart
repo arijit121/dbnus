@@ -1261,6 +1261,8 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
                           const SizedBox(height: 24),
                           CustomGOEButton(
                             onPressed: startGame,
+                            width: double.infinity,
+                            height: 48,
                             backGroundColor: const Color(0xFF00F0FF),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 32, vertical: 14),
@@ -1338,6 +1340,8 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
                           const SizedBox(height: 28),
                           CustomGOEButton(
                             onPressed: startGame,
+                            width: double.infinity,
+                            height: 48,
                             backGroundColor: const Color(0xFFFF0055),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 32, vertical: 14),
