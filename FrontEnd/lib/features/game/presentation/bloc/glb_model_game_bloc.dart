@@ -39,7 +39,8 @@ class GlbModelGameBloc extends Bloc<GlbModelGameEvent, GlbModelGameState> {
   void _onSetEngineError(
       SetEngineError event, Emitter<GlbModelGameState> emit) {
     emit(state.copyWith(
-      initError: DynamicBlocData<String?>.error(message: event.error, error: event.error),
+      initError: DynamicBlocData<String?>.error(
+          message: event.error, error: event.error),
       initialized: const DynamicBlocData<bool>.success(value: false),
     ));
   }
@@ -68,7 +69,8 @@ class GlbModelGameBloc extends Bloc<GlbModelGameEvent, GlbModelGameState> {
   void _onGameOver(GameOver event, Emitter<GlbModelGameState> emit) {
     final currentScore = state.score.value ?? 0;
     final currentHighScore = state.highScore.value ?? 0;
-    final newHighScore = currentScore > currentHighScore ? currentScore : currentHighScore;
+    final newHighScore =
+        currentScore > currentHighScore ? currentScore : currentHighScore;
 
     emit(state.copyWith(
       gameRunning: const DynamicBlocData<bool>.success(value: false),
