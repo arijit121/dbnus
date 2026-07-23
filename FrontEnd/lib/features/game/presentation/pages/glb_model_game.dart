@@ -76,6 +76,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   );
 
   // Game loop mechanical state
+  bool _pendingStart = false;
   double speedMultiplier = 1.0;
   double playerX = 0.0;
   double playerY = 0.0;
@@ -192,6 +193,10 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       threeJs.addAnimationEvent(update);
 
       bloc.add(SetEngineInitialized());
+
+      if (_pendingStart) {
+        startGame();
+      }
     } catch (e, stack) {
       debugPrint("3D Flight GLB Engine error: $e\n$stack");
       bloc.add(SetEngineError(e.toString()));
@@ -235,7 +240,11 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
 
   void startGame() {
     final bloc = context.read<GlbModelGameBloc>();
-    if (!(bloc.state.initialized.value ?? false)) return;
+    if (!(bloc.state.initialized.value ?? false)) {
+      _pendingStart = true;
+      return;
+    }
+    _pendingStart = false;
 
     speedMultiplier = 1.0;
     playerX = 0.0;
@@ -695,7 +704,12 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xFF060614),
-        body: BlocBuilder<GlbModelGameBloc, GlbModelGameState>(
+        body: BlocConsumer<GlbModelGameBloc, GlbModelGameState>(
+          listener: (context, state) {
+            if ((state.initialized.value ?? false) && _pendingStart) {
+              startGame();
+            }
+          },
           builder: (context, state) {
             final isInitialized = state.initialized.value ?? false;
             final isGameRunning = state.gameRunning.value ?? false;
@@ -778,6 +792,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
                 // Start Screen Panel Overlay
                 if (!isGameRunning && !isGameOver)
                   GlbGameStartOverlay(
+                    isInitialized: isInitialized,
                     onStart: startGame,
                   ),
 

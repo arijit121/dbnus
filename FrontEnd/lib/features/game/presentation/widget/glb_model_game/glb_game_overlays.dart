@@ -62,10 +62,12 @@ class GlbGameLoadingOverlay extends StatelessWidget {
 }
 
 class GlbGameStartOverlay extends StatelessWidget {
+  final bool isInitialized;
   final VoidCallback onStart;
 
   const GlbGameStartOverlay({
     super.key,
+    required this.isInitialized,
     required this.onStart,
   });
 
@@ -145,14 +147,36 @@ class GlbGameStartOverlay extends StatelessWidget {
                   onPressed: onStart,
                   width: double.infinity,
                   height: 48,
-                  backGroundColor: const Color(0xFF00F0FF),
+                  backGroundColor: isInitialized
+                      ? const Color(0xFF00F0FF)
+                      : const Color(0xFF555566),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
                   borderRadius: BorderRadius.circular(14),
-                  child: const CustomText('Launch Simulator',
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      size: 16),
+                  child: isInitialized
+                      ? const CustomText('Launch Simulator',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          size: 16)
+                      : const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            CustomText('Preparing Ship...',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                size: 14),
+                          ],
+                        ),
                 ),
               ],
             ),
