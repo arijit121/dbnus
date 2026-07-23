@@ -1,42 +1,50 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:three_js/three_js.dart' as three;
 import '../../../../core/services/JsService/provider/js_provider.dart';
-import '../../../../navigation/custom_router/custom_route.dart';
 import '../../../../shared/constants/assects_const.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
 import '../../../../shared/ui/atoms/indicators/loading_widget.dart';
 import '../../../../shared/ui/atoms/text/custom_text.dart';
 import '../../data/models/glb_model.dart';
+import '../bloc/glb_model_game_bloc.dart';
+import '../utils/glb_spaceship_builder.dart';
+import '../widget/glb_model_game/glb_game_controls.dart';
+import '../widget/glb_model_game/glb_game_hud.dart';
+import '../widget/glb_model_game/glb_game_overlays.dart';
+import '../widget/glb_model_game/radar_painter.dart';
 
 class GlbModelGamePage extends StatelessWidget {
   const GlbModelGamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: FutureBuilder(
-          future: JsProvider.loadJs(
-            jsPath:
-                "https://cdn.jsdelivr.net/gh/Knightro63/flutter_angle/assets/gles_bindings.js",
+    return BlocProvider(
+      create: (_) => GlbModelGameBloc(),
+      child: Scaffold(
+        body: SafeArea(
+          child: FutureBuilder(
+            future: JsProvider.loadJs(
+              jsPath:
+                  "https://cdn.jsdelivr.net/gh/Knightro63/flutter_angle/assets/gles_bindings.js",
+            ),
+            builder: (context, asyncSnapshot) {
+              if (asyncSnapshot.connectionState == ConnectionState.done) {
+                return const GlbModelGameData();
+              } else if (asyncSnapshot.hasError) {
+                return Center(
+                  child: CustomText('Error loading JS: ${asyncSnapshot.error}'),
+                );
+              } else {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+            },
           ),
-          builder: (context, asyncSnapshot) {
-            if (asyncSnapshot.connectionState == ConnectionState.done) {
-              return const GlbModelGameData();
-            } else if (asyncSnapshot.hasError) {
-              return Center(
-                child: CustomText('Error loading JS: ${asyncSnapshot.error}'),
-              );
-            } else {
-              return const Center(
-                child: LoadingWidget(),
-              );
-            }
-          },
         ),
       ),
     );
@@ -67,17 +75,8 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     themeColor: Color(0xFF00F0FF),
   );
 
-  // Game State
+  // Game loop mechanical state
   double speedMultiplier = 1.0;
-  int score = 0;
-  int shield = 100;
-  int highScore = 0;
-  bool gameRunning = false;
-  bool showGameOver = false;
-  bool _initialized = false;
-  String? _initError;
-
-  // Player controls state
   double playerX = 0.0;
   double playerY = 0.0;
   bool keyLeft = false;
@@ -85,11 +84,6 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   bool keyUp = false;
   bool keyDown = false;
   bool keySpace = false;
-
-  // Mobile virtual joystick control offsets
-  double touchXOffset = 0.0;
-  double touchYOffset = 0.0;
-  bool touchFiring = false;
 
   // Space weapons heat management
   double laserHeat = 0.0;
@@ -117,7 +111,9 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     super.initState();
     threeJs = three.ThreeJS(
       onSetupComplete: () {
-        setState(() {});
+        if (mounted) {
+          context.read<GlbModelGameBloc>().add(ThreeJsSetupComplete());
+        }
       },
       setup: setup,
     );
@@ -131,6 +127,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   }
 
   Future<void> setup() async {
+    final bloc = context.read<GlbModelGameBloc>();
     try {
       // 1. Perspective Camera
       threeJs.camera = three.PerspectiveCamera(
@@ -194,15 +191,10 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       // 7. Register Framerate updates
       threeJs.addAnimationEvent(update);
 
-      setState(() {
-        _initialized = true;
-        _initError = null;
-      });
+      bloc.add(SetEngineInitialized());
     } catch (e, stack) {
       debugPrint("3D Flight GLB Engine error: $e\n$stack");
-      setState(() {
-        _initError = e.toString();
-      });
+      bloc.add(SetEngineError(e.toString()));
     }
   }
 
@@ -219,7 +211,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
         currentGlbMesh = gltf!.scene;
         final s = spaceshipModel.defaultScale;
         currentGlbMesh!.scale.setValues(s, s, s);
-        currentGlbMesh!.rotation.y = math.pi / 2; // Rotate 90 degrees horizontally right to left
+        currentGlbMesh!.rotation.y = math.pi / 2;
         playerGroup.add(currentGlbMesh!);
         updatePlayerModel();
         return;
@@ -229,94 +221,10 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     }
 
     // High-quality 3D Sci-Fi Spaceship fallback model
-    currentGlbMesh = _createSpaceshipGlbFallback();
-    currentGlbMesh!.rotation.y = math.pi / 2; // Rotate 90 degrees horizontally right to left
+    currentGlbMesh = createSpaceshipGlbFallback();
+    currentGlbMesh!.rotation.y = math.pi / 2;
     playerGroup.add(currentGlbMesh!);
     updatePlayerModel();
-  }
-
-  three.Object3D _createSpaceshipGlbFallback() {
-    final group = three.Group();
-
-    // Main aerodynamic fuselage
-    final geomBody = three.CylinderGeometry(0.18, 0.36, 1.7, 8);
-    geomBody.rotateX(math.pi / 2);
-    final matBody = three.MeshPhongMaterial.fromMap({
-      'color': 0x16172b,
-      'emissive': 0x050615,
-      'shininess': 60,
-      'flatShading': true
-    });
-    final bodyMesh = three.Mesh(geomBody, matBody);
-    group.add(bodyMesh);
-
-    // Sleek cockpit canopy (translucent cyan)
-    final geomCockpit = three.ConeGeometry(0.24, 0.85, 6);
-    geomCockpit.rotateX(math.pi / 2);
-    geomCockpit.translate(0, 0.12, -0.22);
-    final matCockpit = three.MeshPhongMaterial.fromMap({
-      'color': 0x00f0ff,
-      'emissive': 0x004466,
-      'transparent': true,
-      'opacity': 0.8,
-      'shininess': 100
-    });
-    final cockpitMesh = three.Mesh(geomCockpit, matCockpit);
-    group.add(cockpitMesh);
-
-    // Left Swept Wing
-    final geomWingL = three.BoxGeometry(1.3, 0.06, 0.65);
-    geomWingL.translate(-0.72, -0.05, 0.15);
-    geomWingL.rotateY(-0.16);
-    geomWingL.rotateZ(-0.08);
-    final matWing = three.MeshPhongMaterial.fromMap({
-      'color': 0x00f0ff,
-      'emissive': 0x003344,
-      'shininess': 60,
-      'flatShading': true
-    });
-    final wingL = three.Mesh(geomWingL, matWing);
-    group.add(wingL);
-
-    // Right Swept Wing
-    final geomWingR = three.BoxGeometry(1.3, 0.06, 0.65);
-    geomWingR.translate(0.72, -0.05, 0.15);
-    geomWingR.rotateY(0.16);
-    geomWingR.rotateZ(0.08);
-    final wingR = three.Mesh(geomWingR, matWing);
-    group.add(wingR);
-
-    // Dual wingtip laser cannons
-    final geomCannon = three.CylinderGeometry(0.035, 0.035, 0.45, 6);
-    geomCannon.rotateX(math.pi / 2);
-    final matCannon = three.MeshPhongMaterial.fromMap({
-      'color': 0xff0055,
-      'emissive': 0x440011,
-      'shininess': 80
-    });
-
-    final cannonL = three.Mesh(geomCannon, matCannon);
-    cannonL.position.setValues(-1.35, -0.1, 0.1);
-    group.add(cannonL);
-
-    final cannonR = three.Mesh(geomCannon, matCannon);
-    cannonR.position.setValues(1.35, -0.1, 0.1);
-    group.add(cannonR);
-
-    // Plasma Engine Flame
-    final geomFlame = three.ConeGeometry(0.2, 0.8, 6);
-    geomFlame.rotateX(-math.pi / 2);
-    final matFlame = three.MeshBasicMaterial.fromMap({
-      'color': 0x00ffff,
-      'transparent': true,
-      'opacity': 0.85
-    });
-    final flameMesh = three.Mesh(geomFlame, matFlame);
-    flameMesh.position.setValues(0, 0, 0.92);
-    flameMesh.name = "engineFlame";
-    group.add(flameMesh);
-
-    return group;
   }
 
   void updatePlayerModel() {
@@ -326,18 +234,16 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   }
 
   void startGame() {
-    if (!_initialized) return;
-    setState(() {
-      score = 0;
-      shield = 100;
-      speedMultiplier = 1.0;
-      playerX = 0.0;
-      playerY = 0.0;
-      laserHeat = 0.0;
-      laserOverheated = false;
-      gameRunning = true;
-      showGameOver = false;
-    });
+    final bloc = context.read<GlbModelGameBloc>();
+    if (!(bloc.state.initialized.value ?? false)) return;
+
+    speedMultiplier = 1.0;
+    playerX = 0.0;
+    playerY = 0.0;
+    laserHeat = 0.0;
+    laserOverheated = false;
+
+    bloc.add(StartGame());
 
     // Clear active scene meshes
     for (var obs in obstacles) {
@@ -361,18 +267,10 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     updatePlayerModel();
   }
 
-  void gameOver() {
-    setState(() {
-      gameRunning = false;
-      showGameOver = true;
-      if (score > highScore) {
-        highScore = score;
-      }
-    });
-  }
-
   void fireLasers() {
     if (shootCooldown > 0.0 || laserOverheated) return;
+
+    final bloc = context.read<GlbModelGameBloc>();
 
     // Heat up weapon
     laserHeat += 18.0;
@@ -381,6 +279,8 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       laserOverheated = true;
     }
     shootCooldown = 0.15;
+
+    bloc.add(UpdateLaserHeat(heat: laserHeat, overheated: laserOverheated));
 
     // Create laser cylinders
     final laserGeom = three.CylinderGeometry(0.04, 0.04, 1.8, 4);
@@ -437,7 +337,8 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
   }
 
   void update(double dt) {
-    if (!gameRunning) return;
+    final bloc = context.read<GlbModelGameBloc>();
+    if (!(bloc.state.gameRunning.value ?? false)) return;
 
     final random = math.Random();
 
@@ -445,7 +346,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     speedMultiplier += 0.012 * dt;
     final currentSpeed = baseShipSpeed * speedMultiplier;
 
-    // 1. Controls processing (Keyboard + Touch inputs)
+    // 1. Controls processing (Keyboard + Touch inputs from BLoC state)
     double speedX = 18.0;
     double speedY = 14.0;
     double steerX = 0.0;
@@ -455,6 +356,10 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
     if (keyRight) steerX = 1.0;
     if (keyUp) steerY = 1.0;
     if (keyDown) steerY = -1.0;
+
+    final touchXOffset = bloc.state.touchXOffset.value ?? 0.0;
+    final touchYOffset = bloc.state.touchYOffset.value ?? 0.0;
+    final touchFiring = bloc.state.touchFiring.value ?? false;
 
     // Blend touch joystick controls
     if (touchXOffset.abs() > 0.01) steerX = touchXOffset.clamp(-1.0, 1.0);
@@ -503,6 +408,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       if (laserOverheated && laserHeat < 20.0) {
         laserOverheated = false;
       }
+      bloc.add(UpdateLaserHeat(heat: laserHeat, overheated: laserOverheated));
     }
 
     if (keySpace || touchFiring) {
@@ -578,8 +484,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
         createExplosion(obs.position, obs.userData['color'] ?? 0xff5500, sizeMultiplier: 2);
         threeJs.scene.remove(obs);
         obstacles.removeAt(i);
-        score += 150;
-        setState(() {});
+        bloc.add(const UpdateScore(150));
         continue;
       }
 
@@ -596,12 +501,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
           threeJs.scene.remove(obs);
           obstacles.removeAt(i);
 
-          shield -= 25;
-          if (shield <= 0) {
-            shield = 0;
-            gameOver();
-          }
-          setState(() {});
+          bloc.add(const DamageShield(25));
           continue;
         }
       }
@@ -610,8 +510,7 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       if (obs.position.z > 15.0) {
         threeJs.scene.remove(obs);
         obstacles.removeAt(i);
-        score += (45 * speedMultiplier).round();
-        setState(() {});
+        bloc.add(UpdateScore((45 * speedMultiplier).round()));
       }
     }
 
@@ -631,15 +530,14 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
         if (distanceSq < collectRadius * collectRadius) {
           final int type = col.userData['type'] ?? 0;
           if (type == 1) {
-            shield = math.min(shield + 20, 100);
+            bloc.add(const RepairShield(20));
             createExplosion(col.position, 0x00ff88, sizeMultiplier: 1);
           } else {
-            score += 350;
+            bloc.add(const UpdateScore(350));
             createExplosion(col.position, 0x00f0ff, sizeMultiplier: 1);
           }
           threeJs.scene.remove(col);
           collectibles.removeAt(i);
-          setState(() {});
           continue;
         }
       }
@@ -797,663 +695,104 @@ class _GlbModelGameDataState extends State<GlbModelGameData> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xFF060614),
-        body: Stack(
-          children: [
-            // 3D Viewport engine rendering
-            Positioned.fill(
-              child: threeJs.build(),
-            ),
+        body: BlocBuilder<GlbModelGameBloc, GlbModelGameState>(
+          builder: (context, state) {
+            final isInitialized = state.initialized.value ?? false;
+            final isGameRunning = state.gameRunning.value ?? false;
+            final isGameOver = state.showGameOver.value ?? false;
+            final scoreVal = state.score.value ?? 0;
+            final shieldVal = state.shield.value ?? 100;
+            final laserHeatVal = state.laserHeat.value ?? 0.0;
+            final laserOverheatedVal = state.laserOverheated.value ?? false;
+            final highScoreVal = state.highScore.value ?? 0;
+            final initErrMsg = state.initError.message ?? state.initError.error?.toString();
 
-            if (!_initialized)
-              Positioned.fill(
-                child: Container(
-                  color: const Color(0xFF060614),
-                  child: Center(
-                    child: _initError != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.error_outline,
-                                    color: Color(0xFFFF0055), size: 48),
-                                const SizedBox(height: 16),
-                                CustomText('Engine Error: $_initError',
-                                    color: Colors.white,
-                                    size: 14,
-                                    textAlign: TextAlign.center),
-                                const SizedBox(height: 24),
-                                CustomGOEButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _initError = null;
-                                      _initialized = false;
-                                    });
-                                    setup();
-                                  },
-                                  backGroundColor: const Color(0xFFFF0055),
-                                  child: const CustomText('Retry Engine',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          )
-                        : const Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF00F0FF)),
-                              ),
-                              SizedBox(height: 16),
-                              CustomText('Loading GLB Spaceship Engine...',
-                                  color: Color(0xFF8B8BA7),
-                                  size: 14,
-                                  fontWeight: FontWeight.bold),
-                            ],
-                          ),
-                  ),
+            return Stack(
+              children: [
+                // 3D Viewport engine rendering
+                Positioned.fill(
+                  child: threeJs.build(),
                 ),
-              ),
 
-            // Space flight status top overlay HUD
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Back Button & Score Card
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new,
-                                color: Colors.white),
-                            onPressed: () => CustomRoute.back(),
-                          ),
-                          const SizedBox(width: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xAA060614),
-                              borderRadius: BorderRadius.circular(12),
-                              border:
-                                  Border.all(color: const Color(0x3300f0ff)),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText('SCORE',
-                                    color: Color(0xFF00F0FF),
-                                    size: 10,
-                                    fontWeight: FontWeight.bold),
-                                CustomText('$score',
-                                    color: Colors.white,
-                                    size: 18,
-                                    fontWeight: FontWeight.w900),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      // Systems Health panel
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          // Shields HUD
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xAA060614),
-                              borderRadius: BorderRadius.circular(12),
-                              border:
-                                  Border.all(color: const Color(0x33ff0055)),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.shield,
-                                    color: Color(0xFFFF0055), size: 16),
-                                const SizedBox(width: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const CustomText('DEFLECTOR SHIELDS',
-                                        color: Color(0xFFFF0055),
-                                        size: 8,
-                                        fontWeight: FontWeight.bold),
-                                    const SizedBox(height: 4),
-                                    Container(
-                                      width: 100,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      child: AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 150),
-                                        width: 100 * (shield / 100),
-                                        decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                              colors: [
-                                                Color(0xFFFF0055),
-                                                Color(0xFFFF00CC)
-                                              ]),
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: const Color(0xFFFF0055)
-                                                  .withValues(alpha: 0.7),
-                                              blurRadius: 6,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-
-                          // Laser heat meter HUD
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xAA060614),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                  color: laserOverheated
-                                      ? const Color(0xFFFF3300)
-                                      : const Color(0xFFFFAA00).withValues(alpha: 0.3)),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.wb_sunny_outlined,
-                                    color: laserOverheated
-                                        ? const Color(0xFFFF3300)
-                                        : const Color(0xFFFFAA00),
-                                    size: 16),
-                                const SizedBox(width: 8),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                        laserOverheated
-                                            ? 'WEAPONS OVERHEATED'
-                                            : 'LASER CORE TEMP',
-                                        color: laserOverheated
-                                            ? const Color(0xFFFF3300)
-                                            : const Color(0xFFFFAA00),
-                                        size: 8,
-                                        fontWeight: FontWeight.bold),
-                                    const SizedBox(height: 4),
-                                    Container(
-                                      width: 100,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      child: AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 150),
-                                        width: 100 * (laserHeat / 100.0),
-                                        decoration: BoxDecoration(
-                                          color: laserOverheated
-                                              ? const Color(0xFFFF3300)
-                                              : const Color(0xFFFFAA00),
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                if (!isInitialized)
+                  GlbGameLoadingOverlay(
+                    initError: initErrMsg,
+                    onRetry: () {
+                      context.read<GlbModelGameBloc>().add(ResetEngine());
+                      setup();
+                    },
                   ),
+
+                // Space flight status top overlay HUD
+                GlbGameHud(
+                  score: scoreVal,
+                  shield: shieldVal,
+                  laserHeat: laserHeatVal,
+                  laserOverheated: laserOverheatedVal,
                 ),
-              ),
-            ),
 
-            // Radar display and joystick control overlays
-            if (gameRunning) ...[
-              // TOP-LEFT: Radar (Minimap)
-              Positioned(
-                top: 80,
-                left: 20,
-                child: Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: const Color(0xBB03030c),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                        color: const Color(0xFF00FF66).withValues(alpha: 0.35),
-                        width: 1.2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF00FF66).withValues(alpha: 0.15),
-                        blurRadius: 8,
-                      ),
-                    ],
+                // Radar display, controls, and crosshair overlay
+                if (isGameRunning) ...[
+                  GlbGameRadar(
+                    playerX: playerX,
+                    obstacles: obstacles,
+                    collectibles: collectibles,
+                    lasers: lasers,
                   ),
-                  child: ClipOval(
-                    child: CustomPaint(
-                      painter: RadarPainter(
-                        playerX: playerX,
-                        obstacles: obstacles,
-                        collectibles: collectibles,
-                        lasers: lasers,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
 
-              // BOTTOM-LEFT: Virtual Joystick for mobile steering
-              Positioned(
-                bottom: 24,
-                left: 24,
-                child: GestureDetector(
-                  onPanUpdate: (details) {
-                    setState(() {
-                      touchXOffset = (details.localPosition.dx - 50.0) / 40.0;
-                      touchYOffset = -(details.localPosition.dy - 50.0) / 40.0;
-                    });
-                  },
-                  onPanEnd: (_) {
-                    setState(() {
-                      touchXOffset = 0.0;
-                      touchYOffset = 0.0;
-                    });
-                  },
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0x33FFFFFF),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0x2200f0ff)),
-                    ),
-                    child: Center(
-                      child: Transform.translate(
-                        offset: Offset(
-                            touchXOffset * 22.0, -touchYOffset * 22.0),
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: const BoxDecoration(
-                            color: Color(0x8800F0FF),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ),
+                  GlbGameJoystick(
+                    touchXOffset: state.touchXOffset.value ?? 0.0,
+                    touchYOffset: state.touchYOffset.value ?? 0.0,
+                    onPanUpdate: (details) {
+                      final x = (details.localPosition.dx - 50.0) / 40.0;
+                      final y = -(details.localPosition.dy - 50.0) / 40.0;
+                      context
+                          .read<GlbModelGameBloc>()
+                          .add(UpdateJoystickOffset(x, y));
+                    },
+                    onPanEnd: () {
+                      context
+                          .read<GlbModelGameBloc>()
+                          .add(const UpdateJoystickOffset(0.0, 0.0));
+                    },
                   ),
-                ),
-              ),
 
-              // BOTTOM-RIGHT: Weapons Fire Button
-              Positioned(
-                bottom: 32,
-                right: 24,
-                child: Listener(
-                  onPointerDown: (_) => setState(() => touchFiring = true),
-                  onPointerUp: (_) => setState(() => touchFiring = false),
-                  onPointerCancel: (_) => setState(() => touchFiring = false),
-                  child: Container(
-                    width: 72,
-                    height: 72,
-                    decoration: BoxDecoration(
-                      color: touchFiring
-                          ? const Color(0xCCFF0055)
-                          : const Color(0x33FF0055),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: const Color(0xFFFF0055), width: 1.5),
-                      boxShadow: [
-                        if (touchFiring)
-                          BoxShadow(
-                            color: const Color(0xFFFF0055).withValues(alpha: 0.6),
-                            blurRadius: 15,
-                          )
-                      ],
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.gps_fixed,
-                          color: Colors.white, size: 28),
-                    ),
+                  GlbGameFireButton(
+                    touchFiring: state.touchFiring.value ?? false,
+                    onPointerDown: () => context
+                        .read<GlbModelGameBloc>()
+                        .add(const SetTouchFiring(true)),
+                    onPointerUp: () => context
+                        .read<GlbModelGameBloc>()
+                        .add(const SetTouchFiring(false)),
+                    onPointerCancel: () => context
+                        .read<GlbModelGameBloc>()
+                        .add(const SetTouchFiring(false)),
                   ),
-                ),
-              ),
-            ],
 
-            // Target reticle in middle of screen
-            if (gameRunning)
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: IgnorePointer(
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: laserOverheated
-                                ? const Color(0x88FF3300)
-                                : const Color(0x8800FFFF),
-                            width: 1.5),
-                      ),
-                      child: Center(
-                        child: Container(
-                          width: 4,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: laserOverheated
-                                ? const Color(0xFFFF3300)
-                                : const Color(0xFF00FFFF),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                    ),
+                  GlbGameCrosshair(
+                    laserOverheated: laserOverheatedVal,
                   ),
-                ),
-              ),
+                ],
 
-            // Start Screen Panel Overlay
-            if (!gameRunning && !showGameOver)
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.8),
-                  child: Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(24),
-                      padding: const EdgeInsets.all(32),
-                      constraints: const BoxConstraints(maxWidth: 400),
-                      decoration: BoxDecoration(
-                        color: const Color(0xEE060618),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                            color: const Color(0x6600f0ff), width: 2),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x3300f0ff),
-                            blurRadius: 30,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CustomText('Spaceship GLB Arena',
-                              color: Colors.white,
-                              size: 28,
-                              fontWeight: FontWeight.w900),
-                          const SizedBox(height: 8),
-                          const CustomText('3D GLB Flight Simulator',
-                              color: Color(0xFF8B8BA7),
-                              size: 14,
-                              fontWeight: FontWeight.bold),
-                          const SizedBox(height: 24),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.03),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.05)),
-                            ),
-                            child: const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText('🚀 Fly GLB Spaceship in 3D',
-                                    color: Color(0xFFA4A4C1), size: 12),
-                                SizedBox(height: 6),
-                                CustomText(
-                                    '⚡ Shoot down space debris & asteroids',
-                                    color: Color(0xFFA4A4C1),
-                                    size: 12),
-                                SizedBox(height: 6),
-                                CustomText(
-                                    '💎 Collect energy cores & repair shields',
-                                    color: Color(0xFFA4A4C1),
-                                    size: 12),
-                                SizedBox(height: 12),
-                                CustomText('Flight Controls:',
-                                    color: Color(0xFF00F0FF),
-                                    size: 12,
-                                    fontWeight: FontWeight.bold),
-                                SizedBox(height: 4),
-                                CustomText(
-                                    '💻 PC: ARROW / WASD keys (Steer) \n    SPACEBAR (Fire Lasers)',
-                                    color: Color(0xFFA4A4C1),
-                                    size: 12),
-                                SizedBox(height: 6),
-                                CustomText(
-                                    '📱 Mobile: Drag left stick to steer\n    Tap right button to fire',
-                                    color: Color(0xFFA4A4C1),
-                                    size: 12),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          CustomGOEButton(
-                            onPressed: startGame,
-                            width: double.infinity,
-                            height: 48,
-                            backGroundColor: const Color(0xFF00F0FF),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 14),
-                            borderRadius: BorderRadius.circular(14),
-                            child: const CustomText('Launch Simulator',
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                size: 16),
-                          ),
-                        ],
-                      ),
-                    ),
+                // Start Screen Panel Overlay
+                if (!isGameRunning && !isGameOver)
+                  GlbGameStartOverlay(
+                    onStart: startGame,
                   ),
-                ),
-              ),
 
-            // Game Over overlay HUD screen
-            if (showGameOver)
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.85),
-                  child: Center(
-                    child: Container(
-                      margin: const EdgeInsets.all(24),
-                      padding: const EdgeInsets.all(32),
-                      constraints: const BoxConstraints(maxWidth: 400),
-                      decoration: BoxDecoration(
-                        color: const Color(0xEE060618),
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                            color: const Color(0x66ff0055), width: 2),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color(0x33ff0055),
-                            blurRadius: 30,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const CustomText('Hull Integrity Critical',
-                              color: Color(0xFFFF0055),
-                              size: 26,
-                              fontWeight: FontWeight.w900),
-                          const SizedBox(height: 8),
-                          const CustomText('Simulation Terminated',
-                              color: Color(0xFF8B8BA7),
-                              size: 14,
-                              fontWeight: FontWeight.bold),
-                          const SizedBox(height: 24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const CustomText('Simulation Score:',
-                                  color: Color(0xFFA4A4C1), size: 16),
-                              CustomText('$score',
-                                  color: const Color(0xFFFF0055),
-                                  size: 18,
-                                  fontWeight: FontWeight.bold),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const CustomText('Best Score:',
-                                  color: Color(0xFFA4A4C1), size: 16),
-                              CustomText('$highScore',
-                                  color: const Color(0xFF00F0FF),
-                                  size: 18,
-                                  fontWeight: FontWeight.bold),
-                            ],
-                          ),
-                          const SizedBox(height: 28),
-                          CustomGOEButton(
-                            onPressed: startGame,
-                            width: double.infinity,
-                            height: 48,
-                            backGroundColor: const Color(0xFFFF0055),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 14),
-                            borderRadius: BorderRadius.circular(14),
-                            child: const CustomText('Relaunch Ship',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                size: 16),
-                          ),
-                        ],
-                      ),
-                    ),
+                // Game Over overlay HUD screen
+                if (isGameOver)
+                  GlbGameOverOverlay(
+                    score: scoreVal,
+                    highScore: highScoreVal,
+                    onRelaunch: startGame,
                   ),
-                ),
-              ),
-          ],
+              ],
+            );
+          },
         ),
       ),
     );
   }
-}
-
-/// Custom painter representing standard 2D top-down circular sweep scan radar
-class RadarPainter extends CustomPainter {
-  final double playerX;
-  final List<three.Mesh> obstacles;
-  final List<three.Mesh> collectibles;
-  final List<three.Mesh> lasers;
-
-  RadarPainter({
-    required this.playerX,
-    required this.obstacles,
-    required this.collectibles,
-    required this.lasers,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double cx = size.width / 2;
-    final double cy = size.height - 12;
-    final double radius = size.width / 2;
-
-    final circlePaint = Paint()
-      ..color = const Color(0xFF00FF66).withValues(alpha: 0.15)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    canvas.drawCircle(Offset(cx, cy), radius * 0.4, circlePaint);
-    canvas.drawCircle(Offset(cx, cy), radius * 0.75, circlePaint);
-    canvas.drawCircle(Offset(cx, cy), radius * 1.1, circlePaint);
-
-    canvas.drawLine(Offset(cx, cy - radius * 1.2), Offset(cx, cy), circlePaint);
-    canvas.drawLine(Offset(cx - radius * 0.8, cy), Offset(cx + radius * 0.8, cy), circlePaint);
-
-    final scanPaint = Paint()
-      ..color = const Color(0xFF00FF66).withValues(alpha: 0.1)
-      ..style = PaintingStyle.fill;
-    final Path sweepPath = Path()
-      ..moveTo(cx, cy)
-      ..relativeLineTo(-radius * 0.8, -radius * 1.0)
-      ..arcToPoint(Offset(cx + radius * 0.8, cy - radius * 1.0),
-          radius: Radius.circular(radius * 1.2))
-      ..close();
-    canvas.drawPath(sweepPath, scanPaint);
-
-    final shipPaint = Paint()
-      ..color = const Color(0xFF00FFFF)
-      ..style = PaintingStyle.fill;
-    final Path shipPath = Path()
-      ..moveTo(cx, cy - 5)
-      ..lineTo(cx - 4, cy + 3)
-      ..lineTo(cx + 4, cy + 3)
-      ..close();
-    canvas.drawPath(shipPath, shipPaint);
-
-    final laserPaint = Paint()
-      ..color = const Color(0xFFFFAA00)
-      ..style = PaintingStyle.fill;
-    for (var laser in lasers) {
-      final double zVal = laser.position.z;
-      if (zVal < 0.0 && zVal > -320.0) {
-        final double ry = cy - ((zVal / -320.0) * (size.height - 24));
-        final double rx = cx + ((laser.position.x) / 16.0) * (size.width * 0.4);
-        canvas.drawCircle(Offset(rx, ry), 1.5, laserPaint);
-      }
-    }
-
-    final obsPaint = Paint()
-      ..color = const Color(0xFFFF0055)
-      ..style = PaintingStyle.fill;
-    for (var obs in obstacles) {
-      final double zVal = obs.position.z;
-      if (zVal < 0.0 && zVal > -320.0) {
-        final double ry = cy - ((zVal / -320.0) * (size.height - 24));
-        final double rx = cx + ((obs.position.x) / 16.0) * (size.width * 0.4);
-        canvas.drawCircle(Offset(rx, ry), 2.5, obsPaint);
-      }
-    }
-
-    final colPaint = Paint()
-      ..color = const Color(0xFF00FF66)
-      ..style = PaintingStyle.fill;
-    for (var col in collectibles) {
-      final double zVal = col.position.z;
-      if (zVal < 0.0 && zVal > -320.0) {
-        final double ry = cy - ((zVal / -320.0) * (size.height - 24));
-        final double rx = cx + ((col.position.x) / 16.0) * (size.width * 0.4);
-        canvas.drawCircle(Offset(rx, ry), 2.5, colPaint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant RadarPainter oldDelegate) => true;
 }
