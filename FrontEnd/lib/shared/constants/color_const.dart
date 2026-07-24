@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class ColorConst {
   static const Color baseHexColor = Color(0xFF4F46E5); // Indigo-600 (SaaS Accent)

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 const int NORMAL_SCROLL_ANIMATION_LENGTH_MS = 250;
 const double SCROLL_SPEED = 130;

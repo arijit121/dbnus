@@ -3,7 +3,7 @@ import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:flutter/foundation.dart' deferred as foundation;
 import 'package:flutter/gestures.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:dbnus/shared/constants/theme_const.dart';

@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 /// Custom painter for a Google Maps-style directional navigation arrow.
 /// Draws a pointed teardrop/chevron shape indicating travel direction.

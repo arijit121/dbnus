@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import '../../../../../shared/ui/atoms/buttons/custom_button.dart';
 import '../../../../../shared/ui/atoms/text/custom_text.dart';
 
