@@ -23,8 +23,13 @@ class LlamaService {
       }
       final selectedBackend = backend ?? LlamaBackend();
       _engine = LlamaEngine(selectedBackend);
-      await _engine?.loadModel(
-        modelPath,
+
+      final source = (modelPath.startsWith('http://') || modelPath.startsWith('https://'))
+          ? ModelSource.url(Uri.parse(modelPath))
+          : ModelSource.path(modelPath);
+
+      await _engine?.loadModelSource(
+        source,
         modelParams: modelParams ?? const ModelParams(),
       );
       _session = ChatSession(_engine!);

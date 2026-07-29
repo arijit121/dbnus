@@ -1,50 +1,67 @@
 /**
  * Dynamic loader for llamadart WebGPU Bridge Runtime.
- * Converts cross-origin CDN Web Worker scripts to same-origin Blob URLs.
+ * Loads same-origin WebGPU bridge assets from webgpu_bridge/ or assets/js/webgpu_bridge/
  */
 (function () {
-    const cdnBase = "https://cdn.jsdelivr.net/gh/leehack/llama-web-bridge-assets@v0.1.18/";
-    const bridgeUrl = cdnBase + "llama_webgpu_bridge.js";
+    let __resolveBridgeReady;
+    let __rejectBridgeReady;
 
-    async function fetchAsBlobUrl(url) {
+    if (!window.__llamadartBridgeReadyPromise) {
+        window.__llamadartBridgeReady = false;
+        window.__llamadartBridgeReadyPromise = new Promise((resolve, reject) => {
+            __resolveBridgeReady = resolve;
+            __rejectBridgeReady = reject;
+        });
+        window.__llamadartBridgeReadyPromise.catch(function () {});
+    }
+
+    function getAbsoluteUrl(relativePath) {
         try {
-            const resp = await fetch(url);
-            if (!resp.ok) return null;
-            const text = await resp.text();
-            const blob = new Blob([text], { type: 'application/javascript' });
-            return URL.createObjectURL(blob);
-        } catch (e) {
-            console.warn('Failed to fetch script for Blob URL:', url, e);
-            return null;
+            const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+            return new URL(relativePath, baseUrl).toString();
+        } catch (_) {
+            return relativePath;
         }
     }
 
     async function ensureLlamaWebGpuBridge() {
-        if (window.LlamaWebGpuBridge) {
+        if (window.LlamaWebGpuBridge && window.__llamadartBridgeReady) {
             return true;
         }
         try {
-            // Create same-origin Blob URLs for cross-origin Web Worker scripts
-            const coreUrl = cdnBase + "llama_webgpu_core.js";
-            const blobCoreUrl = await fetchAsBlobUrl(coreUrl);
-            if (blobCoreUrl) {
-                window.__llamadartBridgeCoreModuleUrl = blobCoreUrl;
+            let bridgeUrl = getAbsoluteUrl("webgpu_bridge/llama_webgpu_bridge.js");
+            let mod;
+            try {
+                mod = await import(bridgeUrl);
+            } catch (_) {
+                bridgeUrl = getAbsoluteUrl("assets/js/webgpu_bridge/llama_webgpu_bridge.js");
+                mod = await import(bridgeUrl);
             }
 
-            const workerUrl = cdnBase + "llama_webgpu_bridge_worker.js";
-            const blobWorkerUrl = await fetchAsBlobUrl(workerUrl);
-            if (blobWorkerUrl) {
-                window.__llamadartBridgeWorkerUrl = blobWorkerUrl;
-            }
-
-            const mod = await import(bridgeUrl);
             if (mod && mod.LlamaWebGpuBridge) {
+                const baseDir = bridgeUrl.substring(0, bridgeUrl.lastIndexOf('/') + 1);
                 window.LlamaWebGpuBridge = mod.LlamaWebGpuBridge;
+                window.__llamadartBridgeModuleUrl = bridgeUrl;
+                window.__llamadartBridgeCoreModuleUrl = baseDir + "llama_webgpu_core.js";
+                window.__llamadartBridgeCoreModuleUrlMem64 = baseDir + "llama_webgpu_core_mem64.js";
+                window.__llamadartBridgeWasmUrl = baseDir + "llama_webgpu_core.wasm";
+                window.__llamadartBridgeWasmUrlMem64 = baseDir + "llama_webgpu_core.wasm";
+                window.__llamadartBridgeWorkerUrl = baseDir + "llama_webgpu_bridge_worker.js";
+                window.__llamadartBridgePreferMemory64 = false;
+                window.__llamadartBridgeLoadError = null;
+
                 window.__llamadartBridgeReady = true;
+                if (__resolveBridgeReady) {
+                    __resolveBridgeReady();
+                }
                 return true;
             }
         } catch (err) {
-            console.warn("llamadart WebGPU bridge import warning:", err);
+            console.warn("llamadart same-origin WebGPU bridge load warning:", err);
+            window.__llamadartBridgeLoadError = String(err);
+            if (__rejectBridgeReady) {
+                __rejectBridgeReady(err);
+            }
         }
         return false;
     }
