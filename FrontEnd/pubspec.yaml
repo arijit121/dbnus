@@ -153,6 +153,7 @@ flutter:
     - assets/store/
     - assets/sound/
     - assets/js/
+    - assets/js/webgpu_bridge/
     - assets/models/
 
 

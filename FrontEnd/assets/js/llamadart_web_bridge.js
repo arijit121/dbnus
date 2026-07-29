@@ -1,6 +1,6 @@
 /**
  * Dynamic loader for llamadart WebGPU Bridge Runtime.
- * Loads same-origin WebGPU bridge assets from webgpu_bridge/ or assets/js/webgpu_bridge/
+ * Loads same-origin WebGPU bridge assets strictly from assets/js/webgpu_bridge/
  */
 (function () {
     let __resolveBridgeReady;
@@ -15,13 +15,22 @@
         window.__llamadartBridgeReadyPromise.catch(function () {});
     }
 
-    function getAbsoluteUrl(relativePath) {
+    function getBridgeBaseDir() {
         try {
-            const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
-            return new URL(relativePath, baseUrl).toString();
-        } catch (_) {
-            return relativePath;
+            const scriptEl = document.querySelector('script[src*="llamadart_web_bridge.js"]');
+            if (scriptEl && scriptEl.src) {
+                const src = scriptEl.src;
+                return src.substring(0, src.lastIndexOf('/') + 1);
+            }
+        } catch (_) {}
+
+        let base = window.flutterAssetBase || (window.location.origin + window.location.pathname);
+        if (!base.endsWith('/')) {
+            base += '/';
         }
+
+        const isReleaseBuild = document.querySelector('script[src*="assets/assets/"]') !== null;
+        return base + (isReleaseBuild ? 'assets/assets/js/' : 'assets/js/');
     }
 
     async function ensureLlamaWebGpuBridge() {
@@ -29,24 +38,19 @@
             return true;
         }
         try {
-            let bridgeUrl = getAbsoluteUrl("webgpu_bridge/llama_webgpu_bridge.js");
-            let mod;
-            try {
-                mod = await import(bridgeUrl);
-            } catch (_) {
-                bridgeUrl = getAbsoluteUrl("assets/js/webgpu_bridge/llama_webgpu_bridge.js");
-                mod = await import(bridgeUrl);
-            }
+            const baseDir = getBridgeBaseDir();
+            const bridgeUrl = baseDir + "webgpu_bridge/llama_webgpu_bridge.js";
+            const mod = await import(bridgeUrl);
 
             if (mod && mod.LlamaWebGpuBridge) {
-                const baseDir = bridgeUrl.substring(0, bridgeUrl.lastIndexOf('/') + 1);
+                const bridgeDir = baseDir + "webgpu_bridge/";
                 window.LlamaWebGpuBridge = mod.LlamaWebGpuBridge;
                 window.__llamadartBridgeModuleUrl = bridgeUrl;
-                window.__llamadartBridgeCoreModuleUrl = baseDir + "llama_webgpu_core.js";
-                window.__llamadartBridgeCoreModuleUrlMem64 = baseDir + "llama_webgpu_core_mem64.js";
-                window.__llamadartBridgeWasmUrl = baseDir + "llama_webgpu_core.wasm";
-                window.__llamadartBridgeWasmUrlMem64 = baseDir + "llama_webgpu_core.wasm";
-                window.__llamadartBridgeWorkerUrl = baseDir + "llama_webgpu_bridge_worker.js";
+                window.__llamadartBridgeCoreModuleUrl = bridgeDir + "llama_webgpu_core.js";
+                window.__llamadartBridgeCoreModuleUrlMem64 = bridgeDir + "llama_webgpu_core_mem64.js";
+                window.__llamadartBridgeWasmUrl = bridgeDir + "llama_webgpu_core.wasm";
+                window.__llamadartBridgeWasmUrlMem64 = bridgeDir + "llama_webgpu_core.wasm";
+                window.__llamadartBridgeWorkerUrl = bridgeDir + "llama_webgpu_bridge_worker.js";
                 window.__llamadartBridgePreferMemory64 = false;
                 window.__llamadartBridgeLoadError = null;
 
@@ -57,7 +61,7 @@
                 return true;
             }
         } catch (err) {
-            console.warn("llamadart same-origin WebGPU bridge load warning:", err);
+            console.warn("llamadart assets WebGPU bridge load warning:", err);
             window.__llamadartBridgeLoadError = String(err);
             if (__rejectBridgeReady) {
                 __rejectBridgeReady(err);
