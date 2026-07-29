@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/core/services/JsService/helper/js_helper.dart';
 
@@ -159,6 +157,21 @@ class JsProvider {
     } catch (e, stacktrace) {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
+  }
+
+  static Future<bool?> loadLlamaWebGpuBridge() async {
+    try {
+      String jsPath = "assets/js/llamadart_web_bridge.js";
+      return await jsHelper.loadJs<bool>(
+        jsPath: jsPath,
+        id: "llamadart-web-bridge-script",
+        jsFunctionName: "ensureLlamaWebGpuBridge",
+        usePromise: true,
+      );
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
+    }
+    return null;
   }
 
   static Future<String?> getSessionStorageItem(String key) async {

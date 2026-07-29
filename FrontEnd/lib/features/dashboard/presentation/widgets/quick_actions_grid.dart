@@ -91,6 +91,17 @@ class QuickActionsGrid extends StatelessWidget {
               name: RouteName.rayzorPay, arguments: RazorpayMerchantDetails());
         },
       ),
+      _QuickAction(
+        icon: AssetsConst.featherGlobe,
+        label: "Llama AI Chat",
+        subtitle: "Local LLM Inference",
+        gradient: const [Color(0xFF6366F1), Color(0xFFA855F7)],
+        onTap: () {
+          kIsWeb
+              ? context.goNamed(RouteName.llamaChat)
+              : context.pushNamed(RouteName.llamaChat);
+        },
+      ),
     ];
 
     return LayoutBuilder(builder: (context, constraints) {

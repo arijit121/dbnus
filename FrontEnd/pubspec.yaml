@@ -129,6 +129,9 @@ dependencies:
   latlong2: 0.10.1
   three_js: 0.3.0
 
+  # AI / LLM
+  llamadart: 0.8.17
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
