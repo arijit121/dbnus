@@ -16,15 +16,8 @@
     }
 
     function getBridgeBaseDir() {
-        try {
-            const scriptEl = document.querySelector('script[src*="llamadart_web_bridge.js"]');
-            if (scriptEl && scriptEl.src) {
-                const src = scriptEl.src;
-                return src.substring(0, src.lastIndexOf('/') + 1);
-            }
-        } catch (_) {}
 
-        let base = window.flutterAssetBase || (window.location.origin + window.location.pathname);
+        let base = window.flutterAssetBase || (window.location.origin + "/");
         if (!base.endsWith('/')) {
             base += '/';
         }
@@ -44,6 +37,10 @@
 
             if (mod && mod.LlamaWebGpuBridge) {
                 const bridgeDir = baseDir + "webgpu_bridge/";
+                const threadPoolSize = window.crossOriginIsolated === true
+                    ? Math.max(1, Math.min(4, Math.trunc(Number(window.navigator?.hardwareConcurrency) || 2)))
+                    : 1;
+
                 window.LlamaWebGpuBridge = mod.LlamaWebGpuBridge;
                 window.__llamadartBridgeModuleUrl = bridgeUrl;
                 window.__llamadartBridgeCoreModuleUrl = bridgeDir + "llama_webgpu_core.js";
@@ -52,6 +49,7 @@
                 window.__llamadartBridgeWasmUrlMem64 = bridgeDir + "llama_webgpu_core.wasm";
                 window.__llamadartBridgeWorkerUrl = bridgeDir + "llama_webgpu_bridge_worker.js";
                 window.__llamadartBridgePreferMemory64 = false;
+                window.__llamadartBridgeThreadPoolSize = threadPoolSize;
                 window.__llamadartBridgeLoadError = null;
 
                 window.__llamadartBridgeReady = true;
