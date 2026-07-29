@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 class EmptyChatState extends StatelessWidget {
   const EmptyChatState({super.key});
@@ -18,24 +19,20 @@ class EmptyChatState extends StatelessWidget {
             color: isDark ? Colors.indigoAccent.shade100 : Colors.indigoAccent,
           ),
           const SizedBox(height: 16),
-          Text(
+          CustomText(
             'LlamaDart Local AI',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : Colors.black87,
-            ),
+            size: 20,
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white : Colors.black87,
           ),
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
+            child: CustomText(
               'Load a GGUF model path or URL above to start private, local LLM chat inference.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-              ),
+              size: 14,
+              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
             ),
           ),
         ],

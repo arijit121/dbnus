@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import '../../domain/entities/chat_message.dart';
 
 class ChatBubble extends StatelessWidget {
@@ -67,14 +68,12 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 4),
-            Text(
+            CustomText(
               '${message.timestamp.hour.toString().padLeft(2, '0')}:${message.timestamp.minute.toString().padLeft(2, '0')}',
-              style: TextStyle(
-                fontSize: 10,
-                color: isUser
-                    ? Colors.white70
-                    : (isDark ? Colors.grey.shade500 : Colors.grey.shade400),
-              ),
+              size: 10,
+              color: isUser
+                  ? Colors.white70
+                  : (isDark ? Colors.grey.shade500 : Colors.grey.shade400),
             ),
           ],
         ),
