@@ -108,6 +108,31 @@ class ModelConfigCard extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ActionChip(
+                  avatar: const Icon(Icons.flash_on, size: 14, color: Colors.amber),
+                  label: const Text('SmolLM2 (135M ~100MB)', style: TextStyle(fontSize: 11)),
+                  onPressed: () {
+                    controller.text =
+                        'https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf';
+                  },
+                ),
+                const SizedBox(width: 6),
+                ActionChip(
+                  avatar: const Icon(Icons.psychology, size: 14, color: Colors.blueAccent),
+                  label: const Text('Qwen2.5 (0.5B ~398MB)', style: TextStyle(fontSize: 11)),
+                  onPressed: () {
+                    controller.text =
+                        'https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf';
+                  },
+                ),
+              ],
+            ),
+          ),
           if (kIsWeb) ...[
             const SizedBox(height: 8),
             Container(

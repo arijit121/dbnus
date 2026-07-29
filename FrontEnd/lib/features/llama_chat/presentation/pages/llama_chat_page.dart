@@ -28,7 +28,7 @@ class _LlamaChatPageState extends State<LlamaChatPage> {
   late final DisposeLlamaUseCase _disposeUseCase;
 
   final TextEditingController _modelPathController = TextEditingController(
-    text: 'https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf',
+    text: 'https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf',
   );
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
