@@ -154,7 +154,14 @@ flutter:
     - assets/sound/
     - assets/js/
     - assets/js/webgpu_bridge/
-    - assets/models/
+    - assets/models/3d/
+    - path: assets/models/ai/
+      platforms:
+        - android
+        - ios
+        - windows
+        - linux
+        - macos
 
 
 flutter_intl:

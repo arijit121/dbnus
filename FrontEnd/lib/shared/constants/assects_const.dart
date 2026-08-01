@@ -198,7 +198,10 @@ class AssetsConst {
   static const String callRingtone = "sound/call_ringtone.mp3";
 
   // 3D GLB Models
-  static const String spaceshipGlbModel = "assets/models/spaceship.glb";
-  static const String damagedHelmetGlbModel = "assets/models/damaged_helmet.glb";
+  static const String spaceshipGlbModel = "assets/models/3d/spaceship.glb";
+  static const String damagedHelmetGlbModel = "assets/models/3d/damaged_helmet.glb";
+
+  // Local AI GGUF Models
+  static const String smolLmAiModelGguf = "assets/models/ai/model.gguf";
 }
 

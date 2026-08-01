@@ -44,6 +44,8 @@ import 'package:dbnus/features/game/presentation/pages/glb_model_game.dart'
     deferred as glb_model_game;
 import 'package:dbnus/features/llama_chat/presentation/pages/llama_chat_page.dart'
     deferred as llama_chat;
+import 'package:dbnus/features/llm_playground/presentation/pages/llm_playground_page.dart'
+    deferred as llm_playground;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
@@ -350,6 +352,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await llama_chat.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.llmPlayground,
+        path: RouteName.llmPlayground,
+        builder: (BuildContext context, GoRouterState state) {
+          return llm_playground.LlmPlaygroundPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await llm_playground.loadLibrary();
           return null;
         },
       ),

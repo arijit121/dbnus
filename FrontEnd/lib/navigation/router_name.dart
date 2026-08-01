@@ -24,4 +24,5 @@ class RouteName {
   static const String spaceFlight3d = "/space-flight-3d";
   static const String glbModelGame = "/glb-model-game";
   static const String llamaChat = "/llama-chat";
+  static const String llmPlayground = "/llm-playground";
 }
