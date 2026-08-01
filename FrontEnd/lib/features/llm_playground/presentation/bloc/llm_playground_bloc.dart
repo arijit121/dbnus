@@ -1,0 +1,348 @@
+import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
+import '../../domain/models/playground_chat_message.dart';
+import '../../domain/models/playground_chat_session.dart';
+import '../../domain/models/playground_tool.dart';
+import '../../services/playground_llama_service.dart';
+import 'llm_playground_event.dart';
+import 'llm_playground_state.dart';
+
+class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
+  final PlaygroundLlamaService _llamaService;
+  StreamSubscription? _streamSubscription;
+  final Uuid _uuid = const Uuid();
+
+  LlmPlaygroundBloc({PlaygroundLlamaService? llamaService})
+      : _llamaService = llamaService ?? PlaygroundLlamaService(),
+        super(LlmPlaygroundState()) {
+    on<InitializeModelEvent>(_onInitializeModel);
+    on<SelectToolEvent>(_onSelectTool);
+    on<UpdateSystemPromptEvent>(_onUpdateSystemPrompt);
+    on<SendPlaygroundMessageEvent>(_onSendMessage);
+    on<StreamChunkReceivedEvent>(_onStreamChunkReceived);
+    on<GenerationCompletedEvent>(_onGenerationCompleted);
+    on<StopGenerationEvent>(_onStopGeneration);
+    on<ClearChatEvent>(_onClearChat);
+    on<CreateNewChatEvent>(_onCreateNewChat);
+    on<SelectChatSessionEvent>(_onSelectChatSession);
+    on<DeleteChatSessionEvent>(_onDeleteChatSession);
+    on<ClearAllHistoryEvent>(_onClearAllHistory);
+  }
+
+  PlaygroundLlamaService get llamaService => _llamaService;
+
+  Future<void> _onInitializeModel(
+    InitializeModelEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) async {
+    final targetPath = event.modelPath ?? state.modelPath;
+
+    emit(state.copyWith(
+      status: LlmPlaygroundStatus.initializing,
+      modelPath: targetPath,
+      statusMessage: 'Loading model weights...',
+      errorMessage: null,
+    ));
+
+    try {
+      await _llamaService.initialize(modelPath: targetPath);
+      emit(state.copyWith(
+        status: LlmPlaygroundStatus.initialized,
+        statusMessage: 'Model Ready',
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: LlmPlaygroundStatus.error,
+        statusMessage: 'Initialization Failed',
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  void _onCreateNewChat(
+    CreateNewChatEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    _streamSubscription?.cancel();
+    final tool = event.tool ?? state.selectedTool;
+    final now = DateTime.now();
+    final newSession = PlaygroundChatSession(
+      id: _uuid.v4(),
+      title: 'New Chat',
+      messages: const [],
+      selectedToolId: tool.id,
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    final updatedSessions = List<PlaygroundChatSession>.from(state.sessions)..insert(0, newSession);
+
+    emit(state.copyWith(
+      sessions: updatedSessions,
+      activeSessionId: newSession.id,
+      selectedTool: tool,
+      isGenerating: false,
+    ));
+  }
+
+  void _onSelectChatSession(
+    SelectChatSessionEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    try {
+      final session = state.sessions.firstWhere((s) => s.id == event.sessionId);
+      final tool = PlaygroundTool.availableTools.firstWhere(
+        (t) => t.id == session.selectedToolId,
+        orElse: () => PlaygroundTool.availableTools.first,
+      );
+
+      emit(state.copyWith(
+        activeSessionId: session.id,
+        selectedTool: tool,
+      ));
+    } catch (_) {}
+  }
+
+  void _onDeleteChatSession(
+    DeleteChatSessionEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    final updatedSessions = state.sessions.where((s) => s.id != event.sessionId).toList();
+
+    String? newActiveId = state.activeSessionId;
+    if (state.activeSessionId == event.sessionId) {
+      _streamSubscription?.cancel();
+      newActiveId = updatedSessions.isNotEmpty ? updatedSessions.first.id : null;
+    }
+
+    emit(state.copyWith(
+      sessions: updatedSessions,
+      activeSessionId: newActiveId,
+      isGenerating: state.activeSessionId == event.sessionId ? false : state.isGenerating,
+    ));
+  }
+
+  void _onClearAllHistory(
+    ClearAllHistoryEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    _streamSubscription?.cancel();
+    emit(state.copyWith(
+      sessions: const [],
+      activeSessionId: null,
+      isGenerating: false,
+    ));
+  }
+
+  void _onSelectTool(
+    SelectToolEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    emit(state.copyWith(selectedTool: event.tool));
+
+    if (state.activeSessionId != null) {
+      final sessions = state.sessions.map((s) {
+        if (s.id == state.activeSessionId) {
+          return s.copyWith(selectedToolId: event.tool.id);
+        }
+        return s;
+      }).toList();
+      emit(state.copyWith(sessions: sessions));
+    }
+  }
+
+  void _onUpdateSystemPrompt(
+    UpdateSystemPromptEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    emit(state.copyWith(systemPrompt: event.systemPrompt));
+  }
+
+  Future<void> _onSendMessage(
+    SendPlaygroundMessageEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) async {
+    final rawText = event.text.trim();
+    if (rawText.isEmpty || !_llamaService.isInitialized || state.isGenerating) return;
+
+    // Ensure we have an active session
+    PlaygroundChatSession session;
+    List<PlaygroundChatSession> sessions = List<PlaygroundChatSession>.from(state.sessions);
+
+    if (state.activeSession == null) {
+      final now = DateTime.now();
+      session = PlaygroundChatSession(
+        id: _uuid.v4(),
+        title: rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText,
+        messages: const [],
+        selectedToolId: state.selectedTool.id,
+        createdAt: now,
+        updatedAt: now,
+      );
+      sessions.insert(0, session);
+    } else {
+      session = state.activeSession!;
+      if (session.messages.isEmpty) {
+        final title = rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
+        session = session.copyWith(title: title);
+      }
+    }
+
+    final tool = state.selectedTool;
+    String fullPrompt = '';
+
+    if (tool.id == PlaygroundToolId.promptStudio) {
+      final sys = state.systemPrompt.trim();
+      fullPrompt = sys.isNotEmpty ? 'System: $sys\n\nUser: $rawText' : rawText;
+    } else if (tool.promptPrefix.isNotEmpty) {
+      fullPrompt = '${tool.promptPrefix}$rawText';
+    } else {
+      fullPrompt = rawText;
+    }
+
+    final now = DateTime.now();
+    final userMsg = PlaygroundChatMessage(
+      id: _uuid.v4(),
+      text: rawText,
+      isUser: true,
+      timestamp: now,
+      toolUsed: tool.id,
+    );
+
+    final botMsg = PlaygroundChatMessage(
+      id: _uuid.v4(),
+      text: '',
+      isUser: false,
+      timestamp: now,
+      toolUsed: tool.id,
+      isStreaming: true,
+    );
+
+    final updatedMessages = List<PlaygroundChatMessage>.from(session.messages)..addAll([userMsg, botMsg]);
+    final updatedSession = session.copyWith(
+      messages: updatedMessages,
+      updatedAt: now,
+    );
+
+    final sessionIndex = sessions.indexWhere((s) => s.id == updatedSession.id);
+    if (sessionIndex != -1) {
+      sessions[sessionIndex] = updatedSession;
+    } else {
+      sessions.insert(0, updatedSession);
+    }
+
+    emit(state.copyWith(
+      isGenerating: true,
+      sessions: sessions,
+      activeSessionId: updatedSession.id,
+    ));
+
+    await _streamSubscription?.cancel();
+    final stream = _llamaService.createChatStream(fullPrompt);
+    if (stream == null) {
+      emit(state.copyWith(
+        isGenerating: false,
+        errorMessage: 'Failed to create AI generation stream.',
+      ));
+      return;
+    }
+
+    _streamSubscription = stream.listen(
+      (chunk) {
+        if (chunk.choices.isNotEmpty) {
+          final content = chunk.choices.first.delta.content;
+          if (content != null && content.isNotEmpty) {
+            add(StreamChunkReceivedEvent(chunk: content));
+          }
+        }
+      },
+      onError: (err) {
+        add(StreamChunkReceivedEvent(chunk: '\n[Error: $err]'));
+        add(const GenerationCompletedEvent());
+      },
+      onDone: () {
+        add(const GenerationCompletedEvent());
+      },
+    );
+  }
+
+  void _onStreamChunkReceived(
+    StreamChunkReceivedEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    if (state.activeSession == null || state.activeSession!.messages.isEmpty) return;
+
+    final session = state.activeSession!;
+    final updated = List<PlaygroundChatMessage>.from(session.messages);
+    final lastIndex = updated.length - 1;
+    final last = updated[lastIndex];
+
+    if (!last.isUser) {
+      updated[lastIndex] = last.copyWith(
+        text: last.text + event.chunk,
+        isStreaming: true,
+      );
+
+      final updatedSession = session.copyWith(messages: updated);
+      final sessions = state.sessions.map((s) => s.id == updatedSession.id ? updatedSession : s).toList();
+
+      emit(state.copyWith(
+        isGenerating: true,
+        sessions: sessions,
+      ));
+    }
+  }
+
+  void _onGenerationCompleted(
+    GenerationCompletedEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    if (state.activeSession != null) {
+      final session = state.activeSession!;
+      final updated = List<PlaygroundChatMessage>.from(session.messages);
+      if (updated.isNotEmpty) {
+        final lastIndex = updated.length - 1;
+        final last = updated[lastIndex];
+        if (!last.isUser) {
+          updated[lastIndex] = last.copyWith(isStreaming: false);
+        }
+      }
+
+      final updatedSession = session.copyWith(messages: updated);
+      final sessions = state.sessions.map((s) => s.id == updatedSession.id ? updatedSession : s).toList();
+
+      emit(state.copyWith(
+        isGenerating: false,
+        sessions: sessions,
+      ));
+    } else {
+      emit(state.copyWith(isGenerating: false));
+    }
+  }
+
+  void _onStopGeneration(
+    StopGenerationEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    _streamSubscription?.cancel();
+    add(const GenerationCompletedEvent());
+  }
+
+  void _onClearChat(
+    ClearChatEvent event,
+    Emitter<LlmPlaygroundState> emit,
+  ) {
+    _streamSubscription?.cancel();
+    if (state.activeSessionId != null) {
+      add(DeleteChatSessionEvent(state.activeSessionId!));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    _llamaService.dispose();
+    return super.close();
+  }
+}

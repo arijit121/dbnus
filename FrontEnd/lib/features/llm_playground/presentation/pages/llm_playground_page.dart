@@ -1,208 +1,67 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:llamadart/llamadart.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../navigation/custom_router/custom_route.dart';
-import '../../services/playground_llama_service.dart';
-import '../widgets/playground_model_config_card.dart';
+import '../../domain/models/playground_tool.dart';
+import '../bloc/llm_playground_bloc.dart';
+import '../bloc/llm_playground_event.dart';
+import '../bloc/llm_playground_state.dart';
+import '../widgets/playground_chat_history_drawer.dart';
+import '../widgets/playground_message_bubble.dart';
 
-enum PlaygroundMode {
-  summarizer('Summarizer', Icons.summarize_rounded, 'Summarize long articles or notes into key bullet points.'),
-  codeExplainer('Code Explainer', Icons.code_rounded, 'Analyze code snippets and explain how they work step-by-step.'),
-  textRewriter('Text Rewriter', Icons.edit_note_rounded, 'Rewrite text in a professional, clear, or concise tone.'),
-  promptStudio('Prompt Studio', Icons.tune_rounded, 'Experiment with custom system prompts and user inputs.');
-
-  final String title;
-  final IconData icon;
-  final String description;
-
-  const PlaygroundMode(this.title, this.icon, this.description);
-}
-
-class LlmPlaygroundPage extends StatefulWidget {
+class LlmPlaygroundPage extends StatelessWidget {
   const LlmPlaygroundPage({super.key});
 
   @override
-  State<LlmPlaygroundPage> createState() => _LlmPlaygroundPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          LlmPlaygroundBloc()..add(const InitializeModelEvent()),
+      child: const _LlmPlaygroundView(),
+    );
+  }
 }
 
-class _LlmPlaygroundPageState extends State<LlmPlaygroundPage> {
-  final PlaygroundLlamaService _llamaService = PlaygroundLlamaService();
-  final TextEditingController _modelPathController = TextEditingController(
-    text: kIsWeb
-        ? 'https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf'
-        : 'assets/models/ai/model.gguf',
-  );
-  final TextEditingController _inputController = TextEditingController();
-  final TextEditingController _systemPromptController = TextEditingController(
-    text: 'You are an intelligent, helpful AI assistant running locally via LlamaDart.',
-  );
+class _LlmPlaygroundView extends StatefulWidget {
+  const _LlmPlaygroundView();
+
+  @override
+  State<_LlmPlaygroundView> createState() => _LlmPlaygroundViewState();
+}
+
+class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
+  final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-
-  PlaygroundMode _selectedMode = PlaygroundMode.summarizer;
-  bool _isInitializing = false;
-  String? _statusMessage;
-  String _outputText = '';
-  bool _isGenerating = false;
-  StreamSubscription<LlamaCompletionChunk>? _streamSub;
-
-  final Map<PlaygroundMode, List<Map<String, String>>> _presets = {
-    PlaygroundMode.summarizer: [
-      {
-        'title': 'AI Overview',
-        'text':
-            'Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think and learn like humans. Recent advancements in On-Device Machine Learning allow Large Language Models to run directly on smartphones and personal computers without sending data to external servers.',
-      },
-      {
-        'title': 'Flutter & Dart',
-        'text':
-            'Flutter is Google’s open-source UI software development kit used to craft natively compiled applications for mobile, web, and desktop from a single codebase. It uses Dart, a client-optimized language for fast apps on any platform.',
-      },
-    ],
-    PlaygroundMode.codeExplainer: [
-      {
-        'title': 'Dart Stream',
-        'text':
-            'Stream<int> countStream(int to) async* {\n  for (int i = 1; i <= to; i++) {\n    yield i;\n  }\n}',
-      },
-      {
-        'title': 'Flutter BLoC',
-        'text':
-            'class CounterBloc extends Bloc<CounterEvent, int> {\n  CounterBloc() : super(0) {\n    on<Increment>((event, emit) => emit(state + 1));\n  }\n}',
-      },
-    ],
-    PlaygroundMode.textRewriter: [
-      {
-        'title': 'Casual to Professional',
-        'text': 'Hey team, just wanted to check if the new build is ready or if there are any blocking bugs left.',
-      },
-      {
-        'title': 'Simplify Concept',
-        'text':
-            'Quantization is a technique that reduces the memory footprint of neural network weights by converting 32-bit floating-point numbers into 4-bit integers.',
-      },
-    ],
-    PlaygroundMode.promptStudio: [
-      {
-        'title': 'Recipe Ideas',
-        'text': 'I have eggs, spinach, tomatoes, and cheese. What quick meal can I make in 10 minutes?',
-      },
-      {
-        'title': 'Creative Story',
-        'text': 'Write a 3-sentence sci-fi opening line about a lighthouse on Mars.',
-      },
-    ],
-  };
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
-    _streamSub?.cancel();
-    _llamaService.dispose();
-    _modelPathController.dispose();
-    _inputController.dispose();
-    _systemPromptController.dispose();
+    _textController.dispose();
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
-  Future<void> _initializeModel() async {
-    final path = _modelPathController.text.trim();
-    if (path.isEmpty) return;
-
-    setState(() {
-      _isInitializing = true;
-      _statusMessage = 'Loading model weights...';
-    });
-
-    try {
-      await _llamaService.initialize(modelPath: path);
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-          _statusMessage = 'Model Initialized';
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isInitializing = false;
-          _statusMessage = 'Failed to load model';
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error initializing model: $e'),
-            backgroundColor: Colors.redAccent,
-          ),
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
         );
       }
-    }
+    });
   }
 
-  void _runPlayground() {
-    final rawInput = _inputController.text.trim();
-    if (rawInput.isEmpty || !_llamaService.isInitialized || _isGenerating) return;
+  void _sendMessage() {
+    final text = _textController.text.trim();
+    if (text.isEmpty) return;
 
-    String fullPrompt = '';
-    switch (_selectedMode) {
-      case PlaygroundMode.summarizer:
-        fullPrompt = 'Task: Summarize the following text in concise bullet points.\n\nText:\n$rawInput';
-        break;
-      case PlaygroundMode.codeExplainer:
-        fullPrompt = 'Task: Explain the following code step-by-step for a developer.\n\nCode:\n$rawInput';
-        break;
-      case PlaygroundMode.textRewriter:
-        fullPrompt = 'Task: Rewrite the following text to be professional, clear, and engaging.\n\nOriginal Text:\n$rawInput';
-        break;
-      case PlaygroundMode.promptStudio:
-        final sys = _systemPromptController.text.trim();
-        fullPrompt = sys.isNotEmpty ? 'System: $sys\n\nUser: $rawInput' : rawInput;
-        break;
-    }
-
-    setState(() {
-      _outputText = '';
-      _isGenerating = true;
-    });
-
-    _streamSub?.cancel();
-    final stream = _llamaService.createChatStream(fullPrompt);
-    if (stream == null) {
-      setState(() {
-        _isGenerating = false;
-        _outputText = '[Error creating generation stream]';
-      });
-      return;
-    }
-
-    _streamSub = stream.listen(
-      (chunk) {
-        if (chunk.choices.isNotEmpty) {
-          final content = chunk.choices.first.delta.content;
-          if (content != null && content.isNotEmpty && mounted) {
-            setState(() {
-              _outputText += content;
-            });
-          }
-        }
-      },
-      onError: (err) {
-        if (mounted) {
-          setState(() {
-            _isGenerating = false;
-            _outputText += '\n[Error: $err]';
-          });
-        }
-      },
-      onDone: () {
-        if (mounted) {
-          setState(() {
-            _isGenerating = false;
-          });
-        }
-      },
-    );
+    context
+        .read<LlmPlaygroundBloc>()
+        .add(SendPlaygroundMessageEvent(text: text));
+    _textController.clear();
+    _scrollToBottom();
   }
 
   @override
@@ -211,311 +70,400 @@ class _LlmPlaygroundPageState extends State<LlmPlaygroundPage> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+      backgroundColor:
+          isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+      drawer: const PlaygroundChatHistoryDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => CustomRoute.back(),
         ),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.science_rounded, color: Colors.indigoAccent, size: 24),
-            SizedBox(width: 10),
-            Text(
-              'LLM Prompt Studio & Tools',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          padding: const EdgeInsets.only(bottom: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Model Config Card
-              PlaygroundModelConfigCard(
-                controller: _modelPathController,
-                isInitializing: _isInitializing,
-                isInitialized: _llamaService.isInitialized,
-                statusMessage: _statusMessage,
-                onInitialize: _initializeModel,
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.indigoAccent.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
               ),
-
-              const SizedBox(height: 12),
-
-              // Mode Switcher Tabs
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  height: 40,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: PlaygroundMode.values.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final mode = PlaygroundMode.values[index];
-                      final isSelected = mode == _selectedMode;
-                      return ChoiceChip(
-                        avatar: Icon(
-                          mode.icon,
-                          size: 16,
-                          color: isSelected ? Colors.white : Colors.indigoAccent,
-                        ),
-                        label: Text(mode.title),
-                        selected: isSelected,
-                        selectedColor: Colors.indigoAccent,
-                        labelStyle: TextStyle(
-                          fontSize: 12,
-                          color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                        ),
-                        onSelected: (selected) {
-                          if (selected) {
-                            setState(() {
-                              _selectedMode = mode;
-                            });
-                          }
-                        },
+              child: const Icon(Icons.smart_toy_rounded,
+                  color: Colors.indigoAccent, size: 20),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<LlmPlaygroundBloc, LlmPlaygroundState>(
+                    builder: (context, state) {
+                      final title =
+                          state.activeSession?.title ?? 'LLM AI Assistant';
+                      return Text(
+                        title,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       );
                     },
                   ),
-                ),
-              ),
+                  BlocBuilder<LlmPlaygroundBloc, LlmPlaygroundState>(
+                    builder: (context, state) {
+                      Color statusColor;
+                      String statusText;
+                      if (state.isInitializing) {
+                        statusColor = Colors.orangeAccent;
+                        statusText = 'Initializing Model...';
+                      } else if (state.isInitialized) {
+                        statusColor = Colors.green;
+                        statusText = 'Model Ready';
+                      } else if (state.status == LlmPlaygroundStatus.error) {
+                        statusColor = Colors.redAccent;
+                        statusText = 'Initialization Failed';
+                      } else {
+                        statusColor = Colors.grey;
+                        statusText = 'Uninitialized';
+                      }
 
-              const SizedBox(height: 12),
-
-              // Mode Description Card
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(_selectedMode.icon, color: Colors.indigoAccent, size: 20),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        _selectedMode.description,
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Sample Presets
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const Text('Presets: ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 6),
-                      ...(_presets[_selectedMode] ?? []).map(
-                        (preset) => Padding(
-                          padding: const EdgeInsets.only(right: 6),
-                          child: ActionChip(
-                            label: Text(preset['title']!, style: const TextStyle(fontSize: 11)),
-                            onPressed: () {
-                              setState(() {
-                                _inputController.text = preset['text']!;
-                              });
-                            },
+                      return Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: statusColor,
+                              shape: BoxShape.circle,
+                            ),
                           ),
+                          const SizedBox(width: 4),
+                          Text(
+                            statusText,
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: statusColor,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_comment_rounded),
+            tooltip: 'New Chat',
+            onPressed: () {
+              context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
+            },
+          ),
+          Builder(
+            builder: (ctx) => IconButton(
+              icon: const Icon(Icons.history_rounded),
+              tooltip: 'Chat History',
+              onPressed: () => Scaffold.of(ctx).openDrawer(),
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: BlocConsumer<LlmPlaygroundBloc, LlmPlaygroundState>(
+          listener: (context, state) {
+            if (state.errorMessage != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage!),
+                  backgroundColor: Colors.redAccent,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            if (state.messages.isNotEmpty) {
+              _scrollToBottom();
+            }
+          },
+          builder: (context, state) {
+            return Column(
+              children: [
+                if (state.isInitializing)
+                  const LinearProgressIndicator(
+                    minHeight: 2,
+                    backgroundColor: Color(0xFFE2E8F0),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.indigoAccent),
+                  ),
+
+                // Chat Messages or Empty Welcome State
+                Expanded(
+                  child: state.messages.isEmpty
+                      ? _buildEmptyWelcomeState(context, state)
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          itemCount: state.messages.length,
+                          itemBuilder: (context, index) {
+                            return PlaygroundMessageBubble(
+                              message: state.messages[index],
+                            );
+                          },
                         ),
+                ),
+
+                // Bottom Bar: Tool Selector & Input Bar
+                _buildBottomInputArea(context, state),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyWelcomeState(
+      BuildContext context, LlmPlaygroundState state) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.indigoAccent.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.auto_awesome_rounded,
+              size: 40,
+              color: Colors.indigoAccent,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'How can I help you today?',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          
+          const SizedBox(height: 24),
+
+          // Tools Grid
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1.6,
+            ),
+            itemCount: PlaygroundTool.availableTools.length,
+            itemBuilder: (context, index) {
+              final tool = PlaygroundTool.availableTools[index];
+              final isSelected = tool.id == state.selectedTool.id;
+
+              return InkWell(
+                onTap: () {
+                  context.read<LlmPlaygroundBloc>().add(SelectToolEvent(tool));
+                },
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected
+                          ? Colors.indigoAccent
+                          : (isDark
+                              ? const Color(0xFF334155)
+                              : const Color(0xFFE2E8F0)),
+                      width: isSelected ? 1.5 : 1.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
                       ),
                     ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // System Prompt Input for Studio mode
-              if (_selectedMode == PlaygroundMode.promptStudio) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    controller: _systemPromptController,
-                    style: const TextStyle(fontSize: 13),
-                    decoration: InputDecoration(
-                      labelText: 'System Instruction',
-                      isDense: true,
-                      filled: true,
-                      fillColor: isDark ? const Color(0xFF1E293B) : Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-              ],
-
-              // Input Text Area Card
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          'Input Text',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                        ),
-                        const Spacer(),
-                        if (_inputController.text.isNotEmpty)
-                          IconButton(
-                            icon: const Icon(Icons.clear_rounded, size: 18, color: Colors.grey),
-                            tooltip: 'Clear input',
-                            onPressed: () => setState(() => _inputController.clear()),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _inputController,
-                      maxLines: 5,
-                      minLines: 3,
-                      onChanged: (_) => setState(() {}),
-                      style: const TextStyle(fontSize: 13),
-                      decoration: InputDecoration(
-                        hintText: 'Enter text, prompt, or code snippet here...',
-                        filled: true,
-                        fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: (_isGenerating || !_llamaService.isInitialized || _inputController.text.trim().isEmpty)
-                            ? null
-                            : _runPlayground,
-                        icon: _isGenerating
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                              )
-                            : const Icon(Icons.auto_awesome_rounded),
-                        label: Text(
-                          _isGenerating
-                              ? 'Generating...'
-                              : (!_llamaService.isInitialized ? 'Initialize Model First' : 'Run ${_selectedMode.title}'),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigoAccent,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Output Response Display Card
-              if (_outputText.isNotEmpty || _isGenerating) ...[
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: isDark
-                          ? [const Color(0xFF1E1B4B), const Color(0xFF0F172A)]
-                          : [const Color(0xFFEEF2FF), Colors.white],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.psychology_rounded, color: Colors.indigoAccent, size: 20),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'AI Output',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          Icon(tool.icon, color: Colors.indigoAccent, size: 20),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              tool.title,
+                              style: const TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                          const Spacer(),
-                          if (_outputText.isNotEmpty) ...[
-                            Text(
-                              '${_outputText.length} chars',
-                              style: const TextStyle(fontSize: 11, color: Colors.grey),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.copy_rounded, size: 18, color: Colors.indigoAccent),
-                              tooltip: 'Copy Output',
-                              onPressed: () {
-                                Clipboard.setData(ClipboardData(text: _outputText));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Copied output to clipboard!'),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                          const SizedBox(width: 4),
+                          if (isSelected)
+                            const Icon(Icons.check_circle_rounded,
+                                color: Colors.indigoAccent, size: 16),
                         ],
                       ),
-                      const Divider(height: 16),
-                      SelectableText(
-                        _outputText.isEmpty && _isGenerating ? 'Generating response...' : _outputText,
-                        style: TextStyle(
-                          fontSize: 13,
-                          height: 1.5,
-                          color: isDark ? Colors.white70 : Colors.black87,
-                        ),
+                      const SizedBox(height: 8),
+                      Text(
+                        tool.description,
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.grey),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ],
+              );
+            },
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomInputArea(BuildContext context, LlmPlaygroundState state) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final currentTool = state.selectedTool;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Horizontal Tool Chips Toolbar
+          SizedBox(
+            height: 38,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              scrollDirection: Axis.horizontal,
+              itemCount: PlaygroundTool.availableTools.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              itemBuilder: (context, index) {
+                final tool = PlaygroundTool.availableTools[index];
+                final isSelected = tool.id == currentTool.id;
+                return ChoiceChip(
+                  avatar: Icon(
+                    tool.icon,
+                    size: 14,
+                    color: isSelected ? Colors.white : Colors.indigoAccent,
+                  ),
+                  label: Text(tool.title),
+                  selected: isSelected,
+                  selectedColor: Colors.indigoAccent,
+                  labelStyle: TextStyle(
+                    fontSize: 11,
+                    color: isSelected
+                        ? Colors.white
+                        : (isDark ? Colors.white70 : Colors.black87),
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  onSelected: (selected) {
+                    if (selected) {
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(SelectToolEvent(tool));
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 6),
+
+          // Input Text Field & Action Button
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    minLines: 1,
+                    maxLines: 4,
+                    enabled: state.isInitialized && !state.isGenerating,
+                    style: const TextStyle(fontSize: 13),
+                    decoration: InputDecoration(
+                      hintText: !state.isInitialized
+                          ? (state.isInitializing
+                              ? 'Loading AI Model...'
+                              : 'Model Not Loaded')
+                          : 'Ask or enter text for ${currentTool.title}...',
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 10),
+                      filled: true,
+                      fillColor: isDark
+                          ? const Color(0xFF0F172A)
+                          : const Color(0xFFF1F5F9),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    onSubmitted: (_) => _sendMessage(),
+                  ),
+                ),
+                const SizedBox(width: 8),
+
+                // Send or Stop Generation Button
+                if (state.isGenerating)
+                  IconButton.filled(
+                    onPressed: () {
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(const StopGenerationEvent());
+                    },
+                    icon: const Icon(Icons.stop_rounded, size: 20),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                  )
+                else
+                  IconButton.filled(
+                    onPressed: state.isInitialized ? _sendMessage : null,
+                    icon: const Icon(Icons.send_rounded, size: 18),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.indigoAccent,
+                      foregroundColor: Colors.white,
+                      disabledBackgroundColor:
+                          Colors.grey.withValues(alpha: 0.3),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
