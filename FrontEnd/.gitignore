@@ -72,5 +72,5 @@ windows/flutter/generated_plugins.cmake
 .antigravitycli
 
 # AI Models
-assets/models/ai/
+assets/models/
 
