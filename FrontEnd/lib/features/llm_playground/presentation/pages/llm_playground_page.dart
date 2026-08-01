@@ -156,18 +156,32 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add_comment_rounded),
-            tooltip: 'New Chat',
-            onPressed: () {
-              context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 4),
+            decoration: BoxDecoration(
+              color: Colors.indigoAccent.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.edit_note_rounded, color: Colors.indigoAccent, size: 20),
+              tooltip: 'Start New Chat',
+              onPressed: () {
+                context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
+              },
+            ),
           ),
           Builder(
-            builder: (ctx) => IconButton(
-              icon: const Icon(Icons.history_rounded),
-              tooltip: 'Chat History',
-              onPressed: () => Scaffold.of(ctx).openDrawer(),
+            builder: (ctx) => Container(
+              margin: const EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.forum_rounded, color: Colors.indigoAccent, size: 20),
+                tooltip: 'Chat History',
+                onPressed: () => Scaffold.of(ctx).openDrawer(),
+              ),
             ),
           ),
         ],

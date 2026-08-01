@@ -66,6 +66,32 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
   ) {
     _streamSubscription?.cancel();
     final tool = event.tool ?? state.selectedTool;
+
+    // Check if an empty chat session already exists
+    PlaygroundChatSession? existingEmpty;
+    try {
+      existingEmpty = state.sessions.firstWhere((s) => s.messages.isEmpty);
+    } catch (_) {
+      existingEmpty = null;
+    }
+
+    if (existingEmpty != null) {
+      final updatedSessions = state.sessions.map((s) {
+        if (s.id == existingEmpty!.id) {
+          return s.copyWith(selectedToolId: tool.id, updatedAt: DateTime.now());
+        }
+        return s;
+      }).toList();
+
+      emit(state.copyWith(
+        sessions: updatedSessions,
+        activeSessionId: existingEmpty.id,
+        selectedTool: tool,
+        isGenerating: false,
+      ));
+      return;
+    }
+
     final now = DateTime.now();
     final newSession = PlaygroundChatSession(
       id: _uuid.v4(),
