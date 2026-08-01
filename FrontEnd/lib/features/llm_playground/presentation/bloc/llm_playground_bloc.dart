@@ -65,6 +65,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
+    _llamaService.resetSession();
     final tool = event.tool ?? state.selectedTool;
 
     // Check if an empty chat session already exists
@@ -123,6 +124,9 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
         orElse: () => PlaygroundTool.availableTools.first,
       );
 
+      _streamSubscription?.cancel();
+      _llamaService.resetSession();
+
       emit(state.copyWith(
         activeSessionId: session.id,
         selectedTool: tool,
@@ -139,6 +143,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     String? newActiveId = state.activeSessionId;
     if (state.activeSessionId == event.sessionId) {
       _streamSubscription?.cancel();
+      _llamaService.resetSession();
       newActiveId = updatedSessions.isNotEmpty ? updatedSessions.first.id : null;
     }
 
@@ -154,6 +159,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
+    _llamaService.resetSession();
     emit(state.copyWith(
       sessions: const [],
       activeSessionId: null,
@@ -165,6 +171,11 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     SelectToolEvent event,
     Emitter<LlmPlaygroundState> emit,
   ) {
+    if (state.selectedTool.id != event.tool.id) {
+      _streamSubscription?.cancel();
+      _llamaService.resetSession();
+    }
+
     emit(state.copyWith(selectedTool: event.tool));
 
     if (state.activeSessionId != null) {
@@ -207,11 +218,19 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
         updatedAt: now,
       );
       sessions.insert(0, session);
+      _llamaService.resetSession();
     } else {
       session = state.activeSession!;
       if (session.messages.isEmpty) {
         final title = rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
         session = session.copyWith(title: title);
+        _llamaService.resetSession();
+      } else {
+        // If switching tool mid-chat, reset LLM session context so tool prefixes don't collide
+        final lastMsgTool = session.messages.last.toolUsed;
+        if (lastMsgTool != null && lastMsgTool != state.selectedTool.id) {
+          _llamaService.resetSession();
+        }
       }
     }
 
@@ -352,6 +371,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
+    _llamaService.resetSession();
     add(const GenerationCompletedEvent());
   }
 
@@ -360,6 +380,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
+    _llamaService.resetSession();
     if (state.activeSessionId != null) {
       add(DeleteChatSessionEvent(state.activeSessionId!));
     }

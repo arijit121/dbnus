@@ -77,6 +77,13 @@ class PlaygroundLlamaService {
     }
   }
 
+  void resetSession() {
+    if (_engine != null && _isInitialized) {
+      _session = ChatSession(_engine!);
+      AppLog.i('PlaygroundLlamaService session reset.');
+    }
+  }
+
   Stream<LlamaCompletionChunk>? createChatStream(String prompt, {GenerationParams? generationParams}) {
     if (!_isInitialized || _session == null) {
       AppLog.e('PlaygroundLlamaService is not initialized.');
