@@ -121,6 +121,8 @@ class PlaygroundMessageBubble extends StatelessWidget {
                         seg.text.contains('tel:') ||
                         seg.text.contains('mailto:') ||
                         seg.text.contains('wa.me') ||
+                        seg.text.contains('market://') ||
+                        seg.text.contains('play.google.com') ||
                         seg.text.contains('href=');
 
                     if (textHasUrl) {

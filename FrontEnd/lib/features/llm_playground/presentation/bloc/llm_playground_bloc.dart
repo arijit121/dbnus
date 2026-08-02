@@ -5,7 +5,9 @@ import '../../domain/entities/playground_chat_message.dart';
 import '../../domain/entities/playground_chat_session.dart';
 import '../../domain/entities/playground_tool.dart';
 import '../../domain/repositories/playground_repository.dart';
+import 'package:dbnus/core/services/open_service.dart';
 import '../../data/repositories/playground_repository_impl.dart';
+import '../../data/datasources/device_intent_service.dart';
 import 'llm_playground_event.dart';
 import 'llm_playground_state.dart';
 
@@ -266,6 +268,58 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
         promptText =
             'Attached File Content (${attached.name}):\n```\n${attached.content}\n```\n\nUser Question:\n$rawText';
       }
+    }
+
+    final intentResult = await DeviceIntentService.processIntent(rawText);
+
+    if (intentResult.isHandled) {
+      final now = DateTime.now();
+      final userMsg = PlaygroundChatMessage(
+        id: _uuid.v4(),
+        text: userTextDisplay,
+        isUser: true,
+        timestamp: now,
+        toolUsed: detectedTool.id,
+      );
+
+      final botMsg = PlaygroundChatMessage(
+        id: _uuid.v4(),
+        text: intentResult.actionCardMarkdown,
+        isUser: false,
+        timestamp: now,
+        toolUsed: detectedTool.id,
+        isStreaming: false,
+      );
+
+      final updatedMessages = List<PlaygroundChatMessage>.from(session.messages)
+        ..addAll([userMsg, botMsg]);
+      final updatedSession = session.copyWith(
+        messages: updatedMessages,
+        selectedToolId: detectedTool.id,
+        updatedAt: now,
+      );
+
+      final sessionIndex =
+          sessions.indexWhere((s) => s.id == updatedSession.id);
+      if (sessionIndex != -1) {
+        sessions[sessionIndex] = updatedSession;
+      } else {
+        sessions.insert(0, updatedSession);
+      }
+
+      emit(state.copyWith(
+        isGenerating: false,
+        sessions: sessions,
+        activeSessionId: updatedSession.id,
+        selectedTool: detectedTool,
+        clearAttachedFile: true,
+      ));
+
+      if (intentResult.autoLaunchUri != null) {
+        await OpenService.openUrl(uri: intentResult.autoLaunchUri!);
+      }
+
+      return;
     }
 
     String fullPrompt = detectedTool.promptPrefix.isNotEmpty

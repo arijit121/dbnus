@@ -37,12 +37,16 @@ class PlaygroundTool {
     ),
     PlaygroundTool(
       id: PlaygroundToolId.appLauncher,
-      title: 'Device App Launcher',
+      title: 'Device App Launcher & Installer',
       description:
-          'Interact with installed apps, open links, calls, maps, WhatsApp, and device utilities.',
+          'Launch installed device apps, search contacts directory, open store installation pages, trigger calls, maps, WhatsApp, and device utilities.',
       icon: Icons.apps_rounded,
       promptPrefix:
-          'Task: Assist the user in launching device apps or performing actions. Provide helpful answers with actionable URLs or instructions (e.g. tel:, mailto:, https://wa.me/, https://maps.google.com/).\n\nRequest:\n',
+          'Task: You are an intelligent device app launcher, contact directory & store assistant. Assist the user with searching device contacts, calling phone numbers, launching installed device apps, or downloading apps from the store.\n'
+          'Rules for Contact & Call Requests (e.g. "call mother", "call mom", "call john"):\n'
+          '1. Search the contact directory for matching contacts.\n'
+          '2. If multiple numbers or entries exist (e.g. Mobile, Home, Work), list all found options clearly with actionable call links (e.g., tel:number, https://wa.me/number) and ask the user to select which number to call.\n'
+          '3. Output actionable links for all actions (e.g. Call: tel:number, WhatsApp: https://wa.me/number, Email: mailto:address, Store: https://play.google.com/store/search?q=appname).\n\nRequest:\n',
     ),
     PlaygroundTool(
       id: PlaygroundToolId.summarizer,
@@ -96,17 +100,29 @@ class PlaygroundTool {
     final appKeywords = [
       'open app',
       'launch app',
+      'install app',
+      'install ',
+      'download app',
+      'get app',
+      'play store',
+      'app store',
+      'store app',
       'open whatsapp',
+      'open youtube',
+      'open camera',
+      'open maps',
+      'open settings',
+      'open chrome',
+      'open browser',
+      'open gmail',
       'call ',
+      'dial ',
       'send email',
       'send mail',
-      'open maps',
       'open website',
       'open link',
       'device app',
-      'installed app',
-      'open chrome',
-      'open browser'
+      'installed app'
     ];
     if (appKeywords.any((k) => lower.contains(k))) {
       return availableTools
