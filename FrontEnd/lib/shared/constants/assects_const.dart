@@ -202,6 +202,6 @@ class AssetsConst {
   static const String damagedHelmetGlbModel = "assets/models/3d/damaged_helmet.glb";
 
   // Local AI GGUF Models
-  static const String smolLmAiModelGguf = "assets/models/ai/model.gguf";
+  static const String smolLmAiModelGguf = "assets/models/ai/SmolLM2-135M-Instruct-Q4_K_M.gguf";
 }
 
