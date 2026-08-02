@@ -7,6 +7,7 @@ enum PlaygroundToolId {
   textRewriter,
   translator,
   mathLogic,
+  appLauncher,
   promptStudio,
 }
 
@@ -32,6 +33,13 @@ class PlaygroundTool {
       description: 'General conversational AI assistant for open questions and advice.',
       icon: Icons.chat_bubble_outline_rounded,
       promptPrefix: '',
+    ),
+    PlaygroundTool(
+      id: PlaygroundToolId.appLauncher,
+      title: 'Device App Launcher',
+      description: 'Interact with installed apps, open links, calls, maps, WhatsApp, and device utilities.',
+      icon: Icons.apps_rounded,
+      promptPrefix: 'Task: Assist the user in launching device apps or performing actions. Provide helpful answers with actionable URLs or instructions (e.g. tel:, mailto:, https://wa.me/, https://maps.google.com/).\n\nRequest:\n',
     ),
     PlaygroundTool(
       id: PlaygroundToolId.summarizer,
@@ -72,6 +80,26 @@ class PlaygroundTool {
 
   static PlaygroundTool detectTool(String query) {
     final lower = query.toLowerCase().trim();
+
+    // App & Device launcher keywords
+    final appKeywords = [
+      'open app',
+      'launch app',
+      'open whatsapp',
+      'call ',
+      'send email',
+      'send mail',
+      'open maps',
+      'open website',
+      'open link',
+      'device app',
+      'installed app',
+      'open chrome',
+      'open browser'
+    ];
+    if (appKeywords.any((k) => lower.contains(k))) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.appLauncher);
+    }
 
     // Code detection
     final codeKeywords = [

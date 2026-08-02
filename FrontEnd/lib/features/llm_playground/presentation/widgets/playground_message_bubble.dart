@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import '../../domain/entities/playground_chat_message.dart';
 
 class PlaygroundMessageBubble extends StatelessWidget {
@@ -66,19 +69,19 @@ class PlaygroundMessageBubble extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: const BoxDecoration(
-                color: Colors.indigoAccent,
+                color: ColorConst.baseHexColor,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.smart_toy_rounded, color: Colors.white, size: 16),
             ),
-            const SizedBox(width: 8),
+            8.pw,
           ],
           Flexible(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: isUser
-                    ? Colors.indigoAccent
+                    ? ColorConst.baseHexColor
                     : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
@@ -87,7 +90,7 @@ class PlaygroundMessageBubble extends StatelessWidget {
                   bottomRight: Radius.circular(isUser ? 4 : 16),
                 ),
                 border: !isUser
-                    ? Border.all(color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0))
+                    ? Border.all(color: isDark ? const Color(0xFF334155) : ColorConst.lineGrey)
                     : null,
               ),
               child: Column(
@@ -103,6 +106,25 @@ class PlaygroundMessageBubble extends StatelessWidget {
                         ),
                       );
                     }
+                    final textHasUrl = seg.text.contains('http://') ||
+                        seg.text.contains('https://') ||
+                        seg.text.contains('tel:') ||
+                        seg.text.contains('mailto:') ||
+                        seg.text.contains('wa.me') ||
+                        seg.text.contains('href=');
+
+                    if (textHasUrl) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: CustomHtmlText(
+                          seg.text.replaceAll('\n', '<br/>'),
+                          size: 13,
+                          height: 1.4,
+                          color: isUser ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
+                        ),
+                      );
+                    }
+
                     return SelectableText(
                       seg.text,
                       style: TextStyle(
@@ -112,19 +134,17 @@ class PlaygroundMessageBubble extends StatelessWidget {
                       ),
                     );
                   }),
-                  const SizedBox(height: 4),
+                  4.ph,
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      CustomText(
                         DateFormat('hh:mm a').format(message.timestamp),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: isUser ? Colors.white70 : Colors.grey,
-                        ),
+                        size: 10,
+                        color: isUser ? Colors.white70 : ColorConst.grey,
                       ),
                       if (!isUser && message.text.isNotEmpty) ...[
-                        const SizedBox(width: 8),
+                        8.pw,
                         InkWell(
                           onTap: () {
                             Clipboard.setData(ClipboardData(text: message.text));
@@ -135,17 +155,17 @@ class PlaygroundMessageBubble extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Icon(Icons.copy_rounded, size: 12, color: Colors.grey),
+                          child: const Icon(Icons.copy_rounded, size: 12, color: ColorConst.grey),
                         ),
                       ],
                       if (message.isStreaming) ...[
-                        const SizedBox(width: 6),
+                        6.pw,
                         const SizedBox(
                           width: 8,
                           height: 8,
                           child: CircularProgressIndicator(
                             strokeWidth: 1.5,
-                            color: Colors.indigoAccent,
+                            color: ColorConst.baseHexColor,
                           ),
                         ),
                       ],
@@ -156,11 +176,11 @@ class PlaygroundMessageBubble extends StatelessWidget {
             ),
           ),
           if (isUser) ...[
-            const SizedBox(width: 8),
+            8.pw,
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
+                color: isDark ? const Color(0xFF334155) : ColorConst.lightGrey,
                 shape: BoxShape.circle,
               ),
               child: Icon(

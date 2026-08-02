@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import '../../../../navigation/custom_router/custom_route.dart';
 import '../../domain/entities/playground_attached_file.dart';
 import '../bloc/llm_playground_bloc.dart';
@@ -254,7 +257,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
 
     return Scaffold(
       backgroundColor:
-          isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+          isDark ? ColorConst.primaryDark : ColorConst.scaffoldBg,
       drawer: const PlaygroundChatHistoryDrawer(),
       appBar: AppBar(
         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
@@ -269,13 +272,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: Colors.indigoAccent.withValues(alpha: 0.15),
+                color: ColorConst.baseHexColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Icon(Icons.smart_toy_rounded,
-                  color: Colors.indigoAccent, size: 20),
+                  color: ColorConst.baseHexColor, size: 20),
             ),
-            const SizedBox(width: 10),
+            10.pw,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,10 +287,10 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                     builder: (context, state) {
                       final title =
                           state.activeSession?.title ?? 'LLM AI Assistant';
-                      return Text(
+                      return CustomText(
                         title,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                        size: 15,
+                        fontWeight: FontWeight.bold,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       );
@@ -301,13 +304,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                         statusColor = Colors.orangeAccent;
                         statusText = 'Initializing Model...';
                       } else if (state.isInitialized) {
-                        statusColor = Colors.green;
+                        statusColor = ColorConst.green;
                         statusText = 'Model Ready';
                       } else if (state.status == LlmPlaygroundStatus.error) {
-                        statusColor = Colors.redAccent;
+                        statusColor = ColorConst.red;
                         statusText = 'Initialization Failed';
                       } else {
-                        statusColor = Colors.grey;
+                        statusColor = ColorConst.grey;
                         statusText = 'Uninitialized';
                       }
 
@@ -321,13 +324,12 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                               shape: BoxShape.circle,
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Text(
+                          4.pw,
+                          CustomText(
                             statusText,
-                            style: TextStyle(
-                                fontSize: 11,
-                                color: statusColor,
-                                fontWeight: FontWeight.w500),
+                            size: 11,
+                            color: statusColor,
+                            fontWeight: FontWeight.w500,
                           ),
                         ],
                       );
@@ -342,11 +344,11 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
           Container(
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: Colors.indigoAccent.withValues(alpha: 0.1),
+              color: ColorConst.baseHexColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
-              icon: const Icon(Icons.edit_note_rounded, color: Colors.indigoAccent, size: 20),
+              icon: const Icon(Icons.edit_note_rounded, color: ColorConst.baseHexColor, size: 20),
               tooltip: 'Start New Chat',
               onPressed: () {
                 context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
@@ -361,7 +363,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                icon: const Icon(Icons.forum_rounded, color: Colors.indigoAccent, size: 20),
+                icon: const Icon(Icons.forum_rounded, color: ColorConst.baseHexColor, size: 20),
                 tooltip: 'Chat History',
                 onPressed: () => Scaffold.of(ctx).openDrawer(),
               ),
@@ -376,7 +378,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(state.errorMessage!),
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: ColorConst.red,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -391,9 +393,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                 if (state.isInitializing)
                   const LinearProgressIndicator(
                     minHeight: 2,
-                    backgroundColor: Color(0xFFE2E8F0),
+                    backgroundColor: ColorConst.lineGrey,
                     valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.indigoAccent),
+                        AlwaysStoppedAnimation<Color>(ColorConst.baseHexColor),
                   ),
 
                 // Chat Messages or Empty Welcome State
@@ -433,25 +435,27 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.indigoAccent.withValues(alpha: 0.1),
+                color: ColorConst.baseHexColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.auto_awesome_rounded,
                 size: 48,
-                color: Colors.indigoAccent,
+                color: ColorConst.baseHexColor,
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
+            20.ph,
+            const CustomText(
               'How can I help you today?',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              size: 22,
+              fontWeight: FontWeight.bold,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            const Text(
+            8.ph,
+            const CustomText(
               'Ask questions, attach images or text files, speak with voice dictation, or get code explanations.',
-              style: TextStyle(fontSize: 13, color: Colors.grey),
+              size: 13,
+              color: ColorConst.grey,
               textAlign: TextAlign.center,
             ),
           ],
@@ -486,9 +490,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.indigoAccent.withValues(alpha: 0.1),
+                color: ColorConst.baseHexColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
+                border: Border.all(color: ColorConst.baseHexColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -496,23 +500,25 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                   Icon(
                     state.attachedFile!.isImage ? Icons.image_rounded : Icons.attach_file_rounded,
                     size: 16,
-                    color: Colors.indigoAccent,
+                    color: ColorConst.baseHexColor,
                   ),
-                  const SizedBox(width: 6),
+                  6.pw,
                   Flexible(
-                    child: Text(
+                    child: CustomText(
                       '${state.attachedFile!.name} (${state.attachedFile!.formattedSize})',
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.indigoAccent),
+                      size: 12,
+                      fontWeight: FontWeight.w600,
+                      color: ColorConst.baseHexColor,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  6.pw,
                   InkWell(
                     onTap: () {
                       context.read<LlmPlaygroundBloc>().add(const RemoveAttachedFileEvent());
                     },
-                    child: const Icon(Icons.close_rounded, size: 16, color: Colors.indigoAccent),
+                    child: const Icon(Icons.close_rounded, size: 16, color: ColorConst.baseHexColor),
                   ),
                 ],
               ),
@@ -524,7 +530,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
               color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                color: isDark ? const Color(0xFF334155) : ColorConst.lineGrey,
               ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -539,7 +545,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                     onTap: state.isInitialized && !state.isGenerating ? _pickAndAttachFile : null,
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.attach_file_rounded, color: Colors.indigoAccent, size: 20),
+                      child: Icon(Icons.attach_file_rounded, color: ColorConst.baseHexColor, size: 20),
                     ),
                   ),
                 ),
@@ -554,14 +560,14 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         state.isListeningToVoice ? Icons.mic_rounded : Icons.mic_none_rounded,
-                        color: state.isListeningToVoice ? Colors.redAccent : Colors.indigoAccent,
+                        color: state.isListeningToVoice ? ColorConst.red : ColorConst.baseHexColor,
                         size: 20,
                       ),
                     ),
                   ),
                 ),
 
-                const SizedBox(width: 4),
+                4.pw,
 
                 // Spacious Multiline Text Field
                 Expanded(
@@ -583,7 +589,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                               : 'Ask anything or paste text/code...'),
                       hintStyle: TextStyle(
                         fontSize: 13,
-                        color: isDark ? Colors.white38 : Colors.grey[500],
+                        color: isDark ? Colors.white38 : ColorConst.grey,
                       ),
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
@@ -593,7 +599,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                   ),
                 ),
 
-                const SizedBox(width: 6),
+                6.pw,
 
                 // Send or Stop Button
                 if (state.isGenerating)
@@ -604,7 +610,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
-                        color: Colors.redAccent,
+                        color: ColorConst.red,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.stop_rounded, size: 18, color: Colors.white),
@@ -616,7 +622,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: state.isInitialized ? Colors.indigoAccent : Colors.grey.withValues(alpha: 0.3),
+                        color: state.isInitialized ? ColorConst.baseHexColor : ColorConst.grey.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.send_rounded, size: 16, color: Colors.white),

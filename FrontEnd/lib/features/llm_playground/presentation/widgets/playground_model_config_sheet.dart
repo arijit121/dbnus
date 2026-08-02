@@ -2,6 +2,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
+import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import '../bloc/llm_playground_bloc.dart';
 import '../bloc/llm_playground_event.dart';
 import '../bloc/llm_playground_state.dart';
@@ -95,20 +98,21 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white24 : Colors.grey[300],
+                    color: isDark ? Colors.white24 : ColorConst.lightGrey,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              16.ph,
 
               Row(
                 children: [
-                  const Icon(Icons.tune_rounded, color: Colors.indigoAccent, size: 22),
-                  const SizedBox(width: 8),
-                  const Text(
+                  const Icon(Icons.tune_rounded, color: ColorConst.baseHexColor, size: 22),
+                  8.pw,
+                  const CustomText(
                     'AI Settings & Models',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    size: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                   const Spacer(),
                   IconButton(
@@ -118,14 +122,16 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 ],
               ),
 
-              const SizedBox(height: 16),
+              16.ph,
 
               // Model Path Input Label
-              const Text(
+              const CustomText(
                 'Model Weight Path / Remote URL',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
+                size: 12,
+                fontWeight: FontWeight.bold,
+                color: ColorConst.grey,
               ),
-              const SizedBox(height: 6),
+              6.ph,
               Row(
                 children: [
                   Expanded(
@@ -139,7 +145,7 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                         filled: true,
                         fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.folder_open_rounded, size: 20, color: Colors.indigoAccent),
+                          icon: const Icon(Icons.folder_open_rounded, size: 20, color: ColorConst.baseHexColor),
                           tooltip: 'Pick local .gguf file',
                           onPressed: state.isInitializing ? null : _pickLocalModelFile,
                         ),
@@ -150,7 +156,7 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  8.pw,
                   ElevatedButton(
                     onPressed: state.isInitializing
                         ? null
@@ -161,7 +167,7 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                             }
                           },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigoAccent,
+                      backgroundColor: ColorConst.baseHexColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -173,7 +179,7 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 ],
               ),
 
-              const SizedBox(height: 10),
+              10.ph,
 
               // Preset Model Chips
               SingleChildScrollView(
@@ -192,9 +198,9 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                               });
                             },
                     ),
-                    const SizedBox(width: 6),
+                    6.pw,
                     ActionChip(
-                      avatar: const Icon(Icons.psychology, size: 14, color: Colors.blueAccent),
+                      avatar: const Icon(Icons.psychology, size: 14, color: ColorConst.lightBlue),
                       label: const Text('Qwen2.5 (0.5B ~398MB)', style: TextStyle(fontSize: 11)),
                       onPressed: state.isInitializing
                           ? null
@@ -206,9 +212,9 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                             },
                     ),
                     if (!kIsWeb) ...[
-                      const SizedBox(width: 6),
+                      6.pw,
                       ActionChip(
-                        avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: Colors.purpleAccent),
+                        avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: ColorConst.violate),
                         label: const Text('Bundled Asset (.gguf)', style: TextStyle(fontSize: 11)),
                         onPressed: state.isInitializing
                             ? null
@@ -223,14 +229,16 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 ),
               ),
 
-              const SizedBox(height: 16),
+              16.ph,
 
               // System Prompt Input
-              const Text(
+              const CustomText(
                 'System Instruction Prompt',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),
+                size: 12,
+                fontWeight: FontWeight.bold,
+                color: ColorConst.grey,
               ),
-              const SizedBox(height: 6),
+              6.ph,
               TextField(
                 controller: _systemPromptController,
                 maxLines: 3,
@@ -250,7 +258,7 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 ),
               ),
 
-              const SizedBox(height: 16),
+              16.ph,
 
               // Clear Chat Action
               SizedBox(
@@ -260,10 +268,10 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                     context.read<LlmPlaygroundBloc>().add(const ClearChatEvent());
                     Navigator.of(context).pop();
                   },
-                  icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 18),
-                  label: const Text('Clear Chat Conversation', style: TextStyle(color: Colors.redAccent)),
+                  icon: const Icon(Icons.delete_outline_rounded, color: ColorConst.red, size: 18),
+                  label: const CustomText('Clear Chat Conversation', color: ColorConst.red),
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.redAccent),
+                    side: const BorderSide(color: ColorConst.red),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:dbnus/shared/constants/color_const.dart';
+import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
 class PlaygroundModelConfigCard extends StatefulWidget {
@@ -100,8 +102,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
           if (widget.isInitializing)
             const LinearProgressIndicator(
               minHeight: 3,
-              backgroundColor: Color(0xFFE2E8F0),
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.indigoAccent),
+              backgroundColor: ColorConst.lineGrey,
+              valueColor: AlwaysStoppedAnimation<Color>(ColorConst.baseHexColor),
             ),
           InkWell(
             onTap: () {
@@ -114,8 +116,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
-                  const Icon(Icons.storage_rounded, size: 18, color: Colors.indigoAccent),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.storage_rounded, size: 18, color: ColorConst.baseHexColor),
+                  8.pw,
                   const CustomText(
                     'Model Configuration',
                     fontWeight: FontWeight.w600,
@@ -128,28 +130,26 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                       height: 12,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.indigoAccent,
+                        color: ColorConst.baseHexColor,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    6.pw,
                   ] else if (widget.statusMessage != null) ...[
                     Flexible(
-                      child: Text(
+                      child: CustomText(
                         widget.statusMessage!,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: widget.isInitialized ? Colors.green : Colors.orangeAccent,
-                        ),
+                        size: 11,
+                        fontWeight: FontWeight.w500,
+                        color: widget.isInitialized ? ColorConst.green : Colors.orangeAccent,
                       ),
                     ),
                   ],
-                  const SizedBox(width: 6),
+                  6.pw,
                   AnimatedRotation(
                     turns: _isExpanded ? 0.5 : 0.0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.keyboard_arrow_down, size: 20, color: Colors.grey),
+                    child: const Icon(Icons.keyboard_arrow_down, size: 20, color: ColorConst.grey),
                   ),
                 ],
               ),
@@ -163,7 +163,7 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Divider(height: 1),
-                  const SizedBox(height: 10),
+                  10.ph,
                   Row(
                     children: [
                       Expanded(
@@ -179,7 +179,7 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                             filled: true,
                             fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
                             suffixIcon: IconButton(
-                              icon: const Icon(Icons.folder_open_rounded, size: 20, color: Colors.indigoAccent),
+                              icon: const Icon(Icons.folder_open_rounded, size: 20, color: ColorConst.baseHexColor),
                               tooltip: 'Pick local .gguf file',
                               onPressed: widget.isInitializing ? null : _pickLocalModelFile,
                             ),
@@ -190,11 +190,11 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      8.pw,
                       ElevatedButton(
                         onPressed: widget.isInitializing ? null : widget.onInitialize,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigoAccent,
+                          backgroundColor: ColorConst.baseHexColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -209,20 +209,20 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  8.ph,
                   Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: _isLocalFile
-                              ? Colors.green.withValues(alpha: 0.15)
-                              : Colors.blue.withValues(alpha: 0.15),
+                              ? ColorConst.green.withValues(alpha: 0.15)
+                              : ColorConst.lightBlue.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(
                             color: _isLocalFile
-                                ? Colors.green.withValues(alpha: 0.4)
-                                : Colors.blue.withValues(alpha: 0.4),
+                                ? ColorConst.green.withValues(alpha: 0.4)
+                                : ColorConst.lightBlue.withValues(alpha: 0.4),
                           ),
                         ),
                         child: Row(
@@ -231,29 +231,27 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                             Icon(
                               _isLocalFile ? Icons.folder_rounded : Icons.cloud_download_rounded,
                               size: 12,
-                              color: _isLocalFile ? Colors.green : Colors.blue,
+                              color: _isLocalFile ? ColorConst.green : ColorConst.lightBlue,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
+                            4.pw,
+                            CustomText(
                               _isLocalFile ? 'Local Target' : 'Remote URL Target',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: _isLocalFile ? Colors.green : Colors.blue,
-                              ),
+                              size: 11,
+                              fontWeight: FontWeight.bold,
+                              color: _isLocalFile ? ColorConst.green : ColorConst.lightBlue,
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  8.ph,
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
                         ActionChip(
-                          avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: Colors.purpleAccent),
+                          avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: ColorConst.violate),
                           label: Text(
                             kIsWeb ? 'Bundled Asset (Native App Only)' : 'Bundled Asset (.gguf)',
                             style: const TextStyle(fontSize: 11),
@@ -277,13 +275,13 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                                   });
                                 },
                         ),
-                        const SizedBox(width: 6),
+                        6.pw,
                         ActionChip(
-                          avatar: const Icon(Icons.folder_open, size: 14, color: Colors.green),
+                          avatar: const Icon(Icons.folder_open, size: 14, color: ColorConst.green),
                           label: const Text('Browse Device .gguf', style: TextStyle(fontSize: 11)),
                           onPressed: widget.isInitializing ? null : _pickLocalModelFile,
                         ),
-                        const SizedBox(width: 6),
+                        6.pw,
                         ActionChip(
                           avatar: const Icon(Icons.flash_on, size: 14, color: Colors.amber),
                           label: const Text('SmolLM2 (135M ~100MB)', style: TextStyle(fontSize: 11)),
@@ -296,9 +294,9 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                                   });
                                 },
                         ),
-                        const SizedBox(width: 6),
+                        6.pw,
                         ActionChip(
-                          avatar: const Icon(Icons.psychology, size: 14, color: Colors.blueAccent),
+                          avatar: const Icon(Icons.psychology, size: 14, color: ColorConst.lightBlue),
                           label: const Text('Qwen2.5 (0.5B ~398MB)', style: TextStyle(fontSize: 11)),
                           onPressed: widget.isInitializing
                               ? null
