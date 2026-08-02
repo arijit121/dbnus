@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import '../../../../shared/constants/assects_const.dart';
 import '../../domain/entities/playground_attached_file.dart';
 import '../../domain/entities/playground_chat_message.dart';
 import '../../domain/entities/playground_chat_session.dart';
@@ -37,7 +38,7 @@ class LlmPlaygroundState extends Equatable {
         modelPath = modelPath ??
             (kIsWeb
                 ? 'https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf'
-                : 'assets/models/ai/model.gguf');
+                : AssetsConst.smolLmAiModelGguf);
 
   bool get isInitializing => status == LlmPlaygroundStatus.initializing;
   bool get isInitialized => status == LlmPlaygroundStatus.initialized;

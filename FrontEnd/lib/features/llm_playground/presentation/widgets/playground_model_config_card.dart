@@ -5,6 +5,8 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
+import '../../../../shared/constants/assects_const.dart';
+
 class PlaygroundModelConfigCard extends StatefulWidget {
   final TextEditingController controller;
   final bool isInitializing;
@@ -300,7 +302,7 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                                   }
                                   setState(() {
                                     widget.controller.text =
-                                        'assets/models/ai/model.gguf';
+                                        AssetsConst.smolLmAiModelGguf;
                                   });
                                 },
                         ),

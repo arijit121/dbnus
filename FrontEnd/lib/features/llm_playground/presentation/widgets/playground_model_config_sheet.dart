@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
+import '../../../../shared/constants/assects_const.dart';
 import '../bloc/llm_playground_bloc.dart';
 import '../bloc/llm_playground_event.dart';
 import '../bloc/llm_playground_state.dart';
@@ -238,7 +239,7 @@ class _PlaygroundModelConfigSheetState
                             : () {
                                 setState(() {
                                   _modelPathController.text =
-                                      'assets/models/ai/model.gguf';
+                                      AssetsConst.smolLmAiModelGguf;
                                 });
                               },
                       ),
