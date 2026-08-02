@@ -30,7 +30,8 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   child: Row(
                     children: [
-                      const Icon(Icons.forum_rounded, color: ColorConst.baseHexColor, size: 22),
+                      const Icon(Icons.forum_rounded,
+                          color: ColorConst.baseHexColor, size: 22),
                       10.pw,
                       const CustomText(
                         'Chat History',
@@ -47,13 +48,17 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                   child: OutlinedButton.icon(
                     onPressed: () {
-                      context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(const CreateNewChatEvent());
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(Icons.add_rounded, size: 20, color: ColorConst.baseHexColor),
+                    icon: const Icon(Icons.add_rounded,
+                        size: 20, color: ColorConst.baseHexColor),
                     label: const CustomText(
                       'New Chat',
                       color: ColorConst.baseHexColor,
@@ -61,7 +66,8 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                       size: 14,
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: ColorConst.baseHexColor, width: 1.5),
+                      side: const BorderSide(
+                          color: ColorConst.baseHexColor, width: 1.5),
                       minimumSize: const Size(double.infinity, 44),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -71,7 +77,10 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                 ),
 
                 8.ph,
-                Divider(height: 1, color: isDark ? const Color(0xFF1E293B) : ColorConst.lineGrey),
+                Divider(
+                    height: 1,
+                    color:
+                        isDark ? const Color(0xFF1E293B) : ColorConst.lineGrey),
 
                 // Chat History List
                 Expanded(
@@ -83,30 +92,37 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                               Icon(
                                 Icons.chat_bubble_outline_rounded,
                                 size: 40,
-                                color: isDark ? Colors.white24 : ColorConst.lightGrey,
+                                color: isDark
+                                    ? Colors.white24
+                                    : ColorConst.lightGrey,
                               ),
                               12.ph,
                               CustomText(
                                 'No previous chats',
                                 size: 13,
-                                color: isDark ? Colors.white38 : ColorConst.grey,
+                                color:
+                                    isDark ? Colors.white38 : ColorConst.grey,
                               ),
                             ],
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
                           itemCount: state.sessions.length,
                           itemBuilder: (context, index) {
                             final session = state.sessions[index];
-                            final isSelected = session.id == state.activeSessionId;
+                            final isSelected =
+                                session.id == state.activeSessionId;
 
                             PlaygroundTool? tool;
                             try {
-                              tool = PlaygroundTool.availableTools.firstWhere((t) => t.id == session.selectedToolId);
+                              tool = PlaygroundTool.availableTools.firstWhere(
+                                  (t) => t.id == session.selectedToolId);
                             } catch (_) {}
 
-                            final timeStr = DateFormat('MMM d, h:mm a').format(session.updatedAt);
+                            final timeStr = DateFormat('MMM d, h:mm a')
+                                .format(session.updatedAt);
 
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
@@ -116,14 +132,17 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 tileColor: isSelected
-                                    ? ColorConst.baseHexColor.withValues(alpha: isDark ? 0.2 : 0.1)
+                                    ? ColorConst.baseHexColor
+                                        .withValues(alpha: isDark ? 0.2 : 0.1)
                                     : Colors.transparent,
                                 leading: Icon(
                                   Icons.chat_bubble_outline_rounded,
                                   size: 18,
                                   color: isSelected
                                       ? ColorConst.baseHexColor
-                                      : (isDark ? Colors.white60 : ColorConst.grey),
+                                      : (isDark
+                                          ? Colors.white60
+                                          : ColorConst.grey),
                                 ),
                                 title: Text(
                                   session.title,
@@ -131,30 +150,40 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 13,
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.w500,
                                     color: isSelected
                                         ? ColorConst.baseHexColor
-                                        : (isDark ? Colors.white : Colors.black87),
+                                        : (isDark
+                                            ? Colors.white
+                                            : Colors.black87),
                                   ),
                                 ),
                                 subtitle: CustomText(
                                   '$timeStr • ${session.messages.length} msgs',
                                   size: 10,
-                                  color: isDark ? Colors.white38 : ColorConst.grey,
+                                  color:
+                                      isDark ? Colors.white38 : ColorConst.grey,
                                 ),
                                 trailing: IconButton(
                                   icon: Icon(
                                     Icons.delete_outline_rounded,
                                     size: 16,
-                                    color: isDark ? Colors.white38 : ColorConst.grey,
+                                    color: isDark
+                                        ? Colors.white38
+                                        : ColorConst.grey,
                                   ),
                                   tooltip: 'Delete Chat',
                                   onPressed: () {
-                                    context.read<LlmPlaygroundBloc>().add(DeleteChatSessionEvent(session.id));
+                                    context.read<LlmPlaygroundBloc>().add(
+                                        DeleteChatSessionEvent(session.id));
                                   },
                                 ),
                                 onTap: () {
-                                  context.read<LlmPlaygroundBloc>().add(SelectChatSessionEvent(session.id));
+                                  context
+                                      .read<LlmPlaygroundBloc>()
+                                      .add(SelectChatSessionEvent(session.id));
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -165,10 +194,15 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
 
                 // Clear History Option
                 if (state.sessions.isNotEmpty) ...[
-                  Divider(height: 1, color: isDark ? const Color(0xFF1E293B) : ColorConst.lineGrey),
+                  Divider(
+                      height: 1,
+                      color: isDark
+                          ? const Color(0xFF1E293B)
+                          : ColorConst.lineGrey),
                   ListTile(
                     dense: true,
-                    leading: const Icon(Icons.delete_sweep_rounded, size: 18, color: ColorConst.red),
+                    leading: const Icon(Icons.delete_sweep_rounded,
+                        size: 18, color: ColorConst.red),
                     title: const CustomText(
                       'Clear Chat History',
                       size: 12,
@@ -176,7 +210,9 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     onTap: () {
-                      context.read<LlmPlaygroundBloc>().add(const ClearAllHistoryEvent());
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(const ClearAllHistoryEvent());
                     },
                   ),
                 ],

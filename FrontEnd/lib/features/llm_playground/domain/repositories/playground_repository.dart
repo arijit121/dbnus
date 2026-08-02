@@ -7,7 +7,8 @@ abstract class PlaygroundRepository {
     ModelParams? modelParams,
   });
   void resetSession();
-  Stream<LlamaCompletionChunk>? createChatStream(String prompt, {GenerationParams? generationParams});
+  Stream<LlamaCompletionChunk>? createChatStream(String prompt,
+      {GenerationParams? generationParams});
   Future<void> dispose();
   bool get isInitialized;
 }

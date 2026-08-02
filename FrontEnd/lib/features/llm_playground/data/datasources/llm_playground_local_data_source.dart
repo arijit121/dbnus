@@ -31,8 +31,10 @@ class LlmPlaygroundLocalDataSourceImpl implements LlmPlaygroundDataSource {
         final dir = await getApplicationSupportDirectory();
         final file = File('${dir.path}/$fileName');
 
-        if (!await file.exists() || (await file.length()) != byteData.lengthInBytes) {
-          final bytes = byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+        if (!await file.exists() ||
+            (await file.length()) != byteData.lengthInBytes) {
+          final bytes = byteData.buffer
+              .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
           await file.writeAsBytes(bytes, flush: true);
         }
         return ModelSource.path(file.path);
@@ -66,7 +68,8 @@ class LlmPlaygroundLocalDataSourceImpl implements LlmPlaygroundDataSource {
       AppLog.i('LlmPlaygroundLocalDataSourceImpl initialized: $modelPath');
     } catch (e, stackTrace) {
       _isInitialized = false;
-      AppLog.e('Failed to initialize LlmPlaygroundLocalDataSourceImpl: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Failed to initialize LlmPlaygroundLocalDataSourceImpl: $e',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -92,7 +95,8 @@ class LlmPlaygroundLocalDataSourceImpl implements LlmPlaygroundDataSource {
       final message = LlamaTextContent(prompt);
       return _session?.create([message], params: generationParams);
     } catch (e, stackTrace) {
-      AppLog.e('Error in LlmPlaygroundLocalDataSourceImpl chat stream: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error in LlmPlaygroundLocalDataSourceImpl chat stream: $e',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -106,7 +110,8 @@ class LlmPlaygroundLocalDataSourceImpl implements LlmPlaygroundDataSource {
       _isInitialized = false;
       AppLog.i('LlmPlaygroundLocalDataSourceImpl disposed.');
     } catch (e, stackTrace) {
-      AppLog.e('Error disposing LlmPlaygroundLocalDataSourceImpl: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error disposing LlmPlaygroundLocalDataSourceImpl: $e',
+          error: e, stackTrace: stackTrace);
     }
   }
 }

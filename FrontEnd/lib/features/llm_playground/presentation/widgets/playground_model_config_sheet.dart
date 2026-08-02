@@ -25,10 +25,12 @@ class PlaygroundModelConfigSheet extends StatefulWidget {
   }
 
   @override
-  State<PlaygroundModelConfigSheet> createState() => _PlaygroundModelConfigSheetState();
+  State<PlaygroundModelConfigSheet> createState() =>
+      _PlaygroundModelConfigSheetState();
 }
 
-class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet> {
+class _PlaygroundModelConfigSheetState
+    extends State<PlaygroundModelConfigSheet> {
   late TextEditingController _modelPathController;
   late TextEditingController _systemPromptController;
 
@@ -37,7 +39,8 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
     super.initState();
     final bloc = context.read<LlmPlaygroundBloc>();
     _modelPathController = TextEditingController(text: bloc.state.modelPath);
-    _systemPromptController = TextEditingController(text: bloc.state.systemPrompt);
+    _systemPromptController =
+        TextEditingController(text: bloc.state.systemPrompt);
   }
 
   @override
@@ -107,7 +110,8 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
 
               Row(
                 children: [
-                  const Icon(Icons.tune_rounded, color: ColorConst.baseHexColor, size: 22),
+                  const Icon(Icons.tune_rounded,
+                      color: ColorConst.baseHexColor, size: 22),
                   8.pw,
                   const CustomText(
                     'AI Settings & Models',
@@ -143,11 +147,15 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                         hintText: 'Enter local .gguf path or URL',
                         isDense: true,
                         filled: true,
-                        fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                        fillColor: isDark
+                            ? const Color(0xFF0F172A)
+                            : const Color(0xFFF1F5F9),
                         suffixIcon: IconButton(
-                          icon: const Icon(Icons.folder_open_rounded, size: 20, color: ColorConst.baseHexColor),
+                          icon: const Icon(Icons.folder_open_rounded,
+                              size: 20, color: ColorConst.baseHexColor),
                           tooltip: 'Pick local .gguf file',
-                          onPressed: state.isInitializing ? null : _pickLocalModelFile,
+                          onPressed:
+                              state.isInitializing ? null : _pickLocalModelFile,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -163,13 +171,16 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                         : () {
                             final path = _modelPathController.text.trim();
                             if (path.isNotEmpty) {
-                              context.read<LlmPlaygroundBloc>().add(InitializeModelEvent(modelPath: path));
+                              context
+                                  .read<LlmPlaygroundBloc>()
+                                  .add(InitializeModelEvent(modelPath: path));
                             }
                           },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorConst.baseHexColor,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -187,8 +198,10 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 child: Row(
                   children: [
                     ActionChip(
-                      avatar: const Icon(Icons.flash_on, size: 14, color: Colors.amber),
-                      label: const Text('SmolLM2 (135M ~100MB)', style: TextStyle(fontSize: 11)),
+                      avatar: const Icon(Icons.flash_on,
+                          size: 14, color: Colors.amber),
+                      label: const Text('SmolLM2 (135M ~100MB)',
+                          style: TextStyle(fontSize: 11)),
                       onPressed: state.isInitializing
                           ? null
                           : () {
@@ -200,8 +213,10 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                     ),
                     6.pw,
                     ActionChip(
-                      avatar: const Icon(Icons.psychology, size: 14, color: ColorConst.lightBlue),
-                      label: const Text('Qwen2.5 (0.5B ~398MB)', style: TextStyle(fontSize: 11)),
+                      avatar: const Icon(Icons.psychology,
+                          size: 14, color: ColorConst.lightBlue),
+                      label: const Text('Qwen2.5 (0.5B ~398MB)',
+                          style: TextStyle(fontSize: 11)),
                       onPressed: state.isInitializing
                           ? null
                           : () {
@@ -214,13 +229,16 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                     if (!kIsWeb) ...[
                       6.pw,
                       ActionChip(
-                        avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: ColorConst.violate),
-                        label: const Text('Bundled Asset (.gguf)', style: TextStyle(fontSize: 11)),
+                        avatar: const Icon(Icons.inventory_2_rounded,
+                            size: 14, color: ColorConst.violate),
+                        label: const Text('Bundled Asset (.gguf)',
+                            style: TextStyle(fontSize: 11)),
                         onPressed: state.isInitializing
                             ? null
                             : () {
                                 setState(() {
-                                  _modelPathController.text = 'assets/models/ai/model.gguf';
+                                  _modelPathController.text =
+                                      'assets/models/ai/model.gguf';
                                 });
                               },
                       ),
@@ -245,12 +263,16 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 minLines: 2,
                 style: const TextStyle(fontSize: 13),
                 onChanged: (text) {
-                  context.read<LlmPlaygroundBloc>().add(UpdateSystemPromptEvent(text));
+                  context
+                      .read<LlmPlaygroundBloc>()
+                      .add(UpdateSystemPromptEvent(text));
                 },
                 decoration: InputDecoration(
                   hintText: 'Enter AI system instruction context...',
                   filled: true,
-                  fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                  fillColor: isDark
+                      ? const Color(0xFF0F172A)
+                      : const Color(0xFFF1F5F9),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -265,11 +287,15 @@ class _PlaygroundModelConfigSheetState extends State<PlaygroundModelConfigSheet>
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.read<LlmPlaygroundBloc>().add(const ClearChatEvent());
+                    context
+                        .read<LlmPlaygroundBloc>()
+                        .add(const ClearChatEvent());
                     Navigator.of(context).pop();
                   },
-                  icon: const Icon(Icons.delete_outline_rounded, color: ColorConst.red, size: 18),
-                  label: const CustomText('Clear Chat Conversation', color: ColorConst.red),
+                  icon: const Icon(Icons.delete_outline_rounded,
+                      color: ColorConst.red, size: 18),
+                  label: const CustomText('Clear Chat Conversation',
+                      color: ColorConst.red),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: ColorConst.red),
                     padding: const EdgeInsets.symmetric(vertical: 12),

@@ -16,7 +16,8 @@ class PlaygroundMessageBubble extends StatelessWidget {
 
   List<_MessageSegment> _parseSegments(String rawText) {
     final segments = <_MessageSegment>[];
-    final regExp = RegExp(r'```([a-zA-Z0-9_\-\+]*)\n?([\s\S]*?)```', multiLine: true);
+    final regExp =
+        RegExp(r'```([a-zA-Z0-9_\-\+]*)\n?([\s\S]*?)```', multiLine: true);
     int lastEnd = 0;
 
     for (final match in regExp.allMatches(rawText)) {
@@ -56,13 +57,16 @@ class PlaygroundMessageBubble extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isUser = message.isUser;
-    final textContent = message.text.isEmpty && message.isStreaming ? 'Thinking...' : message.text;
+    final textContent = message.text.isEmpty && message.isStreaming
+        ? 'Thinking...'
+        : message.text;
     final segments = _parseSegments(textContent);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
       child: Row(
-        mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUser) ...[
@@ -72,7 +76,8 @@ class PlaygroundMessageBubble extends StatelessWidget {
                 color: ColorConst.baseHexColor,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.smart_toy_rounded, color: Colors.white, size: 16),
+              child: const Icon(Icons.smart_toy_rounded,
+                  color: Colors.white, size: 16),
             ),
             8.pw,
           ],
@@ -82,7 +87,9 @@ class PlaygroundMessageBubble extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isUser
                     ? ColorConst.baseHexColor
-                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9)),
+                    : (isDark
+                        ? const Color(0xFF1E293B)
+                        : const Color(0xFFF1F5F9)),
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),
@@ -90,7 +97,10 @@ class PlaygroundMessageBubble extends StatelessWidget {
                   bottomRight: Radius.circular(isUser ? 4 : 16),
                 ),
                 border: !isUser
-                    ? Border.all(color: isDark ? const Color(0xFF334155) : ColorConst.lineGrey)
+                    ? Border.all(
+                        color: isDark
+                            ? const Color(0xFF334155)
+                            : ColorConst.lineGrey)
                     : null,
               ),
               child: Column(
@@ -120,7 +130,9 @@ class PlaygroundMessageBubble extends StatelessWidget {
                           seg.text.replaceAll('\n', '<br/>'),
                           size: 13,
                           height: 1.4,
-                          color: isUser ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
+                          color: isUser
+                              ? Colors.white
+                              : (isDark ? Colors.white70 : Colors.black87),
                         ),
                       );
                     }
@@ -130,7 +142,9 @@ class PlaygroundMessageBubble extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         height: 1.4,
-                        color: isUser ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
+                        color: isUser
+                            ? Colors.white
+                            : (isDark ? Colors.white70 : Colors.black87),
                       ),
                     );
                   }),
@@ -147,7 +161,8 @@ class PlaygroundMessageBubble extends StatelessWidget {
                         8.pw,
                         InkWell(
                           onTap: () {
-                            Clipboard.setData(ClipboardData(text: message.text));
+                            Clipboard.setData(
+                                ClipboardData(text: message.text));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Copied response to clipboard'),
@@ -155,7 +170,8 @@ class PlaygroundMessageBubble extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Icon(Icons.copy_rounded, size: 12, color: ColorConst.grey),
+                          child: const Icon(Icons.copy_rounded,
+                              size: 12, color: ColorConst.grey),
                         ),
                       ],
                       if (message.isStreaming) ...[
@@ -255,7 +271,8 @@ class _PlaygroundCodeViewerState extends State<_PlaygroundCodeViewer> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.code_rounded, size: 14, color: Colors.indigoAccent),
+                    const Icon(Icons.code_rounded,
+                        size: 14, color: Colors.indigoAccent),
                     const SizedBox(width: 6),
                     Text(
                       widget.language.toUpperCase(),
@@ -272,7 +289,8 @@ class _PlaygroundCodeViewerState extends State<_PlaygroundCodeViewer> {
                   onTap: _copyCode,
                   borderRadius: BorderRadius.circular(6),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     child: Row(
                       children: [
                         Icon(
@@ -284,7 +302,8 @@ class _PlaygroundCodeViewerState extends State<_PlaygroundCodeViewer> {
                         Text(
                           _copied ? 'Copied!' : 'Copy Code',
                           style: TextStyle(
-                            color: _copied ? Colors.greenAccent : Colors.white70,
+                            color:
+                                _copied ? Colors.greenAccent : Colors.white70,
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
                           ),

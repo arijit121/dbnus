@@ -83,7 +83,8 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
 
   bool _checkIsImage(String fileName) {
     final ext = fileName.split('.').last.toLowerCase();
-    return ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'heic', 'svg'].contains(ext);
+    return ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'heic', 'svg']
+        .contains(ext);
   }
 
   Future<void> _pickAndAttachFile() async {
@@ -113,7 +114,8 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
           if (content.trim().isEmpty) {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Selected file is empty or unreadable.')),
+                const SnackBar(
+                    content: Text('Selected file is empty or unreadable.')),
               );
             }
             return;
@@ -164,7 +166,8 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Microphone permission is required for speech recognition.'),
+                  content: Text(
+                      'Microphone permission is required for speech recognition.'),
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -184,7 +187,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
           onError: (err) {
             debugPrint('SpeechToText onError: ${err.errorMsg}');
             if (mounted) {
-              context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+              context
+                  .read<LlmPlaygroundBloc>()
+                  .add(const ToggleVoiceInputEvent(isListening: false));
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text('Speech error: ${err.errorMsg}'),
@@ -197,7 +202,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
             debugPrint('SpeechToText onStatus: $status');
             if (status == 'done' || status == 'notListening') {
               if (mounted) {
-                context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+                context
+                    .read<LlmPlaygroundBloc>()
+                    .add(const ToggleVoiceInputEvent(isListening: false));
               }
             }
           },
@@ -231,7 +238,8 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Speech recognition is not available on this device/browser.'),
+              content: Text(
+                  'Speech recognition is not available on this device/browser.'),
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -239,7 +247,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
       }
     } catch (e) {
       if (mounted) {
-        context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+        context
+            .read<LlmPlaygroundBloc>()
+            .add(const ToggleVoiceInputEvent(isListening: false));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Speech recognition error: $e'),
@@ -256,8 +266,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? ColorConst.primaryDark : ColorConst.scaffoldBg,
+      backgroundColor: isDark ? ColorConst.primaryDark : ColorConst.scaffoldBg,
       drawer: const PlaygroundChatHistoryDrawer(),
       appBar: AppBar(
         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
@@ -348,10 +357,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
-              icon: const Icon(Icons.edit_note_rounded, color: ColorConst.baseHexColor, size: 20),
+              icon: const Icon(Icons.edit_note_rounded,
+                  color: ColorConst.baseHexColor, size: 20),
               tooltip: 'Start New Chat',
               onPressed: () {
-                context.read<LlmPlaygroundBloc>().add(const CreateNewChatEvent());
+                context
+                    .read<LlmPlaygroundBloc>()
+                    .add(const CreateNewChatEvent());
               },
             ),
           ),
@@ -359,11 +371,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
             builder: (ctx) => Container(
               margin: const EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
+                color:
+                    isDark ? const Color(0xFF334155) : const Color(0xFFF1F5F9),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: IconButton(
-                icon: const Icon(Icons.forum_rounded, color: ColorConst.baseHexColor, size: 20),
+                icon: const Icon(Icons.forum_rounded,
+                    color: ColorConst.baseHexColor, size: 20),
                 tooltip: 'Chat History',
                 onPressed: () => Scaffold.of(ctx).openDrawer(),
               ),
@@ -492,13 +506,16 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
               decoration: BoxDecoration(
                 color: ColorConst.baseHexColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: ColorConst.baseHexColor.withValues(alpha: 0.3)),
+                border: Border.all(
+                    color: ColorConst.baseHexColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    state.attachedFile!.isImage ? Icons.image_rounded : Icons.attach_file_rounded,
+                    state.attachedFile!.isImage
+                        ? Icons.image_rounded
+                        : Icons.attach_file_rounded,
                     size: 16,
                     color: ColorConst.baseHexColor,
                   ),
@@ -516,9 +533,12 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                   6.pw,
                   InkWell(
                     onTap: () {
-                      context.read<LlmPlaygroundBloc>().add(const RemoveAttachedFileEvent());
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(const RemoveAttachedFileEvent());
                     },
-                    child: const Icon(Icons.close_rounded, size: 16, color: ColorConst.baseHexColor),
+                    child: const Icon(Icons.close_rounded,
+                        size: 16, color: ColorConst.baseHexColor),
                   ),
                 ],
               ),
@@ -542,10 +562,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
-                    onTap: state.isInitialized && !state.isGenerating ? _pickAndAttachFile : null,
+                    onTap: state.isInitialized && !state.isGenerating
+                        ? _pickAndAttachFile
+                        : null,
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.attach_file_rounded, color: ColorConst.baseHexColor, size: 20),
+                      child: Icon(Icons.attach_file_rounded,
+                          color: ColorConst.baseHexColor, size: 20),
                     ),
                   ),
                 ),
@@ -555,12 +578,18 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
-                    onTap: state.isInitialized && !state.isGenerating ? _toggleSpeechInput : null,
+                    onTap: state.isInitialized && !state.isGenerating
+                        ? _toggleSpeechInput
+                        : null,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
-                        state.isListeningToVoice ? Icons.mic_rounded : Icons.mic_none_rounded,
-                        color: state.isListeningToVoice ? ColorConst.red : ColorConst.baseHexColor,
+                        state.isListeningToVoice
+                            ? Icons.mic_rounded
+                            : Icons.mic_none_rounded,
+                        color: state.isListeningToVoice
+                            ? ColorConst.red
+                            : ColorConst.baseHexColor,
                         size: 20,
                       ),
                     ),
@@ -585,14 +614,17 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                       hintText: state.isListeningToVoice
                           ? 'Listening to voice...'
                           : (!state.isInitialized
-                              ? (state.isInitializing ? 'Loading AI Model...' : 'Model Not Loaded')
+                              ? (state.isInitializing
+                                  ? 'Loading AI Model...'
+                                  : 'Model Not Loaded')
                               : 'Ask anything or paste text/code...'),
                       hintStyle: TextStyle(
                         fontSize: 13,
                         color: isDark ? Colors.white38 : ColorConst.grey,
                       ),
                       isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 8),
                       border: InputBorder.none,
                     ),
                     onSubmitted: (_) => _sendMessage(),
@@ -605,7 +637,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                 if (state.isGenerating)
                   GestureDetector(
                     onTap: () {
-                      context.read<LlmPlaygroundBloc>().add(const StopGenerationEvent());
+                      context
+                          .read<LlmPlaygroundBloc>()
+                          .add(const StopGenerationEvent());
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -613,7 +647,8 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                         color: ColorConst.red,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.stop_rounded, size: 18, color: Colors.white),
+                      child: const Icon(Icons.stop_rounded,
+                          size: 18, color: Colors.white),
                     ),
                   )
                 else
@@ -622,10 +657,13 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: state.isInitialized ? ColorConst.baseHexColor : ColorConst.grey.withValues(alpha: 0.3),
+                        color: state.isInitialized
+                            ? ColorConst.baseHexColor
+                            : ColorConst.grey.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.send_rounded, size: 16, color: Colors.white),
+                      child: const Icon(Icons.send_rounded,
+                          size: 16, color: Colors.white),
                     ),
                   ),
               ],

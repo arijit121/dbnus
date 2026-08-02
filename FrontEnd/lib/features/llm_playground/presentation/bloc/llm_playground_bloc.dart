@@ -29,9 +29,12 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     on<SelectChatSessionEvent>(_onSelectChatSession);
     on<DeleteChatSessionEvent>(_onDeleteChatSession);
     on<ClearAllHistoryEvent>(_onClearAllHistory);
-    on<AttachFileEvent>((event, emit) => emit(state.copyWith(attachedFile: event.file)));
-    on<RemoveAttachedFileEvent>((event, emit) => emit(state.copyWith(clearAttachedFile: true)));
-    on<ToggleVoiceInputEvent>((event, emit) => emit(state.copyWith(isListeningToVoice: event.isListening)));
+    on<AttachFileEvent>(
+        (event, emit) => emit(state.copyWith(attachedFile: event.file)));
+    on<RemoveAttachedFileEvent>(
+        (event, emit) => emit(state.copyWith(clearAttachedFile: true)));
+    on<ToggleVoiceInputEvent>((event, emit) =>
+        emit(state.copyWith(isListeningToVoice: event.isListening)));
   }
 
   PlaygroundRepository get repository => _repository;
@@ -107,7 +110,8 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       updatedAt: now,
     );
 
-    final updatedSessions = List<PlaygroundChatSession>.from(state.sessions)..insert(0, newSession);
+    final updatedSessions = List<PlaygroundChatSession>.from(state.sessions)
+      ..insert(0, newSession);
 
     emit(state.copyWith(
       sessions: updatedSessions,
@@ -142,19 +146,22 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     DeleteChatSessionEvent event,
     Emitter<LlmPlaygroundState> emit,
   ) {
-    final updatedSessions = state.sessions.where((s) => s.id != event.sessionId).toList();
+    final updatedSessions =
+        state.sessions.where((s) => s.id != event.sessionId).toList();
 
     String? newActiveId = state.activeSessionId;
     if (state.activeSessionId == event.sessionId) {
       _streamSubscription?.cancel();
       _repository.resetSession();
-      newActiveId = updatedSessions.isNotEmpty ? updatedSessions.first.id : null;
+      newActiveId =
+          updatedSessions.isNotEmpty ? updatedSessions.first.id : null;
     }
 
     emit(state.copyWith(
       sessions: updatedSessions,
       activeSessionId: newActiveId,
-      isGenerating: state.activeSessionId == event.sessionId ? false : state.isGenerating,
+      isGenerating:
+          state.activeSessionId == event.sessionId ? false : state.isGenerating,
     ));
   }
 
@@ -205,13 +212,16 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) async {
     final rawText = event.text.trim();
-    if (rawText.isEmpty || !_repository.isInitialized || state.isGenerating) return;
+    if (rawText.isEmpty || !_repository.isInitialized || state.isGenerating) {
+      return;
+    }
 
     final detectedTool = PlaygroundTool.detectTool(rawText);
 
     // Ensure we have an active session
     PlaygroundChatSession session;
-    List<PlaygroundChatSession> sessions = List<PlaygroundChatSession>.from(state.sessions);
+    List<PlaygroundChatSession> sessions =
+        List<PlaygroundChatSession>.from(state.sessions);
 
     if (state.activeSession == null) {
       final now = DateTime.now();
@@ -228,8 +238,10 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     } else {
       session = state.activeSession!;
       if (session.messages.isEmpty) {
-        final title = rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
-        session = session.copyWith(title: title, selectedToolId: detectedTool.id);
+        final title =
+            rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
+        session =
+            session.copyWith(title: title, selectedToolId: detectedTool.id);
         _repository.resetSession();
       } else {
         // Reset LLM session context if detected tool changes
@@ -247,10 +259,12 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     if (attached != null) {
       if (attached.isImage) {
         userTextDisplay = '📷 [Attached Image: ${attached.name}]\n$rawText';
-        promptText = '[User attached Image: ${attached.name}]\nUser Query:\n${rawText.isNotEmpty ? rawText : "I have attached an image file named ${attached.name}."}';
+        promptText =
+            '[User attached Image: ${attached.name}]\nUser Query:\n${rawText.isNotEmpty ? rawText : "I have attached an image file named ${attached.name}."}';
       } else {
         userTextDisplay = '📎 [Attached File: ${attached.name}]\n$rawText';
-        promptText = 'Attached File Content (${attached.name}):\n```\n${attached.content}\n```\n\nUser Question:\n$rawText';
+        promptText =
+            'Attached File Content (${attached.name}):\n```\n${attached.content}\n```\n\nUser Question:\n$rawText';
       }
     }
 
@@ -276,7 +290,8 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       isStreaming: true,
     );
 
-    final updatedMessages = List<PlaygroundChatMessage>.from(session.messages)..addAll([userMsg, botMsg]);
+    final updatedMessages = List<PlaygroundChatMessage>.from(session.messages)
+      ..addAll([userMsg, botMsg]);
     final updatedSession = session.copyWith(
       messages: updatedMessages,
       selectedToolId: detectedTool.id,
@@ -331,7 +346,9 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     StreamChunkReceivedEvent event,
     Emitter<LlmPlaygroundState> emit,
   ) {
-    if (state.activeSession == null || state.activeSession!.messages.isEmpty) return;
+    if (state.activeSession == null || state.activeSession!.messages.isEmpty) {
+      return;
+    }
 
     final session = state.activeSession!;
     final updated = List<PlaygroundChatMessage>.from(session.messages);
@@ -345,7 +362,9 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       );
 
       final updatedSession = session.copyWith(messages: updated);
-      final sessions = state.sessions.map((s) => s.id == updatedSession.id ? updatedSession : s).toList();
+      final sessions = state.sessions
+          .map((s) => s.id == updatedSession.id ? updatedSession : s)
+          .toList();
 
       emit(state.copyWith(
         isGenerating: true,
@@ -370,7 +389,9 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       }
 
       final updatedSession = session.copyWith(messages: updated);
-      final sessions = state.sessions.map((s) => s.id == updatedSession.id ? updatedSession : s).toList();
+      final sessions = state.sessions
+          .map((s) => s.id == updatedSession.id ? updatedSession : s)
+          .toList();
 
       emit(state.copyWith(
         isGenerating: false,

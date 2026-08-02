@@ -13,7 +13,8 @@ class PlaygroundRepositoryImpl implements PlaygroundRepository {
     LlmPlaygroundDataSource? localDataSource,
     LlmPlaygroundDataSource? remoteDataSource,
   })  : localDataSource = localDataSource ?? LlmPlaygroundLocalDataSourceImpl(),
-        remoteDataSource = remoteDataSource ?? LlmPlaygroundRemoteDataSourceImpl();
+        remoteDataSource =
+            remoteDataSource ?? LlmPlaygroundRemoteDataSourceImpl();
 
   @override
   Future<void> initializeModel({
@@ -25,7 +26,8 @@ class PlaygroundRepositoryImpl implements PlaygroundRepository {
       await _activeDataSource!.dispose();
     }
 
-    final isRemote = modelPath.startsWith('http://') || modelPath.startsWith('https://');
+    final isRemote =
+        modelPath.startsWith('http://') || modelPath.startsWith('https://');
     _activeDataSource = isRemote ? remoteDataSource : localDataSource;
 
     await _activeDataSource!.initialize(
@@ -45,7 +47,8 @@ class PlaygroundRepositoryImpl implements PlaygroundRepository {
     String prompt, {
     GenerationParams? generationParams,
   }) {
-    return _activeDataSource?.createChatStream(prompt, generationParams: generationParams);
+    return _activeDataSource?.createChatStream(prompt,
+        generationParams: generationParams);
   }
 
   @override

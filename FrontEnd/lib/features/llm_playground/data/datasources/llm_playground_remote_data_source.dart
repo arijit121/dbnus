@@ -36,7 +36,8 @@ class LlmPlaygroundRemoteDataSourceImpl implements LlmPlaygroundDataSource {
       AppLog.i('LlmPlaygroundRemoteDataSourceImpl initialized: $modelPath');
     } catch (e, stackTrace) {
       _isInitialized = false;
-      AppLog.e('Failed to initialize LlmPlaygroundRemoteDataSourceImpl: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Failed to initialize LlmPlaygroundRemoteDataSourceImpl: $e',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -62,7 +63,8 @@ class LlmPlaygroundRemoteDataSourceImpl implements LlmPlaygroundDataSource {
       final message = LlamaTextContent(prompt);
       return _session?.create([message], params: generationParams);
     } catch (e, stackTrace) {
-      AppLog.e('Error in LlmPlaygroundRemoteDataSourceImpl chat stream: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error in LlmPlaygroundRemoteDataSourceImpl chat stream: $e',
+          error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -76,7 +78,8 @@ class LlmPlaygroundRemoteDataSourceImpl implements LlmPlaygroundDataSource {
       _isInitialized = false;
       AppLog.i('LlmPlaygroundRemoteDataSourceImpl disposed.');
     } catch (e, stackTrace) {
-      AppLog.e('Error disposing LlmPlaygroundRemoteDataSourceImpl: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error disposing LlmPlaygroundRemoteDataSourceImpl: $e',
+          error: e, stackTrace: stackTrace);
     }
   }
 }

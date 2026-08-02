@@ -22,7 +22,8 @@ class PlaygroundModelConfigCard extends StatefulWidget {
   });
 
   @override
-  State<PlaygroundModelConfigCard> createState() => _PlaygroundModelConfigCardState();
+  State<PlaygroundModelConfigCard> createState() =>
+      _PlaygroundModelConfigCardState();
 }
 
 class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
@@ -70,7 +71,9 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
 
   bool get _isLocalFile {
     final text = widget.controller.text.trim();
-    return text.isNotEmpty && !text.startsWith('http://') && !text.startsWith('https://');
+    return text.isNotEmpty &&
+        !text.startsWith('http://') &&
+        !text.startsWith('https://');
   }
 
   @override
@@ -103,7 +106,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
             const LinearProgressIndicator(
               minHeight: 3,
               backgroundColor: ColorConst.lineGrey,
-              valueColor: AlwaysStoppedAnimation<Color>(ColorConst.baseHexColor),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(ColorConst.baseHexColor),
             ),
           InkWell(
             onTap: () {
@@ -116,7 +120,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
-                  const Icon(Icons.storage_rounded, size: 18, color: ColorConst.baseHexColor),
+                  const Icon(Icons.storage_rounded,
+                      size: 18, color: ColorConst.baseHexColor),
                   8.pw,
                   const CustomText(
                     'Model Configuration',
@@ -141,7 +146,9 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                         overflow: TextOverflow.ellipsis,
                         size: 11,
                         fontWeight: FontWeight.w500,
-                        color: widget.isInitialized ? ColorConst.green : Colors.orangeAccent,
+                        color: widget.isInitialized
+                            ? ColorConst.green
+                            : Colors.orangeAccent,
                       ),
                     ),
                   ],
@@ -149,7 +156,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                   AnimatedRotation(
                     turns: _isExpanded ? 0.5 : 0.0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.keyboard_arrow_down, size: 20, color: ColorConst.grey),
+                    child: const Icon(Icons.keyboard_arrow_down,
+                        size: 20, color: ColorConst.grey),
                   ),
                 ],
               ),
@@ -175,13 +183,19 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                           decoration: InputDecoration(
                             hintText: 'Enter local .gguf path, URL, or asset:',
                             isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10),
                             filled: true,
-                            fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+                            fillColor: isDark
+                                ? const Color(0xFF0F172A)
+                                : const Color(0xFFF1F5F9),
                             suffixIcon: IconButton(
-                              icon: const Icon(Icons.folder_open_rounded, size: 20, color: ColorConst.baseHexColor),
+                              icon: const Icon(Icons.folder_open_rounded,
+                                  size: 20, color: ColorConst.baseHexColor),
                               tooltip: 'Pick local .gguf file',
-                              onPressed: widget.isInitializing ? null : _pickLocalModelFile,
+                              onPressed: widget.isInitializing
+                                  ? null
+                                  : _pickLocalModelFile,
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -192,14 +206,16 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                       ),
                       8.pw,
                       ElevatedButton(
-                        onPressed: widget.isInitializing ? null : widget.onInitialize,
+                        onPressed:
+                            widget.isInitializing ? null : widget.onInitialize,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: ColorConst.baseHexColor,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 12),
                         ),
                         child: Text(
                           widget.isInitializing
@@ -213,7 +229,8 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: _isLocalFile
                               ? ColorConst.green.withValues(alpha: 0.15)
@@ -229,16 +246,24 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              _isLocalFile ? Icons.folder_rounded : Icons.cloud_download_rounded,
+                              _isLocalFile
+                                  ? Icons.folder_rounded
+                                  : Icons.cloud_download_rounded,
                               size: 12,
-                              color: _isLocalFile ? ColorConst.green : ColorConst.lightBlue,
+                              color: _isLocalFile
+                                  ? ColorConst.green
+                                  : ColorConst.lightBlue,
                             ),
                             4.pw,
                             CustomText(
-                              _isLocalFile ? 'Local Target' : 'Remote URL Target',
+                              _isLocalFile
+                                  ? 'Local Target'
+                                  : 'Remote URL Target',
                               size: 11,
                               fontWeight: FontWeight.bold,
-                              color: _isLocalFile ? ColorConst.green : ColorConst.lightBlue,
+                              color: _isLocalFile
+                                  ? ColorConst.green
+                                  : ColorConst.lightBlue,
                             ),
                           ],
                         ),
@@ -251,9 +276,12 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                     child: Row(
                       children: [
                         ActionChip(
-                          avatar: const Icon(Icons.inventory_2_rounded, size: 14, color: ColorConst.violate),
+                          avatar: const Icon(Icons.inventory_2_rounded,
+                              size: 14, color: ColorConst.violate),
                           label: Text(
-                            kIsWeb ? 'Bundled Asset (Native App Only)' : 'Bundled Asset (.gguf)',
+                            kIsWeb
+                                ? 'Bundled Asset (Native App Only)'
+                                : 'Bundled Asset (.gguf)',
                             style: const TextStyle(fontSize: 11),
                           ),
                           onPressed: widget.isInitializing
@@ -271,20 +299,27 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                                     return;
                                   }
                                   setState(() {
-                                    widget.controller.text = 'assets/models/ai/model.gguf';
+                                    widget.controller.text =
+                                        'assets/models/ai/model.gguf';
                                   });
                                 },
                         ),
                         6.pw,
                         ActionChip(
-                          avatar: const Icon(Icons.folder_open, size: 14, color: ColorConst.green),
-                          label: const Text('Browse Device .gguf', style: TextStyle(fontSize: 11)),
-                          onPressed: widget.isInitializing ? null : _pickLocalModelFile,
+                          avatar: const Icon(Icons.folder_open,
+                              size: 14, color: ColorConst.green),
+                          label: const Text('Browse Device .gguf',
+                              style: TextStyle(fontSize: 11)),
+                          onPressed: widget.isInitializing
+                              ? null
+                              : _pickLocalModelFile,
                         ),
                         6.pw,
                         ActionChip(
-                          avatar: const Icon(Icons.flash_on, size: 14, color: Colors.amber),
-                          label: const Text('SmolLM2 (135M ~100MB)', style: TextStyle(fontSize: 11)),
+                          avatar: const Icon(Icons.flash_on,
+                              size: 14, color: Colors.amber),
+                          label: const Text('SmolLM2 (135M ~100MB)',
+                              style: TextStyle(fontSize: 11)),
                           onPressed: widget.isInitializing
                               ? null
                               : () {
@@ -296,8 +331,10 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                         ),
                         6.pw,
                         ActionChip(
-                          avatar: const Icon(Icons.psychology, size: 14, color: ColorConst.lightBlue),
-                          label: const Text('Qwen2.5 (0.5B ~398MB)', style: TextStyle(fontSize: 11)),
+                          avatar: const Icon(Icons.psychology,
+                              size: 14, color: ColorConst.lightBlue),
+                          label: const Text('Qwen2.5 (0.5B ~398MB)',
+                              style: TextStyle(fontSize: 11)),
                           onPressed: widget.isInitializing
                               ? null
                               : () {
@@ -317,16 +354,19 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                       decoration: BoxDecoration(
                         color: Colors.amber.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+                        border: Border.all(
+                            color: Colors.amber.withValues(alpha: 0.3)),
                       ),
                       child: const Row(
                         children: [
-                          Icon(Icons.info_outline, size: 14, color: Colors.amber),
+                          Icon(Icons.info_outline,
+                              size: 14, color: Colors.amber),
                           SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               'Web Notice: WebGPU WASM bridge is required for Web browser execution.',
-                              style: TextStyle(fontSize: 11, color: Colors.amber),
+                              style:
+                                  TextStyle(fontSize: 11, color: Colors.amber),
                             ),
                           ),
                         ],
@@ -336,7 +376,9 @@ class _PlaygroundModelConfigCardState extends State<PlaygroundModelConfigCard> {
                 ],
               ),
             ),
-            crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+            crossFadeState: _isExpanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
             duration: const Duration(milliseconds: 250),
           ),
         ],

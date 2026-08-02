@@ -25,7 +25,8 @@ class LlmPlaygroundState extends Equatable {
     this.sessions = const [],
     this.activeSessionId,
     PlaygroundTool? selectedTool,
-    this.systemPrompt = 'You are an intelligent, helpful AI assistant running locally.',
+    this.systemPrompt =
+        'You are an intelligent, helpful AI assistant running locally.',
     String? modelPath,
     this.statusMessage,
     this.errorMessage,
@@ -50,7 +51,8 @@ class LlmPlaygroundState extends Equatable {
     }
   }
 
-  List<PlaygroundChatMessage> get messages => activeSession?.messages ?? const [];
+  List<PlaygroundChatMessage> get messages =>
+      activeSession?.messages ?? const [];
 
   LlmPlaygroundState copyWith({
     LlmPlaygroundStatus? status,
@@ -76,7 +78,8 @@ class LlmPlaygroundState extends Equatable {
       statusMessage: statusMessage ?? this.statusMessage,
       errorMessage: errorMessage ?? this.errorMessage,
       isGenerating: isGenerating ?? this.isGenerating,
-      attachedFile: clearAttachedFile ? null : (attachedFile ?? this.attachedFile),
+      attachedFile:
+          clearAttachedFile ? null : (attachedFile ?? this.attachedFile),
       isListeningToVoice: isListeningToVoice ?? this.isListeningToVoice,
     );
   }
