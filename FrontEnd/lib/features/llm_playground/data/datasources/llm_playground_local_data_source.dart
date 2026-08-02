@@ -3,22 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:llamadart/llamadart.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:dbnus/core/services/JsService/provider/js_provider.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'llm_playground_data_source.dart';
 
-/// Independent service for LLM Playground feature.
-class PlaygroundLlamaService {
+class LlmPlaygroundLocalDataSourceImpl implements LlmPlaygroundDataSource {
   LlamaEngine? _engine;
   ChatSession? _session;
   bool _isInitialized = false;
 
+  @override
   bool get isInitialized => _isInitialized;
 
-  Future<ModelSource> _resolveSource(String modelPath) async {
-    if (modelPath.startsWith('http://') || modelPath.startsWith('https://')) {
-      return ModelSource.url(Uri.parse(modelPath));
-    }
-
+  Future<ModelSource> _resolveLocalSource(String modelPath) async {
     final cleanPath = modelPath.startsWith('asset:')
         ? modelPath.replaceFirst('asset:', '')
         : modelPath;
@@ -26,7 +22,7 @@ class PlaygroundLlamaService {
     if (cleanPath.startsWith('assets/')) {
       if (kIsWeb) {
         throw Exception(
-          'Bundled local asset GGUF models (assets/models/ai/...) are reserved for native mobile and desktop apps (Android, iOS, Windows, macOS, Linux). On Web, please use a remote model URL.',
+          'Bundled local asset GGUF models are reserved for native mobile and desktop apps (Android, iOS, Windows, macOS, Linux). On Web, please use a remote model URL.',
         );
       }
       try {
@@ -41,7 +37,7 @@ class PlaygroundLlamaService {
         }
         return ModelSource.path(file.path);
       } catch (e) {
-        AppLog.e('PlaygroundLlamaService asset error: $e');
+        AppLog.e('LlmPlaygroundLocalDataSourceImpl asset error: $e');
         rethrow;
       }
     }
@@ -49,19 +45,17 @@ class PlaygroundLlamaService {
     return ModelSource.path(modelPath);
   }
 
+  @override
   Future<void> initialize({
     required String modelPath,
     LlamaBackend? backend,
     ModelParams? modelParams,
   }) async {
     try {
-      if (kIsWeb) {
-        await JsProvider.loadLlamaWebGpuBridge();
-      }
       final selectedBackend = backend ?? LlamaBackend();
       _engine = LlamaEngine(selectedBackend);
 
-      final source = await _resolveSource(modelPath);
+      final source = await _resolveLocalSource(modelPath);
 
       await _engine?.loadModelSource(
         source,
@@ -69,44 +63,50 @@ class PlaygroundLlamaService {
       );
       _session = ChatSession(_engine!);
       _isInitialized = true;
-      AppLog.i('PlaygroundLlamaService initialized: $modelPath');
+      AppLog.i('LlmPlaygroundLocalDataSourceImpl initialized: $modelPath');
     } catch (e, stackTrace) {
       _isInitialized = false;
-      AppLog.e('Failed to initialize PlaygroundLlamaService: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Failed to initialize LlmPlaygroundLocalDataSourceImpl: $e', error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
+  @override
   void resetSession() {
     if (_engine != null && _isInitialized) {
       _session = ChatSession(_engine!);
-      AppLog.i('PlaygroundLlamaService session reset.');
+      AppLog.i('LlmPlaygroundLocalDataSourceImpl session reset.');
     }
   }
 
-  Stream<LlamaCompletionChunk>? createChatStream(String prompt, {GenerationParams? generationParams}) {
+  @override
+  Stream<LlamaCompletionChunk>? createChatStream(
+    String prompt, {
+    GenerationParams? generationParams,
+  }) {
     if (!_isInitialized || _session == null) {
-      AppLog.e('PlaygroundLlamaService is not initialized.');
+      AppLog.e('LlmPlaygroundLocalDataSourceImpl is not initialized.');
       return null;
     }
     try {
       final message = LlamaTextContent(prompt);
       return _session?.create([message], params: generationParams);
     } catch (e, stackTrace) {
-      AppLog.e('Error in PlaygroundLlamaService chat stream: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error in LlmPlaygroundLocalDataSourceImpl chat stream: $e', error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
+  @override
   Future<void> dispose() async {
     try {
       _session = null;
       await _engine?.dispose();
       _engine = null;
       _isInitialized = false;
-      AppLog.i('PlaygroundLlamaService disposed.');
+      AppLog.i('LlmPlaygroundLocalDataSourceImpl disposed.');
     } catch (e, stackTrace) {
-      AppLog.e('Error disposing PlaygroundLlamaService: $e', error: e, stackTrace: stackTrace);
+      AppLog.e('Error disposing LlmPlaygroundLocalDataSourceImpl: $e', error: e, stackTrace: stackTrace);
     }
   }
 }

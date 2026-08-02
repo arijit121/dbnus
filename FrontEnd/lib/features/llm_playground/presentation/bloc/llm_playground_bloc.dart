@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/models/playground_chat_message.dart';
-import '../../domain/models/playground_chat_session.dart';
-import '../../domain/models/playground_tool.dart';
-import '../../services/playground_llama_service.dart';
+import '../../domain/entities/playground_chat_message.dart';
+import '../../domain/entities/playground_chat_session.dart';
+import '../../domain/entities/playground_tool.dart';
+import '../../domain/repositories/playground_repository.dart';
+import '../../data/repositories/playground_repository_impl.dart';
 import 'llm_playground_event.dart';
 import 'llm_playground_state.dart';
 
 class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
-  final PlaygroundLlamaService _llamaService;
+  final PlaygroundRepository _repository;
   StreamSubscription? _streamSubscription;
   final Uuid _uuid = const Uuid();
 
-  LlmPlaygroundBloc({PlaygroundLlamaService? llamaService})
-      : _llamaService = llamaService ?? PlaygroundLlamaService(),
+  LlmPlaygroundBloc({PlaygroundRepository? repository})
+      : _repository = repository ?? PlaygroundRepositoryImpl(),
         super(LlmPlaygroundState()) {
     on<InitializeModelEvent>(_onInitializeModel);
     on<SelectToolEvent>(_onSelectTool);
@@ -30,7 +31,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     on<ClearAllHistoryEvent>(_onClearAllHistory);
   }
 
-  PlaygroundLlamaService get llamaService => _llamaService;
+  PlaygroundRepository get repository => _repository;
 
   Future<void> _onInitializeModel(
     InitializeModelEvent event,
@@ -46,7 +47,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     ));
 
     try {
-      await _llamaService.initialize(modelPath: targetPath);
+      await _repository.initializeModel(modelPath: targetPath);
       emit(state.copyWith(
         status: LlmPlaygroundStatus.initialized,
         statusMessage: 'Model Ready',
@@ -65,7 +66,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
-    _llamaService.resetSession();
+    _repository.resetSession();
     final tool = event.tool ?? state.selectedTool;
 
     // Check if an empty chat session already exists
@@ -125,7 +126,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       );
 
       _streamSubscription?.cancel();
-      _llamaService.resetSession();
+      _repository.resetSession();
 
       emit(state.copyWith(
         activeSessionId: session.id,
@@ -143,7 +144,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     String? newActiveId = state.activeSessionId;
     if (state.activeSessionId == event.sessionId) {
       _streamSubscription?.cancel();
-      _llamaService.resetSession();
+      _repository.resetSession();
       newActiveId = updatedSessions.isNotEmpty ? updatedSessions.first.id : null;
     }
 
@@ -159,7 +160,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
-    _llamaService.resetSession();
+    _repository.resetSession();
     emit(state.copyWith(
       sessions: const [],
       activeSessionId: null,
@@ -173,7 +174,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
   ) {
     if (state.selectedTool.id != event.tool.id) {
       _streamSubscription?.cancel();
-      _llamaService.resetSession();
+      _repository.resetSession();
     }
 
     emit(state.copyWith(selectedTool: event.tool));
@@ -201,7 +202,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) async {
     final rawText = event.text.trim();
-    if (rawText.isEmpty || !_llamaService.isInitialized || state.isGenerating) return;
+    if (rawText.isEmpty || !_repository.isInitialized || state.isGenerating) return;
 
     // Ensure we have an active session
     PlaygroundChatSession session;
@@ -218,18 +219,18 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
         updatedAt: now,
       );
       sessions.insert(0, session);
-      _llamaService.resetSession();
+      _repository.resetSession();
     } else {
       session = state.activeSession!;
       if (session.messages.isEmpty) {
         final title = rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
         session = session.copyWith(title: title);
-        _llamaService.resetSession();
+        _repository.resetSession();
       } else {
         // If switching tool mid-chat, reset LLM session context so tool prefixes don't collide
         final lastMsgTool = session.messages.last.toolUsed;
         if (lastMsgTool != null && lastMsgTool != state.selectedTool.id) {
-          _llamaService.resetSession();
+          _repository.resetSession();
         }
       }
     }
@@ -284,7 +285,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     ));
 
     await _streamSubscription?.cancel();
-    final stream = _llamaService.createChatStream(fullPrompt);
+    final stream = _repository.createChatStream(fullPrompt);
     if (stream == null) {
       emit(state.copyWith(
         isGenerating: false,
@@ -371,7 +372,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
-    _llamaService.resetSession();
+    _repository.resetSession();
     add(const GenerationCompletedEvent());
   }
 
@@ -380,7 +381,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     Emitter<LlmPlaygroundState> emit,
   ) {
     _streamSubscription?.cancel();
-    _llamaService.resetSession();
+    _repository.resetSession();
     if (state.activeSessionId != null) {
       add(DeleteChatSessionEvent(state.activeSessionId!));
     }
@@ -389,7 +390,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
   @override
   Future<void> close() {
     _streamSubscription?.cancel();
-    _llamaService.dispose();
+    _repository.dispose();
     return super.close();
   }
 }

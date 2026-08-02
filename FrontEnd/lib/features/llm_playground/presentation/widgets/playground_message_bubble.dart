@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import '../../domain/models/playground_chat_message.dart';
-import '../../domain/models/playground_tool.dart';
+import '../../domain/entities/playground_chat_message.dart';
+import '../../domain/entities/playground_tool.dart';
 
 class PlaygroundMessageBubble extends StatelessWidget {
   final PlaygroundChatMessage message;

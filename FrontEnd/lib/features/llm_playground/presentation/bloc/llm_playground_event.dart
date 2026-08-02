@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../domain/models/playground_tool.dart';
+import '../../domain/entities/playground_tool.dart';
 
 abstract class LlmPlaygroundEvent extends Equatable {
   const LlmPlaygroundEvent();

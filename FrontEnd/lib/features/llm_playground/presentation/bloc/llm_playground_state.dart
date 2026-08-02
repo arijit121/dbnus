@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import '../../domain/models/playground_chat_message.dart';
-import '../../domain/models/playground_chat_session.dart';
-import '../../domain/models/playground_tool.dart';
+import '../../domain/entities/playground_chat_message.dart';
+import '../../domain/entities/playground_chat_session.dart';
+import '../../domain/entities/playground_tool.dart';
 
 enum LlmPlaygroundStatus { initial, initializing, initialized, error }
 

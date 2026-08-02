@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../navigation/custom_router/custom_route.dart';
-import '../../domain/models/playground_tool.dart';
+import '../../domain/entities/playground_tool.dart';
 import '../bloc/llm_playground_bloc.dart';
 import '../bloc/llm_playground_event.dart';
 import '../bloc/llm_playground_state.dart';
