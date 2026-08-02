@@ -7,7 +7,7 @@ import '../../domain/entities/playground_tool.dart';
 import '../../domain/repositories/playground_repository.dart';
 import 'package:dbnus/core/services/open_service.dart';
 import '../../data/repositories/playground_repository_impl.dart';
-import '../../data/datasources/device_intent_service.dart';
+import '../../data/services/device_intent_service.dart';
 import 'llm_playground_event.dart';
 import 'llm_playground_state.dart';
 
