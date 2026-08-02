@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../navigation/custom_router/custom_route.dart';
-import '../../domain/entities/playground_tool.dart';
+import '../../domain/entities/playground_attached_file.dart';
 import '../bloc/llm_playground_bloc.dart';
 import '../bloc/llm_playground_event.dart';
 import '../bloc/llm_playground_state.dart';
@@ -32,9 +38,12 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
+  final stt.SpeechToText _speechToText = stt.SpeechToText();
+  bool _isSpeechInitialized = false;
 
   @override
   void dispose() {
+    _speechToText.stop();
     _textController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
@@ -55,13 +64,187 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
 
   void _sendMessage() {
     final text = _textController.text.trim();
-    if (text.isEmpty) return;
+    final bloc = context.read<LlmPlaygroundBloc>();
 
-    context
-        .read<LlmPlaygroundBloc>()
-        .add(SendPlaygroundMessageEvent(text: text));
+    if (text.isEmpty && bloc.state.attachedFile == null) return;
+
+    if (bloc.state.isListeningToVoice) {
+      _speechToText.stop();
+      bloc.add(const ToggleVoiceInputEvent(isListening: false));
+    }
+
+    bloc.add(SendPlaygroundMessageEvent(text: text));
     _textController.clear();
     _scrollToBottom();
+  }
+
+  bool _checkIsImage(String fileName) {
+    final ext = fileName.split('.').last.toLowerCase();
+    return ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp', 'heic', 'svg'].contains(ext);
+  }
+
+  Future<void> _pickAndAttachFile() async {
+    try {
+      final result = await FilePicker.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final platformFile = result.files.first;
+        final isImage = _checkIsImage(platformFile.name);
+        String content = '';
+        Uint8List? fileBytes = platformFile.bytes;
+
+        if (isImage) {
+          content = '[Image File: ${platformFile.name}]';
+        } else {
+          if (platformFile.bytes != null) {
+            content = utf8.decode(platformFile.bytes!, allowMalformed: true);
+          } else if (platformFile.path != null) {
+            final file = File(platformFile.path!);
+            content = await file.readAsString();
+          }
+
+          if (content.trim().isEmpty) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Selected file is empty or unreadable.')),
+              );
+            }
+            return;
+          }
+        }
+
+        if (mounted) {
+          context.read<LlmPlaygroundBloc>().add(
+                AttachFileEvent(
+                  PlaygroundAttachedFile(
+                    name: platformFile.name,
+                    path: platformFile.path,
+                    content: content,
+                    sizeInBytes: platformFile.size,
+                    isImage: isImage,
+                    bytes: fileBytes,
+                  ),
+                ),
+              );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to read file: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _toggleSpeechInput() async {
+    final bloc = context.read<LlmPlaygroundBloc>();
+    if (bloc.state.isListeningToVoice) {
+      try {
+        await _speechToText.stop();
+      } catch (_) {}
+      bloc.add(const ToggleVoiceInputEvent(isListening: false));
+      return;
+    }
+
+    // 1. Request microphone permission on mobile/desktop platforms
+    if (!kIsWeb) {
+      try {
+        var micStatus = await Permission.microphone.status;
+        if (!micStatus.isGranted) {
+          micStatus = await Permission.microphone.request();
+          if (!micStatus.isGranted) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Microphone permission is required for speech recognition.'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+            return;
+          }
+        }
+      } catch (e) {
+        debugPrint('Permission check error: $e');
+      }
+    }
+
+    // 2. Initialize and start listening
+    try {
+      if (!_isSpeechInitialized) {
+        _isSpeechInitialized = await _speechToText.initialize(
+          onError: (err) {
+            debugPrint('SpeechToText onError: ${err.errorMsg}');
+            if (mounted) {
+              context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Speech error: ${err.errorMsg}'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          },
+          onStatus: (status) {
+            debugPrint('SpeechToText onStatus: $status');
+            if (status == 'done' || status == 'notListening') {
+              if (mounted) {
+                context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+              }
+            }
+          },
+          debugLogging: kDebugMode,
+        );
+      }
+
+      if (_isSpeechInitialized) {
+        bloc.add(const ToggleVoiceInputEvent(isListening: true));
+        await _speechToText.listen(
+          onResult: (result) {
+            if (mounted && result.recognizedWords.isNotEmpty) {
+              setState(() {
+                _textController.text = result.recognizedWords;
+                _textController.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _textController.text.length),
+                );
+              });
+            }
+          },
+          listenOptions: stt.SpeechListenOptions(
+            listenFor: const Duration(seconds: 60),
+            pauseFor: const Duration(seconds: 5),
+            partialResults: true,
+            cancelOnError: false,
+            listenMode: stt.ListenMode.dictation,
+          ),
+        );
+      } else {
+        _isSpeechInitialized = false;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Speech recognition is not available on this device/browser.'),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        context.read<LlmPlaygroundBloc>().add(const ToggleVoiceInputEvent(isListening: false));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Speech recognition error: $e'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -229,7 +412,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
                         ),
                 ),
 
-                // Bottom Bar: Tool Selector & Input Bar
+                // Bottom Input Area with Attachment & Speech-to-Text
                 _buildBottomInputArea(context, state),
               ],
             );
@@ -241,113 +424,38 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
 
   Widget _buildEmptyWelcomeState(
       BuildContext context, LlmPlaygroundState state) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.indigoAccent.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.indigoAccent.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                size: 48,
+                color: Colors.indigoAccent,
+              ),
             ),
-            child: const Icon(
-              Icons.auto_awesome_rounded,
-              size: 40,
-              color: Colors.indigoAccent,
+            const SizedBox(height: 20),
+            const Text(
+              'How can I help you today?',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'How can I help you today?',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          
-          const SizedBox(height: 24),
-
-          // Tools Grid
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.6,
+            const SizedBox(height: 8),
+            const Text(
+              'Ask questions, attach images or text files, speak with voice dictation, or get code explanations.',
+              style: TextStyle(fontSize: 13, color: Colors.grey),
+              textAlign: TextAlign.center,
             ),
-            itemCount: PlaygroundTool.availableTools.length,
-            itemBuilder: (context, index) {
-              final tool = PlaygroundTool.availableTools[index];
-              final isSelected = tool.id == state.selectedTool.id;
-
-              return InkWell(
-                onTap: () {
-                  context.read<LlmPlaygroundBloc>().add(SelectToolEvent(tool));
-                },
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isSelected
-                          ? Colors.indigoAccent
-                          : (isDark
-                              ? const Color(0xFF334155)
-                              : const Color(0xFFE2E8F0)),
-                      width: isSelected ? 1.5 : 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.03),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(tool.icon, color: Colors.indigoAccent, size: 20),
-                          const SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              tool.title,
-                              style: const TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          if (isSelected)
-                            const Icon(Icons.check_circle_rounded,
-                                color: Colors.indigoAccent, size: 16),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        tool.description,
-                        style:
-                            const TextStyle(fontSize: 10, color: Colors.grey),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -355,9 +463,9 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
   Widget _buildBottomInputArea(BuildContext context, LlmPlaygroundState state) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final currentTool = state.selectedTool;
 
     return Container(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         boxShadow: [
@@ -370,108 +478,148 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Horizontal Tool Chips Toolbar
-          SizedBox(
-            height: 38,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              scrollDirection: Axis.horizontal,
-              itemCount: PlaygroundTool.availableTools.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
-              itemBuilder: (context, index) {
-                final tool = PlaygroundTool.availableTools[index];
-                final isSelected = tool.id == currentTool.id;
-                return ChoiceChip(
-                  avatar: Icon(
-                    tool.icon,
-                    size: 14,
-                    color: isSelected ? Colors.white : Colors.indigoAccent,
+          // Attached File Chip Preview
+          if (state.attachedFile != null)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.indigoAccent.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    state.attachedFile!.isImage ? Icons.image_rounded : Icons.attach_file_rounded,
+                    size: 16,
+                    color: Colors.indigoAccent,
                   ),
-                  label: Text(tool.title),
-                  selected: isSelected,
-                  selectedColor: Colors.indigoAccent,
-                  labelStyle: TextStyle(
-                    fontSize: 11,
-                    color: isSelected
-                        ? Colors.white
-                        : (isDark ? Colors.white70 : Colors.black87),
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      '${state.attachedFile!.name} (${state.attachedFile!.formattedSize})',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.indigoAccent),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                  onSelected: (selected) {
-                    if (selected) {
-                      context
-                          .read<LlmPlaygroundBloc>()
-                          .add(SelectToolEvent(tool));
-                    }
-                  },
-                );
-              },
+                  const SizedBox(width: 6),
+                  InkWell(
+                    onTap: () {
+                      context.read<LlmPlaygroundBloc>().add(const RemoveAttachedFileEvent());
+                    },
+                    child: const Icon(Icons.close_rounded, size: 16, color: Colors.indigoAccent),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          const SizedBox(height: 6),
-
-          // Input Text Field & Action Button
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 10),
+          // Unified Capsule Input Bar
+          Container(
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Attach File Compact Icon Button
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: state.isInitialized && !state.isGenerating ? _pickAndAttachFile : null,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.attach_file_rounded, color: Colors.indigoAccent, size: 20),
+                    ),
+                  ),
+                ),
+
+                // Speech-to-Text Microphone Compact Icon Button
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: state.isInitialized && !state.isGenerating ? _toggleSpeechInput : null,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        state.isListeningToVoice ? Icons.mic_rounded : Icons.mic_none_rounded,
+                        color: state.isListeningToVoice ? Colors.redAccent : Colors.indigoAccent,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(width: 4),
+
+                // Spacious Multiline Text Field
                 Expanded(
                   child: TextField(
                     controller: _textController,
                     focusNode: _focusNode,
                     minLines: 1,
-                    maxLines: 4,
+                    maxLines: 5,
                     enabled: state.isInitialized && !state.isGenerating,
-                    style: const TextStyle(fontSize: 13),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                     decoration: InputDecoration(
-                      hintText: !state.isInitialized
-                          ? (state.isInitializing
-                              ? 'Loading AI Model...'
-                              : 'Model Not Loaded')
-                          : 'Ask or enter text for ${currentTool.title}...',
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
-                      filled: true,
-                      fillColor: isDark
-                          ? const Color(0xFF0F172A)
-                          : const Color(0xFFF1F5F9),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
+                      hintText: state.isListeningToVoice
+                          ? 'Listening to voice...'
+                          : (!state.isInitialized
+                              ? (state.isInitializing ? 'Loading AI Model...' : 'Model Not Loaded')
+                              : 'Ask anything or paste text/code...'),
+                      hintStyle: TextStyle(
+                        fontSize: 13,
+                        color: isDark ? Colors.white38 : Colors.grey[500],
                       ),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                      border: InputBorder.none,
                     ),
                     onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
-                const SizedBox(width: 8),
 
-                // Send or Stop Generation Button
+                const SizedBox(width: 6),
+
+                // Send or Stop Button
                 if (state.isGenerating)
-                  IconButton.filled(
-                    onPressed: () {
-                      context
-                          .read<LlmPlaygroundBloc>()
-                          .add(const StopGenerationEvent());
+                  GestureDetector(
+                    onTap: () {
+                      context.read<LlmPlaygroundBloc>().add(const StopGenerationEvent());
                     },
-                    icon: const Icon(Icons.stop_rounded, size: 20),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.redAccent,
-                      foregroundColor: Colors.white,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Colors.redAccent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.stop_rounded, size: 18, color: Colors.white),
                     ),
                   )
                 else
-                  IconButton.filled(
-                    onPressed: state.isInitialized ? _sendMessage : null,
-                    icon: const Icon(Icons.send_rounded, size: 18),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.indigoAccent,
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor:
-                          Colors.grey.withValues(alpha: 0.3),
+                  GestureDetector(
+                    onTap: state.isInitialized ? _sendMessage : null,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: state.isInitialized ? Colors.indigoAccent : Colors.grey.withValues(alpha: 0.3),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.send_rounded, size: 16, color: Colors.white),
                     ),
                   ),
               ],

@@ -59,7 +59,7 @@ class PlaygroundTool {
       title: 'Translator',
       description: 'Translate text cleanly into target languages.',
       icon: Icons.translate_rounded,
-      promptPrefix: 'Task: Translate the following text into English and Spanish cleanly.\n\nText:\n',
+      promptPrefix: 'Task: Translate the following text into English cleanly.\n\nText:\n',
     ),
     PlaygroundTool(
       id: PlaygroundToolId.mathLogic,
@@ -68,12 +68,112 @@ class PlaygroundTool {
       icon: Icons.calculate_rounded,
       promptPrefix: 'Task: Solve the following math or logic question step-by-step with explanation.\n\nQuestion:\n',
     ),
-    PlaygroundTool(
-      id: PlaygroundToolId.promptStudio,
-      title: 'Prompt Studio',
-      description: 'Custom system instructions and prompt engineering sandbox.',
-      icon: Icons.tune_rounded,
-      promptPrefix: '',
-    ),
   ];
+
+  static PlaygroundTool detectTool(String query) {
+    final lower = query.toLowerCase().trim();
+
+    // Code detection
+    final codeKeywords = [
+      'class ',
+      'function ',
+      'def ',
+      'const ',
+      'var ',
+      'let ',
+      'void ',
+      'import ',
+      'return ',
+      'if (',
+      'for (',
+      'while (',
+      'select ',
+      'from ',
+      'where ',
+      '```',
+      'syntax error',
+      'bug in',
+      'explain this code'
+    ];
+    final hasCodeSyntax = lower.contains('```') ||
+        (lower.contains('{') && lower.contains('}')) ||
+        (lower.contains(';') &&
+            (lower.contains('var') ||
+                lower.contains('const') ||
+                lower.contains('let') ||
+                lower.contains('int') ||
+                lower.contains('string')));
+    if (codeKeywords.any((k) => lower.contains(k)) || hasCodeSyntax) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.codeExplainer);
+    }
+
+    // Summarizer detection
+    final summaryKeywords = [
+      'summarize',
+      'summary',
+      'bullet points',
+      'tl;dr',
+      'tldr',
+      'key takeaways',
+      'brief overview',
+      'shorten this'
+    ];
+    if (summaryKeywords.any((k) => lower.contains(k))) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.summarizer);
+    }
+
+    // Translator detection
+    final translateKeywords = [
+      'translate',
+      'translation',
+      'in spanish',
+      'in french',
+      'in german',
+      'in hindi',
+      'in japanese',
+      'in chinese',
+      'in english',
+      'to spanish',
+      'to french',
+      'to german',
+      'to hindi',
+      'to japanese'
+    ];
+    if (translateKeywords.any((k) => lower.contains(k))) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.translator);
+    }
+
+    // Math & Logic detection
+    final mathKeywords = [
+      'solve for',
+      'calculate',
+      'integrate',
+      'derivative',
+      'equation',
+      'math problem',
+      'logic puzzle',
+      'sqrt('
+    ];
+    final hasMathOperators = RegExp(r'\d+\s*[\+\-\*/\^=]\s*\d+').hasMatch(lower);
+    if (mathKeywords.any((k) => lower.contains(k)) || hasMathOperators) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.mathLogic);
+    }
+
+    // Text Rewriter detection
+    final rewriteKeywords = [
+      'rewrite',
+      'rephrase',
+      'polish',
+      'improve this',
+      'proofread',
+      'make it professional',
+      'fix grammar'
+    ];
+    if (rewriteKeywords.any((k) => lower.contains(k))) {
+      return availableTools.firstWhere((t) => t.id == PlaygroundToolId.textRewriter);
+    }
+
+    // General default
+    return availableTools.firstWhere((t) => t.id == PlaygroundToolId.general);
+  }
 }

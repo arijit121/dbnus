@@ -29,6 +29,9 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     on<SelectChatSessionEvent>(_onSelectChatSession);
     on<DeleteChatSessionEvent>(_onDeleteChatSession);
     on<ClearAllHistoryEvent>(_onClearAllHistory);
+    on<AttachFileEvent>((event, emit) => emit(state.copyWith(attachedFile: event.file)));
+    on<RemoveAttachedFileEvent>((event, emit) => emit(state.copyWith(clearAttachedFile: true)));
+    on<ToggleVoiceInputEvent>((event, emit) => emit(state.copyWith(isListeningToVoice: event.isListening)));
   }
 
   PlaygroundRepository get repository => _repository;
@@ -204,6 +207,8 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
     final rawText = event.text.trim();
     if (rawText.isEmpty || !_repository.isInitialized || state.isGenerating) return;
 
+    final detectedTool = PlaygroundTool.detectTool(rawText);
+
     // Ensure we have an active session
     PlaygroundChatSession session;
     List<PlaygroundChatSession> sessions = List<PlaygroundChatSession>.from(state.sessions);
@@ -214,7 +219,7 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
         id: _uuid.v4(),
         title: rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText,
         messages: const [],
-        selectedToolId: state.selectedTool.id,
+        selectedToolId: detectedTool.id,
         createdAt: now,
         updatedAt: now,
       );
@@ -224,36 +229,42 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       session = state.activeSession!;
       if (session.messages.isEmpty) {
         final title = rawText.length > 25 ? '${rawText.substring(0, 25)}...' : rawText;
-        session = session.copyWith(title: title);
+        session = session.copyWith(title: title, selectedToolId: detectedTool.id);
         _repository.resetSession();
       } else {
-        // If switching tool mid-chat, reset LLM session context so tool prefixes don't collide
+        // Reset LLM session context if detected tool changes
         final lastMsgTool = session.messages.last.toolUsed;
-        if (lastMsgTool != null && lastMsgTool != state.selectedTool.id) {
+        if (lastMsgTool != null && lastMsgTool != detectedTool.id) {
           _repository.resetSession();
         }
       }
     }
 
-    final tool = state.selectedTool;
-    String fullPrompt = '';
+    final attached = state.attachedFile;
+    String userTextDisplay = rawText;
+    String promptText = rawText;
 
-    if (tool.id == PlaygroundToolId.promptStudio) {
-      final sys = state.systemPrompt.trim();
-      fullPrompt = sys.isNotEmpty ? 'System: $sys\n\nUser: $rawText' : rawText;
-    } else if (tool.promptPrefix.isNotEmpty) {
-      fullPrompt = '${tool.promptPrefix}$rawText';
-    } else {
-      fullPrompt = rawText;
+    if (attached != null) {
+      if (attached.isImage) {
+        userTextDisplay = '📷 [Attached Image: ${attached.name}]\n$rawText';
+        promptText = '[User attached Image: ${attached.name}]\nUser Query:\n${rawText.isNotEmpty ? rawText : "I have attached an image file named ${attached.name}."}';
+      } else {
+        userTextDisplay = '📎 [Attached File: ${attached.name}]\n$rawText';
+        promptText = 'Attached File Content (${attached.name}):\n```\n${attached.content}\n```\n\nUser Question:\n$rawText';
+      }
     }
+
+    String fullPrompt = detectedTool.promptPrefix.isNotEmpty
+        ? '${detectedTool.promptPrefix}$promptText'
+        : promptText;
 
     final now = DateTime.now();
     final userMsg = PlaygroundChatMessage(
       id: _uuid.v4(),
-      text: rawText,
+      text: userTextDisplay,
       isUser: true,
       timestamp: now,
-      toolUsed: tool.id,
+      toolUsed: detectedTool.id,
     );
 
     final botMsg = PlaygroundChatMessage(
@@ -261,13 +272,14 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       text: '',
       isUser: false,
       timestamp: now,
-      toolUsed: tool.id,
+      toolUsed: detectedTool.id,
       isStreaming: true,
     );
 
     final updatedMessages = List<PlaygroundChatMessage>.from(session.messages)..addAll([userMsg, botMsg]);
     final updatedSession = session.copyWith(
       messages: updatedMessages,
+      selectedToolId: detectedTool.id,
       updatedAt: now,
     );
 
@@ -282,6 +294,8 @@ class LlmPlaygroundBloc extends Bloc<LlmPlaygroundEvent, LlmPlaygroundState> {
       isGenerating: true,
       sessions: sessions,
       activeSessionId: updatedSession.id,
+      selectedTool: detectedTool,
+      clearAttachedFile: true,
     ));
 
     await _streamSubscription?.cancel();

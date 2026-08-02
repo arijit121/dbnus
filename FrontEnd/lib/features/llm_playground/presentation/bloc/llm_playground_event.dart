@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entities/playground_attached_file.dart';
 import '../../domain/entities/playground_tool.dart';
 
 abstract class LlmPlaygroundEvent extends Equatable {
@@ -94,4 +95,26 @@ class DeleteChatSessionEvent extends LlmPlaygroundEvent {
 
 class ClearAllHistoryEvent extends LlmPlaygroundEvent {
   const ClearAllHistoryEvent();
+}
+
+class AttachFileEvent extends LlmPlaygroundEvent {
+  final PlaygroundAttachedFile file;
+
+  const AttachFileEvent(this.file);
+
+  @override
+  List<Object?> get props => [file];
+}
+
+class RemoveAttachedFileEvent extends LlmPlaygroundEvent {
+  const RemoveAttachedFileEvent();
+}
+
+class ToggleVoiceInputEvent extends LlmPlaygroundEvent {
+  final bool isListening;
+
+  const ToggleVoiceInputEvent({required this.isListening});
+
+  @override
+  List<Object?> get props => [isListening];
 }

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import '../../domain/entities/playground_attached_file.dart';
 import '../../domain/entities/playground_chat_message.dart';
 import '../../domain/entities/playground_chat_session.dart';
 import '../../domain/entities/playground_tool.dart';
@@ -16,6 +17,8 @@ class LlmPlaygroundState extends Equatable {
   final String? statusMessage;
   final String? errorMessage;
   final bool isGenerating;
+  final PlaygroundAttachedFile? attachedFile;
+  final bool isListeningToVoice;
 
   LlmPlaygroundState({
     this.status = LlmPlaygroundStatus.initial,
@@ -27,6 +30,8 @@ class LlmPlaygroundState extends Equatable {
     this.statusMessage,
     this.errorMessage,
     this.isGenerating = false,
+    this.attachedFile,
+    this.isListeningToVoice = false,
   })  : selectedTool = selectedTool ?? PlaygroundTool.availableTools.first,
         modelPath = modelPath ??
             (kIsWeb
@@ -57,6 +62,9 @@ class LlmPlaygroundState extends Equatable {
     String? statusMessage,
     String? errorMessage,
     bool? isGenerating,
+    PlaygroundAttachedFile? attachedFile,
+    bool clearAttachedFile = false,
+    bool? isListeningToVoice,
   }) {
     return LlmPlaygroundState(
       status: status ?? this.status,
@@ -68,6 +76,8 @@ class LlmPlaygroundState extends Equatable {
       statusMessage: statusMessage ?? this.statusMessage,
       errorMessage: errorMessage ?? this.errorMessage,
       isGenerating: isGenerating ?? this.isGenerating,
+      attachedFile: clearAttachedFile ? null : (attachedFile ?? this.attachedFile),
+      isListeningToVoice: isListeningToVoice ?? this.isListeningToVoice,
     );
   }
 
@@ -82,5 +92,7 @@ class LlmPlaygroundState extends Equatable {
         statusMessage,
         errorMessage,
         isGenerating,
+        attachedFile,
+        isListeningToVoice,
       ];
 }

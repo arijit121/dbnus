@@ -119,7 +119,7 @@ class PlaygroundChatHistoryDrawer extends StatelessWidget {
                                     ? Colors.indigoAccent.withValues(alpha: isDark ? 0.2 : 0.1)
                                     : Colors.transparent,
                                 leading: Icon(
-                                  tool?.icon ?? Icons.chat_bubble_outline_rounded,
+                                  Icons.chat_bubble_outline_rounded,
                                   size: 18,
                                   color: isSelected
                                       ? Colors.indigoAccent
