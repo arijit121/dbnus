@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/images/custom_image.dart';
 
@@ -117,6 +119,16 @@ class ToolsSection extends StatelessWidget {
         onTap: () {
           CustomRoute.navigate(RouteName.openStreetMap, strPreRouteState: true);
         },
+      ),
+      _ToolItem(
+        icon: AssetsConst.featherCpu,
+        title: "LLM Playground",
+        subtitle: "Interactive LLM Studio with tool execution",
+        color: ColorConst.violate,
+        tag: "AI",
+        onTap: () {
+          CustomRoute.navigateNamed(RouteName.llmPlayground);
+          },
       ),
     ];
 

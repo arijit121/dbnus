@@ -102,16 +102,15 @@ class QuickActionsGrid extends StatelessWidget {
               : context.pushNamed(RouteName.llamaChat);
         },
       ),
-      if (!kIsWeb)
-        _QuickAction(
-          icon: AssetsConst.featherCpu,
-          label: "AI Prompt Studio",
-          subtitle: "Offline LLM Tools",
-          gradient: const [Color(0xFF3B82F6), Color(0xFF10B981)],
-          onTap: () {
-            context.pushNamed(RouteName.llmPlayground);
-          },
-        ),
+      _QuickAction(
+        icon: AssetsConst.featherCpu,
+        label: "LLM Playground",
+        subtitle: "Interactive AI Studio",
+        gradient: const [Color(0xFF3B82F6), Color(0xFF10B981)],
+        onTap: () {
+          CustomRoute.navigateNamed(RouteName.llmPlayground);
+        },
+      ),
     ];
 
     return LayoutBuilder(builder: (context, constraints) {
