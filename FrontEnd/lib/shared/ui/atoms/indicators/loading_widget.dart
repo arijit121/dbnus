@@ -82,7 +82,7 @@ Future<BuildContext> showLoading() {
           DateTime now = DateTime.now();
           Duration elapsed = now.difference(startLoadingTime);
           AppLog.i(elapsed);
-          if (elapsed.inSeconds >= 5) {
+          if (elapsed.inSeconds >= 5 && !didPop) {
             hideLoading(loadingDialogContext: context);
           }
         },
