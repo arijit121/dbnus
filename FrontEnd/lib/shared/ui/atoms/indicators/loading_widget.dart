@@ -6,6 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/core/services/context_service.dart';
 
+import '../../../extensions/logger_extension.dart';
+
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
     super.key,
@@ -64,7 +66,7 @@ class LoadingWidget extends StatelessWidget {
 /// ```
 Future<BuildContext> showLoading() {
   Completer<BuildContext> dialogCompleter = Completer<BuildContext>();
-
+  DateTime startLoadingTime = DateTime.now();
   showDialog(
     context: CurrentContext().context,
     barrierDismissible: false,
@@ -76,7 +78,14 @@ Future<BuildContext> showLoading() {
 
       return PopScope(
         canPop: false,
-        onPopInvokedWithResult: (didPop, result) {},
+        onPopInvokedWithResult: (didPop, result) {
+          DateTime now = DateTime.now();
+          Duration elapsed = now.difference(startLoadingTime);
+          AppLog.i(elapsed);
+          if (elapsed.inSeconds >= 5) {
+            hideLoading(loadingDialogContext: context);
+          }
+        },
         child: Center(
           child: SpinKitThreeBounce(
             itemBuilder: (_, int index) {
