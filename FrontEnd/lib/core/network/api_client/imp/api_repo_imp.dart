@@ -13,178 +13,14 @@ import 'package:dbnus/core/network/api_client/repo/api_repo.dart';
 
 class ApiRepoImp extends ApiRepo {
   @override
-  Future<ApiReturnModel?> callApi(
-      {required String tag,
-      required String uri,
-      required Method method,
-      Map<String, dynamic>? queryParameters,
-      Map<String, String>? headers,
-      BodyData? bodyData}) async {
-    try {
-      Map<String, String> stringQueryParameters = <String, String>{};
-      queryParameters?.forEach((key, value) {
-        if (value != null) {
-          stringQueryParameters[key] = value!.toString();
-        }
-      });
-      Uri.parse(uri).queryParameters.forEach((key, value) {
-        stringQueryParameters[key] = value.toString();
-      });
-      Uri url = stringQueryParameters.isNotEmpty
-          ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
-          : Uri.parse(uri);
-      http.Request request = http.Request(method.value, url);
-      http.MultipartRequest requestFormData =
-          http.MultipartRequest(method.value, url);
-      AppLog.i(tag: "$tag Method", method.value, time: DateTime.now());
-      AppLog.i(tag: "$tag Url", "$url", time: DateTime.now());
-      if (headers?.isNotEmpty == true) {
-        AppLog.i(
-            tag: "$tag Headers", json.encode(headers), time: DateTime.now());
-      }
-      if (bodyData?.bodyTypeStatus == BodyTypeStatus.raw) {
-        BodyData<Map<String, dynamic>?> body =
-            bodyData as BodyData<Map<String, dynamic>?>;
-        if (body.value?.isNotEmpty == true) {
-          request.body = json.encode(body.value);
-          AppLog.i(
-              tag: "$tag BodyData",
-              json.encode(body.value),
-              time: DateTime.now());
-        }
-      } else if (bodyData?.bodyTypeStatus == BodyTypeStatus.rawText) {
-        BodyData<String> body = bodyData as BodyData<String>;
-        if (body.value?.isNotEmpty == true) {
-          request.body = body.value ?? "";
-          AppLog.i(tag: "$tag BodyData", "${body.value}", time: DateTime.now());
-        }
-      } else if (bodyData?.bodyTypeStatus == BodyTypeStatus.formData) {
-        BodyData<FormData?> body = bodyData as BodyData<FormData?>;
-        if (body.value != null) {
-          requestFormData.fields.addAll(body.value?.fields ?? {});
-        }
-        if (body.value?.customMultipartFiles?.isNotEmpty == true) {
-          await Future.wait([http_parser.loadLibrary(), mime.loadLibrary()]);
-          body.value?.customMultipartFiles?.forEach((element) async {
-            if (kIsWeb) {
-              Uint8List byte = element.bytes ?? Uint8List(0);
-              requestFormData.files.add(http.MultipartFile.fromBytes(
-                element.field ?? "",
-                byte,
-                filename: element.name,
-                contentType: http_parser.MediaType.parse(
-                  mime.lookupMimeType(element.name ?? "",
-                          headerBytes: element.bytes) ??
-                      "",
-                ),
-              ));
-            } else {
-              requestFormData.files.add(await http.MultipartFile.fromPath(
-                element.field ?? "",
-                element.path ?? "",
-                contentType: http_parser.MediaType.parse(
-                  mime.lookupMimeType(element.name ?? "",
-                          headerBytes: element.bytes) ??
-                      "",
-                ),
-              ));
-            }
-          });
-        }
-        AppLog.i(
-            tag: "$tag BodyData",
-            json.encode(((body.value) as FormData).toJson()),
-            time: DateTime.now());
-      }
-      if (headers?.isNotEmpty == true) {
-        (bodyData?.bodyTypeStatus == BodyTypeStatus.formData
-                ? requestFormData
-                : request)
-            .headers
-            .addAll(headers ?? {});
-      }
-      DateTime requestTime = DateTime.now();
-      http.StreamedResponse response =
-          await (bodyData?.bodyTypeStatus == BodyTypeStatus.formData
-                  ? requestFormData
-                  : request)
-              .send()
-              .timeout(timeout());
-      if (response.statusCode == 200) {
-        String responseReturn = await response.stream.bytesToString();
-        AppLog.i(tag: "$tag Response", responseReturn, time: DateTime.now());
-        AppLog.i(
-            tag: "$tag Response time",
-            "${DateTime.now().difference(requestTime)} HH:MM:SS ",
-            time: DateTime.now());
-        return ApiReturnModel(
-            statusCode: response.statusCode, responseString: responseReturn);
-      } else {
-        String responseReturn = await response.stream.bytesToString();
-        AppLog.i(
-            tag: "$tag Response code",
-            "${response.statusCode}",
-            time: DateTime.now());
-        AppLog.i(tag: "$tag Response", responseReturn, time: DateTime.now());
-        return ApiReturnModel(
-            statusCode: response.statusCode, responseString: responseReturn);
-      }
-    } catch (e, s) {
-      AppLog.e(e, time: DateTime.now(), stackTrace: s);
-    }
-    return null;
-  }
-
-  @override
-  Future<Uint8List?> urlToByte(
-      {required String uri,
-      Map<String, dynamic>? queryParameters,
-      Map<String, String>? headers,
-      required String tag}) async {
-    try {
-      Map<String, String> stringQueryParameters = <String, String>{};
-      queryParameters?.forEach((key, value) {
-        if (value != null) {
-          stringQueryParameters[key] = value!.toString();
-        }
-      });
-      Uri.parse(uri).queryParameters.forEach((key, value) {
-        stringQueryParameters[key] = value.toString();
-      });
-      Uri url = stringQueryParameters.isNotEmpty
-          ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
-          : Uri.parse(uri);
-
-      AppLog.i(tag: "$tag Url", url, time: DateTime.now());
-      DateTime requestTime = DateTime.now();
-      http.Response response =
-          await http.get(url, headers: headers).timeout(timeout());
-      if (response.statusCode == 200) {
-        AppLog.i(
-            tag: "$tag Response time",
-            "${DateTime.now().difference(requestTime)} HH:MM:SS ",
-            time: DateTime.now());
-        return response.bodyBytes;
-      } else {
-        return null;
-      }
-    } catch (e, s) {
-      AppLog.e(e, time: DateTime.now(), stackTrace: s);
-      return null;
-    }
-  }
-
-  @override
-  Future<StreamSubscription?> callSse({
+  Future<ApiReturnModel?> callApi({
     required String tag,
     required String uri,
     required Method method,
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
     BodyData? bodyData,
-    required void Function(ApiReturnModel)? onData,
-    void Function()? onDone,
-    void Function(Object, StackTrace)? onError,
+    Duration? timeOut,
   }) async {
     try {
       Map<String, String> stringQueryParameters = <String, String>{};
@@ -275,7 +111,176 @@ class ApiRepoImp extends ApiRepo {
                   ? requestFormData
                   : request)
               .send()
-              .timeout(timeout());
+              .timeout(timeOut ?? timeout());
+      if (response.statusCode == 200) {
+        String responseReturn = await response.stream.bytesToString();
+        AppLog.i(tag: "$tag Response", responseReturn, time: DateTime.now());
+        AppLog.i(
+            tag: "$tag Response time",
+            "${DateTime.now().difference(requestTime)} HH:MM:SS ",
+            time: DateTime.now());
+        return ApiReturnModel(
+            statusCode: response.statusCode, responseString: responseReturn);
+      } else {
+        String responseReturn = await response.stream.bytesToString();
+        AppLog.i(
+            tag: "$tag Response code",
+            "${response.statusCode}",
+            time: DateTime.now());
+        AppLog.i(tag: "$tag Response", responseReturn, time: DateTime.now());
+        return ApiReturnModel(
+            statusCode: response.statusCode, responseString: responseReturn);
+      }
+    } catch (e, s) {
+      AppLog.e(e, time: DateTime.now(), stackTrace: s);
+    }
+    return null;
+  }
+
+  @override
+  Future<Uint8List?> urlToByte({
+    required String uri,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    required String tag,
+    Duration? timeOut,
+  }) async {
+    try {
+      Map<String, String> stringQueryParameters = <String, String>{};
+      queryParameters?.forEach((key, value) {
+        if (value != null) {
+          stringQueryParameters[key] = value!.toString();
+        }
+      });
+      Uri.parse(uri).queryParameters.forEach((key, value) {
+        stringQueryParameters[key] = value.toString();
+      });
+      Uri url = stringQueryParameters.isNotEmpty
+          ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
+          : Uri.parse(uri);
+
+      AppLog.i(tag: "$tag Url", url, time: DateTime.now());
+      DateTime requestTime = DateTime.now();
+      http.Response response =
+          await http.get(url, headers: headers).timeout(timeOut ?? timeout());
+      if (response.statusCode == 200) {
+        AppLog.i(
+            tag: "$tag Response time",
+            "${DateTime.now().difference(requestTime)} HH:MM:SS ",
+            time: DateTime.now());
+        return response.bodyBytes;
+      } else {
+        return null;
+      }
+    } catch (e, s) {
+      AppLog.e(e, time: DateTime.now(), stackTrace: s);
+      return null;
+    }
+  }
+
+  @override
+  Future<StreamSubscription?> callSse({
+    required String tag,
+    required String uri,
+    required Method method,
+    Map<String, dynamic>? queryParameters,
+    Map<String, String>? headers,
+    BodyData? bodyData,
+    required void Function(ApiReturnModel)? onData,
+    void Function()? onDone,
+    void Function(Object, StackTrace)? onError,
+    Duration? timeOut,
+  }) async {
+    try {
+      Map<String, String> stringQueryParameters = <String, String>{};
+      queryParameters?.forEach((key, value) {
+        if (value != null) {
+          stringQueryParameters[key] = value!.toString();
+        }
+      });
+      Uri.parse(uri).queryParameters.forEach((key, value) {
+        stringQueryParameters[key] = value.toString();
+      });
+      Uri url = stringQueryParameters.isNotEmpty
+          ? Uri.parse(uri).replace(queryParameters: stringQueryParameters)
+          : Uri.parse(uri);
+      http.Request request = http.Request(method.value, url);
+      http.MultipartRequest requestFormData =
+          http.MultipartRequest(method.value, url);
+      AppLog.i(tag: "$tag Method", method.value, time: DateTime.now());
+      AppLog.i(tag: "$tag Url", "$url", time: DateTime.now());
+      if (headers?.isNotEmpty == true) {
+        AppLog.i(
+            tag: "$tag Headers", json.encode(headers), time: DateTime.now());
+      }
+      if (bodyData?.bodyTypeStatus == BodyTypeStatus.raw) {
+        BodyData<Map<String, dynamic>?> body =
+            bodyData as BodyData<Map<String, dynamic>?>;
+        if (body.value?.isNotEmpty == true) {
+          request.body = json.encode(body.value);
+          AppLog.i(
+              tag: "$tag BodyData",
+              json.encode(body.value),
+              time: DateTime.now());
+        }
+      } else if (bodyData?.bodyTypeStatus == BodyTypeStatus.rawText) {
+        BodyData<String> body = bodyData as BodyData<String>;
+        if (body.value?.isNotEmpty == true) {
+          request.body = body.value ?? "";
+          AppLog.i(tag: "$tag BodyData", "${body.value}", time: DateTime.now());
+        }
+      } else if (bodyData?.bodyTypeStatus == BodyTypeStatus.formData) {
+        BodyData<FormData?> body = bodyData as BodyData<FormData?>;
+        if (body.value != null) {
+          requestFormData.fields.addAll(body.value?.fields ?? {});
+        }
+        if (body.value?.customMultipartFiles?.isNotEmpty == true) {
+          await Future.wait([http_parser.loadLibrary(), mime.loadLibrary()]);
+          body.value?.customMultipartFiles?.forEach((element) async {
+            if (kIsWeb) {
+              Uint8List byte = element.bytes ?? Uint8List(0);
+              requestFormData.files.add(http.MultipartFile.fromBytes(
+                element.field ?? "",
+                byte,
+                filename: element.name,
+                contentType: http_parser.MediaType.parse(
+                  mime.lookupMimeType(element.name ?? "",
+                          headerBytes: element.bytes) ??
+                      "",
+                ),
+              ));
+            } else {
+              requestFormData.files.add(await http.MultipartFile.fromPath(
+                element.field ?? "",
+                element.path ?? "",
+                contentType: http_parser.MediaType.parse(
+                  mime.lookupMimeType(element.name ?? "",
+                          headerBytes: element.bytes) ??
+                      "",
+                ),
+              ));
+            }
+          });
+        }
+        AppLog.i(
+            tag: "$tag BodyData",
+            json.encode(((body.value) as FormData).toJson()),
+            time: DateTime.now());
+      }
+      if (headers?.isNotEmpty == true) {
+        (bodyData?.bodyTypeStatus == BodyTypeStatus.formData
+                ? requestFormData
+                : request)
+            .headers
+            .addAll(headers ?? {});
+      }
+      DateTime requestTime = DateTime.now();
+      http.StreamedResponse response =
+          await (bodyData?.bodyTypeStatus == BodyTypeStatus.formData
+                  ? requestFormData
+                  : request)
+              .send()
+              .timeout(timeOut ?? timeout());
       String? event;
       StreamSubscription? streamSubscription;
       streamSubscription = response.stream
