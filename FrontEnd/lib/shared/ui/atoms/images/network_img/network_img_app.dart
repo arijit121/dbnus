@@ -10,22 +10,23 @@ class NetworkImg extends StatelessWidget {
       required this.url,
       this.height,
       this.width,
-      this.radius,
+      this.borderRadius = BorderRadius.zero,
       this.fit,
       this.color,
       this.errorWidget,
       this.loadingWidget});
 
   final String url;
-  final double? height, width, radius;
+  final double? height, width;
   final BoxFit? fit;
   final Color? color;
   final Widget? loadingWidget, errorWidget;
+  final BorderRadiusGeometry borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 0),
+      borderRadius: borderRadius,
       child: CachedNetworkImage(
         imageUrl: url,
         width: width != 0.0 ? width : null,
@@ -61,7 +62,7 @@ class NetworkImg extends StatelessWidget {
                   height: height,
                   decoration: BoxDecoration(
                     color: Colors.white, // Shimmer background color
-                    borderRadius: BorderRadius.circular(radius ?? 0),
+                    borderRadius: borderRadius,
                   ),
                 ),
               );

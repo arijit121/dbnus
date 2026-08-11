@@ -145,7 +145,11 @@ class _MediaCard extends StatelessWidget {
               child: Row(
                 children: [
                   if (icon != null) ...[
-                    CustomSvgAssetImageView(path: icon!, height: 14, width: 14, color: ColorConst.secondaryDark),
+                    CustomSvgAssetImageView(
+                        path: icon!,
+                        height: 14,
+                        width: 14,
+                        color: ColorConst.secondaryDark),
                     6.pw,
                   ],
                   CustomText(
@@ -210,7 +214,7 @@ class _ImageCardWithOverlay extends StatelessWidget {
               children: [
                 CustomNetWorkImageView(
                   url: url,
-                  radius: 16,
+                  borderRadius: BorderRadius.circular(16),
                   height: height,
                   fit: BoxFit.cover,
                 ),

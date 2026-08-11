@@ -12,7 +12,7 @@ class CustomNetWorkImageView extends StatelessWidget {
     this.height,
     this.width,
     this.fit = BoxFit.contain, // Default BoxFit value
-    this.radius,
+    this.borderRadius = BorderRadius.zero,
     this.color,
     this.loadingWidget,
     this.errorWidget,
@@ -22,7 +22,7 @@ class CustomNetWorkImageView extends StatelessWidget {
   final double? height;
   final double? width;
   final BoxFit fit;
-  final double? radius;
+  final BorderRadiusGeometry borderRadius;
   final Color? color;
   final Widget? loadingWidget, errorWidget;
 
@@ -32,7 +32,7 @@ class CustomNetWorkImageView extends StatelessWidget {
       url: url,
       width: width,
       height: height,
-      radius: radius,
+      borderRadius: borderRadius,
       fit: fit,
       color: color,
       errorWidget: errorWidget,
@@ -48,20 +48,20 @@ class CustomAssetImageView extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.radius,
+      this.borderRadius = BorderRadius.zero,
       this.color});
 
   final String path;
   final double? height;
   final double? width;
   final BoxFit? fit;
-  final double? radius;
+  final BorderRadiusGeometry borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius ?? 0.0),
+      borderRadius: borderRadius,
       child: Image.asset(
         path,
         color: color,
@@ -104,14 +104,14 @@ class CustomSvgAssetImageView extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.radius,
+      this.borderRadius = BorderRadius.zero,
       this.color});
 
   final String path;
   final double? height;
   final double? width;
   final BoxFit? fit;
-  final double? radius;
+  final BorderRadiusGeometry borderRadius;
   final Color? color;
 
   @override
@@ -120,7 +120,7 @@ class CustomSvgAssetImageView extends StatelessWidget {
       width: width != 0.0 ? width : null,
       height: height != 0.0 ? height : null,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 0.0),
+        borderRadius: borderRadius,
         child: SvgPicture.asset(
           path,
           width: width != 0.0 ? width : null,
@@ -148,14 +148,14 @@ class CustomSvgNetworkImageView extends StatelessWidget {
       this.height,
       this.width,
       this.fit,
-      this.radius,
+      this.borderRadius = BorderRadius.zero,
       this.color});
 
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
-  final double? radius;
+  final BorderRadiusGeometry borderRadius;
   final Color? color;
 
   @override
@@ -164,7 +164,7 @@ class CustomSvgNetworkImageView extends StatelessWidget {
       width: width != 0.0 ? width : null,
       height: height != 0.0 ? height : null,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(radius ?? 0.0),
+        borderRadius: borderRadius,
         child: SvgPicture.network(
           url,
           width: width != 0.0 ? width : null,
