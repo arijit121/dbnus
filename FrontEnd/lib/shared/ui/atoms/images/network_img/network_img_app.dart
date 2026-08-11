@@ -33,25 +33,6 @@ class NetworkImg extends StatelessWidget {
         height: height != 0.0 ? height : null,
         fit: fit,
         color: color,
-        memCacheWidth: (width != null && width != 0 && width != double.infinity
-                ? width
-                : 320)
-            ?.toInt(),
-        memCacheHeight:
-            (height != null && height != 0 && height != double.infinity
-                    ? height
-                    : 320)
-                ?.toInt(),
-        maxWidthDiskCache:
-            (width != null && width != 0 && width != double.infinity
-                    ? width
-                    : 320)
-                ?.toInt(),
-        maxHeightDiskCache:
-            (height != null && height != 0 && height != double.infinity
-                    ? height
-                    : 320)
-                ?.toInt(),
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return loadingWidget ??
               Shimmer.fromColors(
