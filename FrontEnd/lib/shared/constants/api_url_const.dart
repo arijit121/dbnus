@@ -12,8 +12,9 @@ class ApiUrlConst {
   static String books = "${baseUrl}books/v1/volumes";
   static String hostUrl = "https://dbnus-df986.web.app";
 
-  static String testImgUrl({num aspectRatio = 1}) {
-    int width = Random().nextInt(2160) + 512;
+  static String testImgUrl(
+      {int minSize = 512, int diff = 100, num aspectRatio = 1}) {
+    int width = Random().nextInt(diff) + minSize;
     int height = (width / aspectRatio).toInt();
     return "https://picsum.photos/$width/$height.jpg";
   }
