@@ -30,6 +30,16 @@ class NetworkImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    final cacheWidth = width != null && width != 0 && width != double.infinity
+        ? (width! * pixelRatio).round()
+        : 320;
+
+    final cacheHeight =
+    height != null && height != 0 && height != double.infinity
+        ? (height! * pixelRatio).round()
+        : 180;
     return ClipRRect(
       borderRadius: borderRadius,
       child: CachedNetworkImage(
@@ -38,25 +48,8 @@ class NetworkImg extends StatelessWidget {
         height: height != 0.0 ? height : null,
         fit: fit,
         color: color,
-        memCacheWidth: (width != null && width != 0 && width != double.infinity
-                ? width
-                : 320)
-            ?.toInt(),
-        memCacheHeight:
-            (height != null && height != 0 && height != double.infinity
-                    ? height
-                    : 320)
-                ?.toInt(),
-        maxWidthDiskCache:
-            (width != null && width != 0 && width != double.infinity
-                    ? width
-                    : 320)
-                ?.toInt(),
-        maxHeightDiskCache:
-            (height != null && height != 0 && height != double.infinity
-                    ? height
-                    : 320)
-                ?.toInt(),
+        memCacheWidth: cacheWidth.toInt(),
+        memCacheHeight: cacheHeight.toInt(),
         progressIndicatorBuilder: (context, url, downloadProgress) {
           return loadingWidget ??
               Shimmer.fromColors(
