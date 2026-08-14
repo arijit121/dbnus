@@ -60,7 +60,7 @@ class DeviceContactService {
       } else {
         for (final phone in contact.phones) {
           final label = phone.label.label.name.isEmpty == true
-              ? phone.label.toString()
+              ? phone.label.label.toString()
               : 'Phone';
           sb.writeln('  * $label: ${phone.number}');
         }
@@ -120,8 +120,8 @@ class DeviceContactService {
         } else {
           for (final phone in contact.phones) {
             final cleanNum = phone.number.replaceAll(RegExp(r'[^\d\+]'), '');
-            final label = phone.label.name.isNotEmpty
-                ? phone.label.name
+            final label = phone.label.label.name.isNotEmpty
+                ? phone.label.label.name
                 : 'Phone';
             sb.writeln('- **$label**: `${phone.number}`');
             sb.writeln(
