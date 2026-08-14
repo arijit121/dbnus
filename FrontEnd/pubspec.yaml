@@ -38,7 +38,7 @@ dependencies:
 
   # Utility Functions
   uuid: 4.6.0
-  intl: 0.20.2
+  intl: 0.20.3
   xml2json: 6.2.7
   encrypt: 5.0.3
   web: 1.1.1

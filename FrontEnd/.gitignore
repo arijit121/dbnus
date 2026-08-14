@@ -48,6 +48,10 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+.vscode/settings.json
+.fvmrc
+
+# Localization
 /lib/core/localization/app_localizations/
 
 # Firebase
@@ -73,4 +77,6 @@ windows/flutter/generated_plugins.cmake
 
 # AI Models
 assets/models/
+
+analysis_options.yaml
 
