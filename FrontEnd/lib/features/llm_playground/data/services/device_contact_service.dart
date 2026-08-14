@@ -5,34 +5,36 @@ class DeviceContactService {
   static Future<List<Contact>> searchContacts(String query) async {
     if (kIsWeb) return [];
     try {
-      if (await FlutterContacts.requestPermission(readonly: true)) {
-        final contacts = await FlutterContacts.getContacts(
-          withProperties: true,
-          withPhoto: false,
+      if (await FlutterContacts.permissions.request(PermissionType.readWrite) ==
+          PermissionStatus.granted) {
+        final contacts = await FlutterContacts.getAll(
+          properties: {ContactProperty.photoThumbnail},
         );
         final lower = query.toLowerCase().trim();
-        final isMomQuery = lower == 'mother' ||
+        final isMomQuery =
+            lower == 'mother' ||
             lower == 'mom' ||
             lower == 'mum' ||
             lower == 'ma';
 
         return contacts.where((c) {
-          final displayName = c.displayName.toLowerCase();
-          final firstName = c.name.first.toLowerCase();
-          final lastName = c.name.last.toLowerCase();
+          final displayName = c.displayName?.toLowerCase();
+          final firstName = c.name?.first?.toLowerCase();
+          final lastName = c.name?.last?.toLowerCase();
 
-          final nameMatch = displayName.contains(lower) ||
-              firstName.contains(lower) ||
-              lastName.contains(lower);
+          final nameMatch =
+              displayName?.contains(lower) == true ||
+              firstName?.contains(lower) == true ||
+              lastName?.contains(lower) == true;
 
           if (nameMatch) return true;
 
           if (isMomQuery) {
-            return displayName.contains('mother') ||
-                displayName.contains('mom') ||
-                displayName.contains('mum') ||
-                firstName.contains('mom') ||
-                firstName.contains('mother');
+            return displayName?.contains('mother') == true ||
+                displayName?.contains('mom') == true ||
+                displayName?.contains('mum') == true ||
+                firstName?.contains('mom') == true ||
+                firstName?.contains('mother') == true;
           }
 
           return false;
@@ -57,8 +59,9 @@ class DeviceContactService {
         sb.writeln('  (No phone numbers saved)');
       } else {
         for (final phone in contact.phones) {
-          final label =
-              phone.label.name.isNotEmpty ? phone.label.name : 'Phone';
+          final label = phone.label.label.name.isEmpty == true
+              ? phone.label.toString()
+              : 'Phone';
           sb.writeln('  * $label: ${phone.number}');
         }
       }
@@ -94,17 +97,21 @@ class DeviceContactService {
       sb.writeln('Direct phone number action for **`$searchTarget`**:');
       sb.writeln();
       sb.writeln(
-          '👉 **[Call $searchTarget](tel:$numericOnly)** | 💬 **[WhatsApp](https://wa.me/$numericOnly)**');
+        '👉 **[Call $searchTarget](tel:$numericOnly)** | 💬 **[WhatsApp](https://wa.me/$numericOnly)**',
+      );
     } else if (contacts.isEmpty) {
       sb.writeln(
-          'No matching contact entry named "$searchTarget" was found in your device contacts directory.');
+        'No matching contact entry named "$searchTarget" was found in your device contacts directory.',
+      );
       sb.writeln();
       sb.writeln(
-          'You can place a direct call by entering the phone number below:');
+        'You can place a direct call by entering the phone number below:',
+      );
       sb.writeln('👉 **[Call Phone Number](tel:)**');
     } else {
       sb.writeln(
-          'Found matching entries in your device contact directory. Select which number to call:');
+        'Found matching entries in your device contact directory. Select which number to call:',
+      );
       sb.writeln();
       for (final contact in contacts) {
         sb.writeln('👤 **${contact.displayName}**');
@@ -113,11 +120,13 @@ class DeviceContactService {
         } else {
           for (final phone in contact.phones) {
             final cleanNum = phone.number.replaceAll(RegExp(r'[^\d\+]'), '');
-            final label =
-                phone.label.name.isNotEmpty ? phone.label.name : 'Phone';
+            final label = phone.label.name.isNotEmpty
+                ? phone.label.name
+                : 'Phone';
             sb.writeln('- **$label**: `${phone.number}`');
             sb.writeln(
-                '  👉 **[Call $label](tel:$cleanNum)** | 💬 **[WhatsApp](https://wa.me/$cleanNum)**');
+              '  👉 **[Call $label](tel:$cleanNum)** | 💬 **[WhatsApp](https://wa.me/$cleanNum)**',
+            );
           }
         }
         sb.writeln();
