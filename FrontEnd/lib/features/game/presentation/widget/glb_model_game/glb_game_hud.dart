@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import '../../../../../navigation/custom_router/custom_route.dart';
 import '../../../../../shared/ui/atoms/text/custom_text.dart';
 

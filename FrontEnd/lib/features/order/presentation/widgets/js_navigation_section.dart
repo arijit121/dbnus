@@ -1,6 +1,6 @@
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 

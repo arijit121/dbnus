@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:dbnus/navigation/custom_router/web/custom_router_web.dart';
 import 'package:dbnus/shared/ui/atoms/indicators/loading_widget.dart';

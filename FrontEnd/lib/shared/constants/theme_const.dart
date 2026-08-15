@@ -1,6 +1,6 @@
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
 import 'package:dbnus/shared/constants/color_const.dart';

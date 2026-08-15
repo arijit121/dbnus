@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:in_app_review/in_app_review.dart' deferred as in_app_review;
 import 'package:open_file/open_file.dart' deferred as open_file;
 import 'package:permission_handler/permission_handler.dart';

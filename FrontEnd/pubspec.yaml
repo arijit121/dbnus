@@ -134,6 +134,11 @@ dependencies:
   llamadart: 0.8.19
   speech_to_text: 7.4.0
 
+  material_ui: any
+  http_parser: any
+  mime: any
+  cupertino_ui: any
+  meta: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

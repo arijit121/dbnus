@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:three_js/three_js.dart' as three;
 
 class GlbGameRadar extends StatelessWidget {
