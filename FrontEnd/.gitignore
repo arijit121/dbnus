@@ -80,3 +80,5 @@ assets/models/
 
 analysis_options.yaml
 
+# Widget Preview related
+.widget_preview/
