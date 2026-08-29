@@ -45,12 +45,16 @@ jaspr serve --dart-define=ENV=prod
 
 The development server will be available at `http://localhost:8080`.
 
-### Using VS Code
+Launch configurations are pre-configured in `.vscode/launch.json` for debugging the server, and `.vscode/tasks.json` for running the dev server:
 
-Launch configurations are pre-configured in `.vscode/launch.json`. Open the **Run and Debug** panel (`Ctrl+Shift+D` / `Cmd+Shift+D`) and select:
-- `Jaspr (dev)`
-- `Jaspr (stg)`
-- `Jaspr (prod)`
+- **Run & Debug (F5)**:
+  - `Jaspr: Serve (dev)`
+  - `Jaspr: Serve (stg)`
+  - `Jaspr: Serve (prod)`
+- **VS Code Tasks (`Ctrl+Shift+B` or `Terminal -> Run Task`)**:
+  - `Jaspr: Serve (dev)`
+  - `Jaspr: Serve (stg)`
+  - `Jaspr: Serve (prod)`
 
 ---
 
