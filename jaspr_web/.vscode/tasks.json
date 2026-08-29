@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Jaspr: Serve (dev)",
+      "type": "shell",
+      "command": "jaspr serve --dart-define=ENV=dev",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Jaspr: Serve (stg)",
+      "type": "shell",
+      "command": "jaspr serve --dart-define=ENV=stg",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Jaspr: Serve (prod)",
+      "type": "shell",
+      "command": "jaspr serve --dart-define=ENV=prod",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}
