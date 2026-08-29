@@ -25,6 +25,26 @@ enum Axis {
   vertical,
 }
 
+enum BoxFit {
+  fill,
+  contain,
+  cover,
+  fitWidth,
+  fitHeight,
+  none,
+  scaleDown;
+
+  String get cssValue => switch (this) {
+        BoxFit.fill => 'fill',
+        BoxFit.contain => 'contain',
+        BoxFit.cover => 'cover',
+        BoxFit.fitWidth => 'contain',
+        BoxFit.fitHeight => 'contain',
+        BoxFit.none => 'none',
+        BoxFit.scaleDown => 'scale-down',
+      };
+}
+
 class EdgeInsets {
   final double top;
   final double right;
@@ -174,4 +194,3 @@ enum Alignment {
   bottomCenter,
   bottomRight,
 }
-

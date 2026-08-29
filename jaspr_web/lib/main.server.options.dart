@@ -12,6 +12,8 @@ import 'package:jaspr_app/shared/ui/atoms/custom_divider.dart'
 import 'package:jaspr_app/shared/ui/atoms/custom_image.dart' as _custom_image;
 import 'package:jaspr_app/shared/ui/atoms/custom_input.dart' as _custom_input;
 import 'package:jaspr_app/shared/ui/atoms/custom_text.dart' as _custom_text;
+import 'package:jaspr_app/shared/ui/atoms/shimmer_loading.dart'
+    as _shimmer_loading;
 import 'package:jaspr_app/shared/ui/molecules/coming_soon_page.dart'
     as _coming_soon_page;
 import 'package:jaspr_app/shared/ui/molecules/error_page.dart' as _error_page;
@@ -62,6 +64,7 @@ ServerOptions get defaultServerOptions => ServerOptions(
     ..._custom_image.CustomImage.styles,
     ..._custom_input.CustomInput.styles,
     ..._custom_text.CustomText.styles,
+    ..._shimmer_loading.ShimmerLoading.styles,
     ..._coming_soon_page.ComingSoonPage.styles,
     ..._error_page.ErrorPage.styles,
     ..._error_widget.ErrorWidget.styles,

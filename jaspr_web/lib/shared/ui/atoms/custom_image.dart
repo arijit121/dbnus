@@ -1,25 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-
-enum BoxFit {
-  fill,
-  contain,
-  cover,
-  fitWidth,
-  fitHeight,
-  none,
-  scaleDown;
-
-  String get cssValue => switch (this) {
-        BoxFit.fill => 'fill',
-        BoxFit.contain => 'contain',
-        BoxFit.cover => 'cover',
-        BoxFit.fitWidth => 'contain',
-        BoxFit.fitHeight => 'contain',
-        BoxFit.none => 'none',
-        BoxFit.scaleDown => 'scale-down',
-      };
-}
+import '../organisms/layout_types.dart';
 
 class CustomNetWorkImageView extends StatelessComponent {
   final String url;

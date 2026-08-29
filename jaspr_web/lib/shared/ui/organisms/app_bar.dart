@@ -1,4 +1,4 @@
-import 'package:jaspr/dom.dart' hide BorderRadius, Alignment;
+import 'package:jaspr/dom.dart' hide BorderRadius;
 import 'package:jaspr/jaspr.dart';
 import '../../constants/theme.dart';
 import '../ui.dart';
