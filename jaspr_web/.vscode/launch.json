@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Jaspr: Serve (dev)",
+      "name": "Jaspr (dev)",
       "request": "launch",
       "type": "dart",
       "customTool": "jaspr",
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "name": "Jaspr: Serve (stg)",
+      "name": "Jaspr (stg)",
       "request": "launch",
       "type": "dart",
       "customTool": "jaspr",
@@ -22,40 +22,13 @@
       ]
     },
     {
-      "name": "Jaspr: Serve (prod)",
+      "name": "Jaspr (prod)",
       "request": "launch",
       "type": "dart",
       "customTool": "jaspr",
       "toolArgs": [
         "serve",
         "--dart-define=ENV=prod"
-      ]
-    },
-    {
-      "name": "Jaspr: Server (dev)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.server.dart",
-      "toolArgs": [
-        "--define=ENV=dev"
-      ]
-    },
-    {
-      "name": "Jaspr: Server (stg)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.server.dart",
-      "toolArgs": [
-        "--define=ENV=stg"
-      ]
-    },
-    {
-      "name": "Jaspr: Server (prod)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.server.dart",
-      "toolArgs": [
-        "--define=ENV=prod"
       ]
     }
   ]

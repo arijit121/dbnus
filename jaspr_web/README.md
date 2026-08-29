@@ -48,10 +48,9 @@ The development server will be available at `http://localhost:8080`.
 ### Using VS Code
 
 Launch configurations are pre-configured in `.vscode/launch.json`. Open the **Run and Debug** panel (`Ctrl+Shift+D` / `Cmd+Shift+D`) and select:
-- `Jaspr: Serve (dev)`
-- `Jaspr: Serve (stg)`
-- `Jaspr: Serve (prod)`
-- `Jaspr: Server (dev | stg | prod)` (for direct server execution)
+- `Jaspr (dev)`
+- `Jaspr (stg)`
+- `Jaspr (prod)`
 
 ---
 
