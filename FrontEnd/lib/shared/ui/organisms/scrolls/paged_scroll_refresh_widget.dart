@@ -5,6 +5,7 @@ import '../../../constants/color_const.dart';
 class PagedScrollRefreshWidget extends StatefulWidget {
   final Function? paginate, onRefresh;
   final Widget child;
+  final Axis paginationAxis;
   final Function(ScrollNotification)? onScroll;
 
   const PagedScrollRefreshWidget({
@@ -13,6 +14,7 @@ class PagedScrollRefreshWidget extends StatefulWidget {
     this.onRefresh,
     this.onScroll,
     required this.child,
+    this.paginationAxis = Axis.vertical,
   });
 
   @override
@@ -27,16 +29,30 @@ class _PagedScrollRefreshWidgetState extends State<PagedScrollRefreshWidget> {
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollInfo) {
+        // 🔐 SAFETY #1 — avoid callbacks after dispose
+        if (!mounted) return false;
+
+        final metrics = scrollInfo.metrics;
+
+        if (metrics.axis != widget.paginationAxis) return false;
+
         if (widget.onScroll != null) {
           widget.onScroll!(scrollInfo);
         }
-        final maxScrollExtent = scrollInfo.metrics.maxScrollExtent;
-        final currentScrollPosition = scrollInfo.metrics.pixels;
+
+        // 🔐 SAFETY #2 — protect against negative or invalid metrics
+        if (metrics.maxScrollExtent <= 0) return false;
+
+        final maxScrollExtent = metrics.maxScrollExtent;
+        final currentScrollPosition = metrics.pixels;
 
         if (maxScrollExtent > 0 &&
             currentScrollPosition >= (maxScrollExtent / 4) &&
             currentScrollPosition > _previousScrollPosition) {
-          widget.paginate?.call();
+          // 🔐 SAFETY #3 — schedule microtask so pagination does not fire inside scroll callbacks
+          Future.microtask(() {
+            if (mounted) widget.paginate?.call();
+          });
         }
 
         _previousScrollPosition = currentScrollPosition;
