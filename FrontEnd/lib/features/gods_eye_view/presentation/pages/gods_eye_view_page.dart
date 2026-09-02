@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' hide Path;
 
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
 import 'package:dbnus/features/gods_eye_view/data/repositories/gods_eye_view_repository_impl.dart';
@@ -51,9 +51,24 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
   final FocusNode _focusNode = FocusNode();
   bool _hudVisible = true;
 
+  late final MapOptions _mapOptions;
+
   @override
   void initState() {
     super.initState();
+    final initialState = context.read<GodsEyeViewBloc>().state;
+    _mapOptions = MapOptions(
+      initialCenter: initialState.cameraCenter,
+      initialZoom: initialState.cameraZoom,
+      minZoom: 2.0,
+      maxZoom: 18.0,
+      interactionOptions: const InteractionOptions(
+        flags: InteractiveFlag.all,
+      ),
+      onTap: (_, __) {
+        context.read<GodsEyeViewBloc>().add(const SelectContact(null));
+      },
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
@@ -136,18 +151,7 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                   mode: state.sensorMode,
                   child: FlutterMap(
                     mapController: _mapController,
-                    options: MapOptions(
-                      initialCenter: state.cameraCenter,
-                      initialZoom: state.cameraZoom,
-                      minZoom: 2.0,
-                      maxZoom: 18.0,
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.all,
-                      ),
-                      onTap: (_, __) {
-                        bloc.add(const SelectContact(null));
-                      },
-                    ),
+                    options: _mapOptions,
                     children: [
                       // Basemap Tile Layer
                       TileLayer(
@@ -404,8 +408,8 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
         markers.add(
           Marker(
             point: f.position,
-            width: showBoxes ? 90 : 36,
-            height: showBoxes ? 60 : 36,
+            width: showBoxes ? 110 : 44,
+            height: showBoxes ? 68 : 44,
             child: GestureDetector(
               onTap: () => bloc.add(SelectContact(f)),
               child: Column(
@@ -413,32 +417,58 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                 children: [
                   Transform.rotate(
                     angle: f.headingDeg * (math.pi / 180.0),
-                    child: Icon(
-                      f.isMilitary ? Icons.airplanemode_active : Icons.flight,
-                      color: iconColor,
-                      size: isSelected ? 26 : 20,
+                    child: SizedBox(
+                      width: isSelected ? 32 : 26,
+                      height: isSelected ? 32 : 26,
+                      child: CustomPaint(
+                        painter: _TacticalChevronPainter(
+                          color: iconColor,
+                          isMilitary: f.isMilitary,
+                          isSelected: isSelected,
+                          speedKnots: f.speedKnots,
+                        ),
+                      ),
                     ),
                   ),
                   if (showBoxes)
                     Container(
                       margin: const EdgeInsets.only(top: 2),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 1),
+                          horizontal: 4, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.75),
+                        color: const Color(0xFF03070D).withValues(alpha: 0.88),
                         border: Border.all(
-                            color: iconColor.withValues(alpha: 0.8), width: 0.8),
-                        borderRadius: BorderRadius.circular(2),
+                            color: iconColor.withValues(alpha: 0.85), width: 0.8),
+                        borderRadius: BorderRadius.circular(3),
+                        boxShadow: [
+                          BoxShadow(
+                            color: iconColor.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        '${f.callsign}\n${f.altitudeFt.toInt()}FT',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: iconColor,
-                          fontSize: 7,
-                          fontFamily: 'monospace',
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            f.callsign,
+                            style: TextStyle(
+                              color: iconColor,
+                              fontSize: 7.5,
+                              fontFamily: 'monospace',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                          Text(
+                            'FL${(f.altitudeFt / 100).round()} · ${f.speedKnots.toInt()}KT',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.75),
+                              fontSize: 6.5,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                 ],
@@ -453,49 +483,43 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
     if (state.activeLayers.contains(GeointLayer.satellites)) {
       for (final s in state.satellites) {
         final isSelected = state.selectedContact?.id == s.id;
+        final satColor = isSelected ? const Color(0xFFFFD600) : const Color(0xFF00E5FF);
+
         markers.add(
           Marker(
             point: s.position,
             width: showBoxes ? 90 : 36,
-            height: showBoxes ? 50 : 36,
+            height: showBoxes ? 52 : 36,
             child: GestureDetector(
               onTap: () => bloc.add(SelectContact(s)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isSelected
-                              ? const Color(0xFFFFD600)
-                              : const Color(0xFF00E5FF),
-                          width: 1.5),
-                    ),
-                    child: Icon(
-                      Icons.satellite_alt,
-                      color: isSelected
-                          ? const Color(0xFFFFD600)
-                          : const Color(0xFF00E5FF),
-                      size: 16,
+                  SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CustomPaint(
+                      painter: _TacticalSatellitePainter(
+                        color: satColor,
+                        isSelected: isSelected,
+                      ),
                     ),
                   ),
                   if (showBoxes)
                     Container(
                       margin: const EdgeInsets.only(top: 2),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 3, vertical: 1),
+                          horizontal: 4, vertical: 1),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.75),
+                        color: const Color(0xFF03070D).withValues(alpha: 0.88),
                         border: Border.all(
-                            color: const Color(0xFF00E5FF), width: 0.8),
+                            color: satColor.withValues(alpha: 0.8), width: 0.8),
                         borderRadius: BorderRadius.circular(2),
                       ),
                       child: Text(
-                        'SAT: ${s.noradId}',
-                        style: const TextStyle(
-                          color: Color(0xFF00E5FF),
+                        'NORAD ${s.noradId}',
+                        style: TextStyle(
+                          color: satColor,
                           fontSize: 7,
                           fontFamily: 'monospace',
                           fontWeight: FontWeight.bold,
@@ -514,6 +538,8 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
     if (state.activeLayers.contains(GeointLayer.vessels)) {
       for (final v in state.vessels) {
         final isSelected = state.selectedContact?.id == v.id;
+        final vslColor = isSelected ? const Color(0xFFFFD600) : const Color(0xFF26A69A);
+
         markers.add(
           Marker(
             point: v.position,
@@ -528,9 +554,7 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                     angle: v.headingDeg * (math.pi / 180.0),
                     child: Icon(
                       Icons.navigation,
-                      color: isSelected
-                          ? const Color(0xFFFFD600)
-                          : const Color(0xFF26A69A),
+                      color: vslColor,
                       size: 18,
                     ),
                   ),
@@ -542,13 +566,13 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.75),
                         border: Border.all(
-                            color: const Color(0xFF26A69A), width: 0.8),
+                            color: vslColor, width: 0.8),
                         borderRadius: BorderRadius.circular(2),
                       ),
                       child: Text(
                         'VSL: ${v.speedKnots}KT',
-                        style: const TextStyle(
-                          color: Color(0xFF26A69A),
+                        style: TextStyle(
+                          color: vslColor,
                           fontSize: 7,
                           fontFamily: 'monospace',
                         ),
@@ -663,4 +687,111 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
       BuildContext context, GodsEyeViewBloc bloc, Color hudColor) {
     FirstRunLauncherDialog.show(context, bloc, hudColor);
   }
+}
+
+/// Military radar delta chevron painter for aircraft
+class _TacticalChevronPainter extends CustomPainter {
+  final Color color;
+  final bool isMilitary;
+  final bool isSelected;
+  final double speedKnots;
+
+  const _TacticalChevronPainter({
+    required this.color,
+    required this.isMilitary,
+    required this.isSelected,
+    required this.speedKnots,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+
+    // 1. Forward velocity vector lead-line
+    final vectorLen = (speedKnots / 30).clamp(8.0, 22.0);
+    final vectorPaint = Paint()
+      ..color = color.withValues(alpha: 0.85)
+      ..strokeWidth = 1.2;
+    canvas.drawLine(Offset(cx, cy - 6), Offset(cx, cy - 6 - vectorLen), vectorPaint);
+
+    // 2. Tactical delta chevron path (Apex pointing UP)
+    final path = Path();
+    path.moveTo(cx, cy - 8); // Apex nose
+    path.lineTo(cx + 7, cy + 7); // Right wing tip
+    path.lineTo(cx, cy + 3); // Inward engine notch
+    path.lineTo(cx - 7, cy + 7); // Left wing tip
+    path.close();
+
+    final fillPaint = Paint()
+      ..color = color.withValues(alpha: isSelected ? 0.95 : 0.75)
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(path, fillPaint);
+
+    final strokePaint = Paint()
+      ..color = isSelected ? Colors.white : color
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+    canvas.drawPath(path, strokePaint);
+
+    // 3. Center glowing avionics beacon
+    canvas.drawCircle(Offset(cx, cy), 1.5, Paint()..color = Colors.white);
+  }
+
+  @override
+  bool shouldRepaint(covariant _TacticalChevronPainter old) =>
+      old.color != color || old.isSelected != isSelected || old.speedKnots != speedKnots;
+}
+
+/// Orbit radar diamond painter for satellites
+class _TacticalSatellitePainter extends CustomPainter {
+  final Color color;
+  final bool isSelected;
+
+  const _TacticalSatellitePainter({
+    required this.color,
+    required this.isSelected,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+
+    // Outer orbital radar ring
+    final ringPaint = Paint()
+      ..color = color.withValues(alpha: 0.35)
+      ..strokeWidth = 0.8
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(Offset(cx, cy), 9, ringPaint);
+
+    // Tactical diamond
+    final path = Path();
+    path.moveTo(cx, cy - 6);
+    path.lineTo(cx + 6, cy);
+    path.lineTo(cx, cy + 6);
+    path.lineTo(cx - 6, cy);
+    path.close();
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color.withValues(alpha: 0.8)
+        ..style = PaintingStyle.fill,
+    );
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = Colors.white
+        ..strokeWidth = 0.8
+        ..style = PaintingStyle.stroke,
+    );
+
+    // Center core
+    canvas.drawCircle(Offset(cx, cy), 1.5, Paint()..color = Colors.white);
+  }
+
+  @override
+  bool shouldRepaint(covariant _TacticalSatellitePainter old) =>
+      old.color != color || old.isSelected != isSelected;
 }
