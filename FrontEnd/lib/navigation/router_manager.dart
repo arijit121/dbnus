@@ -48,6 +48,8 @@ import 'package:dbnus/features/llm_playground/presentation/pages/llm_playground_
     deferred as llm_playground;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
+import 'package:dbnus/features/gods_eye_view/presentation/pages/gods_eye_view_page.dart'
+    deferred as gods_eye_view;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -363,6 +365,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await llm_playground.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.godsEyeView,
+        path: RouteName.godsEyeView,
+        builder: (BuildContext context, GoRouterState state) {
+          return gods_eye_view.GodsEyeViewPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await gods_eye_view.loadLibrary();
           return null;
         },
       ),

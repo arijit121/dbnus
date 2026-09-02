@@ -25,4 +25,5 @@ class RouteName {
   static const String glbModelGame = "/glb-model-game";
   static const String llamaChat = "/llama-chat";
   static const String llmPlayground = "/llm-playground";
+  static const String godsEyeView = "/gods-eye-view";
 }
