@@ -110,8 +110,9 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
   Widget build(BuildContext context) {
     return BlocConsumer<GodsEyeViewBloc, GodsEyeViewState>(
       listenWhen: (prev, curr) =>
-          prev.cameraCenter != curr.cameraCenter ||
-          prev.cameraZoom != curr.cameraZoom,
+          (curr.isCockpitMode && prev.cameraCenter != curr.cameraCenter) ||
+          prev.cameraZoom != curr.cameraZoom ||
+          (prev.selectedContact != curr.selectedContact && curr.selectedContact != null),
       listener: (context, state) {
         _mapController.move(state.cameraCenter, state.cameraZoom);
       },
@@ -140,6 +141,9 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                       initialZoom: state.cameraZoom,
                       minZoom: 2.0,
                       maxZoom: 18.0,
+                      interactionOptions: const InteractionOptions(
+                        flags: InteractiveFlag.all,
+                      ),
                       onTap: (_, __) {
                         bloc.add(const SelectContact(null));
                       },
@@ -205,15 +209,18 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                 // 4. Contact Detail Sheet (Slide-Up)
                 if (state.selectedContact != null && !state.isCockpitMode)
                   Positioned(
-                    bottom: 72,
-                    left: 16,
-                    right: 16,
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: 480,
-                          maxHeight: MediaQuery.of(context).size.height * 0.45,
-                        ),
+                    bottom: 80,
+                    left: 0,
+                    right: 0,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 480,
+                            maxHeight: MediaQuery.of(context).size.height * 0.45,
+                          ),
                         child: SingleChildScrollView(
                           child: ContactDetailSheet(
                             contact: state.selectedContact!,
@@ -233,6 +240,7 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                       ),
                     ),
                   ),
+                ),
 
               // 5. Loading Indicator
               if (state.isLoading)
