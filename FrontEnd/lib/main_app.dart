@@ -31,6 +31,8 @@ import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 
+import 'core/services/crash/utils/crashlytics_error_classifier.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -59,9 +61,26 @@ Future<void> main() async {
   runApp(const MyApp());
   CrashUtils.setValue(value: false);
   FlutterError.onError = (errorDetails) {
-    if (errorDetails.library?.contains("widgets library") == true) {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Serious Error", stackTrace: errorDetails.stack);
+    final exception = errorDetails.exception;
+    final library = errorDetails.library;
+
+    AppLog.e("library: $library | error: $exception",
+        tag: "FlutterError.onError");
+
+    // Rendering / foundation library errors are always fatal regardless of
+    // exception type — the framework itself is in a broken state.
+    final bool libraryFatal =
+        CrashlyticsErrorClassifier.isFatalLibrary(library);
+
+    // Exception-level classification: recoverable operational errors → non-fatal.
+    final bool exceptionFatal = CrashlyticsErrorClassifier.isFatal(exception);
+    if (libraryFatal || exceptionFatal) {
+      AppLog.e(
+        "${errorDetails.exception}",
+        tag: "Serious Error",
+        error: errorDetails.exception,
+        stackTrace: errorDetails.stack,
+      );
       if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       }
@@ -70,8 +89,12 @@ Future<void> main() async {
         "stack": "${errorDetails.stack}",
       });
     } else {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Error", stackTrace: errorDetails.stack);
+      AppLog.e(
+        "${errorDetails.exception}",
+        tag: "Error",
+        error: errorDetails.exception,
+        stackTrace: errorDetails.stack,
+      );
       if (!kDebugMode) {
         FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       }
@@ -82,7 +105,7 @@ Future<void> main() async {
     if (!kDebugMode) {
       FirebaseCrashlytics.instance.recordError(error, stack);
     }
-    AppLog.e("$error", stackTrace: stack, tag: "Error");
+    AppLog.e("$error", error: error, stackTrace: stack, tag: "Error");
     return true;
   };
 }

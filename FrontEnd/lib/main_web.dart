@@ -24,7 +24,6 @@ import 'package:dbnus/shared/utils/text_utils.dart';
 import 'navigation/url_strategy/url_strategy.dart' deferred as url_strategy;
 import 'package:flutter/rendering.dart';
 
-
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
     url_strategy.usePathUrlStrategy();
@@ -52,17 +51,25 @@ Future<void> main() async {
         "error": "${errorDetails.exception}",
         "stack": "${errorDetails.stack}",
       });
-      AppLog.e("${errorDetails.exception}",
-          tag: "Serious Error", stackTrace: errorDetails.stack);
+      AppLog.e(
+        "${errorDetails.exception}",
+        tag: "Serious Error",
+        error: errorDetails.exception,
+        stackTrace: errorDetails.stack,
+      );
     } else {
-      AppLog.e("${errorDetails.exception}",
-          tag: "Error", stackTrace: errorDetails.stack);
+      AppLog.e(
+        "${errorDetails.exception}",
+        tag: "Error",
+        error: errorDetails.exception,
+        stackTrace: errorDetails.stack,
+      );
     }
   };
 
   foundation.loadLibrary().then((_) {
     foundation.PlatformDispatcher.instance.onError = (error, stack) {
-      AppLog.e("$error", stackTrace: stack, tag: "Error");
+      AppLog.e("$error", error: error, stackTrace: stack, tag: "Error");
       return true;
     };
   });
