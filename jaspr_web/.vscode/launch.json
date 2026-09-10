@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Jaspr: Serve (dev)",
+      "request": "launch",
+      "type": "jaspr",
+      "args": [
+        "--dart-define=ENV=dev"
+      ]
+    },
+    {
+      "name": "Jaspr: Serve (stg)",
+      "request": "launch",
+      "type": "jaspr",
+      "args": [
+        "--dart-define=ENV=stg"
+      ]
+    },
+    {
+      "name": "Jaspr: Serve (prod)",
+      "request": "launch",
+      "type": "jaspr",
+      "args": [
+        "--dart-define=ENV=prod"
+      ]
+    }
+  ]
+}

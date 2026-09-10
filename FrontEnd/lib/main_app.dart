@@ -30,6 +30,7 @@ import 'package:dbnus/core/services/redirect_engine.dart';
 import 'package:dbnus/core/storage/localCart/bloc/local_cart_bloc.dart';
 import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
+import 'core/services/crash/utils/crashlytics_error_classifier.dart';
 
 import 'core/services/crash/utils/crashlytics_error_classifier.dart';
 

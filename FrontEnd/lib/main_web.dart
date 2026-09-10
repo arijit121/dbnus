@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dbnus/shared/constants/theme_const.dart';
 import 'package:dbnus/core/network/connection/bloc/connection_bloc.dart';
 import 'package:dbnus/shared/extensions/logger_extension.dart';
-import 'package:dbnus/firebase_options.dart' deferred as firebase_options;
+import 'package:dbnus/firebase_options.dart';
 import 'package:dbnus/navigation/router_manager.dart';
 import 'package:dbnus/core/localization/bloc/localization_bloc.dart';
 import 'package:dbnus/core/localization/app_localizations/app_localizations.dart';
@@ -23,6 +23,7 @@ import 'package:dbnus/shared/utils/text_utils.dart';
 
 import 'navigation/url_strategy/url_strategy.dart' deferred as url_strategy;
 import 'package:flutter/rendering.dart';
+import 'core/services/crash/utils/crashlytics_error_classifier.dart';
 
 Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
@@ -31,10 +32,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SemanticsBinding.instance.ensureSemantics();
 
-  await Future.wait(
-      [firebase_core.loadLibrary(), firebase_options.loadLibrary()]);
+  await firebase_core.loadLibrary();
   await firebase_core.Firebase.initializeApp(
-      options: firebase_options.DefaultFirebaseOptions.currentPlatform);
+      options: DefaultFirebaseOptions.currentPlatform);
 /*  firebase_performance.loadLibrary().then((_) async {
     await firebase_performance.FirebasePerformance.instance
         .setPerformanceCollectionEnabled(true);
@@ -45,18 +45,31 @@ Future<void> main() async {
   });
 
   FlutterError.onError = (errorDetails) async {
-    if (errorDetails.library?.contains("widgets library") == true) {
-      await crash_utils.loadLibrary();
-      crash_utils.CrashUtils.navigateToCrashPage({
-        "error": "${errorDetails.exception}",
-        "stack": "${errorDetails.stack}",
-      });
-      AppLog.e(
+        final exception = errorDetails.exception;
+    final library = errorDetails.library;
+
+    AppLog.e("library: $library | error: $exception",
+        tag: "FlutterError.onError");
+
+    // Rendering / foundation library errors are always fatal regardless of
+    // exception type — the framework itself is in a broken state.
+    final bool libraryFatal =
+        CrashlyticsErrorClassifier.isFatalLibrary(library);
+
+    // Exception-level classification: recoverable operational errors → non-fatal.
+    final bool exceptionFatal = CrashlyticsErrorClassifier.isFatal(exception);
+    if (libraryFatal || exceptionFatal)  {
+       AppLog.e(
         "${errorDetails.exception}",
         tag: "Serious Error",
         error: errorDetails.exception,
         stackTrace: errorDetails.stack,
       );
+      await crash_utils.loadLibrary();
+      crash_utils.CrashUtils.navigateToCrashPage({
+        "error": "${errorDetails.exception}",
+        "stack": "${errorDetails.stack}",
+      });
     } else {
       AppLog.e(
         "${errorDetails.exception}",

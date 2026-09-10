@@ -46,6 +46,7 @@ class CustomFilePicker {
       final result = await file_picker.FilePicker.pickFiles(
         type: file_picker.FileType.custom,
         allowedExtensions: allowedExtensionsFinal,
+        withData: kIsWeb,
       );
 
       if (result != null) {
@@ -130,7 +131,8 @@ class CustomFilePicker {
       final result = await file_picker.FilePicker.pickFiles(
           type: file_picker.FileType.custom,
           allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
-          allowMultiple: true);
+          allowMultiple: true,
+          withData: kIsWeb);
 
       if (result != null) {
         final platformFiles = result.files;

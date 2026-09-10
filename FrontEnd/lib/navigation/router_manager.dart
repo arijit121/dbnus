@@ -42,8 +42,14 @@ import 'package:dbnus/features/game/presentation/pages/space_flight_3d_game.dart
     deferred as space_flight_3d;
 import 'package:dbnus/features/game/presentation/pages/glb_model_game.dart'
     deferred as glb_model_game;
+import 'package:dbnus/features/llama_chat/presentation/pages/llama_chat_page.dart'
+    deferred as llama_chat;
+import 'package:dbnus/features/llm_playground/presentation/pages/llm_playground_page.dart'
+    deferred as llm_playground;
 import 'package:dbnus/features/open_street_map/presentation/pages/open_street_map_page.dart'
     deferred as open_street_map;
+import 'package:dbnus/features/gods_eye_view/presentation/pages/gods_eye_view_page.dart'
+    deferred as gods_eye_view;
 import 'package:dbnus/core/services/crash/ui/crash_ui.dart' deferred as crash;
 import 'package:dbnus/core/services/value_handler.dart';
 import 'package:dbnus/shared/ui/molecules/error/error_route_widget.dart'
@@ -337,6 +343,39 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await glb_model_game.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.llamaChat,
+        path: RouteName.llamaChat,
+        builder: (BuildContext context, GoRouterState state) {
+          return llama_chat.LlamaChatPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await llama_chat.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.llmPlayground,
+        path: RouteName.llmPlayground,
+        builder: (BuildContext context, GoRouterState state) {
+          return llm_playground.LlmPlaygroundPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await llm_playground.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.godsEyeView,
+        path: RouteName.godsEyeView,
+        builder: (BuildContext context, GoRouterState state) {
+          return gods_eye_view.GodsEyeViewPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await gods_eye_view.loadLibrary();
           return null;
         },
       ),

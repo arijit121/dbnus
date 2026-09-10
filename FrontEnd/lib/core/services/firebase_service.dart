@@ -15,6 +15,14 @@ class FirebaseService {
       await Future.wait([
         firebase_messaging.loadLibrary(),
       ]);
+      bool isSupported =
+          await firebase_messaging.FirebaseMessaging.instance.isSupported();
+      if (!isSupported) {
+        AppLog.w(
+            tag: "FcmToken",
+            "Firebase Messaging is not supported in this browser/environment.");
+        return;
+      }
       String? fcmToken =
           await firebase_messaging.FirebaseMessaging.instance.getToken();
       AppLog.i(tag: "FcmToken0", "$fcmToken");
@@ -34,6 +42,10 @@ class FirebaseService {
     try {
       await Future.wait(
           [firebase_messaging.loadLibrary(), redirect_engine.loadLibrary()]);
+
+      bool isSupported =
+          await firebase_messaging.FirebaseMessaging.instance.isSupported();
+      if (!isSupported) return;
 
       final initialMessage = await firebase_messaging.FirebaseMessaging.instance
           .getInitialMessage();
