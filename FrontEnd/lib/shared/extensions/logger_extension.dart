@@ -45,7 +45,7 @@ class AppLog {
 
   static _log(int priority, String tag, String message,
       {Object? error, StackTrace? stackTrace, DateTime? time}) {
-    if (_currentLogLevel <= priority) {
+    if ((_currentLogLevel <= priority) && (_enableOnRelease || kDebugMode)) {
       if (!_enableLogger) {
         _logLargeMessage(_ascieEscape(priority,
             text: "${_getPriorityText(priority)}$tag::==>  $message"));
@@ -73,15 +73,11 @@ class AppLog {
     }
   }
 
-  static void _logLargeMessage(String message, {int chunkSize = 220}) {
-    for (var i = 0; i < message.length; i += chunkSize) {
-      final chunk = message.substring(
-          i, i + chunkSize > message.length ? message.length : i + chunkSize);
-      if (_enableOnRelease) {
-        print(chunk);
-      } else {
-        debugPrint(chunk);
-      }
+  static void _logLargeMessage(String message) {
+    if (_enableOnRelease) {
+      print(message);
+    } else if (kDebugMode) {
+      debugPrint(message);
     }
   }
 

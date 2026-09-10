@@ -32,6 +32,8 @@ import 'package:dbnus/shared/utils/pop_up_items.dart';
 import 'package:dbnus/shared/utils/text_utils.dart';
 import 'core/services/crash/utils/crashlytics_error_classifier.dart';
 
+import 'core/services/crash/utils/crashlytics_error_classifier.dart';
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

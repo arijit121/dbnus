@@ -158,7 +158,9 @@ class _CarouselSliderState extends State<CarouselSlider> {
             _isUserInteracting = false;
           },
           child: CustomNetWorkImageView(
-            radius: widget.radius,
+            borderRadius: widget.radius != null
+                ? BorderRadius.circular(widget.radius!)
+                : BorderRadius.zero,
             url: widget.imageList.elementAt(pageIndex),
             fit: widget.fit,
             width: double.infinity,
