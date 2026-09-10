@@ -113,12 +113,8 @@ class _MyWebAppState extends State<MyWebApp> {
           if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
         ]);
       });
-      await Future.wait([
-        js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js"),
-        js_provider.JsProvider.loadJs(
-            jsPath:
-                "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"),
-      ]);
+      await js_provider.JsProvider.loadJs(
+          jsPath: "assets/js/storage-utils.js");
     });
     super.initState();
   }
