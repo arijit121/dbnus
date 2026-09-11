@@ -45,21 +45,18 @@ Future<void> main() async {
   });
 
   FlutterError.onError = (errorDetails) async {
-        final exception = errorDetails.exception;
+    final exception = errorDetails.exception;
     final library = errorDetails.library;
 
     AppLog.e("library: $library | error: $exception",
         tag: "FlutterError.onError");
 
-    // Rendering / foundation library errors are always fatal regardless of
-    // exception type — the framework itself is in a broken state.
-    final bool libraryFatal =
-        CrashlyticsErrorClassifier.isFatalLibrary(library);
-
     // Exception-level classification: recoverable operational errors → non-fatal.
-    final bool exceptionFatal = CrashlyticsErrorClassifier.isFatal(exception);
-    if (libraryFatal || exceptionFatal)  {
-       AppLog.e(
+    final bool exceptionFatal = errorDetails.silent
+        ? false
+        : CrashlyticsErrorClassifier.isFatal(exception);
+    if (exceptionFatal) {
+      AppLog.e(
         "${errorDetails.exception}",
         tag: "Serious Error",
         error: errorDetails.exception,
@@ -113,8 +110,7 @@ class _MyWebAppState extends State<MyWebApp> {
           if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
         ]);
       });
-      await js_provider.JsProvider.loadJs(
-          jsPath: "assets/js/storage-utils.js");
+      await js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js");
     });
     super.initState();
   }

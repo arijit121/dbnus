@@ -68,14 +68,11 @@ Future<void> main() async {
     AppLog.e("library: $library | error: $exception",
         tag: "FlutterError.onError");
 
-    // Rendering / foundation library errors are always fatal regardless of
-    // exception type — the framework itself is in a broken state.
-    final bool libraryFatal =
-        CrashlyticsErrorClassifier.isFatalLibrary(library);
-
     // Exception-level classification: recoverable operational errors → non-fatal.
-    final bool exceptionFatal = CrashlyticsErrorClassifier.isFatal(exception);
-    if (libraryFatal || exceptionFatal) {
+    final bool exceptionFatal = errorDetails.silent
+        ? false
+        : CrashlyticsErrorClassifier.isFatal(exception);
+    if (exceptionFatal) {
       AppLog.e(
         "${errorDetails.exception}",
         tag: "Serious Error",
