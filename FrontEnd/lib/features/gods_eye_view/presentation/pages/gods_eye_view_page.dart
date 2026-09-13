@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,8 +66,13 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
       interactionOptions: const InteractionOptions(
         flags: InteractiveFlag.all,
       ),
-      onTap: (_, __) {
-        context.read<GodsEyeViewBloc>().add(const SelectContact(null));
+      onTap: (_, point) {
+        final bloc = context.read<GodsEyeViewBloc>();
+        if (bloc.state.isMeasureToolActive) {
+          bloc.add(AddMeasurementPoint(point));
+        } else {
+          bloc.add(const SelectContact(null));
+        }
       },
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -159,21 +165,24 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
                         userAgentPackageName: 'com.dbnus.app',
                       ),
 
-                      // Orbital & Flight Trail Vectors
-                      PolylineLayer(
-                        polylines: _buildPolylines(state, hudColor),
+                      // Orbital & Flight Trail Vectors (Visual only - ignore pointer to prevent hit-test multi-world loops)
+                      IgnorePointer(
+                        child: PolylineLayer(
+                          polylines: _buildPolylines(state, hudColor),
+                        ),
                       ),
 
-                      // CCTV Viewshed Coverage Cones
+                      // CCTV Viewshed Coverage Cones (Visual only - safe custom painter)
                       if (state.activeLayers.contains(GeointLayer.cctv))
-                        PolygonLayer(
-                          polygons: _buildCctvViewsheds(state, hudColor),
+                        _CctvViewshedLayer(
+                          cameras: state.cctvCameras,
+                          hudColor: hudColor,
                         ),
 
-                      // Seismic Pulse Rings
+                      // Seismic Pulse Rings (Visual only - safe custom painter immune to multi-world loop bugs)
                       if (state.activeLayers.contains(GeointLayer.earthquakes))
-                        CircleLayer(
-                          circles: _buildEarthquakeCircles(state),
+                        _SeismicPulseLayer(
+                          earthquakes: state.earthquakes,
                         ),
 
                       // Entity Tactical Markers
@@ -325,67 +334,37 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
       }
     }
 
-    return polylines;
-  }
+    // Space Launch Trajectories
+    if (state.activeLayers.contains(GeointLayer.spaceLaunches)) {
+      for (final launch in state.spaceLaunches) {
+        if (launch.trajectoryPoints.length > 1) {
+          polylines.add(
+            Polyline(
+              points: launch.trajectoryPoints,
+              color: const Color(0xFFFF5252).withValues(alpha: 0.75),
+              strokeWidth: 2.2,
+            ),
+          );
+        }
+      }
+    }
 
-  List<Polygon> _buildCctvViewsheds(
-      GodsEyeViewState state, Color hudColor) {
-    final polygons = <Polygon>[];
-
-    for (final cam in state.cctvCameras) {
-      // Build triangular FOV cone ~2km deep
-      const radiusKm = 1.5;
-      final halfFovRad = (cam.fovDeg / 2.0) * (math.pi / 180.0);
-      final bearingRad = cam.bearingDeg * (math.pi / 180.0);
-
-      final leftRad = bearingRad - halfFovRad;
-      final rightRad = bearingRad + halfFovRad;
-
-      final p0 = cam.position;
-      final pLeft = _projectPoint(p0, radiusKm, leftRad);
-      final pRight = _projectPoint(p0, radiusKm, rightRad);
-
-      polygons.add(
-        Polygon(
-          points: [p0, pLeft, pRight],
-          color: hudColor.withValues(alpha: 0.12),
-          borderColor: hudColor.withValues(alpha: 0.4),
-          borderStrokeWidth: 1.0,
+    // Tactical Measurement Ruler Line
+    if (state.isMeasureToolActive && state.measurementPoints.length > 1) {
+      polylines.add(
+        Polyline(
+          points: state.measurementPoints,
+          color: const Color(0xFFFFD600),
+          strokeWidth: 2.5,
         ),
       );
     }
 
-    return polygons;
+    return polylines;
   }
 
-  LatLng _projectPoint(LatLng origin, double distKm, double angleRad) {
-    final deltaLat = (distKm / 111.0) * math.cos(angleRad);
-    final cosLat = math.cos(origin.latitude * (math.pi / 180.0));
-    final deltaLon =
-        (distKm / (111.0 * (cosLat.abs() < 0.01 ? 0.01 : cosLat))) *
-            math.sin(angleRad);
+  // (Replaced by _CctvViewshedLayer and _SeismicPulseLayer below)
 
-    return LatLng(origin.latitude + deltaLat, origin.longitude + deltaLon);
-  }
-
-  List<CircleMarker> _buildEarthquakeCircles(GodsEyeViewState state) {
-    return state.earthquakes.map((eq) {
-      final radius = (eq.magnitude * 5.0).clamp(12.0, 45.0);
-      final color = eq.alertLevel == 'red'
-          ? const Color(0xFFFF1744)
-          : eq.alertLevel == 'orange'
-              ? const Color(0xFFFF9100)
-              : const Color(0xFFFFEA00);
-
-      return CircleMarker(
-        point: eq.position,
-        radius: radius,
-        color: color.withValues(alpha: 0.2),
-        borderColor: color.withValues(alpha: 0.8),
-        borderStrokeWidth: 1.5,
-      );
-    }).toList();
-  }
 
   List<Marker> _buildMarkers(
       GodsEyeViewState state, GodsEyeViewBloc bloc, Color hudColor) {
@@ -664,6 +643,278 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
       }
     }
 
+    // 5b. USGS Earthquakes
+    if (state.activeLayers.contains(GeointLayer.earthquakes)) {
+      for (final eq in state.earthquakes) {
+        final isSelected = state.selectedContact?.id == eq.id;
+        final eqColor = eq.alertLevel == 'red'
+            ? const Color(0xFFFF1744)
+            : eq.alertLevel == 'orange'
+                ? const Color(0xFFFF9100)
+                : const Color(0xFFFFEA00);
+
+        markers.add(
+          Marker(
+            point: eq.position,
+            width: showBoxes ? 90 : 36,
+            height: showBoxes ? 54 : 36,
+            child: GestureDetector(
+              onTap: () => bloc.add(SelectContact(eq)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: eqColor.withValues(alpha: 0.3),
+                      border: Border.all(
+                        color: isSelected ? const Color(0xFFFFD600) : eqColor,
+                        width: isSelected ? 2.0 : 1.2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: eqColor.withValues(alpha: 0.5),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.waves,
+                      color: isSelected ? const Color(0xFFFFD600) : eqColor,
+                      size: 13,
+                    ),
+                  ),
+                  if (showBoxes)
+                    Container(
+                      margin: const EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.85),
+                        border: Border.all(color: eqColor, width: 0.8),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: Text(
+                        'M${eq.magnitude.toStringAsFixed(1)} · ${eq.depthKm.toInt()}KM',
+                        style: TextStyle(
+                          color: eqColor,
+                          fontSize: 6.5,
+                          fontFamily: 'monospace',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    // 6. NASA FIRMS Wildfires
+    if (state.activeLayers.contains(GeointLayer.wildfires)) {
+      for (final wf in state.wildfires) {
+        final isSelected = state.selectedContact?.id == wf.id;
+        final fireColor = isSelected ? const Color(0xFFFFD600) : const Color(0xFFFF3D00);
+
+        markers.add(
+          Marker(
+            point: wf.position,
+            width: showBoxes ? 95 : 36,
+            height: showBoxes ? 56 : 36,
+            child: GestureDetector(
+              onTap: () => bloc.add(SelectContact(wf)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: fireColor.withValues(alpha: 0.25),
+                      border: Border.all(color: fireColor, width: isSelected ? 2.0 : 1.2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: fireColor.withValues(alpha: 0.6),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.local_fire_department,
+                      color: fireColor,
+                      size: 14,
+                    ),
+                  ),
+                  if (showBoxes)
+                    Container(
+                      margin: const EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.85),
+                        border: Border.all(color: fireColor, width: 0.8),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: Text(
+                        '${wf.frpMw.toInt()}MW · ${wf.region}',
+                        style: TextStyle(
+                          color: fireColor,
+                          fontSize: 6.5,
+                          fontFamily: 'monospace',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    // 7. Spaceport Rocket Launches
+    if (state.activeLayers.contains(GeointLayer.spaceLaunches)) {
+      for (final sl in state.spaceLaunches) {
+        final isSelected = state.selectedContact?.id == sl.id;
+        final launchColor = isSelected ? const Color(0xFFFFD600) : const Color(0xFFFF5252);
+
+        markers.add(
+          Marker(
+            point: sl.position,
+            width: showBoxes ? 110 : 38,
+            height: showBoxes ? 56 : 38,
+            child: GestureDetector(
+              onTap: () => bloc.add(SelectContact(sl)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: launchColor.withValues(alpha: 0.25),
+                      border: Border.all(color: launchColor, width: isSelected ? 2.0 : 1.2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: launchColor.withValues(alpha: 0.6),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.rocket_launch,
+                      color: launchColor,
+                      size: 13,
+                    ),
+                  ),
+                  if (showBoxes)
+                    Container(
+                      margin: const EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.85),
+                        border: Border.all(color: launchColor, width: 0.8),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                      child: Text(
+                        sl.vehicle,
+                        style: TextStyle(
+                          color: launchColor,
+                          fontSize: 6.5,
+                          fontFamily: 'monospace',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    // 8. Measurement Waypoint Markers & Midpoint Distance Badge
+    if (state.isMeasureToolActive && state.measurementPoints.isNotEmpty) {
+      for (int i = 0; i < state.measurementPoints.length; i++) {
+        final pt = state.measurementPoints[i];
+        final label = i == 0 ? 'A' : 'B';
+        markers.add(
+          Marker(
+            point: pt,
+            width: 28,
+            height: 28,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFFFFD600),
+                border: Border.all(color: Colors.black, width: 2),
+                boxShadow: const [
+                  BoxShadow(color: Color(0xFFFFD600), blurRadius: 8, spreadRadius: 1),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+
+      // If both points exist, show midpoint badge with distance
+      if (state.measurementPoints.length == 2 && state.measuredDistanceKm != null) {
+        final p1 = state.measurementPoints[0];
+        final p2 = state.measurementPoints[1];
+        final midLat = (p1.latitude + p2.latitude) / 2.0;
+        final midLon = (p1.longitude + p2.longitude) / 2.0;
+        final km = state.measuredDistanceKm!;
+        final nm = km * 0.539957;
+
+        markers.add(
+          Marker(
+            point: LatLng(midLat, midLon),
+            width: 150,
+            height: 32,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0C0C14).withValues(alpha: 0.95),
+                border: Border.all(color: const Color(0xFFFFD600), width: 1.2),
+                borderRadius: BorderRadius.circular(4),
+                boxShadow: const [
+                  BoxShadow(color: Colors.black54, blurRadius: 6),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '${km.toStringAsFixed(1)} KM (${nm.toStringAsFixed(1)} NM)',
+                style: const TextStyle(
+                  color: Color(0xFFFFD600),
+                  fontSize: 8.5,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'monospace',
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
     return markers;
   }
 
@@ -795,3 +1046,177 @@ class _TacticalSatellitePainter extends CustomPainter {
   bool shouldRepaint(covariant _TacticalSatellitePainter old) =>
       old.color != color || old.isSelected != isSelected;
 }
+
+/// Safe, non-interactive seismic shockwave layer completely immune to
+/// flutter_map's CircleLayer multi-world infinite loop bug (issue #2052).
+class _SeismicPulseLayer extends StatelessWidget {
+  final List<EarthquakeContact> earthquakes;
+
+  const _SeismicPulseLayer({required this.earthquakes});
+
+  @override
+  Widget build(BuildContext context) {
+    final camera = MapCamera.of(context);
+
+    return MobileLayerTransformer(
+      child: CustomPaint(
+        painter: _SeismicRingsPainter(
+          earthquakes: earthquakes,
+          camera: camera,
+        ),
+        size: camera.size,
+      ),
+    );
+  }
+}
+
+class _SeismicRingsPainter extends CustomPainter {
+  final List<EarthquakeContact> earthquakes;
+  final MapCamera camera;
+
+  _SeismicRingsPainter({required this.earthquakes, required this.camera});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final eq in earthquakes) {
+      final center = camera.getOffsetFromOrigin(eq.position);
+      final radius = (eq.magnitude * 5.0).clamp(12.0, 45.0);
+      final color = eq.alertLevel == 'red'
+          ? const Color(0xFFFF1744)
+          : eq.alertLevel == 'orange'
+              ? const Color(0xFFFF9100)
+              : const Color(0xFFFFEA00);
+
+      // Outer shockwave ripple
+      canvas.drawCircle(
+        center,
+        radius * 1.5,
+        Paint()
+          ..color = color.withValues(alpha: 0.22)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0,
+      );
+
+      // Inner filled disk
+      canvas.drawCircle(
+        center,
+        radius,
+        Paint()
+          ..color = color.withValues(alpha: 0.14)
+          ..style = PaintingStyle.fill,
+      );
+
+      // Primary perimeter stroke
+      canvas.drawCircle(
+        center,
+        radius,
+        Paint()
+          ..color = color.withValues(alpha: 0.85)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.8,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _SeismicRingsPainter oldDelegate) {
+    return oldDelegate.earthquakes != earthquakes ||
+        oldDelegate.camera != camera;
+  }
+
+  // Explicitly return false to guarantee zero multi-world hit testing loops
+  @override
+  bool? hitTest(Offset position) => false;
+}
+
+/// Safe, non-interactive CCTV viewshed cone layer immune to
+/// flutter_map's PolygonLayer multi-world infinite loop bug.
+class _CctvViewshedLayer extends StatelessWidget {
+  final List<CctvCameraContact> cameras;
+  final Color hudColor;
+
+  const _CctvViewshedLayer({required this.cameras, required this.hudColor});
+
+  @override
+  Widget build(BuildContext context) {
+    final camera = MapCamera.of(context);
+
+    return MobileLayerTransformer(
+      child: CustomPaint(
+        painter: _CctvViewshedPainter(
+          cameras: cameras,
+          hudColor: hudColor,
+          camera: camera,
+        ),
+        size: camera.size,
+      ),
+    );
+  }
+}
+
+class _CctvViewshedPainter extends CustomPainter {
+  final List<CctvCameraContact> cameras;
+  final Color hudColor;
+  final MapCamera camera;
+
+  _CctvViewshedPainter({
+    required this.cameras,
+    required this.hudColor,
+    required this.camera,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final fillPaint = Paint()
+      ..color = hudColor.withValues(alpha: 0.12)
+      ..style = PaintingStyle.fill;
+    final strokePaint = Paint()
+      ..color = hudColor.withValues(alpha: 0.40)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+
+    for (final cam in cameras) {
+      const radiusKm = 1.5;
+      final halfFovRad = (cam.fovDeg / 2.0) * (math.pi / 180.0);
+      final bearingRad = cam.bearingDeg * (math.pi / 180.0);
+
+      final leftRad = bearingRad - halfFovRad;
+      final rightRad = bearingRad + halfFovRad;
+
+      final p0 = camera.getOffsetFromOrigin(cam.position);
+      final pLeft = camera.getOffsetFromOrigin(_projectPoint(cam.position, radiusKm, leftRad));
+      final pRight = camera.getOffsetFromOrigin(_projectPoint(cam.position, radiusKm, rightRad));
+
+      final path = ui.Path()
+        ..moveTo(p0.dx, p0.dy)
+        ..lineTo(pLeft.dx, pLeft.dy)
+        ..lineTo(pRight.dx, pRight.dy)
+        ..close();
+
+      canvas.drawPath(path, fillPaint);
+      canvas.drawPath(path, strokePaint);
+    }
+  }
+
+  LatLng _projectPoint(LatLng origin, double distKm, double angleRad) {
+    final deltaLat = (distKm / 111.0) * math.cos(angleRad);
+    final cosLat = math.cos(origin.latitude * (math.pi / 180.0));
+    final deltaLon =
+        (distKm / (111.0 * (cosLat.abs() < 0.01 ? 0.01 : cosLat))) *
+            math.sin(angleRad);
+
+    return LatLng(origin.latitude + deltaLat, origin.longitude + deltaLon);
+  }
+
+  @override
+  bool shouldRepaint(covariant _CctvViewshedPainter oldDelegate) {
+    return oldDelegate.cameras != cameras ||
+        oldDelegate.hudColor != hudColor ||
+        oldDelegate.camera != camera;
+  }
+
+  // Explicitly return false to guarantee zero multi-world hit testing loops
+  @override
+  bool? hitTest(Offset position) => false;
+}
+

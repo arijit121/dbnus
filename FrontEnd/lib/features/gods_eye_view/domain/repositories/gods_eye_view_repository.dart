@@ -7,4 +7,7 @@ abstract class GodsEyeViewRepository {
   Future<List<EarthquakeContact>> getEarthquakes();
   Future<List<CctvCameraContact>> getCctvCameras();
   Future<List<InfrastructureContact>> getInfrastructure();
+  Future<List<WildfireContact>> getWildfires();
+  Future<List<SpaceLaunchContact>> getSpaceLaunches();
+  List<CinematicTour> getCinematicTours();
 }
