@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/geoint_contact.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';
@@ -262,18 +264,20 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 8,
-                    height: 8,
+                    width: isCompact ? 24 : 32,
+                    height: isCompact ? 18 : 24,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: hudColor,
                       boxShadow: [
                         BoxShadow(
-                          color: hudColor.withValues(alpha: 0.8),
-                          blurRadius: 10,
-                          spreadRadius: 2,
+                          color: hudColor.withValues(alpha: 0.5),
+                          blurRadius: 12,
+                          spreadRadius: 1,
                         ),
                       ],
+                    ),
+                    child: SvgPicture.asset(
+                      AssetsConst.gevLogo,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -732,7 +736,15 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.near_me, size: 10, color: const Color(0xFFBEDDE6).withValues(alpha: 0.58)),
+            SvgPicture.asset(
+              AssetsConst.gevLocation,
+              width: 10,
+              height: 10,
+              colorFilter: ColorFilter.mode(
+                const Color(0xFFBEDDE6).withValues(alpha: 0.58),
+                BlendMode.srcIn,
+              ),
+            ),
             const SizedBox(width: 4),
             Text(
               'LOCATION',
@@ -910,7 +922,17 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                       color: const Color(0xFF00D4FF).withValues(alpha: 0.45),
                     ),
                   ),
-                  child: const Icon(Icons.mic, size: 13, color: Color(0xFF00D4FF)),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AssetsConst.gevMic,
+                      width: 12,
+                      height: 12,
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xFF00D4FF),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Column(
@@ -955,7 +977,15 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.tune, size: 10, color: const Color(0xFFBEDDE6).withValues(alpha: 0.58)),
+            SvgPicture.asset(
+              AssetsConst.gevVisualPresets,
+              width: 10,
+              height: 10,
+              colorFilter: ColorFilter.mode(
+                const Color(0xFFBEDDE6).withValues(alpha: 0.58),
+                BlendMode.srcIn,
+              ),
+            ),
             const SizedBox(width: 4),
             Text(
               'VISUAL PRESETS',

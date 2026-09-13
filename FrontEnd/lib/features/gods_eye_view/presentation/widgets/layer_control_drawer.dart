@@ -1,4 +1,6 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_bloc.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_event.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_state.dart';
@@ -47,6 +49,19 @@ class LayerControlDrawer extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      AssetsConst.gevPin,
+                      width: 18,
+                      height: 18,
+                      colorFilter: ColorFilter.mode(
+                        hudColor.withValues(alpha: 0.7),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    tooltip: 'Pin panel',
+                    onPressed: () {},
+                  ),
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.white70),
                     onPressed: () => Navigator.of(context).pop(),
