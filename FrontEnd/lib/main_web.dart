@@ -2,7 +2,9 @@ import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:flutter/foundation.dart' deferred as foundation;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:marionette_flutter/marionette_flutter.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +31,11 @@ Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
     url_strategy.usePathUrlStrategy();
   });
-  WidgetsFlutterBinding.ensureInitialized();
+   if (kDebugMode) {
+    MarionetteBinding.ensureInitialized();
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+  }
   SemanticsBinding.instance.ensureSemantics();
 
   await firebase_core.loadLibrary();
