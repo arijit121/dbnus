@@ -8,6 +8,8 @@ enum GeointType {
   earthquake,
   cctv,
   infrastructure,
+  wildfire,
+  spaceLaunch,
 }
 
 abstract class GeointContact {
@@ -214,4 +216,80 @@ class InfrastructureContact extends GeointContact {
     required this.details,
     this.capacity = 'N/A',
   }) : super(type: GeointType.infrastructure);
+}
+
+/// NASA FIRMS Thermal Anomaly / Wildfire Hotspot
+class WildfireContact extends GeointContact {
+  final double frpMw; // Fire Radiative Power in Megawatts
+  final double brightnessKelvin;
+  final String confidence; // low, nominal, high
+  final DateTime acquisitionTime;
+  final String region;
+
+  const WildfireContact({
+    required super.id,
+    required super.title,
+    required super.position,
+    required this.frpMw,
+    required this.brightnessKelvin,
+    required this.confidence,
+    required this.acquisitionTime,
+    required this.region,
+  }) : super(type: GeointType.wildfire);
+}
+
+/// Spaceport Rocket Launch & Orbital Ascent
+class SpaceLaunchContact extends GeointContact {
+  final String missionName;
+  final String vehicle;
+  final String operatorName;
+  final String site;
+  final double azimuthDeg;
+  final List<LatLng> trajectoryPoints;
+  final String status; // COUNTDOWN, ORBITAL ASCENT, STAGING, DEPLOYED
+
+  const SpaceLaunchContact({
+    required super.id,
+    required super.title,
+    required super.position,
+    required this.missionName,
+    required this.vehicle,
+    required this.operatorName,
+    required this.site,
+    required this.azimuthDeg,
+    this.trajectoryPoints = const [],
+    this.status = 'COUNTDOWN',
+  }) : super(type: GeointType.spaceLaunch);
+}
+
+/// Cinematic Tour Waypoint
+class TourWaypoint {
+  final String title;
+  final String subtitle;
+  final LatLng position;
+  final double zoom;
+  final int durationSeconds;
+
+  const TourWaypoint({
+    required this.title,
+    required this.subtitle,
+    required this.position,
+    required this.zoom,
+    this.durationSeconds = 6,
+  });
+}
+
+/// Cinematic Scene Director Tour
+class CinematicTour {
+  final String id;
+  final String name;
+  final String description;
+  final List<TourWaypoint> waypoints;
+
+  const CinematicTour({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.waypoints,
+  });
 }

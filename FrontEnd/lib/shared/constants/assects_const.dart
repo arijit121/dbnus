@@ -200,6 +200,27 @@ class AssetsConst {
   // 3D GLB Models
   static const String spaceshipGlbModel = "assets/models/3d/spaceship.glb";
   static const String damagedHelmetGlbModel = "assets/models/3d/damaged_helmet.glb";
+  static const String airplaneGlbModel = "assets/models/3d/airplane.glb";
+  static const String atr72GlbModel = "assets/models/3d/atr72.glb";
+  static const String b789GlbModel = "assets/models/3d/b789.glb";
+  static const String bell206GlbModel = "assets/models/3d/bell206.glb";
+  static const String c172GlbModel = "assets/models/3d/c172.glb";
+  static const String citation2GlbModel = "assets/models/3d/citation2.glb";
+  static const String jetGlbModel = "assets/models/3d/jet.glb";
+  static const String mq9GlbModel = "assets/models/3d/mq9.glb";
+  static const String shipGlbModel = "assets/models/3d/ship.glb";
+
+  // God's Eye View HUD SVGs
+  static const String gevLogo = "assets/icon/gev_logo.svg";
+  static const String gevPin = "assets/icon/gev_pin.svg";
+  static const String gevLocation = "assets/icon/gev_location.svg";
+  static const String gevMic = "assets/icon/gev_mic.svg";
+  static const String gevVisualPresets = "assets/icon/gev_visual_presets.svg";
+
+  // Subsea Cables & CCTV Data
+  static const String submarineCablesGeoJson = "assets/store/cable-geo.json";
+  static const String cableLandingPointsGeoJson = "assets/store/landing-point-geo.json";
+  static const String cctvSourcesShinjukuJson = "assets/store/cctv_sources.shinjuku.json";
 
   // Local AI GGUF Models
   static const String smolLmAiModelGguf = "assets/models/ai/SmolLM2-135M-Instruct-Q4_K_M.gguf";

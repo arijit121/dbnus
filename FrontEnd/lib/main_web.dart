@@ -2,7 +2,9 @@ import 'package:dbnus/core/services/JsService/provider/js_provider.dart'
     deferred as js_provider;
 import 'package:firebase_core/firebase_core.dart' deferred as firebase_core;
 import 'package:flutter/foundation.dart' deferred as foundation;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:marionette_flutter/marionette_flutter.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +31,11 @@ Future<void> main() async {
   url_strategy.loadLibrary().then((_) {
     url_strategy.usePathUrlStrategy();
   });
-  WidgetsFlutterBinding.ensureInitialized();
+   if (kDebugMode) {
+    MarionetteBinding.ensureInitialized();
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+  }
   SemanticsBinding.instance.ensureSemantics();
 
   await firebase_core.loadLibrary();
@@ -45,21 +51,18 @@ Future<void> main() async {
   });
 
   FlutterError.onError = (errorDetails) async {
-        final exception = errorDetails.exception;
+    final exception = errorDetails.exception;
     final library = errorDetails.library;
 
     AppLog.e("library: $library | error: $exception",
         tag: "FlutterError.onError");
 
-    // Rendering / foundation library errors are always fatal regardless of
-    // exception type — the framework itself is in a broken state.
-    final bool libraryFatal =
-        CrashlyticsErrorClassifier.isFatalLibrary(library);
-
     // Exception-level classification: recoverable operational errors → non-fatal.
-    final bool exceptionFatal = CrashlyticsErrorClassifier.isFatal(exception);
-    if (libraryFatal || exceptionFatal)  {
-       AppLog.e(
+    final bool exceptionFatal = errorDetails.silent
+        ? false
+        : CrashlyticsErrorClassifier.isFatal(exception);
+    if (exceptionFatal) {
+      AppLog.e(
         "${errorDetails.exception}",
         tag: "Serious Error",
         error: errorDetails.exception,
@@ -113,8 +116,7 @@ class _MyWebAppState extends State<MyWebApp> {
           if (foundation.kReleaseMode) js_provider.JsProvider.installPWA()
         ]);
       });
-      await js_provider.JsProvider.loadJs(
-          jsPath: "assets/js/storage-utils.js");
+      await js_provider.JsProvider.loadJs(jsPath: "assets/js/storage-utils.js");
     });
     super.initState();
   }

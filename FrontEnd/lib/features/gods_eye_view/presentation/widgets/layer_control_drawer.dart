@@ -1,4 +1,6 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_bloc.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_event.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_state.dart';
@@ -18,7 +20,7 @@ class LayerControlDrawer extends StatelessWidget {
     final hudColor = state.sensorMode.hudColor;
 
     return Drawer(
-      backgroundColor: const Color(0xFF0C0C14),
+      backgroundColor: const Color(0xFF09121B).withValues(alpha: 0.96),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,7 +31,7 @@ class LayerControlDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                      color: hudColor.withValues(alpha: 0.3), width: 1),
+                      color: const Color(0xFF7BBDD3).withValues(alpha: 0.25), width: 1),
                 ),
               ),
               child: Row(
@@ -40,13 +42,26 @@ class LayerControlDrawer extends StatelessWidget {
                     'DATA LAYERS',
                     style: TextStyle(
                       color: hudColor,
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'monospace',
-                      letterSpacing: 1.2,
+                      letterSpacing: 1.6,
                     ),
                   ),
                   const Spacer(),
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      AssetsConst.gevPin,
+                      width: 18,
+                      height: 18,
+                      colorFilter: ColorFilter.mode(
+                        hudColor.withValues(alpha: 0.7),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    tooltip: 'Pin panel',
+                    onPressed: () {},
+                  ),
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.white70),
                     onPressed: () => Navigator.of(context).pop(),
@@ -139,6 +154,27 @@ class LayerControlDrawer extends StatelessWidget {
                     subtitle: 'Undersea cables, datacenters, dams',
                     layer: GeointLayer.infrastructure,
                     icon: Icons.cable,
+                    hudColor: hudColor,
+                  ),
+                  _buildLayerToggle(
+                    title: 'NASA FIRMS WILDFIRES',
+                    subtitle: 'Thermal anomalies & fire radiative power',
+                    layer: GeointLayer.wildfires,
+                    icon: Icons.local_fire_department,
+                    hudColor: hudColor,
+                  ),
+                  _buildLayerToggle(
+                    title: 'SPACE LAUNCHES & ASCENT',
+                    subtitle: 'Rocket pads & orbital trajectories',
+                    layer: GeointLayer.spaceLaunches,
+                    icon: Icons.rocket_launch,
+                    hudColor: hudColor,
+                  ),
+                  _buildLayerToggle(
+                    title: 'TACTICAL ANNOTATIONS',
+                    subtitle: 'Distance rulers & waypoint markers',
+                    layer: GeointLayer.annotations,
+                    icon: Icons.straighten,
                     hudColor: hudColor,
                   ),
                   _buildLayerToggle(

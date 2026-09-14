@@ -25,19 +25,21 @@ class ContactDetailSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0C0C14).withValues(alpha: 0.95),
-        border: Border.all(color: hudColor.withValues(alpha: 0.6), width: 1.2),
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFF09121B).withValues(alpha: 0.94),
+        border: Border.all(
+          color: const Color(0xFF7BBDD3).withValues(alpha: 0.35),
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: hudColor.withValues(alpha: 0.15),
-            blurRadius: 20,
-            spreadRadius: 1,
+            color: Colors.black.withValues(alpha: 0.58),
+            blurRadius: 28,
+            offset: const Offset(0, 10),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.8),
-            blurRadius: 16,
-            spreadRadius: 2,
+            color: hudColor.withValues(alpha: 0.08),
+            blurRadius: 20,
           ),
         ],
       ),
@@ -241,6 +243,29 @@ class ContactDetailSheet extends StatelessWidget {
           _row('CATEGORY', i.category, 'CAPACITY', i.capacity, hudColor),
           _row('DETAILS', i.details, 'STRATEGIC TIER', 'TIER 1 CRITICAL',
               hudColor),
+        ],
+      );
+    } else if (contact is WildfireContact) {
+      final w = contact as WildfireContact;
+      return Column(
+        children: [
+          _row('FIRE RADIATIVE PWR', '${w.frpMw.toStringAsFixed(1)} MW', 'BRIGHTNESS',
+              '${w.brightnessKelvin.toStringAsFixed(1)} K', hudColor),
+          _row('CONFIDENCE', w.confidence.toUpperCase(), 'REGION', w.region,
+              hudColor),
+          _row('SENSOR PLATFORM', 'NASA FIRMS VIIRS', 'UTC ACQUIRED',
+              w.acquisitionTime.toUtc().toString().substring(11, 19), hudColor),
+        ],
+      );
+    } else if (contact is SpaceLaunchContact) {
+      final sl = contact as SpaceLaunchContact;
+      return Column(
+        children: [
+          _row('MISSION', sl.missionName, 'STATUS', sl.status, hudColor),
+          _row('VEHICLE', sl.vehicle, 'OPERATOR', sl.operatorName, hudColor),
+          _row('LAUNCH SITE', sl.site, 'AZIMUTH', '${sl.azimuthDeg}°', hudColor),
+          _row('TRAJECTORY VECTORS', '${sl.trajectoryPoints.length} WAYPOINTS',
+              'CORRIDOR', 'NOMINAL ASCENT', hudColor),
         ],
       );
     }

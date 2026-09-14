@@ -11,6 +11,9 @@ enum GeointLayer {
   earthquakes,
   cctv,
   infrastructure,
+  wildfires,
+  spaceLaunches,
+  annotations,
   detectionBoxes,
 }
 
@@ -126,4 +129,40 @@ class CenterOnLocation extends GodsEyeViewEvent {
 
 class ResetGlobe extends GodsEyeViewEvent {
   const ResetGlobe();
+}
+
+class ToggleMeasureTool extends GodsEyeViewEvent {
+  final bool? enable;
+  const ToggleMeasureTool([this.enable]);
+
+  @override
+  List<Object?> get props => [enable];
+}
+
+class AddMeasurementPoint extends GodsEyeViewEvent {
+  final LatLng point;
+  const AddMeasurementPoint(this.point);
+
+  @override
+  List<Object?> get props => [point];
+}
+
+class ClearMeasurements extends GodsEyeViewEvent {
+  const ClearMeasurements();
+}
+
+class StartCinematicTour extends GodsEyeViewEvent {
+  final CinematicTour tour;
+  const StartCinematicTour(this.tour);
+
+  @override
+  List<Object?> get props => [tour];
+}
+
+class NextTourWaypoint extends GodsEyeViewEvent {
+  const NextTourWaypoint();
+}
+
+class StopCinematicTour extends GodsEyeViewEvent {
+  const StopCinematicTour();
 }

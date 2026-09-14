@@ -139,6 +139,7 @@ dependencies:
   mime: any
   cupertino_ui: any
   meta: any
+  marionette_flutter: 0.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
