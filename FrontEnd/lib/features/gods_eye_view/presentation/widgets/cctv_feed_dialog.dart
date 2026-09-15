@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/geoint_contact.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';
 

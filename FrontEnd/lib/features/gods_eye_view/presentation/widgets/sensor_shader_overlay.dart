@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';
 
 /// Sensor shader overlay that simulates NVG, FLIR, CRT, Noir, and Snow

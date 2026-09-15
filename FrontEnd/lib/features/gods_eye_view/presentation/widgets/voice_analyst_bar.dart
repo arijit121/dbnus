@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';

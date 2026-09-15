@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_bloc.dart';

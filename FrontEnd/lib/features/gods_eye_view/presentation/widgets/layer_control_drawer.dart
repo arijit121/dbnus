@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_bloc.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_event.dart';
