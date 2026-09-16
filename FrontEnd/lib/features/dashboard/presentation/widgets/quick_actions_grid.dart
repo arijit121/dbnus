@@ -19,6 +19,8 @@ import 'package:dbnus/navigation/custom_router/custom_route.dart';
 import 'package:dbnus/core/network/models/razorpay_merchant_details.dart';
 import 'package:dbnus/shared/ui/organisms/grids/custom_grid_view.dart';
 
+import '../../../../core/services/JsService/provider/js_provider.dart';
+
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
 
@@ -82,6 +84,17 @@ class QuickActionsGrid extends StatelessWidget {
         },
       ),
       _QuickAction(
+        icon: AssetsConst.featherSmartphone,
+        label: "Asset Base",
+        subtitle: "CDN",
+        gradient: const [Color(0xFF8E44AD), Color(0xFF6C3483)],
+        onTap: () async {
+          String? assetBase = await JsProvider.getFlutterAssetBase();
+          AppLog.i(assetBase);
+          PopUpItems.toastMessage(assetBase ?? "", Colors.green);
+        },
+      ),
+      _QuickAction(
         icon: AssetsConst.featherDollarSign,
         label: "Razorpay",
         subtitle: "Payment",
@@ -136,6 +149,7 @@ class QuickActionsGrid extends StatelessWidget {
 
 class _QuickActionCard extends StatefulWidget {
   const _QuickActionCard({required this.action});
+
   final _QuickAction action;
 
   @override
@@ -195,7 +209,9 @@ class _QuickActionCardState extends State<_QuickActionCard>
             ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? Colors.black.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+                color: isDark
+                    ? Colors.black.withOpacity(0.3)
+                    : Colors.black.withOpacity(0.02),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -234,7 +250,9 @@ class _QuickActionCardState extends State<_QuickActionCard>
                         children: [
                           CustomText(
                             widget.action.label,
-                            color: isDark ? const Color(0xFFF8FAFC) : const Color(0xFF0F172A),
+                            color: isDark
+                                ? const Color(0xFFF8FAFC)
+                                : const Color(0xFF0F172A),
                             fontWeight: FontWeight.w600,
                             size: 13,
                             maxLines: 1,
@@ -243,7 +261,9 @@ class _QuickActionCardState extends State<_QuickActionCard>
                           4.ph,
                           CustomText(
                             widget.action.subtitle,
-                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                            color: isDark
+                                ? const Color(0xFF94A3B8)
+                                : const Color(0xFF64748B),
                             fontWeight: FontWeight.w400,
                             size: 11,
                             maxLines: 1,
@@ -254,7 +274,9 @@ class _QuickActionCardState extends State<_QuickActionCard>
                     ),
                     CustomSvgAssetImageView(
                       path: AssetsConst.featherArrowRight,
-                      color: isDark ? Colors.white.withOpacity(0.3) : ColorConst.secondaryDark.withOpacity(0.4),
+                      color: isDark
+                          ? Colors.white.withOpacity(0.3)
+                          : ColorConst.secondaryDark.withOpacity(0.4),
                       height: 14,
                       width: 14,
                     ),
