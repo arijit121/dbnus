@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:dbnus/shared/constants/assects_const.dart';
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
@@ -85,7 +85,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
     final clean = query.trim().toUpperCase();
     final match = _quickCities.firstWhere(
       (c) => (c['name'] as String).contains(clean),
-      orElse: () => {'name': clean, 'lat': 38.8951, 'lon': -77.0364, 'zoom': 10.0},
+      orElse: () =>
+          {'name': clean, 'lat': 38.8951, 'lon': -77.0364, 'zoom': 10.0},
     );
     widget.bloc.add(CenterOnLocation(
       LatLng(match['lat'] as double, match['lon'] as double),
@@ -106,10 +107,19 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
         final screenWidth = constraints.maxWidth;
         final isCompact = screenWidth < 768;
         final isVerySmall = screenWidth < 480;
+        final hudTop = isCompact ? 34.0 : 40.0;
+        final tourTop = isVerySmall ? 82.0 : 96.0;
 
         return Stack(
           fit: StackFit.expand,
           children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _buildClassificationRail(hudColor, isCompact),
+            ),
+
             // 0. Minimal Tactical Scope Corners (Non-obtrusive framing brackets)
             if (!isCockpit)
               Positioned.fill(
@@ -120,7 +130,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
 
             // 1. Top-Left Floating Title Bar (#title-bar: transparent typography with radial cyan glow)
             Positioned(
-              top: isCompact ? 16 : 28,
+              top: hudTop,
               left: isCompact ? 16 : 36,
               child: _buildFloatingTitleBar(hudColor, isCompact),
             ),
@@ -128,7 +138,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
             // 2. Top-Center Actions Navigation Bar (#top-center-actions: 36x36 round glass buttons)
             if (!isVerySmall)
               Positioned(
-                top: isCompact ? 16 : 28,
+                top: hudTop,
                 left: 0,
                 right: 0,
                 child: Align(
@@ -140,7 +150,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
             // 2b. Active Cinematic Tour Status Banner
             if (widget.state.activeTour != null)
               Positioned(
-                top: isVerySmall ? 68 : 82,
+                top: tourTop,
                 left: 0,
                 right: 0,
                 child: Align(
@@ -151,7 +161,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
 
             // 3. Top-Right Style Indicator & Zulu Clock (#style-indicator)
             Positioned(
-              top: isCompact ? 16 : 28,
+              top: hudTop,
               right: isCompact ? 16 : 36,
               child: _buildStyleIndicator(hudColor, isCompact),
             ),
@@ -174,7 +184,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: _buildUnifiedCommandDock(hudColor, screenWidth, isCompact),
+                    child: _buildUnifiedCommandDock(
+                        hudColor, screenWidth, isCompact),
                   ),
                 ),
               ),
@@ -189,6 +200,57 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildClassificationRail(Color hudColor, bool isCompact) {
+    return Container(
+      height: isCompact ? 22 : 26,
+      padding: EdgeInsets.symmetric(horizontal: isCompact ? 12 : 24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF02070B).withValues(alpha: 0.72),
+        border: Border(
+          bottom: BorderSide(
+            color: hudColor.withValues(alpha: 0.18),
+            width: 0.8,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Text(
+            'TOP SECRET // SI-TK // NOFORN',
+            style: TextStyle(
+              color: hudColor.withValues(alpha: 0.72),
+              fontSize: isCompact ? 7 : 8,
+              fontFamily: 'monospace',
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+            ),
+          ),
+          const Spacer(),
+          if (!isCompact)
+            Text(
+              'OPS-KH11 // ${widget.state.sensorMode.shortCode}',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.42),
+                fontSize: 8,
+                fontFamily: 'monospace',
+                letterSpacing: 1.0,
+              ),
+            ),
+          const Spacer(),
+          Text(
+            'PAGE 1/1',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.42),
+              fontSize: isCompact ? 7 : 8,
+              fontFamily: 'monospace',
+              letterSpacing: 1.0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -208,22 +270,38 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
         Positioned(
           top: 10,
           left: 12,
-          child: Text('┌', style: TextStyle(color: hudColor.withValues(alpha: 0.35), fontSize: 20, fontFamily: 'monospace')),
+          child: Text('┌',
+              style: TextStyle(
+                  color: hudColor.withValues(alpha: 0.35),
+                  fontSize: 20,
+                  fontFamily: 'monospace')),
         ),
         Positioned(
           top: 10,
           right: 12,
-          child: Text('┐', style: TextStyle(color: hudColor.withValues(alpha: 0.35), fontSize: 20, fontFamily: 'monospace')),
+          child: Text('┐',
+              style: TextStyle(
+                  color: hudColor.withValues(alpha: 0.35),
+                  fontSize: 20,
+                  fontFamily: 'monospace')),
         ),
         Positioned(
           bottom: 10,
           left: 12,
-          child: Text('└', style: TextStyle(color: hudColor.withValues(alpha: 0.35), fontSize: 20, fontFamily: 'monospace')),
+          child: Text('└',
+              style: TextStyle(
+                  color: hudColor.withValues(alpha: 0.35),
+                  fontSize: 20,
+                  fontFamily: 'monospace')),
         ),
         Positioned(
           bottom: 10,
           right: 12,
-          child: Text('┘', style: TextStyle(color: hudColor.withValues(alpha: 0.35), fontSize: 20, fontFamily: 'monospace')),
+          child: Text('┘',
+              style: TextStyle(
+                  color: hudColor.withValues(alpha: 0.35),
+                  fontSize: 20,
+                  fontFamily: 'monospace')),
         ),
       ],
     );
@@ -373,7 +451,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                     backgroundColor: const Color(0xFF09121B),
                     content: Text(
                       'COPIED VIEW LINK: ${widget.state.cameraCenter.latitude.toStringAsFixed(3)}N ${widget.state.cameraCenter.longitude.toStringAsFixed(3)}E // ZM: ${widget.state.cameraZoom.toStringAsFixed(1)}',
-                      style: TextStyle(color: hudColor, fontFamily: 'monospace'),
+                      style:
+                          TextStyle(color: hudColor, fontFamily: 'monospace'),
                     ),
                     duration: const Duration(seconds: 2),
                   ),
@@ -572,7 +651,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
   }
 
   /// Unified 3-Segment Command Dock (#command-dock from upstream command-dock.css)
-  Widget _buildUnifiedCommandDock(Color hudColor, double screenWidth, bool isCompact) {
+  Widget _buildUnifiedCommandDock(
+      Color hudColor, double screenWidth, bool isCompact) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -616,7 +696,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                     const SizedBox(width: 18),
                     InkWell(
                       onTap: () => setState(() => _presetsExpanded = false),
-                      child: const Icon(Icons.close, color: Colors.white54, size: 13),
+                      child: const Icon(Icons.close,
+                          color: Colors.white54, size: 13),
                     ),
                   ],
                 ),
@@ -653,9 +734,9 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           ),
           child: GlassContainer(
             blur: 28,
-            borderRadius: 14,
-            color: const Color(0xFF09121B).withValues(alpha: 0.86),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            borderRadius: 5,
+            color: const Color(0xFF050B10).withValues(alpha: 0.82),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
             child: screenWidth >= 960
                 ? _buildDesktopDockContent(hudColor)
                 : _buildCompactDockContent(hudColor),
@@ -720,7 +801,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           ],
         ),
         const SizedBox(height: 8),
-        Container(height: 1, color: const Color(0xFF7BBDD3).withValues(alpha: 0.14)),
+        Container(
+            height: 1, color: const Color(0xFF7BBDD3).withValues(alpha: 0.14)),
         const SizedBox(height: 6),
         _buildPresetsSection(hudColor),
       ],
@@ -762,7 +844,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
         Row(
           children: [
             InkWell(
-              onTap: () => setState(() => _locationsExpanded = !_locationsExpanded),
+              onTap: () =>
+                  setState(() => _locationsExpanded = !_locationsExpanded),
               borderRadius: BorderRadius.circular(6),
               child: Container(
                 height: 28,
@@ -803,17 +886,24 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                 height: 28,
                 child: TextField(
                   controller: _searchController,
-                  style: const TextStyle(color: Colors.white, fontSize: 10, fontFamily: 'monospace'),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontFamily: 'monospace'),
                   decoration: InputDecoration(
                     hintText: 'Search city...',
-                    hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4), fontSize: 9),
+                    hintStyle: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontSize: 9),
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                     filled: true,
                     fillColor: Colors.white.withValues(alpha: 0.06),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(color: Color(0xFF00D4FF), width: 0.8),
+                      borderSide: const BorderSide(
+                          color: Color(0xFF00D4FF), width: 0.8),
                     ),
                   ),
                   onSubmitted: _onSearchSubmit,
@@ -831,17 +921,20 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                       child: InkWell(
                         onTap: () {
                           widget.bloc.add(CenterOnLocation(
-                            LatLng(city['lat'] as double, city['lon'] as double),
+                            LatLng(
+                                city['lat'] as double, city['lon'] as double),
                             city['zoom'] as double,
                             label: city['name'] as String,
                           ));
                         },
                         borderRadius: BorderRadius.circular(6),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.04),
-                            border: Border.all(color: Colors.white12, width: 0.8),
+                            border:
+                                Border.all(color: Colors.white12, width: 0.8),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -869,19 +962,21 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
 
   /// Elevated AI Recon Analyst Voice Card (#gev-voice-control in command-dock.css)
   Widget _buildElevatedVoiceCenter(Color hudColor) {
+    final voiceColor = hudColor;
+
     return InkWell(
       onTap: widget.onOpenVoice,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        width: 175,
+        constraints: const BoxConstraints(minWidth: 154),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: const Color(0xFF081F2A).withValues(alpha: 0.94),
           border: Border.all(
-            color: const Color(0xFF00D4FF).withValues(alpha: 0.36),
+            color: voiceColor.withValues(alpha: 0.36),
             width: 1.0,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(5),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.56),
@@ -889,7 +984,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: const Color(0xFF00D4FF).withValues(alpha: 0.16),
+              color: voiceColor.withValues(alpha: 0.16),
               blurRadius: 18,
             ),
           ],
@@ -899,7 +994,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'AI RECON ANALYST',
+              'GEV MIC // VOICE OPS',
               style: TextStyle(
                 color: const Color(0xFFBEDDE6).withValues(alpha: 0.65),
                 fontFamily: 'monospace',
@@ -917,9 +1012,9 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFF00D4FF).withValues(alpha: 0.12),
+                    color: voiceColor.withValues(alpha: 0.12),
                     border: Border.all(
-                      color: const Color(0xFF00D4FF).withValues(alpha: 0.45),
+                      color: voiceColor.withValues(alpha: 0.45),
                     ),
                   ),
                   child: Center(
@@ -927,8 +1022,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                       AssetsConst.gevMic,
                       width: 12,
                       height: 12,
-                      colorFilter: const ColorFilter.mode(
-                        Color(0xFF00D4FF),
+                      colorFilter: ColorFilter.mode(
+                        voiceColor,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -940,7 +1035,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'VOICE OPS READY',
+                      'READY // TAP TO TALK',
                       style: TextStyle(
                         color: Color(0xFF00D4FF),
                         fontSize: 8.5,
@@ -1005,7 +1100,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ...SensorMode.values.map((mode) => _buildStyleButton(mode, hudColor)),
+              ...SensorMode.values
+                  .map((mode) => _buildStyleButton(mode, hudColor)),
               Container(
                 width: 1,
                 height: 28,
@@ -1017,7 +1113,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                 label: 'MAP',
                 isActive: _presetsExpanded,
                 hudColor: hudColor,
-                onTap: () => setState(() => _presetsExpanded = !_presetsExpanded),
+                onTap: () =>
+                    setState(() => _presetsExpanded = !_presetsExpanded),
               ),
               const SizedBox(width: 4),
               _buildDockButton(
@@ -1055,6 +1152,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
   /// Style button with exact icon, label, and shortcut key badge matching upstream controls.css
   Widget _buildStyleButton(SensorMode mode, Color hudColor) {
     final isSelected = widget.state.sensorMode == mode;
+    final modeColor = mode.hudColor;
     final iconGlyph = switch (mode) {
       SensorMode.normal => '◯',
       SensorMode.crt => '▦',
@@ -1076,17 +1174,17 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           decoration: BoxDecoration(
             color: isSelected
-                ? const Color(0xFF00D4FF).withValues(alpha: 0.18)
+                ? modeColor.withValues(alpha: 0.18)
                 : Colors.white.withValues(alpha: 0.03),
             border: Border.all(
-              color: isSelected ? const Color(0xFF00D4FF) : Colors.white10,
+              color: isSelected ? modeColor : Colors.white10,
               width: isSelected ? 1.2 : 0.8,
             ),
             borderRadius: BorderRadius.circular(7),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: const Color(0xFF00D4FF).withValues(alpha: 0.25),
+                      color: modeColor.withValues(alpha: 0.25),
                       blurRadius: 12,
                     ),
                   ]
@@ -1101,7 +1199,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                 child: Text(
                   '${mode.keyNumber}',
                   style: TextStyle(
-                    color: isSelected ? const Color(0xFF00D4FF) : Colors.white30,
+                    color: isSelected ? modeColor : Colors.white30,
                     fontSize: 7.5,
                     fontFamily: 'monospace',
                     fontWeight: FontWeight.bold,
@@ -1115,11 +1213,11 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                     iconGlyph,
                     style: TextStyle(
                       fontSize: 14,
-                      color: isSelected ? const Color(0xFF00D4FF) : Colors.white70,
+                      color: isSelected ? modeColor : Colors.white70,
                       shadows: isSelected
                           ? [
-                              const Shadow(
-                                color: Color(0xFF00D4FF),
+                              Shadow(
+                                color: modeColor,
                                 blurRadius: 8,
                               ),
                             ]
@@ -1130,10 +1228,11 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                   Text(
                     mode.displayName.toUpperCase(),
                     style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.white60,
+                      color: isSelected ? modeColor : Colors.white60,
                       fontSize: 7.5,
                       fontFamily: 'monospace',
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w500,
                       letterSpacing: 0.3,
                     ),
                     maxLines: 1,
@@ -1164,7 +1263,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
       decoration: BoxDecoration(
         color: const Color(0xFF09121B).withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: hudColor.withValues(alpha: 0.22)),
       ),
       child: Text(
         'GEOINT: $latStr $lonStr | ZM: ${widget.state.cameraZoom.toStringAsFixed(1)}$distanceStr',
@@ -1195,7 +1294,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: const Color(0xFF0C0C14).withValues(alpha: 0.72),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.12), width: 1),
+            border: Border.all(
+                color: Colors.white.withValues(alpha: 0.12), width: 1),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.4),
@@ -1203,7 +1303,7 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
               ),
             ],
           ),
-          child: Icon(icon, size: 18, color: const Color(0xFFE8EAED)),
+          child: Icon(icon, size: 18, color: hudColor),
         ),
       ),
     );
@@ -1321,10 +1421,14 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
                     const Spacer(),
                     if (widget.state.activeTour != null)
                       TextButton.icon(
-                        icon: const Icon(Icons.stop, color: Colors.redAccent, size: 16),
+                        icon: const Icon(Icons.stop,
+                            color: Colors.redAccent, size: 16),
                         label: const Text(
                           'ABORT',
-                          style: TextStyle(color: Colors.redAccent, fontFamily: 'monospace', fontSize: 11),
+                          style: TextStyle(
+                              color: Colors.redAccent,
+                              fontFamily: 'monospace',
+                              fontSize: 11),
                         ),
                         onPressed: () {
                           widget.bloc.add(const StopCinematicTour());
@@ -1408,7 +1512,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? hudColor.withValues(alpha: 0.2) : Colors.transparent,
+          color:
+              isActive ? hudColor.withValues(alpha: 0.2) : Colors.transparent,
           border: Border.all(
             color: isActive ? hudColor : Colors.white24,
             width: isActive ? 1.2 : 0.8,

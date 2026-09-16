@@ -4,7 +4,8 @@ class AssetsConst {
   static const String menuIcon = "assets/icon/menu.svg";
   static const String recordsIcon = "assets/icon/records.svg";
   static const String reportsIcon = "assets/icon/reports.svg";
-  static const String locationPinChangeIcon = "assets/icon/locationPinChange.svg";
+  static const String locationPinChangeIcon =
+      "assets/icon/locationPinChange.svg";
   static const String locationBookingsIcon = "assets/icon/locationBookings.svg";
   static const String labBookingIcon = "assets/icon/lab_booking.svg";
   static const String detailsIcon = "assets/icon/details.svg";
@@ -60,7 +61,8 @@ class AssetsConst {
   static const String otherIcon = "assets/icon/other.png";
   static const String reschedulingIcon = "assets/icon/rescheduling.svg";
   static const String editPatientInfoIcon = "assets/icon/edit_patient_info.svg";
-  static const String uploadPrescriptionIcon = "assets/icon/upload_prescription.svg";
+  static const String uploadPrescriptionIcon =
+      "assets/icon/upload_prescription.svg";
   static const String videoIcon = "assets/icon/video_icon.svg";
   static const String videoCall = "assets/icon/video_call.svg";
   static const String phoneMissed = "assets/icon/phone-missed.svg";
@@ -83,11 +85,15 @@ class AssetsConst {
   static const String helpButtonDesign = "assets/design/helpButton.png";
   static const String bookViaRight = "assets/design/bookViaRight.svg";
   static const String bookViaLeft = "assets/design/bookViaLeft.svg";
-  static const String somethingWentWrong = "assets/design/something_went_wrong.png";
-  static const String noConsultationData = "assets/design/noConsultationData.svg";
+  static const String somethingWentWrong =
+      "assets/design/something_went_wrong.png";
+  static const String noConsultationData =
+      "assets/design/noConsultationData.svg";
   static const String noLabTest = "assets/design/noLabTest.svg";
-  static const String genuPathLabsLogo = "assets/design/genu_Path_Labs_Logo.png";
-  static const String pinCodePickerDesign = "assets/design/pincodePickerDesign.png";
+  static const String genuPathLabsLogo =
+      "assets/design/genu_Path_Labs_Logo.png";
+  static const String pinCodePickerDesign =
+      "assets/design/pincodePickerDesign.png";
   static const String appRatingScreenImage =
       "assets/design/app_rating_screen_image.png";
   static const String emptyFile = "assets/icon/empty_file.svg";
@@ -110,30 +116,40 @@ class AssetsConst {
   static const String featherBriefcase = "assets/icon/feather_briefcase.svg";
   static const String featherCalendar = "assets/icon/feather_calendar.svg";
   static const String featherCamera = "assets/icon/feather_camera.svg";
-  static const String featherCheckCircle = "assets/icon/feather_check_circle.svg";
+  static const String featherCheckCircle =
+      "assets/icon/feather_check_circle.svg";
   static const String featherCheck = "assets/icon/feather_check.svg";
-  static const String featherChevronRight = "assets/icon/feather_chevron_right.svg";
-  static const String featherChevronsLeft = "assets/icon/feather_chevrons_left.svg";
-  static const String featherChevronsRight = "assets/icon/feather_chevrons_right.svg";
+  static const String featherChevronRight =
+      "assets/icon/feather_chevron_right.svg";
+  static const String featherChevronsLeft =
+      "assets/icon/feather_chevrons_left.svg";
+  static const String featherChevronsRight =
+      "assets/icon/feather_chevrons_right.svg";
   static const String featherCircle = "assets/icon/feather_circle.svg";
   static const String featherClipboard = "assets/icon/feather_clipboard.svg";
   static const String featherClock = "assets/icon/feather_clock.svg";
   static const String featherCode = "assets/icon/feather_code.svg";
   static const String featherCoffee = "assets/icon/feather_coffee.svg";
   static const String featherCompass = "assets/icon/feather_compass.svg";
-  static const String featherCornerDownLeft = "assets/icon/feather_corner_down_left.svg";
-  static const String featherCornerDownRight = "assets/icon/feather_corner_down_right.svg";
-  static const String featherCornerUpLeft = "assets/icon/feather_corner_up_left.svg";
-  static const String featherCornerUpRight = "assets/icon/feather_corner_up_right.svg";
+  static const String featherCornerDownLeft =
+      "assets/icon/feather_corner_down_left.svg";
+  static const String featherCornerDownRight =
+      "assets/icon/feather_corner_down_right.svg";
+  static const String featherCornerUpLeft =
+      "assets/icon/feather_corner_up_left.svg";
+  static const String featherCornerUpRight =
+      "assets/icon/feather_corner_up_right.svg";
   static const String featherCpu = "assets/icon/feather_cpu.svg";
   static const String featherCreditCard = "assets/icon/feather_credit_card.svg";
   static const String featherCrosshair = "assets/icon/feather_crosshair.svg";
   static const String featherDollarSign = "assets/icon/feather_dollar_sign.svg";
-  static const String featherDownloadCloud = "assets/icon/feather_download_cloud.svg";
+  static const String featherDownloadCloud =
+      "assets/icon/feather_download_cloud.svg";
   static const String featherDownload = "assets/icon/feather_download.svg";
   static const String featherEdit3 = "assets/icon/feather_edit_3.svg";
   static const String featherEdit = "assets/icon/feather_edit.svg";
-  static const String featherExternalLink = "assets/icon/feather_external_link.svg";
+  static const String featherExternalLink =
+      "assets/icon/feather_external_link.svg";
   static const String featherEye = "assets/icon/feather_eye.svg";
   static const String featherFileText = "assets/icon/feather_file_text.svg";
   static const String featherFile = "assets/icon/feather_file.svg";
@@ -155,12 +171,16 @@ class AssetsConst {
   static const String featherMapPin = "assets/icon/feather_map_pin.svg";
   static const String featherMap = "assets/icon/feather_map.svg";
   static const String featherMenu = "assets/icon/feather_menu.svg";
-  static const String featherMessageCircle = "assets/icon/feather_message_circle.svg";
-  static const String featherMessageSquare = "assets/icon/feather_message_square.svg";
+  static const String featherMessageCircle =
+      "assets/icon/feather_message_circle.svg";
+  static const String featherMessageSquare =
+      "assets/icon/feather_message_square.svg";
   static const String featherMoon = "assets/icon/feather_moon.svg";
-  static const String featherMoreHorizontal = "assets/icon/feather_more_horizontal.svg";
+  static const String featherMoreHorizontal =
+      "assets/icon/feather_more_horizontal.svg";
   static const String featherMusic = "assets/icon/feather_music.svg";
-  static const String featherNavigation2 = "assets/icon/feather_navigation_2.svg";
+  static const String featherNavigation2 =
+      "assets/icon/feather_navigation_2.svg";
   static const String featherNavigation = "assets/icon/feather_navigation.svg";
   static const String featherPackage = "assets/icon/feather_package.svg";
   static const String featherPhone = "assets/icon/feather_phone.svg";
@@ -175,8 +195,10 @@ class AssetsConst {
   static const String featherShare2 = "assets/icon/feather_share_2.svg";
   static const String featherShare = "assets/icon/feather_share.svg";
   static const String featherShield = "assets/icon/feather_shield.svg";
-  static const String featherShoppingBag = "assets/icon/feather_shopping_bag.svg";
-  static const String featherShoppingCart = "assets/icon/feather_shopping_cart.svg";
+  static const String featherShoppingBag =
+      "assets/icon/feather_shopping_bag.svg";
+  static const String featherShoppingCart =
+      "assets/icon/feather_shopping_cart.svg";
   static const String featherSmartphone = "assets/icon/feather_smartphone.svg";
   static const String featherSun = "assets/icon/feather_sun.svg";
   static const String featherSunrise = "assets/icon/feather_sunrise.svg";
@@ -186,7 +208,8 @@ class AssetsConst {
   static const String featherTrash = "assets/icon/feather_trash.svg";
   static const String featherTrendingUp = "assets/icon/feather_trending_up.svg";
   static const String featherTruck = "assets/icon/feather_truck.svg";
-  static const String featherUploadCloud = "assets/icon/feather_upload_cloud.svg";
+  static const String featherUploadCloud =
+      "assets/icon/feather_upload_cloud.svg";
   static const String featherUpload = "assets/icon/feather_upload.svg";
   static const String featherUser = "assets/icon/feather_user.svg";
   static const String featherUsers = "assets/icon/feather_users.svg";
@@ -199,7 +222,8 @@ class AssetsConst {
 
   // 3D GLB Models
   static const String spaceshipGlbModel = "assets/models/3d/spaceship.glb";
-  static const String damagedHelmetGlbModel = "assets/models/3d/damaged_helmet.glb";
+  static const String damagedHelmetGlbModel =
+      "assets/models/3d/damaged_helmet.glb";
   static const String airplaneGlbModel = "assets/models/3d/airplane.glb";
   static const String atr72GlbModel = "assets/models/3d/atr72.glb";
   static const String b789GlbModel = "assets/models/3d/b789.glb";
@@ -211,18 +235,22 @@ class AssetsConst {
   static const String shipGlbModel = "assets/models/3d/ship.glb";
 
   // God's Eye View HUD SVGs
-  static const String gevLogo = "assets/icon/gev_logo.svg";
-  static const String gevPin = "assets/icon/gev_pin.svg";
-  static const String gevLocation = "assets/icon/gev_location.svg";
-  static const String gevMic = "assets/icon/gev_mic.svg";
-  static const String gevVisualPresets = "assets/icon/gev_visual_presets.svg";
+  static const String gevLogo = "assets/icon/gev_reference/gev_logo.svg";
+  static const String gevPin = "assets/icon/gev_reference/gev_pin.svg";
+  static const String gevLocation =
+      "assets/icon/gev_reference/gev_location.svg";
+  static const String gevMic = "assets/icon/gev_reference/gev_mic.svg";
+  static const String gevVisualPresets =
+      "assets/icon/gev_reference/gev_visual_presets.svg";
 
   // Subsea Cables & CCTV Data
   static const String submarineCablesGeoJson = "assets/store/cable-geo.json";
-  static const String cableLandingPointsGeoJson = "assets/store/landing-point-geo.json";
-  static const String cctvSourcesShinjukuJson = "assets/store/cctv_sources.shinjuku.json";
+  static const String cableLandingPointsGeoJson =
+      "assets/store/landing-point-geo.json";
+  static const String cctvSourcesShinjukuJson =
+      "assets/store/cctv_sources.shinjuku.json";
 
   // Local AI GGUF Models
-  static const String smolLmAiModelGguf = "assets/models/ai/SmolLM2-135M-Instruct-Q4_K_M.gguf";
+  static const String smolLmAiModelGguf =
+      "assets/models/ai/SmolLM2-135M-Instruct-Q4_K_M.gguf";
 }
-

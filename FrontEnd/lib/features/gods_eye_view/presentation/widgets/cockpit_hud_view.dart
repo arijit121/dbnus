@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:intl/intl.dart' hide TextDirection;
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:dbnus/shared/ui/atoms/decorations/glass_container.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/geoint_contact.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';

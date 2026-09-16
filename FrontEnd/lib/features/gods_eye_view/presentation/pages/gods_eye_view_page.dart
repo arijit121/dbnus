@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' hide Path;
@@ -657,7 +657,7 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
           Marker(
             point: eq.position,
             width: showBoxes ? 90 : 36,
-            height: showBoxes ? 54 : 36,
+            height: showBoxes ? 60 : 36,
             child: GestureDetector(
               onTap: () => bloc.add(SelectContact(eq)),
               child: Column(
@@ -722,8 +722,8 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
         markers.add(
           Marker(
             point: wf.position,
-            width: showBoxes ? 95 : 36,
-            height: showBoxes ? 56 : 36,
+            width: showBoxes ? 100 : 36,
+            height: showBoxes ? 68 : 36,
             child: GestureDetector(
               onTap: () => bloc.add(SelectContact(wf)),
               child: Column(
@@ -787,7 +787,7 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
           Marker(
             point: sl.position,
             width: showBoxes ? 110 : 38,
-            height: showBoxes ? 56 : 38,
+            height: showBoxes ? 68 : 38,
             child: GestureDetector(
               onTap: () => bloc.add(SelectContact(sl)),
               child: Column(

@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 /// Sensor and optics modes mirroring the God's Eye View GLSL shader presets.
 enum SensorMode {

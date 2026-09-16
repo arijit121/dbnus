@@ -1,8 +1,9 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/geoint_contact.dart';
 import 'package:dbnus/features/gods_eye_view/domain/entities/sensor_mode.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_bloc.dart';
 import 'package:dbnus/features/gods_eye_view/presentation/bloc/gods_eye_view_event.dart';
+import 'package:dbnus/features/gods_eye_view/presentation/widgets/gev_contact_model_preview.dart';
 
 class ContactDetailSheet extends StatelessWidget {
   final GeointContact contact;
@@ -91,6 +92,12 @@ class ContactDetailSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
+
+          if (contact is FlightContact || contact is VesselContact)
+            GevContactModelPreview(
+              contact: contact,
+              hudColor: hudColor,
+            ),
 
           // Telemetry Grid
           _buildTelemetryContent(hudColor),
@@ -249,8 +256,12 @@ class ContactDetailSheet extends StatelessWidget {
       final w = contact as WildfireContact;
       return Column(
         children: [
-          _row('FIRE RADIATIVE PWR', '${w.frpMw.toStringAsFixed(1)} MW', 'BRIGHTNESS',
-              '${w.brightnessKelvin.toStringAsFixed(1)} K', hudColor),
+          _row(
+              'FIRE RADIATIVE PWR',
+              '${w.frpMw.toStringAsFixed(1)} MW',
+              'BRIGHTNESS',
+              '${w.brightnessKelvin.toStringAsFixed(1)} K',
+              hudColor),
           _row('CONFIDENCE', w.confidence.toUpperCase(), 'REGION', w.region,
               hudColor),
           _row('SENSOR PLATFORM', 'NASA FIRMS VIIRS', 'UTC ACQUIRED',
@@ -263,7 +274,8 @@ class ContactDetailSheet extends StatelessWidget {
         children: [
           _row('MISSION', sl.missionName, 'STATUS', sl.status, hudColor),
           _row('VEHICLE', sl.vehicle, 'OPERATOR', sl.operatorName, hudColor),
-          _row('LAUNCH SITE', sl.site, 'AZIMUTH', '${sl.azimuthDeg}°', hudColor),
+          _row(
+              'LAUNCH SITE', sl.site, 'AZIMUTH', '${sl.azimuthDeg}°', hudColor),
           _row('TRAJECTORY VECTORS', '${sl.trajectoryPoints.length} WAYPOINTS',
               'CORRIDOR', 'NOMINAL ASCENT', hudColor),
         ],
@@ -276,8 +288,7 @@ class ContactDetailSheet extends StatelessWidget {
     );
   }
 
-  Widget _row(
-      String k1, String v1, String k2, String v2, Color hudColor) {
+  Widget _row(String k1, String v1, String k2, String v2, Color hudColor) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
