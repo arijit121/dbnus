@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'package:dbnus/core/services/context_service.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ScreenUtils {
   static double devicePixelRatio() =>
@@ -39,6 +40,91 @@ class ScreenUtils {
     } catch (e) {
       return 1;
     }
+  }
+
+  static bool isWidgetVisible(BuildContext? context) {
+    if (context == null) return false;
+
+    final renderObject = context.findRenderObject();
+
+    if (renderObject is! RenderBox ||
+        !renderObject.hasSize ||
+        !renderObject.attached) {
+      return false;
+    }
+
+    final size = renderObject.size;
+
+    if (size.width <= 0 || size.height <= 0) {
+      return false;
+    }
+
+    final position = renderObject.localToGlobal(Offset.zero);
+
+    final screenSize = MediaQuery.sizeOf(context);
+
+    final rect = Rect.fromLTWH(
+      position.dx,
+      position.dy,
+      size.width,
+      size.height,
+    );
+
+    final screenRect = Rect.fromLTWH(
+      0,
+      0,
+      screenSize.width,
+      screenSize.height,
+    );
+
+    return rect.overlaps(screenRect);
+  }
+
+  static double getVisiblePercentage(BuildContext? context) {
+    if (context == null) return 0.0;
+
+    final renderObject = context.findRenderObject();
+
+    if (renderObject is! RenderBox ||
+        !renderObject.hasSize ||
+        !renderObject.attached) {
+      return 0.0;
+    }
+
+    final size = renderObject.size;
+
+    if (size.width <= 0 || size.height <= 0) {
+      return 0.0;
+    }
+
+    final position = renderObject.localToGlobal(Offset.zero);
+    final screenSize = MediaQuery.sizeOf(context);
+
+    final widgetRect = Rect.fromLTWH(
+      position.dx,
+      position.dy,
+      size.width,
+      size.height,
+    );
+
+    final screenRect = Rect.fromLTWH(
+      0,
+      0,
+      screenSize.width,
+      screenSize.height,
+    );
+
+    final intersection = widgetRect.intersect(screenRect);
+
+    if (intersection.isEmpty) {
+      return 0.0;
+    }
+
+    final visibleArea = intersection.width * intersection.height;
+
+    final totalArea = size.width * size.height;
+
+    return ((visibleArea / totalArea) * 100).clamp(0.0, 100.0);
   }
 }
 
@@ -106,6 +192,63 @@ class ResponsiveBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: _buildWithConstraints);
+  }
+}
+
+class CustomVisibilityDetector extends StatefulWidget {
+  final Widget child;
+  final void Function(double visiblePercentage) onVisibilityChanged;
+  final double minVisibleFraction;
+  final bool oneTime;
+
+  const CustomVisibilityDetector({
+    super.key,
+    required this.child,
+    required this.onVisibilityChanged,
+    this.minVisibleFraction = 0.3,
+    this.oneTime = true,
+  });
+
+  @override
+  State<CustomVisibilityDetector> createState() =>
+      _CustomVisibilityDetectorState();
+}
+
+class _CustomVisibilityDetectorState extends State<CustomVisibilityDetector> {
+  bool _hasLogged = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      if (ScreenUtils.isWidgetVisible(context)) {
+        double visiblePercentage =
+            ScreenUtils.getVisiblePercentage(context) / 100;
+        if (visiblePercentage >= widget.minVisibleFraction &&
+            (!widget.oneTime || !_hasLogged)) {
+          widget.onVisibilityChanged(visiblePercentage);
+          _hasLogged = true;
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key(widget.child.hashCode.toString()),
+      onVisibilityChanged: (visibilityInfo) {
+        var visiblePercentage = visibilityInfo.visibleFraction;
+        if (visiblePercentage >= widget.minVisibleFraction &&
+            (!widget.oneTime || !_hasLogged)) {
+          widget.onVisibilityChanged(visiblePercentage);
+          _hasLogged = true;
+        }
+      },
+      child: widget.child,
+    );
   }
 }
 
