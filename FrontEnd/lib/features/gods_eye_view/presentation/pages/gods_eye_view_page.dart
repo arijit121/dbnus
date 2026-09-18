@@ -152,6 +152,23 @@ class _GodsEyeViewViewState extends State<_GodsEyeViewView> {
             body: Stack(
               fit: StackFit.expand,
               children: [
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.12),
+                            Colors.black.withValues(alpha: 0.04),
+                            Colors.black.withValues(alpha: 0.18),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 // 1. Map Canvas with Sensor Optics Filter
                 SensorShaderOverlay(
                   mode: state.sensorMode,

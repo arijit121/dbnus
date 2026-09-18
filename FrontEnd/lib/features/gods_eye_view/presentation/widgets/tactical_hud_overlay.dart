@@ -169,8 +169,8 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
             // 4. Left Floating Data Layers Accordion Trigger (#left-panel-stack)
             if (!isCockpit && !isCompact)
               Positioned(
-                top: 140,
-                left: 36,
+                top: 112,
+                left: 28,
                 child: _buildFloatingDataLayersButton(hudColor),
               ),
 
@@ -607,32 +607,40 @@ class _TacticalHudOverlayState extends State<TacticalHudOverlay> {
   Widget _buildFloatingDataLayersButton(Color hudColor) {
     return GlassContainer(
       blur: 24,
-      borderRadius: 8,
-      color: const Color(0xFF09121B).withValues(alpha: 0.86),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      borderRadius: 999,
+      color: const Color(0xFF09121B).withValues(alpha: 0.82),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       child: InkWell(
         onTap: widget.onOpenLayers,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.layers_outlined, size: 14, color: hudColor),
+            Icon(Icons.layers_outlined, size: 13, color: hudColor),
             const SizedBox(width: 6),
-            const Text(
+            Text(
               'DATA LAYERS',
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 9,
+                color: Colors.white.withValues(alpha: 0.9),
+                fontSize: 8.2,
                 fontFamily: 'monospace',
-                letterSpacing: 1.4,
+                letterSpacing: 1.2,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 8),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: hudColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(4),
+                color: const Color(0xFF0C0C14),
+                border: Border.all(color: hudColor.withValues(alpha: 0.4), width: 0.8),
+                borderRadius: BorderRadius.circular(999),
+                boxShadow: [
+                  BoxShadow(
+                    color: hudColor.withValues(alpha: 0.18),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ],
               ),
               child: Text(
                 '${widget.state.activeLayers.length}',
