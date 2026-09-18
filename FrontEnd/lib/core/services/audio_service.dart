@@ -1,6 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 
 import 'package:dbnus/shared/extensions/logger_extension.dart';
+import 'package:flutter/foundation.dart';
+
+import 'JsService/provider/js_provider.dart';
 
 class AudioService {
   // Private constructor for singleton
@@ -31,13 +34,29 @@ class AudioService {
   Future<void> playFromAsset(String assetPath, {bool loop = false}) async {
     try {
       await _initNewPlayer();
-      await _audioPlayer?.play(AssetSource(assetPath));
+      if (kIsWeb) {
+        // For the web: It will derive the CDN base URL to construct the URL source.
+        final assetBase = await JsProvider.getFlutterAssetBase();
+        String base = (assetBase != null && assetBase.isNotEmpty) ? assetBase : '/';
+        if (!base.endsWith('/')) base = '$base/';
+        final cleanPath = assetPath.startsWith('assets/')
+            ? 'assets/$assetPath'
+            : 'assets/assets/$assetPath';
+        final fullUrl = '$base$cleanPath';
+        // For the web: Plays audio using a URL source.
+        await _audioPlayer?.play(UrlSource(fullUrl));
+      } else {
+        // Mobile (Android / iOS) plays audio using the local offline bundle.
+        await _audioPlayer?.play(AssetSource(assetPath));
+      }
       _setLoopMode(loop);
     } catch (e, stacktrace) {
-      AppLog.e(e.toString(),
-          error: e,
-          stackTrace: stacktrace,
-          tag: "Error playing asset: $assetPath");
+      AppLog.e(
+        e.toString(),
+        error: e,
+        stackTrace: stacktrace,
+        tag: "Error playing asset: $assetPath",
+      );
     }
   }
 

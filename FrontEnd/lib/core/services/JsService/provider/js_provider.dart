@@ -308,7 +308,7 @@ class JsProvider {
     return null;
   }
 
-  Future<bool?> isEligibleForOpenStoreApp() async {
+  static Future<bool?> isEligibleForOpenStoreApp() async {
     try {
       String jsPath = "assets/js/store_app.js";
       final result = await jsHelper.loadJs<bool>(
@@ -323,7 +323,7 @@ class JsProvider {
     return null;
   }
 
-  Future<bool?> openStoreApp() async {
+  static Future<bool?> openStoreApp() async {
     try {
       String jsPath = "assets/js/store_app.js";
       final result = await jsHelper.loadJs<bool>(
@@ -335,5 +335,20 @@ class JsProvider {
       AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
     }
     return null;
+  }
+
+  static Future<String?> getFlutterAssetBase() async {
+    try {
+      const String jsPath = "assets/js/get_flutter_asset_base.js";
+      final result = await jsHelper.loadJs<String>(
+        jsPath: jsPath,
+        jsFunctionName: 'getFlutterAssetBase',
+        usePromise: true,
+      );
+      return result;
+    } catch (e, stackTrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
+      return null;
+    }
   }
 }
