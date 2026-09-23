@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:dbnus/core/services/context_service.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../extensions/logger_extension.dart';
+
 class ScreenUtils {
   static double devicePixelRatio() =>
       MediaQuery.of(CurrentContext().context).devicePixelRatio;
@@ -43,88 +45,98 @@ class ScreenUtils {
   }
 
   static bool isWidgetVisible(BuildContext? context) {
-    if (context == null) return false;
+    try {
+      if (context == null) return false;
 
-    final renderObject = context.findRenderObject();
+      final renderObject = context.findRenderObject();
 
-    if (renderObject is! RenderBox ||
-        !renderObject.hasSize ||
-        !renderObject.attached) {
+      if (renderObject is! RenderBox ||
+          !renderObject.hasSize ||
+          !renderObject.attached) {
+        return false;
+      }
+
+      final size = renderObject.size;
+
+      if (size.width <= 0 || size.height <= 0) {
+        return false;
+      }
+
+      final position = renderObject.localToGlobal(Offset.zero);
+
+      final screenSize = MediaQuery.sizeOf(context);
+
+      final rect = Rect.fromLTWH(
+        position.dx,
+        position.dy,
+        size.width,
+        size.height,
+      );
+
+      final screenRect = Rect.fromLTWH(
+        0,
+        0,
+        screenSize.width,
+        screenSize.height,
+      );
+
+      return rect.overlaps(screenRect);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return false;
     }
-
-    final size = renderObject.size;
-
-    if (size.width <= 0 || size.height <= 0) {
-      return false;
-    }
-
-    final position = renderObject.localToGlobal(Offset.zero);
-
-    final screenSize = MediaQuery.sizeOf(context);
-
-    final rect = Rect.fromLTWH(
-      position.dx,
-      position.dy,
-      size.width,
-      size.height,
-    );
-
-    final screenRect = Rect.fromLTWH(
-      0,
-      0,
-      screenSize.width,
-      screenSize.height,
-    );
-
-    return rect.overlaps(screenRect);
   }
 
   static double getVisiblePercentage(BuildContext? context) {
-    if (context == null) return 0.0;
+    try {
+      if (context == null) return 0.0;
 
-    final renderObject = context.findRenderObject();
+      final renderObject = context.findRenderObject();
 
-    if (renderObject is! RenderBox ||
-        !renderObject.hasSize ||
-        !renderObject.attached) {
+      if (renderObject is! RenderBox ||
+          !renderObject.hasSize ||
+          !renderObject.attached) {
+        return 0.0;
+      }
+
+      final size = renderObject.size;
+
+      if (size.width <= 0 || size.height <= 0) {
+        return 0.0;
+      }
+
+      final position = renderObject.localToGlobal(Offset.zero);
+      final screenSize = MediaQuery.sizeOf(context);
+
+      final widgetRect = Rect.fromLTWH(
+        position.dx,
+        position.dy,
+        size.width,
+        size.height,
+      );
+
+      final screenRect = Rect.fromLTWH(
+        0,
+        0,
+        screenSize.width,
+        screenSize.height,
+      );
+
+      final intersection = widgetRect.intersect(screenRect);
+
+      if (intersection.isEmpty) {
+        return 0.0;
+      }
+
+      final visibleArea = intersection.width * intersection.height;
+
+      final totalArea = size.width * size.height;
+
+      return ((((visibleArea / totalArea) * 100).clamp(0.1, 100.0)) / 100);
+    } catch (e, stacktrace) {
+      AppLog.e(e.toString(), error: e, stackTrace: stacktrace);
       return 0.0;
     }
-
-    final size = renderObject.size;
-
-    if (size.width <= 0 || size.height <= 0) {
-      return 0.0;
-    }
-
-    final position = renderObject.localToGlobal(Offset.zero);
-    final screenSize = MediaQuery.sizeOf(context);
-
-    final widgetRect = Rect.fromLTWH(
-      position.dx,
-      position.dy,
-      size.width,
-      size.height,
-    );
-
-    final screenRect = Rect.fromLTWH(
-      0,
-      0,
-      screenSize.width,
-      screenSize.height,
-    );
-
-    final intersection = widgetRect.intersect(screenRect);
-
-    if (intersection.isEmpty) {
-      return 0.0;
-    }
-
-    final visibleArea = intersection.width * intersection.height;
-
-    final totalArea = size.width * size.height;
-
-    return ((visibleArea / totalArea) * 100).clamp(0.0, 100.0);
   }
 }
 
@@ -223,8 +235,7 @@ class _CustomVisibilityDetectorState extends State<CustomVisibilityDetector> {
       if (!mounted) return;
 
       if (ScreenUtils.isWidgetVisible(context)) {
-        double visiblePercentage =
-            ScreenUtils.getVisiblePercentage(context) / 100;
+        double visiblePercentage = ScreenUtils.getVisiblePercentage(context);
         if (visiblePercentage >= widget.minVisibleFraction &&
             (!widget.oneTime || !_hasLogged)) {
           widget.onVisibilityChanged(visiblePercentage);
