@@ -9,7 +9,7 @@ import 'package:vibration/vibration_presets.dart';
 export 'package:vibration/vibration.dart' show Vibration;
 export 'package:vibration/vibration_presets.dart' show VibrationPreset;
 
-class VibrationHapticFeedback {
+class HapticFeedbackService {
   static Future<void> light() async {
     try {
       await HapticFeedback.lightImpact();
@@ -51,7 +51,7 @@ class VibrationHapticFeedback {
   }
 }
 
-class VibrationHapticFeedbackV2 {
+class VibrationService {
   /// Light impact vibration feedback
   static Future<void> light({int duration = 20, int amplitude = 60}) async {
     if (kIsWeb) return;
