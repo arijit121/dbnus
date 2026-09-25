@@ -102,7 +102,7 @@ class _NotificationsSectionState extends State<NotificationsSection> {
             subtitle: "Haptic Feedback",
             color: const Color(0xFFE67E22),
             onTap: () {
-              VibrationService.selection();
+              VibrationService.heavy();
             },
           ),
         ],

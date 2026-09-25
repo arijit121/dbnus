@@ -51,42 +51,22 @@ class HapticFeedbackService {
 class VibrationService {
   /// Light impact vibration feedback
   static Future<void> light({int duration = 20, int amplitude = 60}) async {
-    if (kIsWeb) return;
-    try {
-      await Vibration.vibrate(duration: duration, amplitude: amplitude);
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
+    await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Medium impact vibration feedback
   static Future<void> medium({int duration = 40, int amplitude = 128}) async {
-    if (kIsWeb) return;
-    try {
-      await Vibration.vibrate(duration: duration, amplitude: amplitude);
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
+    await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Heavy impact vibration feedback
   static Future<void> heavy({int duration = 60, int amplitude = 255}) async {
-    if (kIsWeb) return;
-    try {
-      await Vibration.vibrate(duration: duration, amplitude: amplitude);
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
+    await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Selection / click vibration feedback
   static Future<void> selection({int duration = 10, int amplitude = 40}) async {
-    if (kIsWeb) return;
-    try {
-      await Vibration.vibrate(duration: duration, amplitude: amplitude);
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
+    await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Standard vibration with custom duration, pattern, amplitude, or preset
@@ -101,13 +81,17 @@ class VibrationService {
   }) async {
     if (kIsWeb) return;
     try {
+      if (!await hasVibrator()) return;
       await cancel();
+
+      final canControlAmplitude = await hasAmplitudeControl();
+
       await Vibration.vibrate(
         duration: duration,
         pattern: pattern,
         repeat: repeat,
-        intensities: intensities,
-        amplitude: amplitude,
+        intensities: canControlAmplitude ? intensities : const [],
+        amplitude: canControlAmplitude ? amplitude : -1,
         sharpness: sharpness,
         preset: preset,
       );
