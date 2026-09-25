@@ -7,7 +7,7 @@ import 'package:dbnus/core/models/custom_notification_model.dart';
 import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/notification_handler.dart';
 
-import '../../../../shared/extensions/vibration_haptic_feedback.dart';
+import '../../../../core/services/vibration_haptic_feedback.dart';
 import 'order_tool_tile.dart';
 
 class NotificationsSection extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import 'logger_extension.dart';
+import '../../shared/extensions/logger_extension.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:vibration/vibration.dart';
