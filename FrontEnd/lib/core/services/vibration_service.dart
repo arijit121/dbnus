@@ -6,66 +6,24 @@ import 'package:flutter/foundation.dart';
 import 'package:vibration/vibration.dart';
 import 'package:vibration/vibration_presets.dart';
 
-class HapticFeedbackService {
-  static Future<void> light() async {
-    try {
-      await HapticFeedback.lightImpact();
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
-  }
-
-  static Future<void> medium() async {
-    try {
-      await HapticFeedback.mediumImpact();
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
-  }
-
-  static Future<void> heavy() async {
-    try {
-      await HapticFeedback.heavyImpact();
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
-  }
-
-  static Future<void> selection() async {
-    try {
-      await HapticFeedback.selectionClick();
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
-  }
-
-  static Future<void> vibrate() async {
-    try {
-      await HapticFeedback.vibrate();
-    } catch (e, stackTrace) {
-      AppLog.e(e.toString(), error: e, stackTrace: stackTrace);
-    }
-  }
-}
-
 class VibrationService {
   /// Light impact vibration feedback
-  static Future<void> light({int duration = 20, int amplitude = 60}) async {
+  static Future<void> light({int duration = 60, int amplitude = 128}) async {
     await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Medium impact vibration feedback
-  static Future<void> medium({int duration = 40, int amplitude = 128}) async {
+  static Future<void> medium({int duration = 100, int amplitude = 192}) async {
     await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Heavy impact vibration feedback
-  static Future<void> heavy({int duration = 60, int amplitude = 255}) async {
+  static Future<void> heavy({int duration = 180, int amplitude = 255}) async {
     await vibrate(duration: duration, amplitude: amplitude);
   }
 
   /// Selection / click vibration feedback
-  static Future<void> selection({int duration = 10, int amplitude = 40}) async {
+  static Future<void> selection({int duration = 40, int amplitude = 80}) async {
     await vibrate(duration: duration, amplitude: amplitude);
   }
 
