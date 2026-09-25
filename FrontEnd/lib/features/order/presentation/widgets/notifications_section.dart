@@ -7,6 +7,7 @@ import 'package:dbnus/core/models/custom_notification_model.dart';
 import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/notification_handler.dart';
 
+import '../../../../shared/extensions/vibration_haptic_feedback.dart';
 import 'order_tool_tile.dart';
 
 class NotificationsSection extends StatefulWidget {
@@ -92,6 +93,16 @@ class _NotificationsSectionState extends State<NotificationsSection> {
                 ),
                 notificationId: notificationId,
               );
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.featherLock,
+            title: "Vibration",
+            subtitle: "Haptic Feedback",
+            color: const Color(0xFFE67E22),
+            onTap: () {
+              VibrationHapticFeedbackV2.selection();
             },
           ),
         ],
