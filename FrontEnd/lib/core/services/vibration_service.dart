@@ -6,9 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:vibration/vibration.dart';
 import 'package:vibration/vibration_presets.dart';
 
-export 'package:vibration/vibration.dart' show Vibration;
-export 'package:vibration/vibration_presets.dart' show VibrationPreset;
-
 class HapticFeedbackService {
   static Future<void> light() async {
     try {
