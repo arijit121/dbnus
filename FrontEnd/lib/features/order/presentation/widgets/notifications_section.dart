@@ -7,6 +7,7 @@ import 'package:dbnus/core/models/custom_notification_model.dart';
 import 'package:dbnus/core/services/download_handler.dart';
 import 'package:dbnus/core/services/notification_handler.dart';
 
+import '../../../../core/services/audio_service.dart';
 import '../../../../core/services/vibration_service.dart';
 import 'order_tool_tile.dart';
 
@@ -103,6 +104,28 @@ class _NotificationsSectionState extends State<NotificationsSection> {
             color: const Color(0xFFE67E22),
             onTap: () {
               VibrationService.heavy();
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.soundAlarm,
+            title: "Audio",
+            subtitle: "Play From Url",
+            color: const Color(0xFFE67E22),
+            onTap: () {
+              AudioService.getInstance.playFromUrl(
+                  "https://asset.sastasundar.com/incom/asset/tone/success_v2.mp3");
+            },
+          ),
+          _buildDivider(),
+          OrderToolTile(
+            icon: AssetsConst.soundAlarm,
+            title: "Audio",
+            subtitle: "Play From Asset",
+            color: const Color(0xFFE67E22),
+            onTap: () {
+              AudioService.getInstance
+                  .playFromAsset("sound/slow_spring_board.mp3");
             },
           ),
         ],
