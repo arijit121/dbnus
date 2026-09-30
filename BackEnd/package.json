@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/c99rahul/ts-node-express#readme",
   "dependencies": {
+    "@google-analytics/data": "^7.0.0",
     "@prisma/client": "^6.19.2",
     "axios": "^1.13.6",
     "cors": "^2.8.5",
