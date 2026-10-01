@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:dbnus/core/services/value_handler.dart';
+import 'package:flutter/foundation.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
@@ -6,7 +10,7 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/color_exe.dart';
 import 'package:dbnus/shared/ui/atoms/text/custom_text.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final String? hintText;
   final String obscuringCharacter;
@@ -80,126 +84,141 @@ class CustomTextFormField extends StatelessWidget {
         );
 
   @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  Widget _widget() => TextFormField(
+      obscuringCharacter: widget.obscuringCharacter,
+      onTapOutside: (_) {
+        widget.onTapOutside?.call();
+      },
+      textInputAction: widget.textInputAction,
+      autofocus: widget.autofocus,
+      cursorColor: ColorConst.primaryDark,
+      cursorErrorColor: ColorConst.primaryDark,
+      onChanged: widget.onChanged,
+      readOnly: widget.readOnly,
+      controller: widget.controller,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
+      maxLength: widget.maxLength,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      onTap: widget.onTap,
+      enabled: widget.enabled,
+      focusNode: widget.focusNode,
+      scrollPadding: widget.scrollPadding,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      maxLines: widget.maxLines,
+      minLines:
+          ValueHandler.isNonZeroNumericValue(widget.fieldHeight) ? null : 1,
+      expands:
+          ValueHandler.isNonZeroNumericValue(widget.fieldHeight) ? true : false,
+      textAlign: widget.textAlign ?? TextAlign.start,
+      obscureText: widget.obscureText,
+      style: customizeTextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+          fontColor: ColorConst.primaryDark),
+      decoration: InputDecoration(
+        errorText: widget.errorText,
+        counterText: "",
+        prefixIcon: widget.prefix,
+        suffixIcon: widget.suffix,
+        labelText:
+            (widget.label?.isNotEmpty == true) ? widget.label ?? "" : null,
+        hintText: widget.hintText,
+        hintMaxLines: widget.maxLines,
+        filled: widget.filled,
+        fillColor: widget.fillColor,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        errorStyle: customizeTextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            fontColor: ColorConst.red),
+        hintStyle: customizeTextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            fontColor: ColorConst.blueGrey),
+        labelStyle: customizeTextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            fontColor: ColorConst.blueGrey),
+        floatingLabelStyle: customizeTextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 17,
+            fontColor: ColorConst.baseHexColor),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: BorderSide(
+            color: widget.selectedBorderColor ?? Colors.blue,
+            width: 1,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: const BorderSide(
+            color: Colors.white,
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: BorderSide(
+            color: widget.borderColor ?? ColorConst.grey,
+            width: 1,
+          ),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: const BorderSide(
+            width: 1,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: const BorderSide(
+            color: ColorConst.red,
+            width: 1,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius,
+          borderSide: const BorderSide(
+            color: ColorConst.red,
+            width: 1,
+          ),
+        ),
+      ));
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title?.isNotEmpty == true)
+        if (widget.title?.isNotEmpty == true)
           Padding(
             padding: const EdgeInsets.only(bottom: 5.0),
-            child: CustomText(title ?? "",
-                color: titleColor ?? ColorConst.primaryDark,
+            child: CustomText(widget.title ?? "",
+                color: widget.titleColor ?? ColorConst.primaryDark,
                 size: 14,
                 fontWeight: FontWeight.w400),
           ),
         SizedBox(
-          height: ValueHandler.isNonZeroNumericValue(fieldHeight)
-              ? fieldHeight
+          height: ValueHandler.isNonZeroNumericValue(widget.fieldHeight)
+              ? widget.fieldHeight
               : null,
-          child: TextFormField(
-              obscuringCharacter: obscuringCharacter,
-              onTapOutside: (_) {
-                onTapOutside?.call();
-              },
-              textInputAction: textInputAction,
-              autofocus: autofocus,
-              cursorColor: ColorConst.primaryDark,
-              cursorErrorColor: ColorConst.primaryDark,
-              onChanged: onChanged,
-              readOnly: readOnly,
-              controller: controller,
-              validator: validator,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
-              maxLength: maxLength,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              onTap: onTap,
-              enabled: enabled,
-              focusNode: focusNode,
-              scrollPadding: scrollPadding,
-              onFieldSubmitted: onFieldSubmitted,
-              maxLines: maxLines,
-              minLines:
-                  ValueHandler.isNonZeroNumericValue(fieldHeight) ? null : 1,
-              expands: ValueHandler.isNonZeroNumericValue(fieldHeight)
-                  ? true
-                  : false,
-              textAlign: textAlign ?? TextAlign.start,
-              obscureText: obscureText,
-              style: customizeTextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  fontColor: ColorConst.primaryDark),
-              decoration: InputDecoration(
-                errorText: errorText,
-                counterText: "",
-                prefixIcon: prefix,
-                suffixIcon: suffix,
-                labelText: (label?.isNotEmpty == true) ? label ?? "" : null,
-                hintText: hintText,
-                hintMaxLines: maxLines,
-                filled: filled,
-                fillColor: fillColor,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                errorStyle: customizeTextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    fontColor: ColorConst.red),
-                hintStyle: customizeTextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    fontColor: ColorConst.blueGrey),
-                labelStyle: customizeTextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    fontColor: ColorConst.blueGrey),
-                floatingLabelStyle: customizeTextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 17,
-                    fontColor: ColorConst.baseHexColor),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: BorderSide(
-                    color: selectedBorderColor ?? Colors.blue,
-                    width: 1,
-                  ),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: const BorderSide(
-                    color: Colors.white,
-                    width: 1,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: BorderSide(
-                    color: borderColor ?? ColorConst.grey,
-                    width: 1,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: const BorderSide(
-                    width: 1,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: const BorderSide(
-                    color: ColorConst.red,
-                    width: 1,
-                  ),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: borderRadius,
-                  borderSide: const BorderSide(
-                    color: ColorConst.red,
-                    width: 1,
-                  ),
-                ),
-              )),
+          child: !kIsWeb &&
+                  Platform.isIOS &&
+                  widget.keyboardType != null &&
+                  !(([
+                    TextInputType.text,
+                    TextInputType.emailAddress,
+                    TextInputType.visiblePassword
+                  ]).contains(widget.keyboardType))
+              ? KeyboardActions.done(child: _widget())
+              : _widget(),
         ),
       ],
     );
