@@ -29,7 +29,7 @@ class FormsSection extends StatelessWidget {
         children: [
           const CustomTextFormField(fieldHeight: 200),
           16.ph,
-          const CustomTextFormField(keyboardType: TextInputType.phone,),
+          const CustomTextFormField(keyboardType: TextInputType.phone),
           16.ph,
           const CustomTextFormField(maxLines: 1),
           16.ph,
