@@ -6,6 +6,8 @@ import 'package:dbnus/shared/extensions/logger_extension.dart';
 import 'package:dbnus/shared/ui/molecules/dropdowns/custom_dropdown.dart';
 import 'package:dbnus/shared/ui/atoms/inputs/custom_text_formfield.dart';
 
+import '../../../../core/localization/extension/localization_ext.dart';
+
 class FormsSection extends StatelessWidget {
   const FormsSection({super.key});
 
@@ -29,7 +31,9 @@ class FormsSection extends StatelessWidget {
         children: [
           const CustomTextFormField(fieldHeight: 200),
           16.ph,
-          const CustomTextFormField(keyboardType: TextInputType.phone),
+          CustomTextFormField(
+              keyboardType: TextInputType.phone,
+              hintText: context.l10n.phone_number),
           16.ph,
           const CustomTextFormField(maxLines: 1),
           16.ph,

@@ -145,8 +145,12 @@ class _MyWebAppState extends State<MyWebApp> {
         builder: (context, localizationState) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            locale: localizationState.locale.value,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            locale: localizationState.locale.value ??
+                LocalizationUtils.supportedLocales.first,
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              ...GlobalMaterialLocalizations.delegates,
+            ],
             supportedLocales: LocalizationUtils.supportedLocales,
             title: TextUtils.appTitle,
             scrollBehavior: const MaterialScrollBehavior().copyWith(
