@@ -271,9 +271,13 @@ class ValueHandler {
     return false;
   }
 
-  static double dp({required double val, required int places}) {
+  static double dp({required double val, int places = 2}) {
     String temp = val.toStringAsFixed(places);
     return double.parse(temp);
+  }
+
+  static num numDp({required num val, int places = 2}) {
+    return val is int ? val : dp(val: val.toDouble(), places: places);
   }
 
   static String stringToBase64({required String value}) {

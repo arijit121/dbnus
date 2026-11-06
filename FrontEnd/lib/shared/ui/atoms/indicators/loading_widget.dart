@@ -138,3 +138,29 @@ void hideLoading({BuildContext? loadingDialogContext}) {
     );
   }
 }
+
+/// Executes an asynchronous [function] while showing the global loading dialog,
+/// and automatically hides the dialog once [function] completes or throws.
+///
+/// Returns the result of [function].
+///
+/// **Example Usage:**
+/// ```dart
+/// final result = await showHideLoading(
+///   function: () async {
+///     return await fetchSomeData();
+///   },
+/// );
+/// ```
+Future<T> showHideLoading<T>({
+  required FutureOr<T> Function() function,
+  Duration? timeOut,
+}) async {
+  final dialogContext = await showLoading(timeOut: timeOut);
+  try {
+    return await function();
+  } finally {
+    hideLoading(loadingDialogContext: dialogContext);
+  }
+}
+
