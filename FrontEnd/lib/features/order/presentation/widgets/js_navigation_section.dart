@@ -158,13 +158,18 @@ class JsNavigationSection extends StatelessWidget {
             subtitle: "Display a loading widget",
             color: ColorConst.primaryDark,
             onTap: () async {
+              final data = await showHideLoading(function: () async {
+                await Future.delayed(const Duration(seconds: 2));
+                return 5;
+              });
+              AppLog.i(data, tag: "ShowHideLoading");
               /*PopUpItems.customMsgDialog(
                   title: "Debug",
                   content: "This is a debug message.",
                   type: DialogType.warning);*/
-              final loadingDialogContext = await showLoading();
+              /*final loadingDialogContext = await showLoading();
               await Future.delayed(const Duration(seconds: 2));
-              hideLoading(loadingDialogContext: loadingDialogContext);
+              hideLoading(loadingDialogContext: loadingDialogContext);*/
               // await Future.delayed(const Duration(seconds: 2));
               // hideLoading(loadingDialogContext: loadingDialogContext);
               // await Future.delayed(const Duration(seconds: 2));
