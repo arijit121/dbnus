@@ -64,7 +64,7 @@ class LoadingWidget extends StatelessWidget {
 ///   hideLoading(loadingDialogContext: dialogContext);
 /// }
 /// ```
-Future<BuildContext> showLoading() {
+Future<BuildContext> showLoading({Duration? timeOut}) {
   Completer<BuildContext> dialogCompleter = Completer<BuildContext>();
   DateTime startLoadingTime = DateTime.now();
   showDialog(
@@ -82,7 +82,8 @@ Future<BuildContext> showLoading() {
           DateTime now = DateTime.now();
           Duration elapsed = now.difference(startLoadingTime);
           AppLog.i(elapsed);
-          if (elapsed.inSeconds >= 5 && !didPop) {
+          if (elapsed.compareTo(timeOut ?? Duration(seconds: 5)) >= 0 &&
+              !didPop) {
             hideLoading(loadingDialogContext: context);
           }
         },
