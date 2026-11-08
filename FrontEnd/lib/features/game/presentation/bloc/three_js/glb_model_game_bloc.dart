@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../../core/models/dynamic_data.dart';
+import '../../../../../core/models/dynamic_data.dart';
 
 part 'glb_model_game_event.dart';
 part 'glb_model_game_state.dart';

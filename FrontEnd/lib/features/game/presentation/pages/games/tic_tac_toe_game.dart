@@ -4,8 +4,8 @@ import 'package:dbnus/shared/constants/color_const.dart';
 import 'package:dbnus/shared/extensions/spacing.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
 
 class TicTacToePage extends StatefulWidget {
   const TicTacToePage({super.key});

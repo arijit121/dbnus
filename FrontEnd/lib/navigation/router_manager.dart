@@ -20,28 +20,30 @@ import 'package:dbnus/features/order_details/presentation/pages/order_details.da
     deferred as order_details;
 import 'package:dbnus/features/payment_gateway/presentation/pages/web_view_payment_gateway_status/web_view_payment_gateway_status.dart'
     deferred as web_view_payment_gateway_status;
-import 'package:dbnus/features/game/presentation/pages/tic_tac_toe_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/tic_tac_toe_game.dart'
     deferred as tic_tac_toe;
-import 'package:dbnus/features/game/presentation/pages/color_match_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/color_match_game.dart'
     deferred as color_match;
-import 'package:dbnus/features/game/presentation/pages/snake_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/snake_game.dart'
     deferred as snake_game;
-import 'package:dbnus/features/game/presentation/pages/reaction_time_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/reaction_time_game.dart'
     deferred as reaction_time;
-import 'package:dbnus/features/game/presentation/pages/space_shooter_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/space_shooter_game.dart'
     deferred as space_shooter;
-import 'package:dbnus/features/game/presentation/pages/brick_breaker_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/brick_breaker_game.dart'
     deferred as brick_breaker;
-import 'package:dbnus/features/game/presentation/pages/gravity_orbit_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/gravity_orbit_game.dart'
     deferred as gravity_orbit;
-import 'package:dbnus/features/game/presentation/pages/ludo_game.dart'
+import 'package:dbnus/features/game/presentation/pages/games/ludo_game.dart'
     deferred as ludo_game;
-import 'package:dbnus/features/game/presentation/pages/three_js_game.dart'
+import 'package:dbnus/features/game/presentation/pages/three_js/three_js_game.dart'
     deferred as cyber_runner;
-import 'package:dbnus/features/game/presentation/pages/space_flight_3d_game.dart'
+import 'package:dbnus/features/game/presentation/pages/three_js/space_flight_3d_game.dart'
     deferred as space_flight_3d;
-import 'package:dbnus/features/game/presentation/pages/glb_model_game.dart'
+import 'package:dbnus/features/game/presentation/pages/three_js/glb_model_game.dart'
     deferred as glb_model_game;
+import 'package:dbnus/features/game/presentation/pages/game_flutter_scene/orbital_collector_page.dart'
+    deferred as orbital_collector;
 import 'package:dbnus/features/llama_chat/presentation/pages/llama_chat_page.dart'
     deferred as llama_chat;
 import 'package:dbnus/features/llm_playground/presentation/pages/llm_playground_page.dart'
@@ -343,6 +345,17 @@ class RouterManager {
         },
         redirect: (BuildContext context, GoRouterState state) async {
           await glb_model_game.loadLibrary();
+          return null;
+        },
+      ),
+      GoRoute(
+        name: RouteName.orbitalCollector,
+        path: RouteName.orbitalCollector,
+        builder: (BuildContext context, GoRouterState state) {
+          return orbital_collector.OrbitalCollectorPage();
+        },
+        redirect: (BuildContext context, GoRouterState state) async {
+          await orbital_collector.loadLibrary();
           return null;
         },
       ),

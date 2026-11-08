@@ -75,6 +75,8 @@ windows/flutter/generated_plugins.cmake
 
 .antigravitycli
 
+.serena/
+
 # AI Models
 assets/models/
 

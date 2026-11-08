@@ -5,17 +5,17 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:three_js/three_js.dart' as three;
-import '../../../../core/services/JsService/provider/js_provider.dart';
-import '../../../../shared/constants/assects_const.dart';
-import '../../../../shared/ui/atoms/indicators/loading_widget.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
-import '../../data/models/glb_model.dart';
-import '../bloc/glb_model_game_bloc.dart';
-import '../utils/glb_spaceship_builder.dart';
-import '../widget/glb_model_game/glb_game_controls.dart';
-import '../widget/glb_model_game/glb_game_hud.dart';
-import '../widget/glb_model_game/glb_game_overlays.dart';
-import '../widget/glb_model_game/radar_painter.dart';
+import '../../../../../core/services/JsService/provider/js_provider.dart';
+import '../../../../../shared/constants/assects_const.dart';
+import '../../../../../shared/ui/atoms/indicators/loading_widget.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../data/models/glb_model.dart';
+import '../../bloc/three_js/glb_model_game_bloc.dart';
+import '../../utils/glb_spaceship_builder.dart';
+import '../../widget/three_js/glb_game_controls.dart';
+import '../../widget/three_js/glb_game_hud.dart';
+import '../../widget/three_js/glb_game_overlays.dart';
+import '../../widget/three_js/radar_painter.dart';
 
 class GlbModelGamePage extends StatelessWidget {
   const GlbModelGamePage({super.key});

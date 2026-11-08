@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:three_js/three_js.dart' as three;
-import '../../../../core/services/JsService/provider/js_provider.dart';
-import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/indicators/loading_widget.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../../core/services/JsService/provider/js_provider.dart';
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/ui/atoms/indicators/loading_widget.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../../../shared/ui/atoms/buttons/custom_button.dart';
 
 class SpaceFlight3dGamePage extends StatelessWidget {
   const SpaceFlight3dGamePage({super.key});

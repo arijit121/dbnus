@@ -8,9 +8,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
 
 /// Space Shooter — Tap to destroy falling asteroids before they reach the bottom.
 /// Built with the Flame game engine.

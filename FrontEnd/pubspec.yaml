@@ -131,7 +131,11 @@ dependencies:
   youtube_player_iframe: 6.0.2
   flutter_map: 8.3.2
   latlong2: 0.10.1
+
+  # 3D
   three_js: 0.3.0
+  flutter_scene: 0.24.3
+  vector_math: ^2.4.4
 
   # AI / LLM
   llamadart: 0.14.0

@@ -8,10 +8,10 @@ import 'package:flame/game.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
-import '../../../../shared/constants/color_const.dart';
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../../../shared/constants/color_const.dart';
 
 /// Gravity Orbit — Tap to switch between inner and outer orbits.
 /// Collect stardust and avoid asteroids.

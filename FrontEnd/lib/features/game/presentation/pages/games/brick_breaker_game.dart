@@ -7,9 +7,9 @@ import 'package:flame/game.dart';
 import 'package:flame/text.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../navigation/custom_router/custom_route.dart';
-import '../../../../shared/ui/atoms/buttons/custom_button.dart';
-import '../../../../shared/ui/atoms/text/custom_text.dart';
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/ui/atoms/buttons/custom_button.dart';
+import '../../../../../shared/ui/atoms/text/custom_text.dart';
 
 /// Brick Breaker — Classic paddle-and-ball game built with the Flame engine.
 /// Drag the paddle to bounce the ball and break all bricks.

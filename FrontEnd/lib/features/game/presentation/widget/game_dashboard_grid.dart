@@ -105,8 +105,14 @@ class GameDashboardGrid extends StatelessWidget {
         gradient: [const Color(0xFFFF0055), const Color(0xFFFFCC00)],
         routeName: RouteName.glbModelGame,
       ),
+      GameEntry(
+        title: 'Orbital Collector',
+        subtitle: 'Dodge asteroids, collect cores',
+        icon: Icons.public_rounded,
+        gradient: [const Color(0xFF42E8E0), const Color(0xFF7C4DFF)],
+        routeName: RouteName.orbitalCollector,
+      ),
     ];
-
 
     return LayoutBuilder(builder: (context, constraints) {
       int crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;
