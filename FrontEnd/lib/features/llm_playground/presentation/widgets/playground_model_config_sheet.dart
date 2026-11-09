@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:dbnus/core/services/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,12 +53,12 @@ class _PlaygroundModelConfigSheetState
 
   Future<void> _pickLocalModelFile() async {
     try {
-      final result = await FilePicker.pickFiles(
-        type: FileType.any,
+      final customFile = await CustomFilePicker.pickSingleFile(
         dialogTitle: 'Select Local GGUF Model File',
+        maxFileSizeInMb: null,
       );
-      if (result != null && result.files.single.path != null) {
-        final path = result.files.single.path!;
+      if (customFile != null && customFile.path != null) {
+        final path = customFile.path!;
         setState(() {
           _modelPathController.text = path;
         });

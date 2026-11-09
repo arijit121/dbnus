@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
+import 'package:dbnus/core/services/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,25 +89,27 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
 
   Future<void> _pickAndAttachFile() async {
     try {
-      final result = await FilePicker.pickFiles(
-        type: FileType.any,
-        allowMultiple: false,
-        withData: true,
+      final customFile = await CustomFilePicker.pickSingleFile(
+        maxFileSizeInMb: null,
       );
 
-      if (result != null && result.files.isNotEmpty) {
-        final platformFile = result.files.first;
-        final isImage = _checkIsImage(platformFile.name);
+      if (customFile != null) {
+        final fileName = customFile.name ?? '';
+        final isImage = _checkIsImage(fileName);
         String content = '';
-        Uint8List? fileBytes = platformFile.bytes;
+        Uint8List? fileBytes = customFile.bytes;
+
+        if (fileBytes == null && customFile.path != null) {
+          fileBytes = await File(customFile.path!).readAsBytes();
+        }
 
         if (isImage) {
-          content = '[Image File: ${platformFile.name}]';
+          content = '[Image File: $fileName]';
         } else {
-          if (platformFile.bytes != null) {
-            content = utf8.decode(platformFile.bytes!, allowMalformed: true);
-          } else if (platformFile.path != null) {
-            final file = File(platformFile.path!);
+          if (fileBytes != null) {
+            content = utf8.decode(fileBytes, allowMalformed: true);
+          } else if (customFile.path != null) {
+            final file = File(customFile.path!);
             content = await file.readAsString();
           }
 
@@ -122,14 +124,19 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
           }
         }
 
+        final sizeInBytes = fileBytes?.length ??
+            (customFile.path != null
+                ? await File(customFile.path!).length()
+                : 0);
+
         if (mounted) {
           context.read<LlmPlaygroundBloc>().add(
                 AttachFileEvent(
                   PlaygroundAttachedFile(
-                    name: platformFile.name,
-                    path: platformFile.path,
+                    name: fileName,
+                    path: customFile.path,
                     content: content,
-                    sizeInBytes: platformFile.size,
+                    sizeInBytes: sizeInBytes,
                     isImage: isImage,
                     bytes: fileBytes,
                   ),

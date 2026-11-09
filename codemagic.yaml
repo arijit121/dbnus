@@ -7,6 +7,7 @@ workflows:
     name: Android Workflow
     max_build_duration: 60
     instance_type: linux_x2
+    working_directory: FrontEnd
     environment:
       flutter: stable
       java: 17
@@ -37,22 +38,24 @@ workflows:
     scripts:
       - name: Set up Android keystore
         script: |
+          KEYSTORE_PATH="$CM_BUILD_DIR/FrontEnd/android/keystore.jks"
+          KEYSTORE_PROPERTIES="$CM_BUILD_DIR/FrontEnd/android/keystore.properties"
           if [ -n "$CM_KEYSTORE" ]; then
-            echo "$CM_KEYSTORE" | base64 --decode > "$CM_BUILD_DIR/android/keystore.jks"
-            echo "storePassword=$CM_KEYSTORE_PASSWORD" > "$CM_BUILD_DIR/android/keystore.properties"
-            echo "keyPassword=$CM_KEY_PASSWORD" >> "$CM_BUILD_DIR/android/keystore.properties"
-            echo "keyAlias=$CM_KEY_ALIAS" >> "$CM_BUILD_DIR/android/keystore.properties"
-            echo "storeFile=$CM_BUILD_DIR/android/keystore.jks" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "$CM_KEYSTORE" | base64 --decode > "$KEYSTORE_PATH"
+            echo "storePassword=$CM_KEYSTORE_PASSWORD" > "$KEYSTORE_PROPERTIES"
+            echo "keyPassword=$CM_KEY_PASSWORD" >> "$KEYSTORE_PROPERTIES"
+            echo "keyAlias=$CM_KEY_ALIAS" >> "$KEYSTORE_PROPERTIES"
+            echo "storeFile=$KEYSTORE_PATH" >> "$KEYSTORE_PROPERTIES"
           else
             # Create a fallback keystore so Android Gradle build succeeds when no CI secret is configured
-            keytool -genkey -v -keystore "$CM_BUILD_DIR/android/keystore.jks" \
+            keytool -genkey -v -keystore "$KEYSTORE_PATH" \
               -alias dummy -keyalg RSA -keysize 2048 -validity 10000 \
               -storepass password -keypass password \
               -dname "CN=CI, OU=CI, O=CI, L=CI, S=CI, C=US"
-            echo "storePassword=password" > "$CM_BUILD_DIR/android/keystore.properties"
-            echo "keyPassword=password" >> "$CM_BUILD_DIR/android/keystore.properties"
-            echo "keyAlias=dummy" >> "$CM_BUILD_DIR/android/keystore.properties"
-            echo "storeFile=$CM_BUILD_DIR/android/keystore.jks" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "storePassword=password" > "$KEYSTORE_PROPERTIES"
+            echo "keyPassword=password" >> "$KEYSTORE_PROPERTIES"
+            echo "keyAlias=dummy" >> "$KEYSTORE_PROPERTIES"
+            echo "storeFile=$KEYSTORE_PATH" >> "$KEYSTORE_PROPERTIES"
           fi
       - name: Get Flutter dependencies
         script: |
@@ -70,9 +73,9 @@ workflows:
         script: |
           flutter build appbundle --flavor prod -t lib/main_prod.dart
     artifacts:
-      - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - flutter_drive.log
+      - FrontEnd/build/**/outputs/**/*.apk
+      - FrontEnd/build/**/outputs/**/*.aab
+      - FrontEnd/flutter_drive.log
     publishing:
       email:
         recipients:
@@ -85,6 +88,7 @@ workflows:
     name: iOS Workflow
     max_build_duration: 60
     instance_type: mac_mini_m2
+    working_directory: FrontEnd
     environment:
       flutter: stable
       xcode: latest
@@ -127,10 +131,10 @@ workflows:
         script: |
           flutter build ios --flavor prod -t lib/main_prod.dart --release --no-codesign
     artifacts:
-      - build/ios/ipa/*.ipa
-      - build/ios/iphoneos/*.app
+      - FrontEnd/build/ios/ipa/*.ipa
+      - FrontEnd/build/ios/iphoneos/*.app
       - /tmp/xcodebuild_logs/*.log
-      - flutter_drive.log
+      - FrontEnd/flutter_drive.log
     publishing:
       email:
         recipients:
@@ -143,6 +147,7 @@ workflows:
     name: Web Workflow
     max_build_duration: 30
     instance_type: linux_x2
+    working_directory: FrontEnd
     environment:
       flutter: stable
     triggering:
@@ -173,7 +178,7 @@ workflows:
         script: |
           flutter build web -t lib/main_prod.dart
     artifacts:
-      - build/web/**
+      - FrontEnd/build/web/**
     publishing:
       email:
         recipients:

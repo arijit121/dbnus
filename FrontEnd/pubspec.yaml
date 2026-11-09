@@ -80,7 +80,7 @@ dependencies:
   package_info_plus: 9.0.1
 
   # File Handling
-  file_picker: 11.0.3
+  file_picker: 13.3.2
   image_picker: 1.2.4
   flutter_image_compress: 2.5.1
 
@@ -158,6 +158,7 @@ dev_dependencies:
 
 dependency_overrides:
   archive: 4.6.0
+  win32: 6.3.0
 
 flutter:
 
