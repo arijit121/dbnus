@@ -11,14 +11,16 @@ workflows:
     environment:
       flutter: stable
       java: 17
-      groups:
-        # Define these environment variables in Codemagic UI:
-        # - CM_KEYSTORE (base64-encoded keystore file)
-        # - CM_KEYSTORE_PASSWORD
-        # - CM_KEY_ALIAS
-        # - CM_KEY_PASSWORD
-        # - keystore_credentials
-        # - google_play_credentials
+      # Define these environment variables in Codemagic UI:
+      # - CM_KEYSTORE (base64-encoded keystore file)
+      # - CM_KEYSTORE_PASSWORD
+      # - CM_KEY_ALIAS
+      # - CM_KEY_PASSWORD
+      # - keystore_credentials
+      # - google_play_credentials
+      # groups:
+      #   - keystore_credentials
+      #   - google_play_credentials
       vars:
         PACKAGE_NAME: "com.dbnus.app"
     triggering:
@@ -93,9 +95,9 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      groups:
-        # Configure in Codemagic UI (e.g., App Store Connect API keys):
-        # - app_store_credentials
+      # Configure in Codemagic UI (e.g., App Store Connect API keys):
+      # groups:
+      #   - app_store_credentials
       vars:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "prod"
