@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_scene/scene.dart' as scene;
 import 'package:vector_math/vector_math.dart' as vm;
 
+import '../../../../../navigation/custom_router/custom_route.dart';
+import '../../../../../shared/constants/assects_const.dart';
+
 class OrbitalCollectorPage extends StatefulWidget {
   const OrbitalCollectorPage({super.key});
 
@@ -399,7 +402,9 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
           children: [
             _HudIconButton(
               icon: Icons.arrow_back_rounded,
-              onPressed: () => Navigator.of(context).maybePop(),
+              onPressed: () {
+                CustomRoute.back();
+              },
             ),
             const SizedBox(width: 12),
             const Expanded(
