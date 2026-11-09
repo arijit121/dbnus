@@ -29,11 +29,8 @@ import '../../shared/constants/assects_const.dart';
 class CustomFilePicker {
   static const int _maxFileSize = 5;
 
-  static Future<CustomFile?> pickSingleFile({
-    List<String>? allowedExtensions,
-    int? maxFileSizeInMb = _maxFileSize,
-    String? dialogTitle,
-  }) async {
+  static Future<CustomFile?> pickSingleFile(
+      {List<String>? allowedExtensions, bool? noMaxSize}) async {
     try {
       if (!kIsWeb && Platform.isIOS) {
         final permissionStatus = await _fileManagerPermission(
@@ -44,30 +41,28 @@ class CustomFilePicker {
       }
       await file_picker.loadLibrary();
 
-      final platformFile = await file_picker.FilePicker.pickFile(
-        type: allowedExtensions != null
-            ? file_picker.FileType.custom
-            : file_picker.FileType.any,
-        allowedExtensions: allowedExtensions,
-        dialogTitle: dialogTitle,
+      List<String> allowedExtensionsFinal =
+          allowedExtensions ?? ['jpeg', 'jpg', 'pdf'];
+      final result = await file_picker.FilePicker.pickFiles(
+        type: file_picker.FileType.custom,
+        allowedExtensions: allowedExtensionsFinal,
+        withData: kIsWeb,
       );
 
-      if (platformFile != null) {
-        int sizeInBytes =
-            platformFile.lengthSync() ?? (await platformFile.length()) ?? 0;
+      if (result != null) {
+        final platformFile = result.files.single;
+        int sizeInBytes = platformFile.size;
         double sizeInMb = sizeInBytes / (1024 * 1024);
-        final extension = platformFile.extension?.toLowerCase();
-        if (allowedExtensions != null &&
-            !allowedExtensions.map((e) => e.toLowerCase()).contains(extension)) {
+        if (!allowedExtensionsFinal.contains(platformFile.extension)) {
           PopUpItems.toastMessage("Invalid file type.", ColorConst.red,
               durationSeconds: 4);
-        } else if (['jpeg', 'jpg', 'heic', 'png'].contains(extension)) {
-          final bytes = await platformFile.readAsBytes();
-          if (maxFileSizeInMb != null && sizeInMb > maxFileSizeInMb) {
+        } else if (['jpeg', 'jpg', 'heic', 'png']
+            .contains(platformFile.extension)) {
+          if (sizeInMb > _maxFileSize && noMaxSize != true) {
             CustomFile? compressFile = await _compressAndResizeImage(CustomFile(
               name: platformFile.name,
               path: kIsWeb ? null : platformFile.path,
-              bytes: bytes,
+              bytes: platformFile.bytes,
             ));
             if (compressFile != null) {
               return CustomFile(
@@ -77,18 +72,19 @@ class CustomFilePicker {
               );
             }
           } else {
-            if (extension == 'jpg' || extension == 'jpeg') {
+            if (platformFile.extension == 'jpg' ||
+                platformFile.extension == 'jpeg') {
               return CustomFile(
                 name: platformFile.name,
                 path: kIsWeb ? null : platformFile.path,
-                bytes: kIsWeb ? bytes : null,
+                bytes: kIsWeb ? platformFile.bytes : null,
               );
             } else {
               CustomFile? compressFile =
                   await _compressAndResizeImage(CustomFile(
                 name: platformFile.name,
                 path: kIsWeb ? null : platformFile.path,
-                bytes: bytes,
+                bytes: platformFile.bytes,
               ));
               if (compressFile != null) {
                 return CustomFile(
@@ -99,16 +95,16 @@ class CustomFilePicker {
               }
             }
           }
-        } else if (maxFileSizeInMb != null && sizeInMb > maxFileSizeInMb) {
+        } else if (sizeInMb > _maxFileSize) {
           PopUpItems.toastMessage(
-              "File limit exceeded. Please try again by uploading a file of size $maxFileSizeInMb MB or less.",
+              "File limit exceeded. Please try again by uploading a file of size 5 MB or less.",
               Colors.red,
               durationSeconds: 4);
         } else {
           CustomFile customFile = CustomFile(
             name: platformFile.name,
             path: kIsWeb ? null : platformFile.path,
-            bytes: kIsWeb ? await platformFile.readAsBytes() : null,
+            bytes: kIsWeb ? platformFile.bytes : null,
           );
           return customFile;
         }
@@ -132,19 +128,23 @@ class CustomFilePicker {
         }
       }
       await file_picker.loadLibrary();
-      final platformFiles = await file_picker.FilePicker.pickFiles(
-        type: file_picker.FileType.custom,
-        allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
-      );
+      final result = await file_picker.FilePicker.pickFiles(
+          type: file_picker.FileType.custom,
+          allowedExtensions: allowedExtensions ?? ['jpeg', 'jpg', 'pdf'],
+          allowMultiple: true,
+          withData: kIsWeb);
 
-      if (platformFiles.isNotEmpty) {
-        return await Future.wait(platformFiles.map((platformFile) async {
+      if (result != null) {
+        final platformFiles = result.files;
+
+        return List.generate(platformFiles.length, (index) {
+          final platformFile = platformFiles.elementAt(index);
           return CustomFile(
             name: platformFile.name,
             path: kIsWeb ? null : platformFile.path,
-            bytes: kIsWeb ? await platformFile.readAsBytes() : null,
+            bytes: kIsWeb ? platformFile.bytes : null,
           );
-        }));
+        });
       } else {
         AppLog.t("User canceled the picker");
       }
@@ -396,7 +396,8 @@ class CustomFilePicker {
           return await galleryPicker();
         } else if (result == "Folder") {
           return await pickSingleFile(
-              allowedExtensions: noDocs == true ? ['jpeg', 'jpg'] : ['jpeg', 'jpg', 'pdf']);
+              allowedExtensions:
+                  noDocs == true ? ['jpeg', 'jpg'] : ['jpeg', 'jpg', 'pdf']);
         }
       }
     } catch (e) {

@@ -53,10 +53,7 @@ class _PlaygroundModelConfigSheetState
 
   Future<void> _pickLocalModelFile() async {
     try {
-      final customFile = await CustomFilePicker.pickSingleFile(
-        dialogTitle: 'Select Local GGUF Model File',
-        maxFileSizeInMb: null,
-      );
+      final customFile = await CustomFilePicker.pickSingleFile(noMaxSize: true);
       if (customFile != null && customFile.path != null) {
         final path = customFile.path!;
         setState(() {
