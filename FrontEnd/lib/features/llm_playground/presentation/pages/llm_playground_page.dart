@@ -90,7 +90,7 @@ class _LlmPlaygroundViewState extends State<_LlmPlaygroundView> {
   Future<void> _pickAndAttachFile() async {
     try {
       final customFile = await CustomFilePicker.pickSingleFile(
-        maxFileSizeInMb: null,
+        noMaxSize: true
       );
 
       if (customFile != null) {
