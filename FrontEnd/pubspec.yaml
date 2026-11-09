@@ -96,7 +96,7 @@ dependencies:
   google_fonts: 9.0.0
   flutter_widget_from_html: 0.17.4
   # dyte_uikit: 0.7.0
-  zikzak_inappwebview: 5.3.4
+  zikzak_inappwebview: 6.3.4
   webview_flutter: 4.14.1
   webview_flutter_android: 4.14.1
   webview_flutter_wkwebview: 3.27.2
@@ -155,6 +155,9 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: 6.0.0
   flutter_flavorizr: 2.5.0
+
+dependency_overrides:
+  archive: 4.6.0
 
 flutter:
 
