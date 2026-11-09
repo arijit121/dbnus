@@ -1,0 +1,183 @@
+# Codemagic CI/CD configuration for Dbnus Flutter App
+# Documentation: https://docs.codemagic.io/yaml-basic-configuration/yaml-getting-started/
+# Schema: https://codemagic.io/codemagic-schema.json
+
+workflows:
+  android-workflow:
+    name: Android Workflow
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+      java: 17
+      groups:
+        # Define these environment variables in Codemagic UI:
+        # - CM_KEYSTORE (base64-encoded keystore file)
+        # - CM_KEYSTORE_PASSWORD
+        # - CM_KEY_ALIAS
+        # - CM_KEY_PASSWORD
+        # - keystore_credentials
+        # - google_play_credentials
+      vars:
+        PACKAGE_NAME: "com.dbnus.app"
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+        - pattern: 'main_v2'
+          include: true
+          source: true
+        - pattern: 'release*'
+          include: true
+          source: true
+    scripts:
+      - name: Set up Android keystore
+        script: |
+          if [ -n "$CM_KEYSTORE" ]; then
+            echo "$CM_KEYSTORE" | base64 --decode > "$CM_BUILD_DIR/android/keystore.jks"
+            echo "storePassword=$CM_KEYSTORE_PASSWORD" > "$CM_BUILD_DIR/android/keystore.properties"
+            echo "keyPassword=$CM_KEY_PASSWORD" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "keyAlias=$CM_KEY_ALIAS" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "storeFile=$CM_BUILD_DIR/android/keystore.jks" >> "$CM_BUILD_DIR/android/keystore.properties"
+          else
+            # Create a fallback keystore so Android Gradle build succeeds when no CI secret is configured
+            keytool -genkey -v -keystore "$CM_BUILD_DIR/android/keystore.jks" \
+              -alias dummy -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass password -keypass password \
+              -dname "CN=CI, OU=CI, O=CI, L=CI, S=CI, C=US"
+            echo "storePassword=password" > "$CM_BUILD_DIR/android/keystore.properties"
+            echo "keyPassword=password" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "keyAlias=dummy" >> "$CM_BUILD_DIR/android/keystore.properties"
+            echo "storeFile=$CM_BUILD_DIR/android/keystore.jks" >> "$CM_BUILD_DIR/android/keystore.properties"
+          fi
+      - name: Get Flutter dependencies
+        script: |
+          flutter packages pub get
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter test
+        script: |
+          flutter test
+      - name: Build Android APK
+        script: |
+          flutter build apk --flavor prod -t lib/main_prod.dart
+      - name: Build Android App Bundle
+        script: |
+          flutter build appbundle --flavor prod -t lib/main_prod.dart
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/*.aab
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - 1arijitsarkar45@gmail.com
+        notify:
+          success: true
+          failure: true
+
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      groups:
+        # Configure in Codemagic UI (e.g., App Store Connect API keys):
+        # - app_store_credentials
+      vars:
+        XCODE_WORKSPACE: "ios/Runner.xcworkspace"
+        XCODE_SCHEME: "prod"
+        BUNDLE_ID: "com.dbnus.app"
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+        - pattern: 'main_v2'
+          include: true
+          source: true
+        - pattern: 'release*'
+          include: true
+          source: true
+    scripts:
+      - name: Get Flutter dependencies
+        script: |
+          flutter packages pub get
+      - name: Install CocoaPods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter test
+        script: |
+          flutter test
+      - name: Build iOS (release)
+        script: |
+          flutter build ios --flavor prod -t lib/main_prod.dart --release --no-codesign
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/iphoneos/*.app
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - 1arijitsarkar45@gmail.com
+        notify:
+          success: true
+          failure: true
+
+  web-workflow:
+    name: Web Workflow
+    max_build_duration: 30
+    instance_type: linux_x2
+    environment:
+      flutter: stable
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          source: true
+        - pattern: 'main_v2'
+          include: true
+          source: true
+        - pattern: 'release*'
+          include: true
+          source: true
+    scripts:
+      - name: Get Flutter dependencies
+        script: |
+          flutter packages pub get
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter test
+        script: |
+          flutter test
+      - name: Build Web
+        script: |
+          flutter build web -t lib/main_prod.dart
+    artifacts:
+      - build/web/**
+    publishing:
+      email:
+        recipients:
+          - 1arijitsarkar45@gmail.com
+        notify:
+          success: true
+          failure: true
