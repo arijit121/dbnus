@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:zikzak_inappwebview/zikzak_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -136,8 +136,9 @@ class _InAppWebViewPaymentGatewayState
               initialUrlRequest: URLRequest(
                   url: WebUri(widget.webViewPaymentGatewayModel.paymentLink)),
               initialSettings: InAppWebViewSettings(
-                clearSessionCache: true,
-                clearCache: true,
+                incognito: true,
+                // clearSessionCache: true,
+                // clearCache: true,
                 cacheEnabled: false,
                 javaScriptCanOpenWindowsAutomatically: true,
                 javaScriptEnabled: true,

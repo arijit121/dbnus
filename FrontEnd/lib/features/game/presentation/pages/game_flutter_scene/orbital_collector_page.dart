@@ -25,6 +25,9 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
   final List<scene.Node> _gates = [];
   late final Future<void> _sceneReady;
   late final scene.Node _ship;
+  final Map<String, scene.AnimationClip> _animationClips = {};
+  final List<String> _animationQueue = [];
+  scene.AnimationClip? _activeAnimation;
 
   double _targetX = 0;
   double _targetY = 0;
@@ -51,6 +54,14 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
   }
 
   void _buildScene(scene.Node playerModel) {
+    for (final name in ['Idle', 'Run', 'JumpStart', 'Jump', 'JumpLand']) {
+      final animation = playerModel.findAnimationByName(name);
+      if (animation == null) {
+        throw StateError('The dash model is missing the "$name" animation.');
+      }
+      _animationClips[name] = playerModel.createAnimationClip(animation);
+    }
+
     final ship = scene.Node(name: 'player-ship');
     final modelPlacement = scene.Node(name: 'player-ship-model')
       ..position = vm.Vector3(0, -0.65, 0)
@@ -59,6 +70,7 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
     ship.add(modelPlacement);
     _ship = ship;
     _scene.add(_ship);
+    _playAnimation('Idle');
 
     final starGeometry = scene.SphereGeometry(
       radius: 0.035,
@@ -133,6 +145,42 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
     }
   }
 
+  void _playAnimation(
+    String name, {
+    bool loop = true,
+    List<String> then = const [],
+  }) {
+    for (final animation in _animationClips.values) {
+      animation
+        ..stop()
+        ..weight = 0;
+    }
+
+    final animation = _animationClips[name]!;
+    animation
+      ..weight = 1
+      ..loop = loop
+      ..replay();
+    _activeAnimation = animation;
+    _animationQueue
+      ..clear()
+      ..addAll(then);
+  }
+
+  void _advanceAnimationSequence() {
+    final animation = _activeAnimation;
+    if (animation == null || animation.loop || animation.playing) return;
+
+    if (_animationQueue.isNotEmpty) {
+      final next = _animationQueue.removeAt(0);
+      _playAnimation(next, loop: next == 'Run');
+    } else if (_running) {
+      _playAnimation('Run');
+    } else {
+      _playAnimation('Idle');
+    }
+  }
+
   scene.PhysicallyBasedMaterial _material(
     Color color, {
     double emission = 0,
@@ -168,6 +216,7 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
 
   void _onSceneTick(Duration _, double deltaSeconds) {
     final dt = deltaSeconds.clamp(0.0, 0.05);
+    _advanceAnimationSequence();
     final current = _ship.position;
     final nextX = current.x + (_targetX - current.x) * math.min(1, dt * 7);
     final nextY = current.y + (_targetY - current.y) * math.min(1, dt * 7);
@@ -198,6 +247,11 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
       if (nextPosition.z > -1.15 && dx * dx + dy * dy < 1.15 * 1.15) {
         if (object.isCore) {
           _score += 10;
+          _playAnimation(
+            'JumpStart',
+            loop: false,
+            then: ['Jump', 'JumpLand', 'Run'],
+          );
         } else {
           _shields = math.max(0, _shields - 1);
         }
@@ -211,6 +265,7 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
     if (_shields == 0) {
       _running = false;
       _gameOver = true;
+      _playAnimation('Idle');
       changed = true;
     }
     if (changed && mounted) setState(() {});
@@ -224,6 +279,7 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
       _targetY = 0;
       _gameOver = false;
       _running = true;
+      _playAnimation('Run');
       for (final object in _objects) {
         _respawn(object, initial: true);
       }
