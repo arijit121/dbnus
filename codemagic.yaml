@@ -6,7 +6,7 @@ workflows:
   android-workflow:
     name: Android Workflow
     max_build_duration: 60
-    instance_type: linux_x2
+    instance_type: mac_mini_m2
     working_directory: FrontEnd
     environment:
       flutter: stable
@@ -43,7 +43,7 @@ workflows:
           KEYSTORE_PATH="$CM_BUILD_DIR/FrontEnd/android/keystore.jks"
           KEYSTORE_PROPERTIES="$CM_BUILD_DIR/FrontEnd/android/keystore.properties"
           if [ -n "$CM_KEYSTORE" ]; then
-            echo "$CM_KEYSTORE" | base64 --decode > "$KEYSTORE_PATH"
+            echo "$CM_KEYSTORE" | base64 --decode 2>/dev/null > "$KEYSTORE_PATH" || echo "$CM_KEYSTORE" | base64 -D > "$KEYSTORE_PATH"
             echo "storePassword=$CM_KEYSTORE_PASSWORD" > "$KEYSTORE_PROPERTIES"
             echo "keyPassword=$CM_KEY_PASSWORD" >> "$KEYSTORE_PROPERTIES"
             echo "keyAlias=$CM_KEY_ALIAS" >> "$KEYSTORE_PROPERTIES"
@@ -148,7 +148,7 @@ workflows:
   web-workflow:
     name: Web Workflow
     max_build_duration: 30
-    instance_type: linux_x2
+    instance_type: mac_mini_m2
     working_directory: FrontEnd
     environment:
       flutter: stable
