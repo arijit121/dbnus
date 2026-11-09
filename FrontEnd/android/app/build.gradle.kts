@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId = "com.dbnus.app"
         minSdk = 26
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
