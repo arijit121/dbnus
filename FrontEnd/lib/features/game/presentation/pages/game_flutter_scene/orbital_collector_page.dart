@@ -42,38 +42,21 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
   Future<void> _initializeScene() async {
     await scene.Scene.initializeStaticResources();
     if (!mounted) return;
-    _buildScene();
+
+    final playerModel = await scene.Node.fromGlbAsset(
+      AssetsConst.dashGlbModel,
+    );
+    if (!mounted) return;
+    _buildScene(playerModel);
   }
 
-  void _buildScene() {
+  void _buildScene(scene.Node playerModel) {
     final ship = scene.Node(name: 'player-ship');
-    _addShipPart(
-      ship,
-      scene.CuboidGeometry(vm.Vector3(0.52, 0.28, 1.35)),
-      _material(const Color(0xFFB7C7E9), metallic: 0.72),
-    );
-    _addShipPart(
-      ship,
-      scene.CuboidGeometry(vm.Vector3(2.05, 0.09, 0.42)),
-      _material(_violet, emission: 0.22, metallic: 0.6),
-      position: vm.Vector3(0, -0.02, 0.2),
-    );
-    _addShipPart(
-      ship,
-      scene.SphereGeometry(radius: 0.25, segments: 18, rings: 10),
-      _material(_cyan, emission: 0.45, metallic: 0.3),
-      position: vm.Vector3(0, 0.19, -0.2),
-      scale: vm.Vector3(0.82, 0.7, 1.35),
-    );
-    for (final side in [-1.0, 1.0]) {
-      _addShipPart(
-        ship,
-        scene.SphereGeometry(radius: 0.12, segments: 12, rings: 8),
-        _material(const Color(0xFFFF8B66), emission: 1.2),
-        position: vm.Vector3(side * 0.23, -0.02, 0.73),
-        scale: vm.Vector3(0.75, 0.75, 1.6),
-      );
-    }
+    final modelPlacement = scene.Node(name: 'player-ship-model')
+      ..position = vm.Vector3(0, -0.65, 0)
+      ..scale = vm.Vector3.all(0.45);
+    modelPlacement.add(playerModel);
+    ship.add(modelPlacement);
     _ship = ship;
     _scene.add(_ship);
 
@@ -148,19 +131,6 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
       _scene.add(object.node);
       _respawn(object, initial: true);
     }
-  }
-
-  void _addShipPart(
-    scene.Node parent,
-    scene.Geometry geometry,
-    scene.Material material, {
-    vm.Vector3? position,
-    vm.Vector3? scale,
-  }) {
-    final part = scene.Node(mesh: scene.Mesh(geometry, material))
-      ..position = position ?? vm.Vector3.zero();
-    if (scale != null) part.scale = scale;
-    parent.add(part);
   }
 
   scene.PhysicallyBasedMaterial _material(
@@ -318,7 +288,7 @@ class _OrbitalCollectorPageState extends State<OrbitalCollectorPage> {
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onPanUpdate: (details) {
-                      _targetX = (_targetX +
+                      _targetX = (_targetX -
                               details.delta.dx / constraints.maxWidth * 6.5)
                           .clamp(-3.1, 3.1);
                       _targetY = (_targetY -

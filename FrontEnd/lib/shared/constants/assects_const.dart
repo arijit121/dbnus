@@ -233,6 +233,8 @@ class AssetsConst {
   static const String jetGlbModel = "assets/models/3d/jet.glb";
   static const String mq9GlbModel = "assets/models/3d/mq9.glb";
   static const String shipGlbModel = "assets/models/3d/ship.glb";
+  static const String dashGlbModel = "assets/models/3d/dash.glb";
+
 
   // God's Eye View HUD SVGs
   static const String gevLogo = "assets/icon/gev_reference/gev_logo.svg";
