@@ -101,6 +101,12 @@ _flutter.loader.load({
          assetBase: assetBase,
         // Load CanvasKit from CDN
          canvasKitBaseUrl:`${assetBase}canvaskit/`,
+         // Enable Wasm on all modern browser engines in Flutter 3.50:
+         wasmAllowList: {
+             blink: true,
+             webkit: true,
+             gecko: true,
+         },
     },
     serviceWorkerSettings: {
         serviceWorkerVersion: {{flutter_service_worker_version}},
